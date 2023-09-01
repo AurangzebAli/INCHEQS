@@ -1,0 +1,94 @@
+﻿@using INCHEQS.Common
+
+<div id="signatureListContainer" class="mBot5" style="font-size: 12pt;padding-left:10px">
+    <div class="row">
+        <div class="col-xs-6">
+            <div id="signatureRules" style="padding-left:10px">
+
+                @if (ViewBag.SignatureRules != null)
+                {
+                    <table class="table" style="font-size: 12pt; font-family: Arial">
+                        <thead>
+
+                            <tr>SIGNING INFORMATION:</tr>
+                            @foreach (var item in @ViewBag.SignatureRules)
+                            {
+                        <tr>
+                            <td>Account No: @ViewBag.InwardItemViewModel.getField("fldAccountNumber")</td>
+                            <td></td>
+                            <td>Name Of Account: @item.accName</td>
+                            @*<td></td>*@
+                        </tr>
+
+                        <tr>
+                            <td>Amount: @StringUtils.FormatCurrency(ViewBag.InwardItemViewModel.getField("fldAmount"))</td>
+                            <td></td>
+                            <td>Status: @item.accountStatus</td>
+                            @*<td></td>*@
+                        </tr>
+                                @*<tr><td>Name Of Account:</td><td>@item.accName</td></tr>
+                                <tr><td>Status:</td><td>@item.accountStatus</td></tr>*@
+
+
+                            }
+
+
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                }
+                @if (ViewBag.SignatureRulesList != null)
+                {
+                    <div class="row" style="overflow:scroll; WIDTH: 100%;height:50%">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    @*<td>Rule No.</td>*@
+                                    @*<td>Condition Type ID</td>*@
+                                    <td>Sign ID / Group ID</td>
+                                    <td>Amount</td>
+                                    <td>From</td>
+                                    <td>To</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in @ViewBag.SignatureRulesList)
+                                {
+                                    <tr>
+                                        @*<td>@item.RuleNo</td>*@
+                                        @*<td>@item.ConditionTypeID</td>*@
+                                        <td>@item.SignID</td>
+                                        <td>@item.amount</td>
+                                        <td>@item.fldSigValidFrom</td>
+                                        <td>@item.fldSigValidTo</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div id="signatureImages">
+                <div id="signatureSearchContainer">
+                    <div id="signatureResult" class="pull-left"></div>
+                    <div id="searchSignature" class="pull-right">
+
+                        Account Number <input id="searchAccountNumber" value="@ViewBag.InwardItemViewModel.getField("fldHostAccountNo")" />
+                        <input id="searchIssueBankBranch" hidden value="@ViewBag.InwardItemViewModel.getField("fldIssueBankBranch")" />
+
+                        <a id="searchSignature" class="btn btn-default btn-xs">Search</a>
+
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+                <div id="signatureContainer">
+                    @*<img src="~/Content/Images/spin.gif" class="signature-loader small-loader hidden" style="position: absolute;margin: 70px;" />*@
+                    <div id="signatureGallery"></div>
+                    <div style="clear:both"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

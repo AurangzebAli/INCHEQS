@@ -1,0 +1,30 @@
+﻿@using INCHEQS.Resources
+<table class="table table-bordered mTop10">
+    <thead>
+        <tr>
+            <th>Cheque Type</th>
+            <th>Presenting Bank</th>
+            <th>Presenting Branch</th>
+            <th>Cheque Number</th>
+            <th>Account Number</th>
+            <th>Amount</th>
+            <th>Remarks</th>
+            <th>Updated By</th>
+            <th>Updated TimeStamp</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: center;"><span>@ViewBag.InwardItemViewModel.getField("fldIssueChequeType")</span></td>
+            <td style="text-align: center;"><span>@ViewBag.InwardItemViewModel.getField("fldPreBankCode")</span></td>
+            <td style="text-align: center;"><span>@ViewBag.InwardItemViewModel.getField("fldPreBranchCode")</span></td>
+            <td style="text-align: center;"><span>@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo")</span></td>
+            <td style="text-align: center;"><span>@ViewBag.InwardItemViewModel.getField("fldAccountNumber")</span></td>
+            <td style="text-align: center;"><span>@ViewBag.InwardItemViewModel.getField("fldAmount")</span></td>
+            <td style="text-align: center;"><span>@ViewBag.InwardItemViewModel.getField("fldRemarks")</span></td>
+            <td style="text-align: center;"><span>@ViewBag.InwardItemViewModel.getField("fldLastUpdateUserName")</span></td>
+            <td style="text-align: center;"><span>@ViewBag.InwardItemViewModel.getField("fldUpdateTimeStamp")</span></td>
+        </tr>
+    </tbody>
+</table>

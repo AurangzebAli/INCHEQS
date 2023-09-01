@@ -1,0 +1,43 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using (Html.BeginForm("SaveCreate", "TransactionCode", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+
+        <h4>@Locale.TransactionCodeMaintenance</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <TBODY>
+                <TR>
+                    <Th>@Locale.TransactionCode</Th>
+
+                    <TD>
+                        <input type="text" name="transCode">
+                        <span class="red-star">*</span>
+                    </TD>
+                </TR>
+                <TR>
+                    <Th>@Locale.TransactionCodeDescription</Th>
+
+                    <TD>
+                        <input type="text" name="transDesc">
+                        <span class="red-star">*</span>
+                    </TD>
+                </TR>
+                <TR>
+                    <th>@Locale.TransactionType</th>
+                    <td>
+                        <select name="transType" id="ajaxTransactionTypeSelectList"></select>
+                        <span class="red-star">*</span>
+                    </td>
+                </TR>            
+            </TBODY>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.TransactionCode.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.TransactionCode.INDEX) ? "" : "disabled")">@Locale.btnClose</a>
+    </div>
+}
+
+<script src="~/Scripts/App/transactionType.js"></script>

@@ -1,0 +1,235 @@
+﻿@using System.Data;
+@using INCHEQS.Resources;
+@{
+    ViewBag.Title = "CapturingPage";
+    Layout = "~/Views/Shared/_LayoutCapturing.cshtml";
+}
+
+<div class="form-horizontal">
+    <h4>CAPTURING</h4>@*Pending Locale Registration*@
+    <hr />
+    <div>
+        <table class="table form-table table-no-border table-utility">
+            <tr>
+                <td style="width: 5px; height:5px;white-space :nowrap"></td>
+                <td style="width:99%" class="cssPageTitleBar">
+                    Capturing&nbsp;&nbsp;&nbsp;
+                    <span id="ComClientStatus">| ComClient Status : - </span><input type="button" class="btn btn-default btn-xs" name="btnComClient" onclick="ConnectComClient();" size="20" value="Connect">
+                </td>
+                <td style="width:1%;height:22px;white-space :nowrap " align="left">
+                    <input type="button" lass="btn btn-default secure-nav" id="btnScan" name="btnScan" onclick="vbScan()" class="btn btn-default btn-xs" value="Scan" />&nbsp;
+                    <input type="button" id="btnEject" name="btnEject" onclick="vbEject()" class="btn btn-default btn-xs" value="Eject" />
+                </td>
+                <td>
+                    <button type="button" id="closeBtn" class="btn btn-default btn-xs" data-action="@Url.Action("Close")">@Locale.btnClose</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Processing Date</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span class="red">[6 March 2018]</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Capturing Mode</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>[Check With Deposit Slip]</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Cheque Type</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>[Regular Check]</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Scanner Id</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>[39]</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Clearing Branch Id</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>[010101973]</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Batch Number</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>[]</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Sequence Number</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>[]</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Source Branch Id</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>[]</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Currency Code</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span><input type="radio" name="optCurrencyCode" id="optBDT" checked value="1" />&nbsp;MMK&nbsp;&nbsp;</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Item Type</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>[]</span>
+                    </div>
+                </div>
+                @*<div class="row">
+                    <div class="col-sm-3">
+                        <span>Priority</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span><input type="radio" name="optPriority" id="optPrioNormal" value="0" checked />&nbsp;Normal&nbsp;&nbsp;</span>
+                    </div>
+                </div>*@
+                @*<div class="row">
+                    <div class="col-sm-3">
+                        <span>CICS Mode</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>
+                            <input type="radio" hidden name="optCICSModeType" id="optBothCICS" value="0" />&nbsp;Both&nbsp;&nbsp;
+                            <input type="radio" name="optCICSModeType" id="optCICSMode" value="1" checked />&nbsp;CICS&nbsp;&nbsp;
+                            <input type="radio" hidden  name="optCICSModeType" id="optNONCICSMode" value="2">&nbsp;Non-CICS&nbsp;&nbsp;
+                        </span>
+                    </div>
+                </div>*@
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Item Type</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>
+                            <input type="radio" name="optPresentment" id="optPre1st" value="1" checked />&nbsp;1st&nbsp;&nbsp;
+                            <input type="radio" name="optPresentment" id="optPre2nd" value="2" />&nbsp;2nd&nbsp;&nbsp;
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>IQA Status List</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span><input type="text" name="lblIQAList" id="lblIQAList" value="" readonly="readonly" maxlength="70" /></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*<table>
+        <tr>
+            <td style="width: 35%"></td>
+            <td style="width: 65%"></td>
+        </tr>
+    </table>*@
+</div>
+
+@*@if (ViewBag.IQA == "2")
+    {
+    <script>
+$(document).ready(function(){
+    alert("@ViewBag.IQADesc");
+
+});
+    </script>
+}
+@if (ViewBag.LockCheck == "False")
+{
+    <script>
+    $(document).ready(function(){
+        alert(" Warning !" + "\n" + " This check is locked by other Clearing user");
+
+    });
+    </script>
+}
+@if (ViewBag.LockCheckBranch == "False")
+{
+    <script>
+    $(document).ready(function(){
+        alert(" Warning !" + "\n" + " This check is locked by branch user");
+
+    });
+    </script>
+}*@

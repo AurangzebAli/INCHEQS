@@ -1,0 +1,267 @@
+﻿using INCHEQS.Security.AuditTrail;
+using INCHEQS.Models.SearchPageConfig;
+using INCHEQS.Models.SearchPageConfig.Services;
+using INCHEQS.TaskAssignment;
+using INCHEQS.Resources;
+using INCHEQS.Security;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using INCHEQS.Security.SystemProfile;
+using System.Globalization;
+using INCHEQS.Areas.COMMON.Models.Holiday;
+
+namespace INCHEQS.Areas.COMMON.Controllers.Maintenance
+{
+    public class HolidayController : BaseController
+    {
+        private iHolidayDao holidayDao;
+        protected readonly ISearchPageService searchPageService;
+        private IPageConfigDao pageConfigDao;
+        private readonly IAuditTrailDao auditTrailDao;
+        protected readonly ISystemProfileDao systemProfileDao;
+
+        public HolidayController(IAuditTrailDao auditTrailDao, iHolidayDao holidayDao, ISearchPageService searchPageService, IPageConfigDao pageConfigDao, ISystemProfileDao systemProfileDao)
+        {
+            this.auditTrailDao = auditTrailDao;
+            this.holidayDao = holidayDao;
+            this.searchPageService = searchPageService;
+            this.pageConfigDao = pageConfigDao;
+            this.systemProfileDao = systemProfileDao;
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.Holiday.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Index()
+        {
+            ViewBag.SearchPage = pageConfigDao.GetSearchFormModelFromConfig(CurrentUser.Account, new PageSqlConfig(TaskIds.Holiday.INDEX));
+            return View();
+        }
+
+
+        [CustomAuthorize(TaskIds = TaskIds.Holiday.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public virtual ActionResult SearchResultPage(FormCollection collection)
+        {
+            ViewBag.SearchResult = pageConfigDao.getResultListFromDatabaseView(new PageSqlConfig(TaskIds.Holiday.INDEX, "view_Holiday", "fldDesc asc,fldRecurring asc", "fldBankCode=@fldBankCode", new[] {
+                    new SqlParameter("@fldBankCode",CurrentUser.Account.BankCode)}),
+            collection);
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.Holiday.CREATE)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.Holiday.SAVECREATE)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveCreate(FormCollection col)
+        {
+            string getDate = "";
+            string getDateDb = "";
+            //string systemProfile = systemProfileDao.GetValueFromSystemProfile("HolidayChecker", CurrentUser.Account.BankCode).Trim();
+            string systemProfile = systemProfileDao.GetValueFromSystemProfile("DualApproval", CurrentUser.Account.BankCode).Trim();
+            try
+            {
+                List<string> errorMessages = holidayDao.ValidateHoliday(col, "Create");
+
+                if ((errorMessages.Count > 0))
+                {
+                    TempData["ErrorMsg"] = errorMessages;
+                }
+                else
+                {
+                    string OneTime = col["OneTime"].ToString();
+                    if ("N".Equals(systemProfile))
+                    {
+                        holidayDao.InsertHoliday(col);
+
+                        #region AuditLog
+                        TempData["Notice"] = Locale.SuccessfullyCreated;
+                        if (OneTime == "OneTime")
+                        {
+                            getDate = col["fldDate"].ToString();
+                            col["RecurringType"] = "Onetime";
+                            getDateDb = DateTime.ParseExact(getDate, "dd-MM-yyyy", CultureInfo.InvariantCulture).ToString("yyyyMMdd");
+                        }
+                        else
+                        {
+                            if (col.AllKeys.Contains("RecurringType"))
+                            {
+                                if (col["RecurringType"].ToString() == "Week")
+                                {
+                                    getDate = "";
+                                }
+                                else
+                                {
+                                    getDate = col["fldYearDate"].ToString();
+                                    getDateDb = DateTime.ParseExact(getDate, "dd-MM-yyyy", CultureInfo.InvariantCulture).ToString("yyyyMMdd");
+                                }
+                            }
+                        }
+
+                        auditTrailDao.Log("Add - Holiday : " + getDate + " " + col["fldHolidayDescription"] + " , RecurringType  :" + col["RecurringType"].ToString(), CurrentUser.Account);
+
+                        #endregion
+                    }
+                    else
+                    {
+                        holidayDao.CreateHolidayToHolidayTemp(col);
+
+
+                        #region AuditLog
+                        TempData["Notice"] = Locale.HolidayCreateVerify;
+                        if (OneTime == "OneTime")
+                        {
+                            getDate = col["fldDate"].ToString();
+                            col["RecurringType"] = "Onetime";
+                            getDateDb = DateTime.ParseExact(getDate, "dd-MM-yyyy", CultureInfo.InvariantCulture).ToString("yyyyMMdd");
+                        }
+                        else
+                        {
+                            if (col.AllKeys.Contains("RecurringType"))
+                            {
+                                if (col["RecurringType"].ToString() == "Week")
+                                {
+                                    getDate = "";
+                                }
+                                else
+                                {
+                                    getDate = col["fldYearDate"].ToString();
+                                    getDateDb = DateTime.ParseExact(getDate, "dd-MM-yyyy", CultureInfo.InvariantCulture).ToString("yyyyMMdd");
+                                }
+                            }
+                        }
+                        auditTrailDao.Log("Add Holiday into Temporary record to Create - Holiday Date : " + getDate + " , Description :  " + col["fldHolidayDescription"] + " RecurringType  :" + col["RecurringType"].ToString(), CurrentUser.Account);
+
+                        #endregion
+                    }
+                }
+                return RedirectToAction("Create");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.Holiday.EDIT)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Edit(FormCollection col, string row_fldHolidayId = "")
+        {
+            Dictionary<string, string> filter = searchPageService.GetFormFiltersFromRow(col);
+            string HolidayId = "";
+            try
+            {
+                if (string.IsNullOrEmpty(row_fldHolidayId))
+                {
+                    HolidayId = filter["fldHolidayId"].Trim();
+                }
+                else
+                {
+                    HolidayId = row_fldHolidayId;
+                }
+                ViewBag.holiday = holidayDao.GetHolidayData(HolidayId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return View();
+        }
+        [CustomAuthorize(TaskIds = TaskIds.Holiday.UPDATE)]
+        [ValidateAntiForgeryToken]
+        public ActionResult Update(FormCollection col)
+        {
+            string systemProfile = systemProfileDao.GetValueFromSystemProfile("DualApproval", CurrentUser.Account.BankCode).Trim();
+            try
+            {
+                if ("N".Equals(systemProfile))
+                {
+                    HolidayModel before = holidayDao.GetHolidayData(col["HolidayId"]);
+                    auditTrailDao.Log("Holiday Calender Created - Holiday Date : " + before.Date + ", Recurring : " + before.recurring + ", Recurring Type : " + before.recurrType + ", Description : " + before.Desc, CurrentUser.Account);
+
+                    holidayDao.UpdateHolidayTable(col);
+                    TempData["Notice"] = Locale.SuccessfullyUpdated;
+
+                    HolidayModel after = holidayDao.GetHolidayData(col["HolidayId"]);
+                    auditTrailDao.Log("Holiday Calender Created - Holiday Date : " + after.Date + ", Recurring : " + after.recurring + ", Recurring Type : " + after.recurrType + ", Description : " + after.Desc, CurrentUser.Account);
+
+                }
+                else
+                {
+                    bool IsHolidayExist = holidayDao.CheckHolidayExist(col["HolidayId"]);
+                    if (IsHolidayExist == true)
+                    {
+                        TempData["warning"] = Locale.HolidayAlreadyExiststoDeleteorUpdate;
+                    }
+                    else
+                    {
+                        holidayDao.AddHolidayinTemptoUpdate(col);
+                        TempData["Notice"] = Locale.HolidayUpdateVerify;
+                        auditTrailDao.Log("Add Holiday Calender in Temp Table to Update, Holiday ID : " + col["HolidayId"] + ", Description to Update : " + col["fldHolidayDescription"], CurrentUser.Account);
+                    }
+                }
+
+                return RedirectToAction("Edit", new { row_fldHolidayId = col["HolidayId"].Trim() });
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.Holiday.DELETE)]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(FormCollection col)
+        {
+            string systemProfile = systemProfileDao.GetValueFromSystemProfile("DualApproval", CurrentUser.Account.BankCode).Trim();
+            if (col != null & col["deleteBox"] != null)
+            {
+                List<string> arrResults = col["deleteBox"].Split(',').ToList();
+                foreach (string arrResult in arrResults)
+                {
+                    if ("N".Equals(systemProfile))
+                    {
+                        HolidayModel objHolidayDeleted = holidayDao.GetHolidayData(arrResult);
+                        holidayDao.DeleteFromHolidayTable(arrResult);
+                        TempData["Notice"] = Resources.Locale.SuccessfullyDeleted;
+                        auditTrailDao.Log("Holiday Calender Deleted - Holiday Date : " + objHolidayDeleted.Date + ", Recurring : " + objHolidayDeleted.recurring + ", Recurring Type : " + objHolidayDeleted.recurrType + ", Description : " + objHolidayDeleted.Desc, CurrentUser.Account);
+                    }
+                    else
+                    {
+                        bool IsHolidayExist = holidayDao.CheckHolidayExist(arrResult);
+                        if (IsHolidayExist == true)
+                        {
+                            TempData["warning"] = Locale.HolidayAlreadyExiststoDeleteorUpdate;
+                        }
+                        else
+                        {
+                            HolidayModel objHolidayDeleted = holidayDao.GetHolidayData(arrResult);
+                            holidayDao.AddHolidayinTemptoDelete(arrResult);
+                            TempData["Notice"] = Locale.HolidayDeleteVerify;
+                            auditTrailDao.Log("Add Holiday into Temporary record to Delete - Holiday Date : " + objHolidayDeleted.Date + ", Recurring : " + objHolidayDeleted.recurring + ", Recurring Type : " + objHolidayDeleted.recurrType + ", Description : " + objHolidayDeleted.Desc, CurrentUser.Account);
+                        }
+                    }
+
+                }
+            }
+            else
+            {
+                TempData["Warning"] = Locale.Nodatawasselected;
+            }
+            return RedirectToAction("Index");
+        }
+
+
+    }
+}

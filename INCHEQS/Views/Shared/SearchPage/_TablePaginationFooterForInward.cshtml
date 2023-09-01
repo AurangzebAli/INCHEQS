@@ -1,0 +1,126 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common;
+@if (ViewBag.SearchResult != null)
+{
+    <tr>
+        <td colspan="100%">
+            @if (ViewBag.SearchResult.TotalPage != 0)
+            {
+            <div class="row">
+                <div class="col-sm-3">
+                    @*@Locale.Record : <span id="record" class="bold record"></span><br />*@
+                    @Locale.TotalRecord : <span id="totalRecord" class="bold totalRecord">@ViewBag.SearchResult.TotalRecordCount</span><br />
+                    @if (ViewBag.SearchResult.TotalOutstandingCount != 0)
+                    {
+                        <text>Total Outstanding: </text> <span id="totalOutstandingRecord" class="bold totalOutstandingRecord">@ViewBag.SearchResult.TotalOutstandingCount</span><br />
+                    }
+                    @if (ViewBag.SearchResult.GrandTotalFile != 0)
+                    {
+                        <text>Grand Total Imported File(s) :</text> <span id="grandtotalfile" class="bold grandtotalfile">@ViewBag.SearchResult.GrandTotalFile</span><br />
+                    }
+                    @if (ViewBag.SearchResult.GrandTotalImportItem != 0)
+                    {
+                        <text>Grand Total Imported Item(s) :</text> <span id="grandtotalImportItem" class="bold grandtotalImportItem">@ViewBag.SearchResult.GrandTotalImportItem</span><br />
+                    }
+                    @if (ViewBag.SearchResult.GrandTotalAmount != 0)
+                    {
+
+                        <text>Grand Total Imported Amount :</text>
+                        <span id="grandTotalAmount" class="bold grandTotalAmount">@StringUtils.FormatCurrency(ViewBag.SearchResult.GrandTotalAmount.ToString())</span>
+                    }
+                </div>
+                <div class="col-sm-6 text-center">
+                    <ul class="pagination pagination-sm">
+                        <li><a href="#" data-page="1">@Locale.First</a></li>
+                        <li><a href="#" data-page="@(ViewBag.SearchResult.CurrentPage - 1)" pageact="prev">@Locale.Prev</a></li>
+                        @if (ViewBag.SearchResult.TotalPage <= 10)
+                        {
+                            for (int i = 1; i <= ViewBag.SearchResult.TotalPage; i++)
+                            {
+                                <li Class="pageData"><a href="#" data-page="@i" class="@i">@i</a></li>
+                            }
+                        }
+                        else
+                        {
+                            if (ViewBag.SearchResult.CurrentPage < 10)
+                            {
+                                for (int i = 1; i <= 10; i++)
+                                {
+                                    <li Class="pageData"><a href="#" data-page="@i" class="@i">@i</a></li>
+                                }
+                            }
+                            else
+                            {
+                                if (ViewBag.SearchResult.CurrentPage != ViewBag.SearchResult.TotalPage)
+                                {
+
+                                    if (ViewBag.SearchResult.CurrentPage + 10 <= ViewBag.SearchResult.TotalPage)
+                                    {
+                                        for (int i = ViewBag.SearchResult.CurrentPage; i < ViewBag.SearchResult.CurrentPage + 10; i++)
+                                        {
+                                            <li Class="pageData"><a href="#" data-page="@i" class="@i">@i</a></li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for (int i = ViewBag.SearchResult.TotalPage - 9; i <= ViewBag.SearchResult.TotalPage; i++)
+                                        {
+                                            <li Class="pageData"><a href="#" data-page="@i" class="@i">@i</a></li>
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    for (int i = ViewBag.SearchResult.TotalPage - 9; i <= ViewBag.SearchResult.TotalPage; i++)
+                                    {
+                                        <li Class="pageData"><a href="#" data-page="@i" class="@i">@i</a></li>
+                                    }
+                                }
+                            }
+                        }
+                        @*@if (ViewBag.SearchResult.CurrentPage <= 3) {
+                    if (ViewBag.SearchResult.TotalPage <= 3) {
+                        for (int i = 1; i <= ViewBag.SearchResult.TotalPage; i++) {
+                            <li Class="pageData"><a href="#" data-page="@i" class="@i">@i</a></li>
+                        }
+                    } else {
+                        for (int i = 1; i <= 5; i++) {
+                            <li Class="pageData"><a href="#" data-page="@i" class="@i">@i</a></li>
+                        }
+                    }
+                } else {
+                    <li><a href="#" data-page="@(ViewBag.SearchResult.CurrentPage - 2)" pageact="@(ViewBag.SearchResult.CurrentPage - 2)">@(ViewBag.SearchResult.CurrentPage - 2)</a></li>
+                    <li><a href="#" data-page="@(ViewBag.SearchResult.CurrentPage - 1)" pageact="@(ViewBag.SearchResult.CurrentPage - 1)">@(ViewBag.SearchResult.CurrentPage - 1)</a></li>
+                    <li class="active"><a href="#" data-page="@(ViewBag.SearchResult.CurrentPage)" pageact="@(ViewBag.SearchResult.CurrentPage)">@(ViewBag.SearchResult.CurrentPage)</a></li>
+                    if (ViewBag.SearchResult.CurrentPage != ViewBag.SearchResult.TotalPage) {
+                        <li><a href="#" data-page="@(ViewBag.SearchResult.CurrentPage + 1)" pageact="@(ViewBag.SearchResult.CurrentPage + 1)">@(ViewBag.SearchResult.CurrentPage + 1)</a></li>
+                        if (ViewBag.SearchResult.CurrentPage != (ViewBag.SearchResult.TotalPage -1)) {
+                            <li><a href="#" data-page="@(ViewBag.SearchResult.CurrentPage + 2)" pageact="@(ViewBag.SearchResult.CurrentPage + 2)">@(ViewBag.SearchResult.CurrentPage + 2)</a></li>
+                        }
+                    }
+                }*@
+
+                        <li><a href="#" data-page="@(ViewBag.SearchResult.CurrentPage + 1)" pageact="next">@Locale.Next</a></li>
+                        <li><a href="#" data-page="@ViewBag.SearchResult.TotalPage">Last</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-3">
+                    @if (ViewBag.SearchResult.TotalImportItem != 0)
+                    {
+                        <text>@Locale.TotalItem :</text> <span id="totalImportItem" class="bold totalImportItem">@ViewBag.SearchResult.TotalImportItem.ToString()</span><br />
+                    }
+
+                    @Locale.Page : <span id="currentPage" class="bold currentPage">@ViewBag.SearchResult.CurrentPage</span> / <span id="totalPage" class="bold totalPage">@ViewBag.SearchResult.TotalPage</span><br />
+                </div>
+
+            </div>
+            }
+            else
+            {
+                <h4 class="text-center">No Data Available</h4>
+            }
+
+        </td>
+    </tr>
+}

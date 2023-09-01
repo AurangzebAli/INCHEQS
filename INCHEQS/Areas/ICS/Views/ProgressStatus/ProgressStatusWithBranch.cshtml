@@ -1,0 +1,137 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment;
+
+<br />
+
+<style>
+    .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+        padding: 0px;
+    }
+</style>
+
+<div style="width:100%">
+    @if (ViewBag.ProgressStatusWithBranch != null)
+    {
+        @*<h3>Normal Inward Clearing</h3>*@
+        <table id="progressStatusBranch" class="table table-bordered"  style="font-size:12pt;font-family:Arial;font-weight:bold;">
+            <thead>
+                <tr style="background-color:#add8e6;">
+                    <td>Description</td>
+                    <td colspan="2">Completed</td>
+                    <td>In Progress</td>
+                    <td>Total</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="background-color:#add8e6;">Approved</td>
+                    <td style="background-color:#add8e6;">Rejected</td>
+                    <td style="background-color:#add8e6;">Pending</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody style="border:none;">
+                @foreach (var items in ViewBag.ProgressStatusWithBranch)
+                {
+                    <tr>
+                        <td>@items.Branch &nbsp;</td>
+                        <td>@items.Approved</td>
+                        <td>@items.Rejected</td>
+                        <td>@items.Pending</td>
+                        <td>@items.Total</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot style="font-weight:bold">
+                <tr style="background-color:#add8e6;">
+                    <td>Total</td>
+                    <td id="TotalCompleted"></td>
+                    <td id="Total1stLevel"></td>
+                    <td id="Total2ndLevel"></td>
+                    <td id="TotalAll"></td>
+                </tr>
+            </tfoot>
+
+        </table>
+
+    }
+
+    @*@if (ViewBag.ProgressStatusWithPPSBranch != null)
+    {
+        <h3>PPS</h3>
+        <table id="progressStatusPPSBranch" class="table table-bordered" style="font-size:8pt;font-family:verdana;font-weight:bold">
+            <thead>
+                <tr style="background-color:#add8e6;">
+                    <td>Description</td>
+                    <td>Completed</td>
+                    <td colspan="2">In Progress</td>
+                    <td>Total</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td style="background-color:#add8e6;">1st Level</td>
+                    <td style="background-color:#add8e6;">2nd Level</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var items in ViewBag.ProgressStatusWithPPSBranch)
+                {
+                    <tr style="padding:5px;">
+                        <td>@items.PPSBranch</td>
+                        <td>@(Convert.ToInt32(items.PPSBranchTotal) - @Convert.ToInt32(items.PPSBranchLevel1st) - @Convert.ToInt32(items.PPSBranchLevel2nd))</td>
+                        <td>@items.PPSBranchLevel1st</td>
+                        <td>@items.PPSBranchLevel2nd</td>
+                        <td>@items.PPSBranchTotal</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot style="font-weight:bold">
+                <tr style="background-color:#add8e6;">
+                    <td>Total</td>
+                    <td id="TotalPPSCompleted"></td>
+                    <td id="TotalPPS1stLevel"></td>
+                    <td id="TotalPPS2ndLevel"></td>
+                    <td id="TotalPPSAll"></td>
+                </tr>
+            </tfoot>
+
+        </table>
+
+    }*@
+</div>
+
+<script>
+    
+    $(function () {
+        $("#TotalCompleted").html(sumColumn(2));
+        $("#Total1stLevel").html(sumColumn(3));
+        $("#Total2ndLevel").html(sumColumn(4));
+        $("#TotalAll").html(sumColumn(5));
+
+        //$("#TotalPPSCompleted").html(sumPPSColumn(2));
+        //$("#TotalPPS1stLevel").html(sumPPSColumn(3));
+        //$("#TotalPPS2ndLevel").html(sumPPSColumn(4));
+        //$("#TotalPPSAll").html(sumPPSColumn(5));
+    });
+
+    function sumColumn(index) {
+        var total = 0;
+        $("#progressStatusBranch tbody td:nth-child(" + index + ")").each(function () {
+            total += parseInt($(this).text(),10) || 0;
+        });
+        return total;
+    }
+
+    //function sumPPSColumn(index) {
+    //    var total = 0;
+    //    $("#progressStatusPPSBranch tbody td:nth-child(" + index + ")").each(function () {
+    //        total += parseInt($(this).text(), 10) || 0;
+    //    });
+    //    return total;
+    //}
+    //$("#Total1stLevel").text(Total1stLevel);
+    //$("#Total2ndLevel").text(Total2ndLevel);
+    //$("#TotalAll").text(TotalAll);
+
+</script>

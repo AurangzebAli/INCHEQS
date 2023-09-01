@@ -1,0 +1,92 @@
+﻿@using INCHEQS.Resources
+
+
+@foreach (var row in ViewBag.Micr.Rows)
+{
+    foreach (var field in row["fldMicrValue"].Split('|'))
+    {
+        if (field == "fldCheckDigit")
+        {
+            <span class="micr-info-ics fldCheckDigit txtBlack" name="fldCheckDigit" value="@ViewBag.InwardItemViewModel.getField("fldCheckDigit").Trim()">@ViewBag.InwardItemViewModel.getField("fldCheckDigit").Trim()</span>
+        }
+        else if (field == "fldChequeSerialNo")
+        {
+            <span class="micr-info-ics fldChequeSerialNo txtBlack" id="fldChequeSerialNo" value="@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo").Trim()">@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo").Trim()</span>
+        }
+        else if (field == "fldIssueBankCode")
+        {
+            <span class="micr-info-ics fldIssueBankCode txtBlack" name="fldIssueBankCode" value="@ViewBag.InwardItemViewModel.getField("fldIssueBankCode").Trim()">@ViewBag.InwardItemViewModel.getField("fldIssueBankCode").Trim()</span>
+        }
+        else if (field == "fldIssueStateCode")
+        {
+            <span class="micr-info-ics fldIssueStateCode txtBlack">@ViewBag.InwardItemViewModel.getField("fldIssueStateCode").Trim()</span>
+        }
+        else if (field == "fldIssueBranchCode")
+        {
+            <span class="micr-info-ics fldIssueBranchCode txtBlack">@ViewBag.InwardItemViewModel.getField("fldIssueBranchCode").Trim()</span>
+        }
+        else if (field == "fldAccountNumber")
+        {
+            <span class="micr-info-ics fldAccountNumber txtBlack" id="fldAccountNumber" value="@ViewBag.InwardItemViewModel.getField("fldAccountNumber").Trim()">@ViewBag.InwardItemViewModel.getField("fldAccountNumber").Trim()</span>
+        }
+        else if (field == "fldTransCode")
+        {
+            <span class="micr-info-ics fldTransCode txtBlack" name="fldTransCode" value="@ViewBag.InwardItemViewModel.getField("fldTransCode").Trim()">@ViewBag.InwardItemViewModel.getField("fldTransCode").Trim()</span>        }
+    }
+}
+
+
+
+
+            @*<span type="hidden" class="micr-info fldIssueBranchCode txtBlack" name="fldIssueBranchCode" value="@ViewBag.InwardItemViewModel.getField("fldIssueBranchCode").Trim()">@ViewBag.InwardItemViewModel.getField("fldIssueBranchCode").Trim()</span>*@
+            @*<span class="micr-info-ics fldTransCode txtBlack" name="fldTransCode" value="@ViewBag.InwardItemViewModel.getField("fldTransCode").Trim()">@ViewBag.InwardItemViewModel.getField("fldTransCode").Trim()</span>*@
+
+            @*For Image Retriever Audit Log*@
+            @*if (ViewBag.TaskId.ToString().Trim() == "309230" || ViewBag.TaskId.ToString().Trim() == "301120" || ViewBag.TaskId.ToString().Trim() == "301130")
+                {*@
+            <input type="hidden" name="fldIssueBranchCodeLog" value="@ViewBag.InwardItemViewModel.getField("fldIssueBranchCode")" />
+            <input type="hidden" name="fldChequeSerialNoLog" value="@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo")" />
+            <input type="hidden" name="fldAccountNumberLog" value="@ViewBag.InwardItemViewModel.getField("fldAccountNumber")" />
+            @*}*@
+
+
+
+
+            @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "ConfirmMICR"))
+            {
+                <td><button data-action="@Url.Action("ConfirmMICR")" class="normal-submit-Verification btn btn-default">@Locale.btnConfirm</button></td>
+            }
+
+            @if ((ViewBag.InwardItemViewModel.getField("fldModifiedFields").Trim() == "AccNo"))
+            {
+                <script>
+                    $(document).ready(function () {
+                        $('#fldAccountNumber').removeClass("txtBlack").addClass("txtRed")
+                        /*$('#fldAccountNumber').css({
+                                'color': 'red'
+                            });*/
+                    });
+                </script>
+            }
+            else if ((ViewBag.InwardItemViewModel.getField("fldModifiedFields").Trim() == "ChequeNo"))
+            {
+                <script>
+                    $(document).ready(function () {
+                        $('#fldChequeSerialNo').removeClass("txtBlack").addClass("txtRed")
+                        /*$('#fldChequeSerialNo').css({
+                            'color': 'red'
+                        });*/
+                    });
+                </script>
+            }
+            else if ((ViewBag.InwardItemViewModel.getField("fldModifiedFields").Trim() == "AccNo,ChequeNo"))
+            {
+                <script>
+                    $(document).ready(function () {
+                        $('#fldChequeSerialNo, #fldAccountNumber').removeClass("txtBlack").addClass("txtRed")
+                        /*$('#fldChequeSerialNo, #fldAccountNumber').css({
+                            'color': 'red'
+                        });*/
+                    });
+                </script>
+            }

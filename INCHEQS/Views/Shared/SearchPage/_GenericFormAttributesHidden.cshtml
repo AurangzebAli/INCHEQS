@@ -1,0 +1,5 @@
+﻿@if (ViewBag.SearchFormAttributes != null) {
+    foreach ( var key in ViewBag.SearchFormAttributes.AllKeys){ 
+        <input type = "hidden" name = "@key" value = "@ViewBag.SearchFormAttributes(key)" />
+    }
+}

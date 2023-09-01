@@ -1,0 +1,41 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+    DateTime currentdate = DateTime.Now;
+    DateTime sDate = currentdate.AddMonths(-6);
+    string staleDate = sDate.ToString("dd-MM-yyyy");
+
+}
+
+<table style="line-height: 23px; margin-top: 30px;">
+    <tr>
+        <th class="col-sm-4">Account Number</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.InwardItemViewModel.getField("fldAccountNumber")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Name Of Account</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.SignatureInfo.fldSignatureAccNo</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Open Date</th>
+        <th>:</th>
+        <td class="col-sm-5 red"><span>@ViewBag.SignatureRules.fldEffectiveDate</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Status</th>
+        <th>:</th>
+        <td class="col-lg-4 h4 red bold"><span>@ViewBag.SignatureInfo.fldSignatureStatus</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">No to sign</th>
+        <th>:</th>
+        <td class="col-lg-4 h4 red bold"><span></span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Signing Condition</th>
+        <th>:</th>
+        <td class="col-lg-4 h4 red bold"><span></span></td>
+    </tr>
+</table>

@@ -1,0 +1,182 @@
+﻿using INCHEQS.Helpers;
+using INCHEQS.Models.SearchPageConfig;
+using System;
+//using System.Collections.Generic;
+//using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+//using System.IO;
+using INCHEQS.Models.Report;
+using System.Threading.Tasks;
+using INCHEQS.Security;
+//using INCHEQS.Models.AuditTrail;
+using INCHEQS.Resources;
+//using INCHEQS.Areas.ICS.ViewModels;
+using INCHEQS.Security.AuditTrail;
+using INCHEQS.Common;
+using System.Globalization;
+
+namespace INCHEQS.Controllers.Reports.Base {
+    
+    public abstract class ReportBaseController : BaseController {
+        protected readonly IAuditTrailDao auditTrailDao;
+        protected IPageConfigDao pageConfigDao;
+        protected IReportService reportService;
+        //Readables by inheriting class
+        protected PageSqlConfig pageSqlConfig { get; private set; }
+
+        //Must be implemented by inheriting class
+        protected abstract PageSqlConfig setupPageSqlConfig();
+
+        protected string searchPageHtml;
+        protected string searchPageHtml2;
+        protected string searchPageHtml3;
+        protected string searchPageHtml4;
+        protected string generateReportHtml;
+        protected string OCSSearchPageHtml;
+        protected string ICSSearchPageHtml;
+
+        //Readables by inheriting class
+        protected string currentAction;
+        protected FormCollection currentFormCollection;
+
+        /// <summary>
+        /// This function should be called inside All Actions in ICCSBaseController and it's Inheritence Controller.
+        /// This is to protect from UNAUTHORIZED ACCESS to the page through TASKID returned by setupPageSqlConfig().
+        /// This function is important and have to be called or else, the page won't work
+        /// Returns: PageSqlConfig set in setupPageSqlConfig();
+        /// </summary>
+        [NonAction]
+        protected PageSqlConfig initializeBeforeAction() {
+
+            //Expose 'currentAction' to Children Controller so that it can be intercepted and add logics accordingly
+            //currentAction is action URL accessed
+            //currentFormCollection is FormCollection sent to URL accessed
+            //The actions are:
+            // - Index
+            // - GenerateReport
+            currentAction = currentAction != null ? currentAction : (string) ControllerContext.RouteData.Values["action"];
+            currentFormCollection = new FormCollection(ControllerContext.HttpContext.Request.Form);
+
+
+            //Initializ PageSqlConfig based on: 
+            // - Inherited Controller initialization of setupPageSqlConfig()
+            // - Request Query String of TaskId and ViewId
+            pageSqlConfig = setupPageSqlConfig();
+            try {
+                //Check for UNAUTHORIZED ACCESS
+                //Reject if User Does Not Have Access         
+                RequestHelper.RestrictAccessToUserBasedOnTaskId(ControllerContext, pageSqlConfig.TaskId);
+
+                return pageSqlConfig;
+            } catch(HttpException) {
+                throw new HttpException(Locale.AccessDenied);
+            }            
+        }
+
+
+        public ReportBaseController(IAuditTrailDao auditTrailDao,IPageConfigDao pageConfigDao , IReportService reportService) {
+            this.auditTrailDao = auditTrailDao;
+            this.pageConfigDao = pageConfigDao;
+            this.reportService = reportService;
+            this.searchPageHtml = searchPageHtml != null ? searchPageHtml : "Report/SearchPage";            
+            this.searchPageHtml2 = searchPageHtml2 != null ? searchPageHtml2 : "Report/SearchPage2";
+            this.searchPageHtml3 = searchPageHtml3 != null ? searchPageHtml3 : "Report/SearchPage3";
+            this.searchPageHtml4 = searchPageHtml4 != null ? searchPageHtml4 : "Report/SearchPage4";
+            this.generateReportHtml = generateReportHtml != null ? generateReportHtml : "Report/GenerateReport";
+            this.OCSSearchPageHtml = OCSSearchPageHtml != null ? OCSSearchPageHtml : "Report/OCSSearchPage";
+            this.ICSSearchPageHtml = ICSSearchPageHtml != null ? ICSSearchPageHtml : "Report/ICSSearchPage";
+        }
+
+        // GET: ICS/ReportBase
+        public virtual async Task<ActionResult> Index() {
+            initializeBeforeAction();
+            ViewBag.SearchPage = await pageConfigDao.GetSearchFormModelFromConfigAsync(CurrentUser.Account, pageSqlConfig);
+            ViewBag.ClearingDate = CurrentUser.Account.ClearingDate;
+            if (ViewBag.SearchPage.PageTitle == "Daily Inward Clearing Summary Report" || ViewBag.SearchPage.PageTitle == "Daily Outward Return Summary Report")
+            {
+                return View(searchPageHtml2);
+            }else if (ViewBag.SearchPage.PageTitle == "Daily Inward Clearing Details Report")
+            {
+                return View(searchPageHtml3);
+            }
+            else if (ViewBag.SearchPage.PageTitle == "Daily Outward Return Details Report")
+            {
+                return View(searchPageHtml4);
+            }
+            else if (ViewBag.SearchPage.PageTitle == "Daily Outward Clearing Summary Report" || ViewBag.SearchPage.PageTitle == "Daily Outward Clearing Details Report" || ViewBag.SearchPage.PageTitle == "Daily Inward Return Summary Report" || ViewBag.SearchPage.PageTitle == "Daily Inward Return Details Report" || ViewBag.SearchPage.PageTitle == "Daily OCS Credit Posting Report")
+            {
+                return View(OCSSearchPageHtml);
+            }
+            else if (ViewBag.SearchPage.PageTitle == "Daily ICS Credit Posting Report")
+            {
+                return View(ICSSearchPageHtml);
+            }
+            else
+            {
+            return View(searchPageHtml);
+        }
+        }
+
+        public virtual async Task<ActionResult> PrintReport() {
+            initializeBeforeAction();
+            ViewBag.SearchPage = await pageConfigDao.GetSearchFormModelFromConfigAsync(CurrentUser.Account, pageSqlConfig);
+            return View("Report/ReportParentForm");
+        }
+
+
+        public virtual async Task<ActionResult> GenerateReport(string reportType , FormCollection collection) {
+            initializeBeforeAction();
+
+            try { 
+                ReportModel reportModel = await GetReportModel(reportType);
+                string mimeType;
+                byte[] renderedBytes;
+
+                if (!pageSqlConfig.PrintReportParam.Equals("page")) {
+                    renderedBytes = reportService.renderReportBasedOnConfig(reportModel, collection, reportModel.reportPath, reportType, out mimeType);
+                } else {
+                    renderedBytes = reportService.renderReportBasedOnConfigForPage(reportModel, collection, reportModel.reportPath, reportType, out mimeType);
+                }
+
+                Response.AddHeader("content-disposition", string.Format("attachment; filename={0}.{1}" , reportModel.extentionFilename , reportModel.extensionType));
+                CurrentUser.Account.TaskId = reportModel.taskId;
+                auditTrailDao.Log("Generate Report '" + reportModel.extentionFilename+"' in "+ reportType, CurrentUser.Account);
+                return File(renderedBytes, mimeType);
+
+            } catch (Exception ex) {
+                throw ex;
+            }
+        }
+        
+
+        public virtual ActionResult GetReportType() {
+            initializeBeforeAction();
+            return View("Report/ModalReportType");
+        }
+
+        private async Task<ReportModel> GetReportModel(string reportType) {
+
+            ReportModel reportModel = await reportService.GetReportConfigAsync(pageSqlConfig);
+            string reportPath = reportModel.reportPath;
+
+            //Search Report Path in Project Or In Any Folder specified
+            if (!System.IO.File.Exists(reportPath)) {
+                reportPath = Server.MapPath(reportModel.reportPath);
+                if (!System.IO.File.Exists(reportPath)) {
+                    throw new Exception("Report Path Not Found");
+                }
+                reportModel.reportPath = reportPath;
+            }
+
+            string fileNameExtention = "pdf";
+            if (ReportType.Extensions.ContainsKey(reportType)) {
+                fileNameExtention = ReportType.Extensions[reportType];
+            }
+            reportModel.extensionType = fileNameExtention;
+            return reportModel;
+
+        }
+
+    }
+}

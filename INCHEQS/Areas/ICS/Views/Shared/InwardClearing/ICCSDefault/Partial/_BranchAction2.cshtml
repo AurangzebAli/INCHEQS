@@ -1,0 +1,33 @@
+﻿@using INCHEQS.Resources;
+
+
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchApproveMaker"))
+{
+    <button type="button" id="approveBtn" data-action="@Url.Action("BranchApprove")" class="btn-verification-border btn-verification btn-medium normal-submit-Verification">@*Locale.Approve*@Accept</button>
+}
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturnMaker"))
+{
+    <button type="button" id="returnBtn" data-action="@Url.Action("BranchReturn")" class="btn-verification-border btn-verification btn-medium normal-submit-Verification">Reject</button>
+}
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReferBackMaker"))
+{
+    <button type="button" id="referBackBtn" data-action="@Url.Action("BranchReferBack")" class="btn-verification-border btn-verification btn-medium normal-submit-Verification">@Locale.ReferBack</button>
+}
+
+
+<input type="text" style="width:34px;min-width:30px" id="rejectCodeText" name="new_textRejectCode" value="@ViewBag.InwardItemViewModel.getField("fldRejectCode").Trim()") />
+<select class="textbox" id="rejectCodeSelectList" name="new_rejectCode" style="width:240px">
+    <option value="">--- @Locale.SelectReturnRouteReason ---</option>
+</select>
+<input type="text" name="fldCharges" value="@ViewBag.InwardItemViewModel.getField("fldChargesPending").Trim()" hidden />
+<label class="txtBlack">Remarks</label>
+<textarea name="textAreaRemarks" placeholder="" style="height: 50px;" maxlength="140" value="@ViewBag.InwardItemViewModel.getField("fldRemarks")">@ViewBag.InwardItemViewModel.getField("fldRemarks")</textarea>
+<input type="hidden" id="remarkField" name="remarkField" value="">
+
+@*<script type="text/javascript">
+        $(function () {
+            $("[name='new_rejectCode']").change(function () {
+                $("#truncatedAmt").val("@ViewBag.getRemarkTruncatedAmount");
+            });
+        });
+    </script>*@

@@ -1,0 +1,40 @@
+﻿var ez;
+(function () {
+
+    function drawRejectCodesSelect(selector) {
+        var $selectList = $(selector);
+        if ($selectList.length > 0) {
+            $.ajax({
+                type: "POST",
+                url: App.ContextPath + "RejectCodesApi",
+                success: function (data) {
+                    $.each(data, function (key, value) {
+                        $selectList.append("<option value=" + key + ">" + key + " - " + value + " </option>");
+                    })
+                    //Initiate selected select list
+                    $("#rejectCodeSelectList").val($.trim($("#rejectCodeText").val()))
+                }
+            })
+        }
+        bindRejectCodeInput();
+    }
+
+    function bindRejectCodeInput() {
+
+        //on keyup
+        $("#rejectCodeText").off('keyup').on('keyup', function () {
+            $("#rejectCodeSelectList").val($(this).val());
+        });
+
+        //on change
+        $("#rejectCodeSelectList").off('change').on('change', function () {
+            $("#rejectCodeText").val($(this).val());
+        });
+    }
+
+
+    //$(document).ready(function () {
+    //    drawRejectCodesSelect("#rejectCodeSelectList");
+    //});
+
+})();

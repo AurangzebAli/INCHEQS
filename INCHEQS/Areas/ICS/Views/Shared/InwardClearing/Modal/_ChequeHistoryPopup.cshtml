@@ -1,0 +1,69 @@
+﻿@using INCHEQS.Resources
+@{
+    ViewBag.Title = "ChequeHistory";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_ChequeHistory</title>
+</head>
+<body>
+    <div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>@Locale.UserName</th>
+                    <th>@Locale.Action</th>
+                    <th>@Locale.ReturnReason</th>
+                    <th>@Locale.Remarks</th>
+                    @*<th>@Locale.InternalRemarks</th>
+                    <th>@Locale.ExternalRemarks</th>*@
+                    <th>@Locale.DateandTime</th>
+                    <th>@Locale.Module</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in ViewBag.ChequeHistory.Rows)
+                {
+                    <tr>
+                        <td>@row["fldUserAbb"]</td>
+                        <td>@row["fldActionStatusDesc"]</td>
+                        <td>@row["fldRejectCode"] - @row["fldRejectDesc"]</td>
+                        @*<td>
+                            @foreach (var remark in row["fldRemarks"].Split('|'))
+                            {
+                                @remark<text><br></text>;
+                            }
+                        </td>*@
+                        <td>
+                            @if (@row["fldRemarks"].ToString().Trim() == "" && @row["fldTextAreaRemarks"].ToString().Trim() != "")
+                            {
+                                @row["fldTextAreaRemarks"]
+                            }
+                            else if (@row["fldRemarks"].ToString().Trim() != "" && @row["fldTextAreaRemarks"].ToString().Trim() == "")
+                            {
+                                @row["fldRemarks"]
+                            }
+                            else if (@row["fldRemarks"].ToString().Trim() != "" && @row["fldTextAreaRemarks"].ToString().Trim() != "")
+                            {
+                               @row["fldTextAreaRemarks"]
+                            }
+                            else
+                            {
+                                @row["fldRemarks"]
+                            }
+
+                        </td>
+                        @*<td>@row["fldTextExtAreaRemarks"]</td>*@
+                        <td>@row["fldCreateTimeStamp"]</td>
+                        <td>@row["Module"]</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        
+    </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+﻿@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+
+<table class="table table-condensed table-striped table-hover">
+    <tr>
+        <th>@Locale.RunDateTime</th>
+        <th>@Locale.ClearDate</th>
+        <th>@Locale.Remarks</th>
+    </tr>
+@foreach (var item in ViewBag.ScheduledHistory.Rows) {
+    <tr>
+       
+        <td>
+            @item["fldCreateTimeStamp"]
+        </td>
+        <td>
+            @item["fldClearDate"]
+        </td>
+        <td>
+            @item["fldRemarks"]
+        </td>
+        
+    </tr>
+}
+</table>

@@ -1,0 +1,30 @@
+﻿@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Areas.ICS.Models.LateReturnedMaintenance;
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("Delete"), @Class = "form-inline secure-form submit-onload", id = "searchForm" }))
+{
+    <div class="form-horizontal">
+        <h4>Inward Clearing - Late Return Maintenance</h4>
+        <hr />
+        <table class="table table-condensed table-striped table-hover data-table dataTable no-footer">
+            <thead>
+                <tr>
+                    @Html.Partial("SearchPage/_TableHeaderColumns")
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+                {
+                    <tr class="clickable-row-without-search">
+                        @Html.Partial("SearchPage/_TableBodyColumns", row)
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button data-action="@Url.Action("/Delete")" Class="btn btn-default secure-nav normal-submit-without-search  @(CurrentUser.HasTask(clsLateReturnMaintenance.DELETE) ? "" : "hidden")">@Locale.DeleteBtn</button>
+
+    </div>
+}
+@Scripts.Render("~/bundles/SearchResultPage")

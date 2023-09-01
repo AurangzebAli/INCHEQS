@@ -1,0 +1,49 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using (Html.BeginForm("Delete", "ClearDataProcess", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+            <div class="form-horizontal">
+                <h4>@Locale.UtilitiesClearDataProcess</h4>
+                <hr/>
+                <table class="table table-condensed table-striped table-hover data-table hidden">
+                    <thead>
+                        <tr>
+                            <th>@Locale.ProcessName</th>
+                            <th>@Locale.Status</th>
+                            <th>@Locale.StartTime</th>
+                            <th>@Locale.EndTime</th>
+                            <th>@Locale.UpdateUser ID</th>
+                            <th>@Locale.ClearDate</th>
+                            <th>@Locale.Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in ViewBag.ClearDataProcess.Rows) {
+                            <tr>
+                                <td>@row["fldProcessName"]</td>
+
+                                @if (@row["fldStatus"] == 4) {
+                                    <td>
+                                        @Locale.Completed
+                                    </td>} else {
+                                    <td>
+                                        @Locale.InProcess
+                                    </td>
+                                }
+                                <td>@row["fldStartTime"]</td>
+                                <td>@row["fldEndTime"]</td>
+                                <td>@row["fldUserAbb"]</td>
+                                <td>@row["fldClearDate"]</td>
+                                <td> <input type="checkbox" name="chkDelete" id="chkDelete" value="@row["fldPrimaryID"]"></td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <button type="submit" class="btn btn-default confirm @(CurrentUser.HasTask(TaskIds.ClearDataProcess.DELETE) ? "" : "hidden")">@Locale.DeleteBtn</button>
+            </div>
+        </div>
+}

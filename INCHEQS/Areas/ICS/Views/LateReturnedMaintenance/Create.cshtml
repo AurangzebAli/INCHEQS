@@ -1,0 +1,126 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("", "", FormMethod.Post, new { @Class = "form-inline secure-form", id = "LateReturnedMaintenanceForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    @*@Html.Partial("~/Views/Shared/Partials/_Notice.cshtml")*@
+
+    <div class="form-horizontal">
+        <h4>Inward Clearing - Late Returned Maintenance</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>Clearing Date</th>
+                    <td>
+                        <select name="fldClearDate" id="fldClearDate" style="width:300px">
+                            <option value="" disabled selected hidden>--Select Clearing Date--</option>
+                            @foreach (var item in ViewBag.ClearDate)
+                            {
+                                <option value=@item.fldClearDate>@item.fldClearDate</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Bank Code</th>
+                    <td>
+                        <select name="fldBankcode">
+                            <option value="18">18</option>
+                            <option value="43">43</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>UIC</th>
+                    <td>
+                        <input type="text" class="form-control" name="fldUIC" autocomplete="off" style="width:300px; font-weight:bold;"/>
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Return Reason</th>
+                    <td>
+                        Return Code <input type="text" style="width:30px;min-width:30px" id="rejectCodeTextBranch" name="fldrejectCode" />
+                        <select class="textbox" id="rejectCodeSelectListBranch">
+                            <option value="">--- @Locale.SelectReturnRouteReason ---</option>
+                        </select>
+                    </td>
+                    @*<td>
+                        @*<select name="fldrejectCode">
+                                @foreach (var rows in ViewBag.ReturnCode.Rows)
+                    {
+                                    <option value=@rows["fldRejectCode"]>@rows["fldRejectCode"] - @rows["fldRejectDesc"]</option>
+                                }
+                            </select>*@
+                        
+                    @*</td>*@
+                </tr>
+                @*<tr>
+                    <th></th>
+                    <td>Charges</td>
+                    <td><input type='text' id="serviceCharge" class="form-control number-only" name="fldCharges" /></td>
+                </tr>*@
+            <input type='hidden' id="serviceCharge" class="form-control number-only" name="fldCharges" />
+            <tr>
+                <th></th>
+                <td>
+                    Remarks
+                    <input type="text" name="fldRemarks" autocomplete="off" />
+                </td>
+                @*<td></td>*@
+            </tr>
+
+            </tbody>
+        </table>
+        @*<button type="button" Class="btn btn-default" id="btnFindLateReturnMaintenance">@Locale.Search</button>*@
+        <a id="btnFindLateReturnMaintenance" class="btn btn-default">Find</a>
+        @*<a class="btn btn-default secure-nav" id="btnFindLateReturnMaintenance">Search</a>*@
+
+
+    </div>
+    <br />
+    <div>
+        <table class="table th table-condensed" id="resultLateReturnMaintenance">
+            <thead>
+                <tr>
+                    <th>Clear Date</th>
+                    <th>Account No</th>
+                    <th>Cheque No</th>
+                    <th>UIC</th>
+                    <th>Amount</th>
+                    <th>TC</th>
+                    <th>Approval User Id</th>
+                    <th>Approval Status</th>
+                    <th>Approval Timestamp</th>
+                    <th>UPI Generated</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <button data-action="@Url.Action("/Save")" Class="btn btn-default normal-submit-late-maintenance">Save</button>
+        @*<button type="submit" class="btn btn-default  init-search" data-action="@Url.Action("Create")">Cancel</button>*@
+        <a href="@Url.Action("Create")" class="btn btn-default secure-nav">Cancel</a>
+        <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsICS.LateReturnMaintenance.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/lateReturnedMaintenance.js"></script>
+<script src="~/Scripts/App/rejectCodeBranchApi.js"></script>
+
+@*<script>
+
+        $("#btnFindLateReturnMaintenance").onclick(e){
+            var e = document.getElementById("fldClearDate");
+            var strUser = e.value;
+            if (strUser = "") {
+                alert("No Items");
+            }
+        };
+
+    </script>*@

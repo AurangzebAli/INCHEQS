@@ -1,0 +1,10 @@
+﻿
+@using INCHEQS.Resources
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("Progress"), @Class = "form-inline secure-form submit-onload", id = "searchForm" })) {
+    @Html.AntiForgeryToken();
+    <h4>@ViewBag.SearchPage.PageTitle</h4>
+    <div id="resultContainer"></div>
+}
+
+@Scripts.Render("~/bundles/SearchPage")

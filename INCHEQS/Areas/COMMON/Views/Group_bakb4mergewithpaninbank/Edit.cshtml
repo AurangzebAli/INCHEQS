@@ -1,0 +1,62 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "Group", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Locale.MaintenanceGroupProfile (Edit)</h4>
+        <hr />
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.GroupID</th>
+                    <td>@ViewBag.Group.fldGroupId<input type="hidden" size="80" value="@ViewBag.Group.fldGroupId" name="fldGroupId" /></td>
+                </tr>
+                <tr>
+                    <th>@Locale.GroupDescription</th>
+                    <td><input type="text" size="85" value="@ViewBag.Group.fldGroupDesc" name="fldGroupDesc" /><span class="red-star"> *</span></td>
+                </tr>
+                <tr hidden>
+                    <th>@Locale.Branch</th>
+                    <td><input type="checkbox" name="fldBranchGroup" @(ViewBag.Group.fldBranchGroup == "1" ? "checked" : "") /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form-select">
+                            <div>
+                                <b>@Locale.UserAvailableList</b><br>
+                                <select multiple="multiple" class="form-multiple select-from">
+                                    @foreach (var item in ViewBag.AvailableUser) {
+                                        <option value="@item.fldUserId">@item.fldUserAbb</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-move">
+                                <br /><br /><br />
+                                <p><input type="button" title="select" style='width:100px' class="btn btn-default btn-move addOne" value="Add"></p>
+                                <p><input type="button" title="select all" style='width:100px' class="btn btn-default btn-move addAll" value="Add All"></p>
+                                <p><input type="button" title="remove" style='width:100px' class="btn btn-default btn-move rmOne" value="Remove"></p>
+                                <p><input type="button" title="remove all" style='width:100px' class="btn btn-default btn-move rmAll" value="Remove All"></p>
+                                <br />
+                            </div>
+                            <div>
+                                <b>@Locale.UserSelectedList</b><br>
+                                <select multiple="multiple" class="form-multiple select-to" name="selectedUser">
+                                    @foreach (var item in ViewBag.SelectedUser) {
+                                        <option value="@item.fldUserId">@item.fldUserAbb</option>
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.Group.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.Group.INDEX) ? "" : "hidden")">@Locale.Back</a>
+    </div>
+}
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/app.js"></script>

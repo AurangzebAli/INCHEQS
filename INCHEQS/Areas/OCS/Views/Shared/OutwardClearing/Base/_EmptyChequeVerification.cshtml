@@ -1,0 +1,18 @@
+﻿@using INCHEQS.Resources
+@using System.Data;
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @Scripts.Render("~/bundles/ChequeOCS")
+</head>
+<body>
+    <div class="row">
+        <div class="col-sm-12 text-right">
+            <a id="closeBtn" type="button" class="btn btn-default btn-xs" href="@Url.Action("Close")">@Locale.btnClose</a>
+        </div>
+        <h2 class="text-center">@Locale.Nochequeavailable</h2>
+    </div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "Message", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.MessageEdit</h4>
+        
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.MessageColumn</th>
+                   
+                    <td>
+                        <input style="width:750px" type="text" name="fldBroadcastMessage" value="@ViewBag.message.fldBroadcastMessage" autocomplete="off" maxlength="100" />
+                        <input type="hidden" value="@ViewBag.message.fldBroadcastMessageId" name="fldBroadcastMessageId" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" data-action="@Url.Action("/UPDATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIdsOCS.Message.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <button data-action="@Url.Action("/Edit")" Class="btn btn-default secure-nav normal-submit-without-search @(CurrentUser.HasTask(TaskIdsOCS.Message.EDIT) ? "" : "hidden")">@Locale.Reset</button>
+        <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.Message.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+<script src="~/Scripts/App/app.js"></script>

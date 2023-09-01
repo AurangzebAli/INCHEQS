@@ -1,0 +1,66 @@
+﻿@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+<div id="" class="">
+    <!--table from tblCutOfftime-->
+    <table class="table-condensed table-striped table-hover">
+        <thead>
+            <tr>
+                <td>@Locale.ClearingTypes</td>
+                <td>@Locale.EndTime (hh:mm)</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <input type="hidden" value="@ViewBag.CutOfftime.fldKLCutOffTime" name="cutOffTime"/>@Locale.NormalClearing
+                </td>
+                <td>
+                    <select name="endHour" maxlength="20">
+                        @for (int hour = 0; hour < 24; hour++) {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == ViewBag.CutOfftime.cutOffTimeHour ? "selected" : "")>@hour.ToString("00")</option>
+                        }
+                    </select><span>:</span>
+                    <select name="endMin" maxlength="20">
+                        @for (int min = 0; min < 60; min++) {
+                            <option value="@min.ToString("00")" @(ViewBag.CutOfftime.cutOffTimeMin == min.ToString("00") ? "selected" : "")>@min.ToString("00")</option>
+                        }
+                    </select>
+                </td>
+
+                
+            </tr>
+
+            <tr>
+                <td>@Locale.CutOffActivation:</td>
+                <td>
+
+                    <input type="radio" name="cutOffActivate" value="1" @(ViewBag.CutOfftime.fldActivation == "1" ? "checked" : "")> @Locale.Activate
+                    <input type="radio" name="cutOffActivate" value="0" @(ViewBag.CutOfftime.fldActivation == "0" ? "checked" : "") @(ViewBag.CutOfftime.fldActivation == null ? "checked" : "")> @Locale.Deactivate
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <!--table from tblChequeActivation-->
+    <table class="table form-table table-no-border table-utility">
+        <tr>
+            <td>@Locale.CCUVerification:</td>
+            <td>
+                <input type="radio" name="ccuActivate" value="1" @(ViewBag.ChequeActivation.fldKLActivation == "1" ? "checked" : "")> @Locale.Activate
+                <input type="radio" name="ccuActivate" value="0" @(ViewBag.ChequeActivation.fldKLActivation == "0" ? "checked" : "") @(ViewBag.ChequeActivation.fldKLActivation == null ? "checked" : "") > @Locale.Deactivate
+            </td>
+        </tr>
+        <tr>
+            <td>@Locale.BranchVerification:</td>
+            <td>
+                <input type="radio" name="branchVerify" value="1" @(ViewBag.ChequeActivation.fldBPCKLActivation == "1" ? "checked" : "")> @Locale.Activate
+                <input type="radio" name="branchVerify" value="0" @(ViewBag.ChequeActivation.fldBPCKLActivation == "0" ? "checked" : "") @(ViewBag.ChequeActivation.fldBPCKLActivation == null ? "checked" : "")> @Locale.Deactivate
+            </td>
+        </tr>
+
+    </table>
+
+    <button type="submit" data-action="@Url.Action("Update")" Class="btn btn-default normal-submit-without-search @(CurrentUser.HasTask(TaskIds.BranchActivation.INDEX) ? "" : "hidden")">@Locale.btnOK</button>
+</div>
+@Scripts.Render("~/bundles/dashboard")

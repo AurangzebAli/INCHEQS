@@ -1,0 +1,17 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@*@using (Html.BeginForm(null, null, FormMethod.Post, new { @Class = "secure-form" }))*@
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline secure-form submit-onload", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+    <h4>Branch - Branch Submisson</h4>
+    <div class="row">
+        <hr />
+        @Html.Partial("SearchPage/_GenericFieldsForm")
+    </div>
+
+}
+
+
+@Scripts.Render("~/bundles/SearchPage")

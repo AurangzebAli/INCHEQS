@@ -1,0 +1,38 @@
+﻿@using INCHEQS.Resources
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline secure-form", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+    <h4>@ViewBag.SearchPage.PageTitle</h4>
+    <hr />
+    <div class="row">
+        @Html.Partial("SearchPage/_GenericFieldsForm")
+    </div>
+    <hr />
+
+    if (ViewBag.ProcessName == "ICSSOAServices" || ViewBag.ProcessName == "ICSDMIServices")
+    {
+        <button class="btn btn-default search">Search</button>
+        <div class="form-group">
+            <button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("StartProcessGenerateFile")" >Start Process</button>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("ReStartSFTPProcess")">Re-send files to SFTP server</button>
+        </div>
+    }
+    else
+    {
+        <div class="form-group">
+            <button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("StartProcess")">Start Process</button>
+        </div>
+    }
+    <div id="resultContainer"></div>
+
+}
+
+<div id="dataProcessContainer" data-processname="@ViewBag.ProcessName"></div>
+<input id="dataProcessType" value="Other" type="hidden">
+
+@Scripts.Render("~/bundles/SearchPage")
+
+@Scripts.Render("~/bundles/DataProcessRealTime")
+@*<script src="~/Scripts/App/app.js"></script>*@

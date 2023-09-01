@@ -1,0 +1,57 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "HighRiskAccount", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Maintenance > Account Setting > High Risk Account Profile (Add)</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+			<tbody>
+				<tr>
+					<th>Internal Branch Code</th>
+					<td>
+						@*<input type="text" name="fldInternalBranchCode" />*@
+						<select class="default" name="fldInternalBranchCode" maxlength="20">
+							@foreach (var row in ViewBag.InternalBranchCode.Rows)
+							{
+								<option value="@row["fldCInternalBranchCode"]">
+									@row["fldCInternalBranchCode"] - @row["fldCBranchDesc"]
+								</option>
+							}
+						</select>
+						<span class="red-star"> *</span>
+					</td>
+					
+				</tr>
+				<tr>
+					<th>High Risk Account</th>
+					<td>
+						<input type="text" name="fldHighRiskAccount" class="number-only" maxlength="10" />
+						<span class="red-star"> *</span>
+					</td>
+				</tr>
+
+				<tr>
+					<th>Amount</th>
+					<td>
+						<input type="text" name="fldHighRiskAmount" id="fldHighRiskAmount" />
+						<span class="red-star"> *</span>
+					</td>
+				</tr>
+
+			</tbody>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.HighRiskAccount.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+		<a href="@Url.Action("Create")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.HighRiskAccount.INDEX) ? "" : "hidden")">@Locale.btnReset</a>
+		<a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.HighRiskAccount.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+		$('#fldHighRiskAmount').maskMoney({ allowZero: true });
+    })
+
+</script>

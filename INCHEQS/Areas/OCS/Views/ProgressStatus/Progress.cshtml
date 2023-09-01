@@ -1,0 +1,259 @@
+﻿@using INCHEQS.Resources
+<br />
+@if (ViewBag.ProgressStatus != null)
+{
+    foreach (var Items in ViewBag.ProgressStatus)
+    {
+        if (ViewBag.UserType == "branch")
+        {
+
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div style="font-size:15px; font-weight:bold;  background-color:#D7DBDD; color:dimgray; height:25px;">::. Overall Cheque Processing Summary</div>
+                        <div style="font-size:15px; font-weight:bold;  background-color:#D7DBDD; color:dimgray; height:25px;"> Outward Clearing</div>
+                        <div class="col-sm-8" style="background-color:#FFFFFF;">Captured</div>
+                        <div class="col-sm-4" style="background-color:#FFFFFF;"><span style="color:red; font-weight:bold; float:right" id="TotalCaptured">@Items.TotalNormalCapturingItems</span></div>
+
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-sm-8" style="background-color:#FFFFFF;">Rejected</div>
+                        <div class="col-sm-4" style="background-color:#FFFFFF;"><span style="color:red; font-weight:bold; float:right" id="TotalRejected">@Items.TotalRejected</span></div>
+
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-sm-8" style="background-color:#FFFFFF;">Cleared</div>
+                        <div class="col-sm-4" style="background-color:#FFFFFF;"><span style="color:red; font-weight:bold; float:right" id="TotalCleared">@Items.TotalClearedItem</span></div>
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-sm-8" style="background-color:#FFFFFF;">In Progress</div>
+                        <div class="col-sm-4" style="background-color:#FFFFFF;"><span style="color:red; font-weight:bold; float:right" id="TotalInProgress">@Items.TotalPending</span></div>
+
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-sm-8" style="background-color:#FFFFFF;">% Completion</div>
+                        <div class="col-sm-4" style="background-color:#FFFFFF;"><span style="color:red; font-weight:bold; float:right" id="TotalCompletion">@Items.TotalPercentCompletion</span></div>
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-9">
+                    @*@if (CurrentUser.HasTask("711000"))
+                        {*@
+                    <div class="row">
+                        <div style="font-size:15px; font-weight:bold;  background-color:#D7DBDD; color:dimgray; height:25px;">Inward Return</div>
+                        <div class="col-sm-8" style="background-color:#FFFFFF;">Inward Return</div>
+                        <div class="col-sm-4" style="background-color:#FFFFFF;"><span style="color:red; font-weight:bold; float:right" id="InwardReturn">@Items.TotalInwardReturn</span></div>
+                    </div>
+                    @*}*@
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+        }
+            <br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div style="font-size:15px; font-weight:bold;  background-color:#D7DBDD; color:dimgray; height:25px; display:none;">::. Outward Clearing</div>
+                        <div style="font-size:15px; font-weight:bold;  background-color:#D7DBDD; color:dimgray; height:25px;">::. Capturing Summary</div>
+                        <div style="font-size:15px; font-weight:bold;  background-color:#AED6F1; color:dimgray; height:20px;">Cheque Capturing Type<span style="float:right"># Of Items</span></div>
+                        <div class="col-sm-8" style="background-color:#FFFFFF;">Normal Cheque</div>
+                        <div class="col-sm-4" style="background-color:#FFFFFF;"><span style="color:red; font-weight:bold; float:right" id="NormalCheque">@Items.TotalNormalCheque</span></div>
+                        <div class="col-sm-8" style="background-color:#FFFFFF; display:none;">Non Clearing Cheque</div>
+                        <div class="col-sm-4" style="background-color:#FFFFFF; display:none;"><span style="color:red; font-weight:bold; float:right" id="NonClearingCheque">@Items.TotalNonClearingCheque</span></div>
+                        <div class="col-sm-8" style="background-color:#D7DBDD;">Total Item</div>
+                        <div class="col-sm-4" style="background-color:#D7DBDD;"><span style="color:red; font-weight:bold; float:right" id="TotalCapturingCheque">@Items.TotalItemCheque</span></div>
+                    </div>
+                    <br />
+                    @if (ViewBag.CapturingMode.Rows.Count > 0)
+                    {
+                        <div class="row">
+                            <div style="font-size:15px; font-weight:bold;  background-color:#AED6F1; color:dimgray; height:25px;">Cheque Capturing Mode<span style="float:right"># Of Items</span></div>
+                            @foreach (var row in ViewBag.CapturingMode.Rows)
+                            {
+                                <div class="col-sm-8" style="background-color:#FFFFFF;">@row["fldCapturingMode"]</div>
+                                <div class="col-sm-4" style="background-color:#FFFFFF;"><span style="color:red; font-weight:bold; float:right" id="TotalCount_@row["fldModeName"]">@row["fldItemcount"]</span></div>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-4">
+                    @if (CurrentUser.HasTask("712000"))
+                    {
+                        <div class="row">
+                            <div style="font-size:15px; font-weight:bold;  background-color:#D7DBDD; color:dimgray; height:25px;">::. Inward Return</div>
+                            <div style="font-size:15px; font-weight:bold;  background-color:#AED6F1; color:dimgray; height:25px;">Task List<span style="float:right">Completed</span></div>
+
+                            <div class="col-sm-8" style="background-color:#D7DBDD; color:dimgray; height:20px;">ICL Download & Import</div>
+                            <div class="col-sm-4" style="background-color:#D7DBDD; color:dimgray; height:20px;"><b style="color:red; float:right;">@Items.TotalInwardReturnICL</b></div>
+
+
+
+                            <div class="col-sm-8" style="background-color:#FFFFFF;">Total Match</div>
+                            <div class="col-sm-4" style="background-color:#FFFFFF;"><b style="color:red; float:right;">@Items.TotalIRMatch</b></div>
+
+
+                            <div class="col-sm-8" style="background-color:#FFFFFF;">Total Unmatch</div>
+                            <div class="col-sm-4" style="background-color:#FFFFFF;"><b style="color:red; float:right;">@Items.TotalIRUnmatch</b></div>
+
+                        </div>
+                    }
+
+                    <br />
+
+                    @if (CurrentUser.HasTask("999830") || CurrentUser.HasTask("999840"))
+                    {
+                        <div class="row">
+                            <div style="font-size:15px; font-weight:bold;  background-color:#D7DBDD; color:dimgray; height:25px;">::. OCS Posting</div>
+                            <div style="font-size:15px; font-weight:bold;  background-color:#AED6F1; color:dimgray; height:20px;">Task List <span style="float:right">Pending&emsp;&emsp;Completed</span></div>
+                            @if (CurrentUser.HasTask("999830"))
+                            {
+                                <div class="col-sm-8" style="background-color:#FFFFFF;">Credit Posting</div>
+                                <div class="col-sm-2" style="background-color:#FFFFFF;"><b style="color:red; float:right;">@Items.TotalPendingCreditPosting</b></div>
+                                <div class="col-sm-2" style="background-color:#FFFFFF;"><b style="color:red; float:right;">@Items.TotalCompleteCreditPosting</b></div>
+                            }
+                            @if (CurrentUser.HasTask("999840"))
+                            {
+                                <div class="col-sm-8" style="background-color:#FFFFFF;">Debit Posting</div>
+                                <div class="col-sm-2" style="background-color:#FFFFFF;"><b style="color:red; float:right;">@Items.TotalPendingDebitPosting</b></div>
+                                <div class="col-sm-2" style="background-color:#FFFFFF;"><b style="color:red; float:right;">@Items.TotalCompleteDebitPosting</b></div>
+                            }
+
+                        </div>
+                    }
+
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                @if (CurrentUser.HasTask("311100") || CurrentUser.HasTask("322200") || CurrentUser.HasTask("311113") || CurrentUser.HasTask("311117"))
+                {
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div style="font-size:15px; font-weight:bold; background-color:#D7DBDD; color:dimgray; height:25px;">::. Data Entry</div>
+                            <div style="font-size:15px; font-weight:bold; background-color:#AED6F1; color:dimgray; height:20px;">Task List <span style="float:right">Pending</span></div>
+                            @if (CurrentUser.HasTask("311100"))
+                            {
+                                <div class="col-sm-8" style="background-color:#FFFFFF;">Cheque Amount Entry</div>
+                                <div class="col-sm-4" style="background-color:#FFFFFF;"><b style="color:red; float:right">@Items.TotalAmountEntryItem</b></div>
+                            }
+                            @if (CurrentUser.HasTask("322200"))
+                            {
+                                <div class="col-sm-8" style="background-color:#FFFFFF;">Cheque Date & Amount Entry</div>
+                                <div class="col-sm-4" style="background-color:#FFFFFF;"><b style="color:red; float:right">@Items.TotalChequeDateAmountEntryItem</b></div>
+                            }
+                            @if (CurrentUser.HasTask("311113"))
+                            {
+                                <div class="col-sm-8" style="background-color:#FFFFFF;">Data Entry</div>
+                                <div class="col-sm-4" style="background-color:#FFFFFF;"><b style="color:red; float:right">@Items.TotalDataEntryItems</b></div>
+                            }
+                            @if (CurrentUser.HasTask("311117"))
+                            {
+                                <div class="col-sm-8" style="background-color:#FFFFFF;">Balancing</div>
+                                <div class="col-sm-4" style="background-color:#FFFFFF;"><b style="color:red; float:right">@Items.TotalBalancingItem</b></div>
+                            }
+
+
+
+                        </div>
+                    </div>
+                }
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">
+                    @if (CurrentUser.HasTask("700101"))
+                    {
+                        <div class="row">
+                            <div style="font-size:15px; font-weight:bold;  background-color:#D7DBDD; color:dimgray; height:25px;">::. Branch Submission</div>
+                            <div style="font-size:15px; font-weight:bold; background-color:#AED6F1; color:dimgray; height:20px;">Task List<span style="float:right">Pending&emsp;&emsp;Completed</span></div>
+                            <div class="col-sm-8" style="background-color:#FFFFFF;">Branch Clearing Item</div>
+                            <div class="col-sm-2" style="background-color:#FFFFFF;"><b style="color:red; float:right;">@Items.TotalReadyforSubmit</b></div>
+                            <div class="col-sm-2" style="background-color:#FFFFFF;"><b style="color:red; float:right;">@Items.TotalSubmittedItem</b></div>
+                        </div>
+                    }
+
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">
+                    @if (CurrentUser.HasTask("700104"))
+                    {
+                        <div class="row">
+                            <div style="font-size:15px; font-weight:bold;  background-color:#D7DBDD; color:dimgray; height:25px;">::. Center Submission</div>
+                            <div style="font-size:15px; font-weight:bold; background-color:#AED6F1; color:dimgray; height:20px;">Task List <span style="float:right">Pending&emsp;&emsp;Completed</span></div>
+                            <div class="col-sm-8" style="background-color:#FFFFFF;">Generate Outward Clearing ICL</div>
+                            <div class="col-sm-2" style="background-color:#FFFFFF;"><b style="color:red; float:right;">@Items.TotalPendingGenOutwardICL</b></div>
+                            <div class="col-sm-2" style="background-color:#FFFFFF;"><b style="color:red; float:right;">@Items.TotalCompleteGenOutwardICL</b></div>
+                        </div>
+                    }
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-1"></div>
+                <div hidden="hidden" class="col-sm-4" style="background-color:#FFFFFF;"><span style="color:red; font-weight:bold; float:right" id="CaptureMode">@Items.CaptureMode</span></div>
+            </div>
+        }
+    }
+@*@Scripts.Render("~/bundles/ocsdashboard")*@
+<script>
+    $(function () {
+        var TotalApproved = $("#TotalApproved").text();
+        var TotalRejected = $("#TotalRejected").text();
+        var TotalPending = $("#TotalPending").text();
+        var TotalITems = parseInt(TotalApproved) + parseInt(TotalRejected) + parseInt(TotalPending);
+        $("#TotalItem").text(TotalITems);
+    });
+
+    $(function () {
+        var TotalNormalCheque = $("#TotalNormalCheque").text();
+        var TotalNonClearingCheque = $("#TotalNonClearingCheque").text();
+        var TotalItemCheque = parseInt(TotalNormalCheque) + parseInt(TotalNonClearingCheque);
+        $("#TotalItemCheque").text(TotalItemCheque);
+    });
+
+
+
+</script>

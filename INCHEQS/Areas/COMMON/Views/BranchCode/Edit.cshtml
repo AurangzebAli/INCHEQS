@@ -1,0 +1,92 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("Update", "BranchCode", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+<div class="form-horizontal">
+    <h4>@Locale.BranchCodeMaintenanceEdit</h4>
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <TBODY>
+            @if (ViewBag.BranchCode != null)
+            {
+                <tr>
+                    <th>@Locale.BankType</th>
+                    <td>
+                        @foreach (var row in ViewBag.BankType.Rows)
+                        {
+                            if (ViewBag.BranchCode["fldBankType"].Trim() == row["fldBankType"].Trim())
+                            {
+                                <input type="text" style="border: none;width:250px" value="@row["fldBankType"] - @row["fldBankTypeDesc"]" readonly />
+                                <input type="hidden" id="bankTypeId" name="bankTypeId" value="@row["fldBankType"]" readonly />
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BranchID</th>
+                    <td>
+                        <input type="text" id="branchId" name="branchId" style="border: none" value="@ViewBag.BranchCode["fldBranchId"]" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BankCode</th>
+                    <td>
+                        <input type="text" id="fldBankCode" name="fldBankCode" style="border: none;width:250px" readonly />
+                        <input type="hidden" id="bankCode" name="bankCode" value="@ViewBag.BranchCode["fldBankCode"]" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.StateCode</th>
+                    <td>
+                        <input type="text" id="fldStateCode" name="fldStateCode" style="border: none;width:250px" readonly />
+                        <input type="hidden" id="stateCode" name="stateCode" value="@ViewBag.BranchCode["fldStateCode"]" readonly />
+                    </td>
+                </tr>
+                <TR>
+                    <Th>@Locale.BranchCode </Th>
+
+                    <td>
+                        <input type="text" id="branchcode" name="branchCode" value="@ViewBag.BranchCode["fldBranchCode"]" style="border: none;width:250px" readonly />
+                        <input type="hidden" id="branchCode" name="branchCode" value="@ViewBag.branchCode" />
+                    </td>
+                </TR>
+                <TR>
+                    <Th>@Locale.BranchDescription</Th>
+                    <td>
+                        <input style="width:250px" type="text" name="branchDesc" value="@ViewBag.BranchCode["fldBranchDesc"]" maxlength="100">
+                        <span class="red-star"> *</span>
+                    </td>
+
+                </TR>
+                <tr>
+                    <td>
+                        <input type="hidden" id="createTimeStamp" name="createTimeStamp" value="@ViewBag.BranchCode["fldCreateTimeStamp"]" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BusinessType</th>
+                    <td>
+                        @Locale.CONV<input type="radio" name="businessType" value="1" @(ViewBag.BranchCode["fldBusinessType"].Trim() == "1" ? "checked" : "") /> &nbsp;&nbsp;&nbsp;
+                        @Locale.SPI<input type="radio" name="businessType" value="2" @(ViewBag.BranchCode["fldBusinessType"].Trim() == "2" ? "checked" : "") /> &nbsp;&nbsp;&nbsp;
+                        <span class="red-star"> *</span>
+                    </td>
+
+                </tr>
+
+            }
+        </TBODY>
+    </table>
+
+    <button type="submit" data-action="@Url.Action("/UPDATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIds.BranchCode.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+    <a href="@Url.Action("Edit", new {branchIdParam = @ViewBag.BranchCode["fldBranchId"]})" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.BranchCode.UPDATE) ? "" : "hidden")">@Locale.btnReset</a>
+    <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.BranchCode.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+
+</div>
+
+
+}
+
+@Scripts.Render("~/bundles/BankBranchMaintDetails")

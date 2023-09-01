@@ -1,0 +1,152 @@
+﻿@using System.Data;
+@using INCHEQS.Resources;
+@{
+    ViewBag.Title = "TransactionBalancingVerificationPage";
+    Layout = "~/Views/Shared/_LayoutChequeVerificationOutward.cshtml";
+    int MinusTotalRecord;
+    string OriTotalRecord = "";
+    if (ViewBag.MinusRecordIndicator != null)
+    {
+        //MinusTotalRecord = Convert.ToInt32(ViewBag.OutwardItemViewModel.getField("totalrecord")) - 1;
+        MinusTotalRecord = Convert.ToInt32(ViewBag.OutwardItemViewModel.getField("totalunverified"));
+    }
+    else
+    {
+        MinusTotalRecord = Convert.ToInt32(ViewBag.OutwardItemViewModel.getField("totalrecord"));
+    }
+    if (ViewBag.DatabaseViewName == "View_Verification")
+    {
+        MinusTotalRecord = Convert.ToInt32(ViewBag.OutwardItemViewModel.getField("totalunverified"));
+    }
+    if (ViewBag.LockIndicator != null)
+    {
+        OriTotalRecord = ViewBag.OutwardItemViewModel.getField("totalrecord");
+        <input type="hidden" id="OriTotalRecordHolder" value="@OriTotalRecord">
+    }
+}
+<div id="DataEntryReturnReasonModal" class="modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Detail</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-7" id="Reasons">
+                    </div>
+                    <div class="col-md-5">
+                        <div id="DataEntryReturnReasonModal_RemarksSec">
+                            <div>
+                                <table>
+                                    <tr>
+                                        <td><span class="bold">Reject Code</span></td>
+                                        <td style="width: 50px;">
+                                            <input type="text" id="DataEntryReturnReasonModal_txtRejectCode" class="form-control number-only " name="DataEntryReturnReasonModal_txtRejectCode" readonly />
+                                        </td>
+                                        <td style="width: 300px;">
+                                            <input type="text" id="DataEntryReturnReasonModal_Detail" class="form-control" name="DataEntryReturnReasonModal_Detail" readonly />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold">Other Remarks</span></td>
+                                        <td style="width: 350px;" colspan="2">
+                                            <input type="text" id="DataEntryReturnReasonModal_Remarks" class="form-control" name="DataEntryReturnReasonModal_Remarks" disabled />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="DismissDataEntryModal">@Locale.btnOK</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div>
+    <div class="row mTop10">
+        <div class="col-sm-7">
+            <span class="h4">@Locale.BalancingQueue</span>
+            <span Class="red">@ViewBag.OutwardItemViewModel.getField("fldtransdesc")</span>
+            <span class="h5"> @ViewBag.OutwardItemViewModel.getField("flditemstatus")</span>
+            <span class="red bold">[@MinusTotalRecord / </span>
+            <span class="red bold" id="OriTotalRecord">1</span>
+            <span class="red bold">]</span>
+        </div>
+        <div class="col-sm-12">
+            <div class="row">
+                &nbsp;
+                &nbsp;
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-6">
+                @Html.Partial("OutwardClearing/Base/_ChequeImageAction")
+            </div>
+            <div class="col-sm-6">
+                @Html.Partial("OutwardClearing/Base/_ChequeControlAction")
+            </div>
+        </div>
+        <div class="col-sm-7">
+
+            <div class="row">
+                &nbsp;
+                &nbsp;
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <span class="col-sm-2 h5 bold">@Locale.TransNo : </span>
+                    <div class="col-sm-2" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldtransno")</div>
+                    <span class="col-sm-2 h5 bold">@Locale.ItemID : </span>
+                    <div class="col-sm-2" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldItemID")</div>
+                    <span class="col-sm-2 h5 bold">@Locale.CapturingDate : </span>
+                    <div class="col-sm-2" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldcapturingdate")</div>
+                    @*<span class="col-sm-2 h5 bold">UIC : </span>
+                        <div class="col-sm-2" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldtransno")</div>*@
+                </div>
+            </div>
+            <div class="row">
+                &nbsp;
+                <div class="col-sm-12">
+                    <span class="col-sm-2 h5 bold">@Locale.ChequeType : </span>
+                    <div class="col-sm-2" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("flditemtype")</div>
+                    <span class="col-sm-2 h5 bold">@Locale.Source : </span>
+                    <div class="col-sm-2" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("source")</div>
+                    <span class="col-sm-2 h5 bold">@Locale.Branch : </span>
+                    <div class="col-sm-2" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldcapturingbranch")</div>
+                </div>
+            </div>
+            <div class="row">
+                &nbsp;
+                &nbsp;
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            @Html.Partial("OutwardClearing/Base/_ChequeImage")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 reject-reentry-action">
+
+            @Html.Partial("Partial/_BalancingControlBox")
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9">
+            @Html.Partial("Partial/_BalancingHistory")
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,32 @@
+﻿using INCHEQS.Security.User;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
+
+namespace INCHEQS.Areas.COMMON.Models.HubUser
+{
+    public interface IHubDao
+    {
+        bool CheckUserExistInHub(string hubId, string userId, string strBankCode);
+
+        bool DeleteInHubUserMaster(string HubId, string Action);
+        bool DeleteInHubMasterTemp(string HubId);
+        bool DeleteInHubUserTemp(string HubId);
+        bool DeleteUserNotSelected(string hubId, string userIds, string strBankCode);
+
+        void InsertUserInHubTemp(string hubId, string userId, string strUpdate, string strUpdateId, string strBankCode);
+        void InsertUserInHub(string hubId, string userId, string strUpdate, string strUpdateId, string strBankCode);
+
+        List<UserModel> ListAvailableUserInHub(string strBankCode);
+        List<UserModel> ListSelectedUserInHub(string hubId, string strBankCode);
+        bool UpdateHubMaster(FormCollection col, string userId);
+        void UpdateHubUser(string hubId);
+        bool UpdateSelectedUser(string hubId, string UserId, string strUpdate, string strBankCode);
+        string GetMenuTitle(string TaskId);
+        List<string> ValidateHubUser(FormCollection col, string action, string userId);
+        HubModel CheckHubMasterByID(string HubID, string SearchFor);
+        bool CheckHubMasterTempByID(string HubID, string SearchFor);
+        void CreateHubMasterTemp(FormCollection col, string bankcode, string crtUser, string Action);
+        void MoveToHubMasterFromTemp(string HubId, string Action);
+    }
+}

@@ -1,0 +1,74 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationApprove"))
+{
+    if (ViewBag.TaskId.ToString().Trim() == "306550")
+    {
+        <button type="button" id="approveBtn" data-action="@Url.Action("VerificationApprove")" value="Approve" class="btn-verification-border btn-verification btn-medium normal-submit-pending-branch" style="margin-left :5px;display: inline-block;">Accept</button>
+    }
+    else
+    {
+        <button type="button" id="approveBtn" data-action="@Url.Action("VerificationApprove")" value="Approve" class="btn-verification-border btn-verification btn-medium normal-submit-Verification" style="margin-left :5px;display: inline-block;">Accept</button>
+    }
+
+}
+
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationReturn"))
+{
+    if (ViewBag.TaskId.ToString().Trim() == "306550")
+    {
+        <button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-verification btn-medium normal-submit-pending-branch" style="margin-left :5px;">Reject</button>
+    }
+    else
+    {
+        <button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-verification btn-medium normal-submit-Verification" style="margin-left :5px;">Reject</button>
+    }
+}
+
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationRoute"))
+{
+    <button type="button" id="routeBtn" data-action="@Url.Action("VerificationRoute")" class="btn-verification-border btn-verification btn-medium normal-submit-Verification">Pending</button>
+}
+
+@if(ViewBag.TaskId != "306520")
+{ 
+    <button class="btn-verification-border btn-verification btn-medium normal-submit-Verification modal-submit" id="pulloutReasonBtn" data-action="@Url.Action("PullOutReason")">@Locale.PullOut</button>
+}
+
+
+
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationRoute") || ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationReturn"))
+{
+    <input type="text" style="width:35px;min-width:30px;font-weight:bold" id="rejectCodeText" name="new_textRejectCode" value="@ViewBag.InwardItemViewModel.getField("fldRejectCode").Trim()" &nbsp;&nbsp; />
+    <select class="textbox" id="rejectCodeSelectList" name="new_rejectCode" style="width:240px;min-width:240px;">
+        <option value="">--- @Locale.SelectReturnRouteReason ---</option>
+    </select>
+}
+
+@if (ViewBag.getMinTruncatedAmount != 0 || ViewBag.getMaxTruncatedAmount != 0)
+{
+    if (Convert.ToDouble(ViewBag.InwardItemViewModel.getField("fldAmount")) >= ViewBag.getMinTruncatedAmount && Convert.ToDouble(ViewBag.InwardItemViewModel.getField("fldAmount")) <= ViewBag.getMaxTruncatedAmount)
+    {
+        <label class="txtBlack">Remarks</label>
+        <textarea name="textAreaRemarks" placeholder="" style="height: 50px;" maxlength="140" id="truncatedAmt" value="@ViewBag.getRemarkTruncatedAmount">@ViewBag.getRemarkTruncatedAmount</textarea>
+        <input type="hidden" id="remarkField" name="remarkField" value="">
+    }
+    else
+    {
+        <label class="txtBlack">Remarks</label>
+        <textarea name="textAreaRemarks" placeholder="" style="height: 50px;" maxlength="140" value="@ViewBag.InwardItemViewModel.getField("fldRemarks")">@ViewBag.InwardItemViewModel.getField("fldRemarks")</textarea>
+        <input type="hidden" id="remarkField" name="remarkField" value="">
+    }
+}
+
+
+<script>
+    //var element = document.getElementById("#chequeNo");
+
+    //element.style.backgroundColor = "red";
+
+    $(document).ready(function () {
+        $('#rejectCodeText').select()
+    });
+</script>

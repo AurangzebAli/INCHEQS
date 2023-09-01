@@ -1,0 +1,64 @@
+﻿@using INCHEQS.Resources
+@using System.Data;
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
+    <title>INCHEQS</title>
+    @Scripts.Render("~/bundles/ez-plus")
+    @Scripts.Render("~/bundles/ChequePPSVerification")
+    @Scripts.Render("~/bundles/RejectCodeApi")
+    @Scripts.Render("~/bundles/app")
+</head>
+<body>
+    
+    <div style="color:black;font-weight:bold">
+        <div>
+            <!--For Json Notice Start-->
+            <div id="notice" Class="alert alert-success alert-dismissible hidden" role="alert">
+                <Button type="button" Class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span Class="sr-only">Close</span></Button>
+                <b>@Locale.Notice:</b><br />
+                <div class="notice-body"></div>
+            </div>
+            <!--For Json Notice End-->
+            @foreach (var error in ViewBag.InwardItemViewModel.errorMessages) {
+                if (error.Key == "notice") {
+                    <div Class="alert alert-success alert-dismissible" role="alert">
+                        <Button type="button" Class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span Class="sr-only">Close</span></Button>
+                        <b>@Locale.Notice:</b><br />
+                        @error.Value
+                    </div>
+                }
+                if (error.Key == "warning") {
+                    <div Class="alert alert-warning alert-dismissible" role="alert">
+                        <Button type="button" Class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span Class="sr-only">Close</span></Button>
+                        <b>@Locale.Warning:</b><br />
+                        @error.Value
+                    </div>
+                }
+                if (error.Key == "error") {
+                    <div Class="alert alert-danger alert-dismissible" role="alert">
+                        <Button type="button" Class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span Class="sr-only">Close</span></Button>
+                        <b>@Locale.Notice:</b><br />
+                        @error.Value
+                    </div>
+                }
+            }
+
+        </div>
+        <div>
+            @RenderBody()
+        </div>
+        <div class="hidden">
+            <input id="fldInwardItemId" name="fldInwardItemId" type="hidden" value="@ViewBag.InwardItemViewModel.getField("fldInwardItemId")" />
+            <ul>
+                @foreach (KeyValuePair<string, string> item in ViewBag.InwardItemViewModel.allFields) {
+                    <li>current_@item.Key <input name="current_@item.Key" value="@item.Value" /></li>
+                }
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

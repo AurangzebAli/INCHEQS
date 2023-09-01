@@ -1,0 +1,271 @@
+﻿using INCHEQS.Security.SystemProfile;
+using INCHEQS.Security.AuditTrail;
+
+using INCHEQS.Models.SearchPageConfig;
+using INCHEQS.Models.SearchPageConfig.Services;
+using INCHEQS.TaskAssignment;
+using INCHEQS.Resources;
+using INCHEQS.Security;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+
+using INCHEQS.Areas.COMMON.Models.InternalBranch;
+
+namespace INCHEQS.Areas.COMMON.Controllers.Maintenance
+{
+ 
+    public class InternalBranchController : BaseController {
+        
+        private IInternalBranchDao internalBranchDao;
+        private readonly IAuditTrailDao auditTrailDao;
+        private IPageConfigDao pageConfigDao;
+        protected readonly ISearchPageService searchPageService;
+        protected readonly ISystemProfileDao systemProfileDao;
+
+    public InternalBranchController(IInternalBranchDao InternalBranch, IAuditTrailDao auditTrailDao, IPageConfigDao pageConfigDao, ISearchPageService searchPageService, ISystemProfileDao systemProfileDao) {
+            this.pageConfigDao = pageConfigDao;
+        this.internalBranchDao = InternalBranch;
+        this.auditTrailDao = auditTrailDao;
+        this.searchPageService = searchPageService;
+            this.systemProfileDao = systemProfileDao;
+        }
+        [CustomAuthorize(TaskIds = TaskIds.InternalBranch.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Index() {
+            ViewBag.SearchPage = pageConfigDao.GetSearchFormModelFromConfig(CurrentUser.Account, new PageSqlConfig(TaskIds.InternalBranch.INDEX));
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.InternalBranch.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public virtual ActionResult SearchResultPage(FormCollection collection) {
+            //ViewBag.SearchResult = pageConfigDao.getResultListFromDatabaseView(new PageSqlConfig(TaskIds.InternalBranch.INDEX, "View_InternalBranch", "fldBankCode, fldBranchCode, fldlocationcode", "fldBankCode=@fldBankCode", new[] {
+            //    new SqlParameter("@fldBankCode",CurrentUser.Account.BankCode )
+            //}),
+            //collection);
+
+            ViewBag.SearchResult = pageConfigDao.getResultListFromDatabaseView(new PageSqlConfig(TaskIds.InternalBranch.INDEX, "View_InternalBranch", "", ""), collection);
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.InternalBranch.EDIT)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Edit(FormCollection col, string intBranchCodeParam = "") {
+
+            Dictionary<string, string> filter = searchPageService.GetFormFiltersFromRow(col);
+
+
+            string branchid = "";
+
+            if (string.IsNullOrEmpty(intBranchCodeParam))
+            {
+                branchid = filter["fldBranchId"].Trim();
+            }
+            else
+            {
+                branchid = intBranchCodeParam;
+            }
+
+            ViewBag.ClearingBranchId = internalBranchDao.ListInternalBranch(CurrentUser.Account.BankCode);
+
+          
+
+            if ((branchid == null))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            DataTable dataTable = internalBranchDao.GetInternalBranchData(branchid);
+           
+
+            if ((dataTable.Rows.Count > 0))
+            {
+                ViewBag.InternalBranch = dataTable.Rows[0];
+
+                if (ViewBag.InternalBranch["fldActive"].ToString() == "Yes")
+            {
+                    @ViewBag.Active = "checked";
+            }
+            else
+            {
+                    @ViewBag.Active = "";
+            }
+
+                if (ViewBag.InternalBranch["fldSelfClearing"].ToString() == "Y")
+                {
+                    @ViewBag.SelfClearing = "checked";
+                }
+                else
+                {
+                    @ViewBag.SelfClearing = "";
+                    
+                }
+
+            }
+
+            //ViewBag.InternalBranch = internalBranchDao.GetInternalBranchDataById(branchid);
+                return View();
+            }
+
+        [CustomAuthorize(TaskIds = TaskIds.InternalBranch.UPDATE)]
+        [HttpPost()]
+        public ActionResult Update(FormCollection collection)
+        {
+            ActionResult action;
+            try
+            {
+                List<String> errorMessages = internalBranchDao.ValidateUpdate(collection);
+
+                string systemProfile = systemProfileDao.GetValueFromSystemProfile("DualApproval", CurrentUser.Account.BankCode).Trim();
+
+                if ((errorMessages.Count > 0))
+                {
+
+                    TempData["ErrorMsg"] = errorMessages;
+                    action = RedirectToAction("Edit", new { intBranchCodeParam = collection["branchId"].Trim() });
+
+                }
+                else
+                {
+
+                    if ("N".Equals(systemProfile))
+                    {
+                        InternalBranchModel before = internalBranchDao.GetInternalBranchDataById(collection["branchId"]);
+                        auditTrailDao.Log("Edit - internal Branch Code - Before Update => Internal Branch Id : " + before.branchId + " Location Code : " + before.locationCode + " Bank Code : " + before.bankCode + " Branch Code : " + before.branchCode + " Branch Desc : " + before.branchDesc + " Internal Branch Code : " + before.internalBranchCode + " Internal Branch Áddress 1 : " + before.address1 + " Internal Branch Áddress 2 : " + before.address2 + " Internal Branch Áddress 3 : " + before.address3 + " Self Clearing : " + before.selfClearing + " Clearing Branch Id : " + before.clearingBranchID + " Active : " + before.active, CurrentUser.Account);
+
+                    internalBranchDao.UpdateInternalBranch(collection);
+                        TempData["Notice"] = Locale.SuccessfullyUpdated;
+
+                        InternalBranchModel after = internalBranchDao.GetInternalBranchDataById(collection["branchId"]);
+                        auditTrailDao.Log("Edit - internal Branch Code - After Update => Internal Branch Id : " + after.branchId + " Location Code : " + after.locationCode + " Bank Code : " + after.bankCode + " Branch Code : " + before.branchCode + " Branch Desc : " + after.branchDesc + " Internal Branch Code : " + after.internalBranchCode + " Internal Branch Áddress 1 : " + after.address1 + " Internal Branch Áddress 2 : " + after.address2 + " Internal Branch Áddress 3 : " + after.address3 + " Self Clearing : " + after.selfClearing + " Clearing Branch Id : " + after.clearingBranchID + " Active : " + after.active, CurrentUser.Account);
+
+                    }
+                    else
+                    {
+                        bool IsInternalBranchMasterTempExist = internalBranchDao.CheckInternalBranchTempById(collection["branchId"]);
+
+                        if (IsInternalBranchMasterTempExist == true)
+                        {
+                            TempData["Warning"] = Locale.InternalBranchAlreadyExiststoDeleteorUpdate;
+                        }
+                        else
+                        {
+                            internalBranchDao.CreateInternalBranchTemp(collection, "update");
+                            TempData["Notice"] = Locale.InternalBranchUpdateVerify;
+
+                            InternalBranchModel data = internalBranchDao.GetInternalBranchDataById(collection["branchId"]);
+                            auditTrailDao.Log("Add Internal Branch into Temporary record to Update => Internal Branch Id : " + data.branchId + " Location Code : " + data.locationCode + " Bank Code : " + data.bankCode + " Branch Code : " + data.branchCode + " Branch Desc : " + data.branchDesc + " Internal Branch Code : " + data.internalBranchCode + " Internal Branch Áddress 1 : " + data.address1 + " Internal Branch Áddress 2 : " + data.address2 + " Internal Branch Áddress 3 : " + data.address3 + " Self Clearing : " + data.selfClearing + " Clearing Branch Id : " + data.clearingBranchID + " Active : " + data.active, CurrentUser.Account);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            return RedirectToAction("Edit", new { intBranchCodeParam = collection["branchId"].Trim() /*+ "_" + CurrentUser.Account.BankCode*/ });
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.InternalBranch.CREATE)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Create(){
+            ViewBag.ClearingBranchId = internalBranchDao.ListInternalBranch(CurrentUser.Account.BankCode);
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.InternalBranch.SAVECREATE)]
+        public ActionResult SaveCreate(FormCollection collection,string bankCode) {
+
+            string systemProfile = systemProfileDao.GetValueFromSystemProfile("DualApproval", CurrentUser.Account.BankCode).Trim();
+
+            try {
+
+                List<string> errorMessages = internalBranchDao.ValidateCreate(collection);
+
+                if ((errorMessages.Count > 0)) {
+
+                    TempData["ErrorMsg"] = errorMessages;
+                    return RedirectToAction("Create");
+
+                } else {
+                    if ("N".Equals(systemProfile)) {
+
+                        internalBranchDao.CreateInternalBranch(collection);
+
+                        TempData["Notice"] = Locale.SuccessfullyCreated;
+                        auditTrailDao.Log("Add into Internal Branch Master: - Internal Branch Id : " + collection["branchId"], CurrentUser.Account);
+
+                    } else {
+
+                        internalBranchDao.CreateInternalBranchTemp(collection, "create");
+
+                        TempData["Notice"] = Locale.InternalBranchCreateVerify;
+                        auditTrailDao.Log("Add into Internal Branch Maste Temporary record to Create - Internal Branch Id : " + collection["branchId"], CurrentUser.Account);
+
+                    }
+                    return RedirectToAction("Create");
+                }
+            } catch (Exception ex) {
+                throw ex;
+            }
+            
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.InternalBranch.DELETE)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(FormCollection collection)
+        {
+
+            string systemProfile = systemProfileDao.GetValueFromSystemProfile("DualApproval", CurrentUser.Account.BankCode).Trim();
+
+            if (collection != null & collection["deleteBox"] != null)
+            {
+                List<string> arrResults = collection["deleteBox"].Split(',').ToList();
+
+                foreach (string arrResult in arrResults)
+                {
+
+                    if ("N".Equals(systemProfile))
+                    {
+                        internalBranchDao.DeleteInternalBranch(arrResult);
+                        TempData["Notice"] = Locale.SuccessfullyDeleted;
+                        auditTrailDao.Log("Delete - InternalBranchMaster table - Branch Id :  " + collection["deleteBox"], CurrentUser.Account);
+
+                    }
+                    else
+                    {
+                        bool IsInternalBranchTempExist = internalBranchDao.CheckInternalBranchTempById(arrResult);
+
+                        if (IsInternalBranchTempExist == true)
+                        {
+                            TempData["Warning"] = Locale.InternalBranchAlreadyExiststoDeleteorUpdate;
+                        }
+                        else
+                        {
+                            internalBranchDao.CreateInternalBranchTempToDelete(arrResult);
+                            TempData["Notice"] = Locale.InternalBranchVerifyDelete;
+                            auditTrailDao.Log("Add into InternalBranchMasterTemp table to Delete -  Branch Id :  " + collection["deleteBox"], CurrentUser.Account);
+                        }
+                    }
+
+                }
+
+                }
+            else
+
+                TempData["Warning"] = Locale.Nodatawasselected;
+
+            return RedirectToAction("Index");
+        }
+
+    }
+    
+}

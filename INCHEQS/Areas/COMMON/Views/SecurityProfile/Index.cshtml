@@ -1,0 +1,202 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Security
+@using (Html.BeginForm("Update", "SecurityProfile", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.SecurityProfile</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border table-utility">
+
+            <tr>
+                <th>
+                    @Locale.AuthenticationMethod
+                </th>
+                <td>
+                    <input type="radio" name="fldUserAuthMethod" id="fldUserAuthMethod" value="AD" @(ViewBag.SecurityProfile.fldUserAuthMethod == "AD" ? "checked" : "")> @Locale.ActiveDirectory
+                    <input type="radio" name="fldUserAuthMethod" id="fldUserAuthMethod1" value="LP" @(ViewBag.SecurityProfile.fldUserAuthMethod == "LP" ? "checked" : "")> @Locale.LocalProfiler
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.UserIDLength
+                </th>
+                <td>
+                    <input type="text" name="fldUserIdLengthMin" value="@ViewBag.SecurityProfile.fldUserIdLengthMin" maxLength=3 class="number-only" /> @Locale.Min<span class="red-star">* </span>
+                    <input type="text" name="fldUserIdLengthMax" value="@ViewBag.SecurityProfile.fldUserIdLengthMax" maxLength=3 class="number-only" /> @Locale.Max<span class="red-star">* </span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Locale.UserAccountExpiryInterval
+                </th>
+                <td>
+                    <input type="text" id="fldUserAcctExpiry" name="fldUserAcctExpiry" value="@ViewBag.SecurityProfile.fldUserAcctExpiry" maxLength=3 class="number-only" />
+                    <select name="fldUserAcctExpiryInt" id="fldUserAcctExpiryInt" class="textbox">
+                        <option value="D" @(ViewBag.SecurityProfile.fldUserAcctExpiryInt == "D" ? "selected" : "")>@Locale.Day</option>
+                        <option value="M" @(ViewBag.SecurityProfile.fldUserAcctExpiryInt == "M" ? "selected" : "")>@Locale.Month</option>
+                        <option value="Y" @(ViewBag.SecurityProfile.fldUserAcctExpiryInt == "Y" ? "selected" : "")>@Locale.Year</option>
+                    </select><span class="red-star" id="fldUserAcctExpiryIntredstar" name="fldUserAcctExpiryIntredstar"> *</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Locale.UserMaximumLoginAttempt
+                </th>
+                <td>
+                    <input type="text" name="fldUserLoginAttemptMax" value="@ViewBag.SecurityProfile.fldUserLoginAttempt" maxLength=4 class="number-only" />
+                    @Locale.Times<span class="red-star"> * </span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.ConcurrentConnection
+                </th>
+                <td>
+                    <input type="radio" name="fldUserCNCR" value="Y" @(ViewBag.SecurityProfile.fldUserCNCR == "Y" ? "checked" : "")> @Locale.Yes1
+                    <input type="radio" name="fldUserCNCR" value="N" @(ViewBag.SecurityProfile.fldUserCNCR == "N" ? "checked" : "")> @Locale.No1
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.UserSessionTimeout
+                </th>
+                <td>
+                    <input type="text" name="fldUserSessionTimeOut" value="@ViewBag.SecurityProfile.fldUserSessionTimeOut" maxLength=4 class="number-only" />
+                    @Locale.Minutes<span class="red-star"> * </span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.DualApproval
+                </th>
+                <td>
+                    <input type="radio" name="fldDualApproval" value="Y" @(ViewBag.SecurityProfile.fldDualApproval == "Y" ? "checked" : "")> @Locale.Yes1
+                    <input type="radio" name="fldDualApproval" value="N" @(ViewBag.SecurityProfile.fldDualApproval == "N" ? "checked" : "")> @Locale.No1
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+
+            @*------------------------------------------------------------------------------------------------------------------*@
+
+            <TR><Th><u><b>@Locale.ActiveDirectoryProperties</b></u></Th></TR>
+
+            <tr>
+                <th>
+                    @Locale.ADDomain
+                </th>
+                <td>
+                    <input type="text" name="fldUserADDomain" id="fldUserADDomain" value="@ViewBag.SecurityProfile.fldUserADDomain" maxLength=4 />
+                    <span class="red-star" id="fldUserADDomainredstar" name="fldUserADDomainredstar"> * </span>
+                </td>
+            </tr>
+
+
+            @*------------------------------------------------------------------------------------------------------------------*@
+
+            <TR><Th><u><b>@Locale.LocalProfilerProperties</b></u></Th></TR>
+
+            <tr>
+                <th>
+                    @Locale.UserPasswordLength
+                </th>
+                <td>
+                    <input type="text" name="fldUserPwdLengthMin" id="fldUserPwdLengthMin" value="@ViewBag.SecurityProfile.fldUserPwdLengthMin" maxLength=3 class="number-only" />
+                    @Locale.Min<span class="red-star" id="fldUserPwdLengthMinredstar" name="fldUserPwdLengthMinredstar"> * </span>
+                    <input type="text" name="fldUserPwdLengthMax" id="fldUserPwdLengthMax" value="@ViewBag.SecurityProfile.fldUserPwdLengthMax" maxLength=3 class="number-only" />
+                    @Locale.Max<span class="red-star" id="fldUserPwdLengthMaxredstar" name="fldUserPwdLengthMaxredstar"> * </span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.PasswordHistoryReusableafter
+                </th>
+                <td>
+                    <input type="text" name="fldUserPwdHistoryMax" id="fldUserPwdHistoryMax" value="@ViewBag.SecurityProfile.fldUserPwdHisRA" maxLength=4 class="number-only" />
+                    @Locale.Times<span class="red-star" id="fldUserPwdHistoryMaxredstar" name="fldUserPwdHistoryMaxredstar"> * </span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.UserPasswordExpiryInterval
+                </th>
+                <td>
+                    <input type="text" id="fldUserPwdExpiry" name="fldUserPwdExpiry" value="@ViewBag.SecurityProfile.fldUserPwdExpiry" maxLength=3 class="number-only">
+                    <select name="fldUserPwdExpiryInt" id="fldUserPwdExpiryInt" class="textbox">
+                        <option value="D" @(ViewBag.SecurityProfile.fldUserPwdExpiryInt == "D" ? "selected" : "")>@Locale.Day</option>
+                        <option value="M" @(ViewBag.SecurityProfile.fldUserPwdExpiryInt == "M" ? "selected" : "")>@Locale.Month</option>
+                        <option value="Y" @(ViewBag.SecurityProfile.fldUserPwdExpiryInt == "Y" ? "selected" : "")>@Locale.Year</option>
+                    </select><span class="red-star" id="fldUserPwdExpiryIntredstar" name="fldUserPwdExpiryIntredstar"> * </span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.UserPasswordNotificationInterval
+                </th>
+                <td>
+                    <input type="text" id="fldUserPwdNotification" name="fldUserPwdNotification" value="@ViewBag.SecurityProfile.fldUserPwdNotification" maxLength=3 class="number-only" />
+                    <select name="fldUserPwdNotificationInt" id="fldUserPwdNotificationInt" class="textbox">
+                        <option value="D" @(ViewBag.SecurityProfile.fldUserPwdNotificationInt == "D" ? "selected" : "")>@Locale.Day</option>
+                        <option value="M" @(ViewBag.SecurityProfile.fldUserPwdNotificationInt == "M" ? "selected" : "")>@Locale.Month</option>
+                        <option value="Y" @(ViewBag.SecurityProfile.fldUserPwdNotificationInt == "Y" ? "selected" : "")>@Locale.Year</option>
+                    </select><span class="red-star" id="fldUserPwdNotificationIntredstar" name="fldUserPwdNotificationIntredstar"> * </span>
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>
+                    @Locale.WhenPasswordExpired
+                </th>
+                <td>
+                    <input type="radio" name="fldUserPwdExpAction" id="fldUserPwdExpAction" value="F" @(ViewBag.SecurityProfile.fldUserPwdExpAction == "F" ? "checked" : "")>@Locale.Forceusertochangepassword
+                    <input type="radio" name="fldUserPwdExpAction" id="fldUserPwdExpAction2" value="D" @(ViewBag.SecurityProfile.fldUserPwdExpAction == "D" ? "checked" : "")>@Locale.Disableuser
+                    <span class="red-star" id="fldUserPwdExpActionredstar" name="fldUserPwdExpActionredstar"> * </span>
+                </td>
+            </tr>
+
+            @*<tr>
+                <th>
+                    @Locale.UserPasswordChangeSequence
+                    <br />@Locale.WithinADay
+                </th>
+                <td>
+                    <input type="text" name="fldPwdChangeTime" id="fldPwdChangeTime" value="@ViewBag.SecurityProfile.fldPwdChangeTime" maxLength=3 class="number-only" /> @Locale.Times
+                </td>
+            </tr>*@
+            <input hidden type="text" name="fldPwdChangeTime" id="fldPwdChangeTime" value="@ViewBag.SecurityProfile.fldPwdChangeTime" maxLength=3 class="number-only" />
+            <tr>
+                <td>
+                    <button onclick="return Confirm()" id=btnsave alt=Save type="submit" value=Save name=btnSave class="btn btn-default @(CurrentUser.HasTask(TaskIds.SecurityProfile.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+                    <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.SecurityProfile.INDEX) ? "" : "hidden")">@Locale.Reset</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+<script type="text/javascript">
+    function Confirm() {
+        var input = $("<input />");
+        input.attr("type", "hidden").attr("name", "confirm_value");
+        if (confirm("Do you want to save data?")) {
+            input.val("Yes");
+            return true;
+        } else {
+            input.val("No");
+            return false;
+        }
+        $("form")[0].appendChild(input[0]);
+    }
+</script>
+<script src="~/Scripts/App/SecurityProfile.js"></script>

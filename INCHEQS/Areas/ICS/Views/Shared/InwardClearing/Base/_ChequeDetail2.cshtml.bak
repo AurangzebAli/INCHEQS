@@ -1,0 +1,88 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+    DateTime currentdate = DateTime.Now;
+    DateTime sDate = currentdate.AddMonths(-6);
+    string staleDate = sDate.ToString("dd-MM-yyyy");
+
+}
+
+<table style="line-height: 23px; margin-top: 30px;">
+    <tr>
+        <th class="col-sm-4">Stale Date</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@staleDate</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Clearing Date</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Presenting Bank</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.InwardItemViewModel.getField("fldPreBankCode")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Presenting Bank Name</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.InwardItemViewModel.getField("fldPreBankDesc")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Presenting Branch</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.InwardItemViewModel.getField("fldPreBranchCode")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Type</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.InwardItemViewModel.getField("fldChequeTypeAbb")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Location</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.InwardItemViewModel.getField("fldLocationAbb")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Issuing Bank</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.InwardItemViewModel.getField("fldIssueBankCode")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Issuing Bank Name</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.InwardItemViewModel.getField("fldIssueBankAbb")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Issuing Branch</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.InwardItemViewModel.getField("fldIssueBranchCode")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Cheque Number</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Issuer Account Number</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.InwardItemViewModel.getField("fldAccountNumber")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Amount</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@StringUtils.FormatCurrency(ViewBag.InwardItemViewModel.getField("fldAmount"))</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">Creditor Account Number</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.InwardItemViewModel.getField("fldPVCAccNo")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4">OCS Remarks</th>
+        <th>:</th>
+        <td class="col-sm-5"><span>@ViewBag.InwardItemViewModel.getField("fldClearingRemark")</span></td>
+    </tr>
+
+
+</table>

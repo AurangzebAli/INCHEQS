@@ -1,0 +1,213 @@
+﻿@using System.Data;
+@using INCHEQS.Resources;
+@{
+    ViewBag.Title = "ChequeVerificationPage";
+    Layout = "~/Views/Shared/_LayoutChequeVerificationOutward.cshtml";
+
+    @*int MinusTotalRecord;
+        string OriTotalRecord = "";
+
+        if (ViewBag.LockedByOtherUser == true)
+        {
+            MinusTotalRecord = 1;
+        }
+        else
+        {
+        if (ViewBag.MinusRecordIndicator != null)
+        {
+            MinusTotalRecord = Convert.ToInt32(ViewBag.OutwardItemViewModel.getField("totalrecord")) - 1;
+        }
+        else
+        {
+            MinusTotalRecord = Convert.ToInt32(ViewBag.OutwardItemViewModel.getField("totalrecord"));
+        }
+        if (ViewBag.DatabaseViewName == "View_Verification")
+        {
+            MinusTotalRecord = Convert.ToInt32(ViewBag.OutwardItemViewModel.getField("totalunverified"));
+        }
+        if (ViewBag.LockIndicator != null)
+        {
+            OriTotalRecord = ViewBag.OutwardItemViewModel.getField("totalrecord");
+            <input type="hidden" id="OriTotalRecordHolder" value="@OriTotalRecord">
+
+        }
+        }*@
+
+
+}
+
+<div>
+    <div class="row mTop10">
+        <div class="col-sm-7">
+            <span class="h3 bold">Cheque Search Details</span>
+            <span Class="red">@ViewBag.OutwardItemViewModel.getField("fldtransdesc")</span>
+            <span class="h5"> @ViewBag.OutwardItemViewModel.getField("flditemstatus")</span>
+            @*<span class="red bold">[@MinusTotalRecord / </span>
+                <span class="red bold" id="OriTotalRecord">1</span>
+                <span class="red bold">]</span>*@
+        </div>
+        <div class="col-sm-12">
+            <div class="row">
+                &nbsp;
+                &nbsp;
+            </div>
+        </div>
+        <br />
+        <div class="col-sm-12">
+            <div class="text-right">
+                <div>
+                    @Html.Partial("_ChequeSearchControlAction")
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-7">
+
+            <div class="row" style="display:none;">
+                &nbsp;
+                &nbsp;
+            </div>
+
+            <div class="row" style="display:none;">
+                <div class="col-sm-12">
+                    @*<span class="col-sm-2 h5 bold">Trans No : </span>*@
+                    <div class="col-sm-2" style="word-wrap: break-word; display: none;">@ViewBag.OutwardItemViewModel.getField("fldtransno")</div>
+                    @*<span class="col-sm-2 h5 bold">Item ID : </span>*@
+                    <div class="col-sm-2" style="word-wrap: break-word;display: none;">@ViewBag.OutwardItemViewModel.getField("flditemid")</div>
+                    @*<span class="col-sm-2 h5 bold">Capturing Date : </span>*@
+                    <div class="col-sm-2" style="word-wrap: break-word;display: none;">@ViewBag.OutwardItemViewModel.getField("fldcapturingdate")</div>
+                    @*<span class="col-sm-6 h5 bold">UIC : </span>
+                        <div class="col-sm-6" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("flduic")</div>*@
+                </div>
+                @*<div class="col-sm-6">
+                        <span class="h5 bold">HOST STATUS : </span>
+                        <span class="txtRed bold blink">@ViewBag.OutwardItemViewModel.getField("fldRejectStatus1") - @ViewBag.HostStatus</span>
+                    </div>*@
+            </div>
+
+            <div class="row" style="display:none;">
+                &nbsp;
+                <div class="col-sm-12">
+                    @*<span class="col-sm-2 h5 bold">Cheque Type : </span>*@
+                    <div class="col-sm-2" style="word-wrap: break-word;display: none;">@ViewBag.OutwardItemViewModel.getField("flditemtype")</div>
+                    @*<span class="col-sm-2 h5 bold">Source : </span>*@
+                    <div class="col-sm-2" style="word-wrap: break-word;display: none;">@ViewBag.OutwardItemViewModel.getField("source")</div>
+                    @*<span class="col-sm-2 h5 bold">Branch : </span>*@
+                    <div class="col-sm-2" style="word-wrap: break-word;display: none;">@ViewBag.OutwardItemViewModel.getField("fldcapturingbranch")</div>
+                </div>
+            </div>
+
+            @*<div class="row">
+                    &nbsp;
+                    &nbsp;
+                </div>*@
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <span class="h4 bold">UIC :</span>
+                    &nbsp;
+                    <span class="h4">@ViewBag.OutwardItemViewModel.getField("flduic")</span>
+
+
+                    @*<div class="row">
+                        &nbsp;
+                        <div class="col-sm-12">
+                                    <span class="col-sm-2 h8 bold">UIC:<span>@ViewBag.OutwardItemViewModel.getField("flduic")</span></span>*@
+                    @*<div class="col-sm-10">:@ViewBag.OutwardItemViewModel.getField("flduic")</div>*@
+                    @*<span class="col-sm-2 h5 bold">Remarks  </span>
+                        <div class="col-sm-10" style="word-wrap: break-word;">:@ViewBag.OutwardItemViewModel.getField("fldremark")</div>*@
+                </div>
+                <br /><br />
+            </div>
+            @*<div class="row">
+                    &nbsp;
+                    <div class="col-sm-12">
+                        <span class="col-sm-2 h5 bold">NCF : </span>
+                        <div class="col-sm-2" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldtransNo")</div>
+                        <span class="col-sm-2 h5 bold">Reject Reason : </span>
+                        <div class="col-sm-2" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldreasonCode")</div>
+                        <span class="col-sm-2 h5 bold"></span>
+                        <div class="col-sm-2" style="word-wrap: break-word;"></div>
+                    </div>
+                </div>*@
+            @*<div class="row">
+                    &nbsp;
+                    <div class="col-sm-12">
+                        <span class="col-sm-2 h5 bold"></span>
+                        <div class="col-sm-2" style="word-wrap: break-word;"></div>
+                        <span class="col-sm-2 h5 bold"></span>
+                        <div class="col-sm-2" style="word-wrap: break-word;"></div>
+                </div>
+                    &nbsp;
+                </div>*@
+            @*<div class="row">
+                    <div class="col-sm-6">
+                        <span class="h5 bold">@Locale.ChequeType : </span>
+                        <span>@ViewBag.OutwardItemViewModel.getField("fldUIC")</span>
+                        &nbsp;
+                        <span class="h5 bold">@Locale.Source : </span>
+                        <span>@ViewBag.OutwardItemViewModel.getField("fldUIC")</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <span class="h5 bold">@Locale.NCF : </span>
+                        <span>@ViewBag.OutwardItemViewModel.getField("fldUIC")</span>
+                        &nbsp;
+                        <span class="h5 bold">@Locale.RejectReason : </span>
+                        <span>@ViewBag.OutwardItemViewModel.getField("fldUIC")</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <span class="h5 bold">a</span>
+                        <span>@ViewBag.OutwardItemViewModel.getField("fldUIC")</span>
+                        &nbsp;
+                        <span class="h5 bold">@Locale.CapturingDate : </span>
+                        <span>@ViewBag.OutwardItemViewModel.getField("fldUIC")</span>
+                    </div>
+                </div>*@
+
+
+        </div>
+
+        <br />
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-10">
+            @Html.Partial("OutwardClearing/Base/_ChequeImageAction")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8" style="width:700px;">
+            <div class="row">
+                <div class="col-sm-8" style="width:700px;">
+                    @Html.Partial("OutwardClearing/Base/_ChequeImage")
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 reject-reentry-action" style="width:700px;">
+                    @Html.Partial("Partial/_MakerVerification")
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="col-sm-4" style="width:750px;">
+            @Html.Partial("_ChequeInfo2")
+        </div>
+    </div>
+    <div class="row">
+    </div>
+    <div class="row" hidden>
+        <div class="col-sm-10">
+            @Html.Partial("Partial/_MakerDataEntryShowMICR")
+        </div>
+    </div>
+</div>
+
+
+

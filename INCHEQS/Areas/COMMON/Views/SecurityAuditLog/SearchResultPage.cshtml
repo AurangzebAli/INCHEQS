@@ -1,0 +1,43 @@
+﻿@using INCHEQS.TaskAssignment;
+@using INCHEQS.Resources;
+@using INCHEQS.Models.SearchPageConfig;
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline secure-form submit-onload", id = "searchForm" }))
+{
+    @Html.Hidden("from_fldCreateTimeStamp1", (object)ViewBag.Collection1)
+    @Html.Hidden("to_fldCreateTimeStamp1", (object)ViewBag.Collection2)
+    @Html.Hidden("UserLoginId1", (object)ViewBag.Collection3)
+    @Html.Hidden("ModuleAccessed1", (object)ViewBag.Collection4)
+<h4>Utilities - Security Audit Log</h4>
+<table id="search-result-table" class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            @Html.Partial("SearchPage/_TableHeaderColumns")
+        </tr>
+    </thead>
+    <tbody>
+            @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+            {
+                    <tr>
+                        @Html.Partial("SearchPage/_TableBodyColumns", row)
+                    </tr>
+            }
+            <tr>
+                <td colspan="100">
+                    <span style="font-weight:bold; color: red">* </span>&nbsp;
+                    <span style="font-weight:bold; color: black">A - Approve</span>&nbsp;
+                    <span style="font-weight:bold; color: black">R - UPI</span>&nbsp;
+                    <span style="font-weight:bold; color: black">B - Pending</span>&nbsp;
+                    <span style="font-weight:bold; color: black">Rev - Review</span>
+                </td>
+            </tr>
+    </tbody>
+    <tfoot>
+        @Html.Partial("SearchPage/_TablePaginationFooter")
+    </tfoot>
+
+</table>
+    <button class="btn btn-default modal-print" data-action="@Url.Content("~/ICS/PrintReport/PrintReport?p=page&tId="+TaskIdsOCS.SecurityAuditLog.INDEX)" data-title="Print">@Locale.Print</button>
+    <button class="btn btn-default modal-print" data-action="@Url.Content("~/ICS/PrintReport/PrintReport?p=all&tId="+TaskIdsOCS.SecurityAuditLog.INDEX)" data-title="Print All">@Locale.PrintAll</button>
+    <a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.SecurityAuditLog.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+}
+@Scripts.Render("~/bundles/SearchResultPage")

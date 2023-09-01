@@ -1,0 +1,88 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("Update", "DataCorrection", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div>
+            <h4>@Locale.DataCorrection</h4>
+            <hr />
+            <div id="1">
+                &#8195; &#8195;<h4>Invalid Date</h4>
+                <div>
+                    
+                    <div>
+                        <img src="@ViewBag.ImageData">
+                        &#8195;&#8195;&#8195;<a href="@Url.Action("Index")" class="btn btn-default secure-nav " style="width : 80px">Previous</a>
+                        &#8195;<button id="btnClick" class="btn btn-default secure-nav" style="width : 80px">Next</button>   
+                    </div>
+                </div>
+            <div>
+                <table>
+                    <tr> 
+                        <td>
+                             <input type="text" id="day-1"  maxlength="1" onkeyup="generateFullName()" style="width : 25px" />
+                             <input type="text" id="day-2"  maxlength="1" onkeyup="generateFullName()" style="width : 25px" />
+                        </td>
+                        <td>
+                            &#8195; <input type="text" id="month-1"  maxlength="1" onkeyup="generateFullName()" style="width : 25px" />
+                                    <input type="text" id="month-2"  maxlength="1" onkeyup="generateFullName()" style="width : 25px" />
+                        </td>
+                        <td>
+                            &#8195; <input type="text" id="year-1"  maxlength="1" onkeyup="generateFullName()" style="width : 25px" />
+                                    <input type="text" id="year-2"  maxlength="1" onkeyup="generateFullName()" style="width : 25px" />
+                        </td>
+                        <td>
+                            &#8195; &#8195; <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.DataCorrection.INDEX) ? "" : "hidden")">Confirm</a>
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td>
+                            &#8195; D D <br>
+                        </td>
+                        <td>
+                            &#8195; &#8195; &#8195; M M <br>
+                        </td>
+                        <td>
+                            &#8195; &#8195; &#8195; Y Y <br>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+                <span id="fullName" />
+        </div>
+
+        <div id="2"  style="display:none;">
+            <div>
+                &#8195; &#8195;<h4>Invalid MICR</h4>
+            </div>
+        </div>
+    </div>
+    <script>
+        function generateFullName() {
+            document.getElementById('fullName').innerText =
+                document.getElementById('day-1').value +
+                document.getElementById('day-2').value +
+                document.getElementById('month-1').value +
+                document.getElementById('month-2').value +
+                document.getElementById('year-1').value +
+                document.getElementById('year-2').value 
+                ;
+        }
+
+        $('#btnClick').on('click', function () {
+            if ($('#1').css('display') != 'none')
+                $('#2').show().siblings('div').hide();
+        });
+
+
+        var day, month, year;
+        day = $('.day').val();
+        month = $('.month').val();
+        year = $('.year').val();
+        $('.hidden-date-input').val([day, year, month].join('-'));
+    </script>
+}
+

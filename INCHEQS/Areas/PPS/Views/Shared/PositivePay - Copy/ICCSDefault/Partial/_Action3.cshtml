@@ -1,0 +1,12 @@
+﻿@using INCHEQS.Resources
+
+<button type="button" id="approveBtn" data-action="@Url.Action("VerificationApprove")" class="btn-verification-border btn-medium normal-submit-Verification">@Locale.Approve</button>
+
+<button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-medium normal-submit-Verification">Reject</button>
+<input type="text" class="btn-xs" style="width:35px;min-width:30px" id="rejectCodeText" name="new_textRejectCode" value="@ViewBag.InwardItemViewModel.getField("fldRejectCode").Trim()" />
+<select class="textbox" id="rejectCodeSelectList" name="new_rejectCode" style="width:240px;min-width:240px">
+    <option value="">--- @Locale.SelectReturnRouteReason ---</option>
+</select>
+<label class="txtBlack">Remarks</label>
+<input type="text" style="width:45%" id="remarkField" name="remarkField" placeholder="Remarks..." maxlength="255" value="@ViewBag.InwardItemViewModel.getField("fldRemarks").Trim()">
+<!--<button type="button" id="routeBtn" data-action="@Url.Action("VerificationRoute")" class="btn-verification-border btn-upi btn-medium normal-submit-Verification">-->@*Locale.Route*@ <!--Pending</button>-->

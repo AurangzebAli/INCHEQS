@@ -1,0 +1,340 @@
+﻿
+@using INCHEQS.Resources
+@{
+    ViewBag.Title = "IQAResult";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_IQAResultPopup</title>
+    <style>
+        .tg th {
+            background: #7EA6E1;
+            color: #051C3B;
+        }
+        .tg .white{
+            border-color: inherit;
+            text-align: center;
+            vertical-align: top;
+            color: #0B1E3E;
+            background: #FFFFFF;
+        }
+
+        .tg .Red {
+            border-color: inherit;
+            text-align: center;
+            vertical-align: top;
+            color: #0B1E3E;
+            background: #fff44f
+        }
+
+        .tg .Yellow {
+            border-color: inherit;
+            text-align: center;
+            vertical-align: top;
+            background: #FC2815;
+        }
+        
+    </style>
+</head>
+<body>
+    <div>
+        <table class="tg table table-bordered">
+            <thead>
+                <tr>
+                    <th>Framing Error</th>
+                    <th>Document Skew</th>
+                    <th>Oversize Instrument</th>
+                    <th>Piggy Back</th>
+                    <th>Image Too Light</th>
+                    <th>Image Too Dark</th>
+                    <th>Horizontal Streaks</th>
+                    <th>Below Minimum Compressed Image Size</th>
+                    <th>Above Maximum Compressed Image Size</th>
+                    <th>Front Rear Dimension Mismatch</th>
+                    <th>Carbon Strip</th>
+                    <th>Out of Focus</th>
+                   
+
+                </tr>
+
+            </thead>
+            <tbody>
+                @foreach (var row in ViewBag.IQAResult.Rows)
+                {
+
+
+                    <tr>
+
+
+                        @*@if (@row["UnderSize Image"] == "1")
+        {
+            <td class="Red">Not Ok</td>
+        }
+        else if (@row["UnderSize Image"] == "2")
+        {
+
+            <td class="white">ok</td>
+        }
+        else
+        {
+            <td class="Yellow">N/A</td>
+        }*@
+
+                        @*@if (@row["Folded or Torn Document Edges"] == "1")
+        {
+            <td class="Red">Not Ok</td>
+        }
+        else if (@row["Folded or Torn Document Edges"] == "2")
+        {
+
+            <td class="white">ok</td>
+        }
+        else
+        {
+            <td class="Yellow">N/A</td>
+        }*@
+
+                        @*@if (@row["Framing Error"] == "1")
+        {
+            <td class="Red">Not Ok</td>
+        }
+        else if (@row["Framing Error"] == "2")
+        {
+
+            <td class="white">ok</td>
+        }
+        else
+        {
+            <td class="Yellow">N/A</td>
+        }*@
+
+                        @if (@row["Document Skew"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Document Skew"] == "2")
+                        {
+
+                            <td class="white">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+
+                        @if (@row["Oversize Instrument"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Oversize Instrument"] == "2")
+                        {
+
+                            <td class="white">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+
+                        @if (@row["Piggy Back"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Piggy Back"] == "2")
+                        {
+
+                            <td class="white">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+
+                        @if (@row["Image Too Light"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Image Too Light"] == "2")
+                        {
+
+                            <td class="white">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+
+
+                        @if (@row["Image Too Dark"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Image Too Dark"] == "2")
+                        {
+
+                            <td class="white">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+
+
+                        @if (@row["Horizontal Streaks"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Horizontal Streaks"] == "2")
+                        {
+
+                            <td class="">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+
+
+                        @if (@row["Below Minimum Compressed Image Size"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Below Minimum Compressed Image Size"] == "2")
+                        {
+
+                            <td class="white">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+
+
+                        @if (@row["Above Maximum Compressed Image Size"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Above Maximum Compressed Image Size"] == "2")
+                        {
+
+                            <td class="white">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+
+                        @if (@row["Front Rear Dimension Mismatch"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Front Rear Dimension Mismatch"] == "2")
+                        {
+
+                            <td class="white">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+
+
+                        @if (@row["Carbon Strip"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Carbon Strip"] == "2")
+                        {
+
+                            <td class="white">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+
+                        @if (@row["Out of Focus"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Out of Focus"] == "2")
+                        {
+
+                            <td class="">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+                        @if (@row["Out of Focus"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Out of Focus"] == "2")
+                        {
+
+                            <td class="">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+
+
+
+
+
+
+
+
+                    </tr>
+                    @*<tr>
+                        <th>Carbon Strip</th>
+                        <th>Out of Focus</th>
+
+                    </tr>*@
+                    @*<tr>
+
+                        @if (@row["Carbon Strip"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Carbon Strip"] == "2")
+                        {
+
+                            <td class="white">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+
+
+                        @if (@row["Out of Focus"] == "1")
+                        {
+                            <td class="Red">Not Ok</td>
+                        }
+                        else if (@row["Out of Focus"] == "2")
+                        {
+
+                            <td class="white">ok</td>
+                        }
+                        else
+                        {
+                            <td class="Yellow">N/A</td>
+                        }
+
+
+                    </tr>*@
+                }
+
+
+            </tbody>
+        </table>
+        
+    </div>
+</body>
+</html>

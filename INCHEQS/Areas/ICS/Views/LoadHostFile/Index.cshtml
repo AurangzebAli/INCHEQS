@@ -1,0 +1,57 @@
+﻿@using INCHEQS.Resources
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline secure-form", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+    <h4>@ViewBag.SearchPage.PageTitle</h4>
+    <hr />
+    <div class="row">
+        @Html.Partial("SearchPage/_GenericFieldsForm")
+    </div>
+    <hr />
+    <div class="form-group">
+        <button type="submit" class="btn btn-default search" data-action="@Url.Action("SearchResultPage")">@Locale.Search</button>
+        @if (ViewHelper.Equals(ViewBag.TaskIds, "309127"))
+        {
+            <button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("LoadHostFile")">Load Non Conformance File</button>
+        }
+        else if (ViewHelper.Equals(ViewBag.TaskIds, "3110"))
+        {
+            <button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("LoadHostFile")">Load Daily File</button>
+            <button class="btn btn-default search" data-action="@Url.Action("SearchResultPage", new {type = "daily"})">Daily File Listing</button>
+        }
+        else
+        {
+            <button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("LoadHostFile")">@Locale.LoadHostFile</button>
+        }
+        @*<button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("LoadHostFile")">@Locale.LoadHostFile</button>*@
+    </div>
+
+
+    <div class="well white-bg hidden manualUploadContainer">
+        <input type="hidden" id="fileTypeExt" value="@ViewBag.FileTypeExt" />
+        <div id="uploadField">
+            <input class="fileUploader" type="file" id="file" name="file" style="margin-left:15px" multiple />
+        </div>
+        <hr />
+        <button type="submit" class="btn btn-default btn-xs normal-submit-file-upload" data-action="@Url.Action("UploadMultiple")">@Locale.UploadFile</button>
+        <span class="upload-notice"></span>
+    </div>
+    if (ViewHelper.Equals(ViewBag.TaskIds, "3110"))
+    {
+        <div id="resultContainer"></div>
+    }
+    else
+    {
+        <div id="dataProcessContainer" data-processname="@ViewBag.ProcessName"></div>
+    }
+
+
+}
+
+
+<input id="dataProcessType" value="Other" type="hidden">
+
+@Scripts.Render("~/bundles/FileUpload")
+@Scripts.Render("~/bundles/SearchPage")
+
+@Scripts.Render("~/bundles/DataProcessRealTime")

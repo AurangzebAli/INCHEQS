@@ -1,0 +1,137 @@
+﻿@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Areas.ICS.Models.LateReturnedMaintenance;
+<!--if (ViewBag.SearchResult != null)
+{
+    Html.AntiForgeryToken()
+    <h4>Late Returned Maintenance Search Result : <span style="color:cornflowerblue">Record Found</span></h4>
+            <hr />
+            <table id="search-result-table" class="table table-striped table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Clear Date</th>
+                        <th>Account No</th>
+                        <th>UIC</th>
+                        <th>Cheque Serial Number</th>
+                        <th>Amount</th>
+                        <th>Payee BB</th>
+                        <th>Issue Bank Code</th>
+                        <th>Approval Status</th>
+                        <th>Rejected User</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    foreach (var row in ViewBag.SearchResult.TableData)
+                {
+                        <tr>
+                        <td>row["fldClearDate"]</td>
+                        <td>row["fldAccountNumber"]</td>
+                        <td>row["fldUIC"]</td>
+                        <td>row["fldChequeSerialNo"]</td>
+                        <td>row["fldAmount"]</td>
+                        <td>row["preBank"]</td>
+                        <td>row["fldIssueBankCode"]</td>
+                        if (row["fldApprovalStatus"] == "Rejected")
+                            {
+                            <td style="color:red;">row["fldApprovalStatus"]</td>
+                            }
+                            else
+                            {
+                            <td>row["fldApprovalStatus"]</td>
+                            }
+                        <td>row["fldUserAbb"]</td>
+                        <td>row["fldUICForDelete"]</td>
+                        </tr>
+                        if (ViewBag.LateReturnMaintenanceItems.Rows.Count > 1)
+                        { break; }
+                    }
+                </tbody>
+            </table>
+            <button data-action="Url.Action("/Create")" Class="btn btn-default secure-nav normal-submit-without-search (CurrentUser.HasTask(clsLateReturnMaintenance.CREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+}
+else
+{
+    <h4>Search Result : <span style="color:cornflowerblue">No Record Found</span></h4>
+            <table id="search-result-table" class="table table-striped table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Clear Date</th>
+                        <th>Account No</th>
+                        <th>UIC</th>
+                        <th>Cheque Serial Number</th>
+                        <th>Amount</th>
+                        <th>Payee BB</th>
+                        <th>Issue Bank Code</th>
+                        <th>Approval Status</th>
+                        <th>Rejected User</th>
+                        <th>Delete</th>
+                    </tr>
+                    <tr><td colspan="10" align="center">No Data Available</td></tr>
+                </thead>
+            </table>-->
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using INCHEQS.Models.SearchPageConfig;
+@Html.Partial("SearchPage/_InfoBox")
+<table id="search-result-table" class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            @Html.Partial("SearchPage/_TableHeaderColumns")
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+        {
+            <tr @*class="clickable-row-without-search"*@ @*data-action="@Url.Action("Edit")"*@>
+                @Html.Partial("SearchPage/_TableBodyColumns", row)
+            </tr>
+}
+    </tbody>
+    <tfoot>
+        @Html.Partial("SearchPage/_TablePaginationFooter")
+    </tfoot>
+    <!--<thead>
+        <tr>
+            <th>Collapse Branch Code</th>
+            <th>Collapse Branch Description</th>
+            <th>Merge Branch Code</th>
+            <th>Merge Branch Description</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        foreach (var row in ViewBag.SearchResult.TableData)
+        {
+            <tr>
+                <td>row["fldCollapseBranchCode"]</td>
+            </tr>
+            <tr>
+                <td>row["fldCollapseBranchDesc"]</td>
+            </tr>
+            <tr>
+                <td>row["fldMergeBranchCode"]</td>
+            </tr>
+            <tr>
+                <td>row["fldMergeBranchDesc"]</td>
+            </tr>
+            <tr>
+                <input type="checkbox" id="delete" name="delete" value="" />
+                <label for="delete"></label>
+            </tr>
+        }
+    </tbody>-->
+</table>
+<button data-action="@Url.Action("/Delete")" Class="btn btn-default secure-nav normal-submit-without-search  @(CurrentUser.HasTask(TaskIdsICS.LateReturnMaintenance.DELETE) ? "" : "hidden")">@Locale.DeleteBtn</button>
+<button data-action="@Url.Action("/Create")" Class="btn btn-default secure-nav normal-submit-without-search @(CurrentUser.HasTask(TaskIdsICS.LateReturnMaintenance.CREATE) ? "" : "hidden")">Add</button>
+@*<button class="btn btn-default modal-print" data-action="@Url.Content("~/ICS/PrintReport/PrintReport?p=page&tId="+TaskIds.BranchCode.INDEX)" data-title="Print">@Locale.Print</button>
+<button class="btn btn-default modal-print" data-action="@Url.Content("~/ICS/PrintReport/PrintReport?p=all&tId="+TaskIds.BranchCode.INDEX)" data-title="Print All">@Locale.PrintAll</button>*@
+@Scripts.Render("~/bundles/SearchResultPage")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("input[name=fldCharges]").addClass("currency");
+        $("input[name=fldUIC]").addClass("number-only");
+    });
+</script>

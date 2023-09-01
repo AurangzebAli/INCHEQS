@@ -1,0 +1,93 @@
+﻿@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline secure-form", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        tr:nth-child(even) {
+            background-color: #eee;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #fff;
+        }
+    </style>
+    <script>
+        $('input.chk').on('change', function () {
+            $('input.chk').not(this).prop('checked', false);
+        });
+    </script>
+
+    <h4>@ViewBag.SearchPage.PageTitle</h4>
+    <hr />
+
+    <div class="row">
+        @Html.Partial("SearchPage/_GenericFieldsForm")
+    </div>
+    <div>
+        <table id="mytable">
+            <tr>
+                @*<th>
+                        <input type="checkbox" name="select-all" id="select-all" />
+                    </th>*@
+                <th>
+                </th>
+                <th>
+                    File Name
+                </th>
+                <th>
+                    File Type
+                </th>
+            </tr>
+            @foreach (var i in @ViewBag.FileDetails)
+            {
+                <tr>
+                    <td>
+                        @if (@i.fldFileType == "Daily")
+                        {
+                            <input type="checkbox" class="chk" id="checkBox" name="Type" value="D" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="chk" id="checkBox" name="Type" value="M" />
+                        }
+                    </td>
+                    <td>
+
+                        @i.fldFileName
+
+                    </td>
+                    <td>
+
+                        @i.fldFileType
+
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <hr />
+    <div class="form-group">
+        <button class="btn btn-default init-search">Search</button>
+        <button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("Import")" data-title="Import">Import</button>
+    </div>
+    <div id="resultContainer"></div>
+
+}
+
+<div id="dataProcessContainer" data-processname="@ViewBag.ProcessName"></div>
+
+<input id="dataProcessType" value="@ViewBag.TaskRole" type="hidden">
+<img src="~/Content/Images/spin.gif" class="resultLoader hidden" />
+@Scripts.Render("~/bundles/DataProcessRealTime")
+@Scripts.Render("~/bundles/SearchPage")

@@ -1,0 +1,49 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+    ViewBag.Title = "InwardItemList";
+    var i = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Imported Item Details</title>
+</head>
+<body>
+    <div style="overflow-y: scroll; height:500px;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    @*<th>UIC</th>
+        <th>Check Digit</th>*@
+                    <th>Cheque Number</th>
+                    <th>Issuing Bank</th>
+                    <th>Issuing Branch</th>
+                    <th>Issuer Account Number</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in ViewBag.InwardHistory.Rows)
+                {
+                <tr>
+                    <td>@{i++;} @i</td>
+                    @*<td>@row["fldUIC"]</td>*@
+                    @*<td>@row["fldCheckDigit"]</td>*@
+                    <td>@row["fldChequeNumber"]</td>
+                    <td>@row["fldIssuingBankCode"]</td>
+                    <td>@row["fldIssuingBranchCode"]</td>
+                    <td>@row["fldIssuerAccNumber"]</td>
+                    <td style="text-align:right;">@StringUtils.FormatCurrency((row["fldAmount"]).ToString())</td>
+
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

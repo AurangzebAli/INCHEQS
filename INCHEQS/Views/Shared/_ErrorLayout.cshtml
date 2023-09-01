@@ -1,0 +1,39 @@
+﻿
+@using INCHEQS.Resources
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
+    <title>INCHEQS - @ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/appConfig")
+</head>
+<body class="white-bg">
+    <div class="container body-content login-content">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+              
+                    @*<img src="@Url.Content("~/Content/Images/logo.jpg")" class="img-responsive" />*@
+                    <!-- Notice Begin Here -->
+                    @RenderBody()
+
+                    <h6>@Html.ActionLink("Go Back To Home Page", "Index", "Login")</h6>
+            </div>
+        </div>
+        <div class="footer-login col-md-8 col-md-offset-2">
+            <p class="text-center">
+                @Locale.LoginWarning
+                <br />
+                &copy; @DateTime.Now.Year - INSITE MY SYSTEM SDN BHD
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>
+

@@ -1,0 +1,7 @@
+﻿@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+
+@Html.Partial("SearchPage/_GenericFieldsTable")
+
+<button data-action="@Url.Action("/Process")" Class="btn btn-default secure-nav normal-submit-without-search @(CurrentUser.HasTask(TaskIdsOCS.Clearing.INDEX) ? "" : "hidden")">Process</button>
+@Scripts.Render("~/bundles/SearchResultPage")

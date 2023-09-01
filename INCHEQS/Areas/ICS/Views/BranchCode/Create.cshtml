@@ -1,0 +1,57 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("SaveCreate", "BranchCode", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.BranchCodeMaintenance</h4>
+        <hr />
+        <table class="table form-table table-no-border">
+            <TBODY>
+
+                    <TR>
+                        <Th>@Locale.BankCode </Th>
+                        <td>
+                            <select name="SelectBank" id="SelectBank">
+                                <option value=""> </option>
+                                @foreach (var item in ViewBag.Bank)
+                                {
+                                    <option value="@item.fldBankCode">@item.fldBankCode - @item.fldBankDesc</option>
+                                }
+                            </select>
+                        </td>
+                    </TR>                
+                    <TR>
+                        <Th>@Locale.BranchCode </Th>
+
+                        <td>
+                            <select name="txtBranchCode1" id="ajaxStateSelectList"></select>
+                            <span class="red-star">*</span>
+                            <input type="text" name="branchCode"maxlength="5"><span class="red-star">*</span>
+                        </td>
+                    </TR>
+
+                    <TR>
+                        <Th>@Locale.BranchDescription</Th>
+                        <td>
+                            <input type="text" name="branchDesc">
+                        </td>
+
+                    </TR>
+                    <TR>
+                        <Th>@Locale.Disable</Th>
+                        <td>
+                            <input type="checkbox" name="fldDisable" value="Y">@Locale.YES
+                        </td>
+
+                    </TR>
+            </TBODY>
+        </table>
+
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.BranchCode.CREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.BranchCode.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+
+    </div>
+}
+
+<script src="~/Scripts/App/states.js"></script>

@@ -1,0 +1,189 @@
+﻿
+@using INCHEQS.Resources
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("BranchRemarks"), @Class = "form-inline secure-form", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+
+    <div>
+        <style>
+
+
+            th {
+                top: 0;
+                z-index: 2;
+                position: sticky;
+                background: #F4F4F4;
+            }
+        </style>
+
+        <script>
+
+
+
+            /*** Created By Ali ****/
+
+
+            var bindRouteReason12 = function (elem) {
+
+                // Get the checkbox
+
+                // Get the output text
+                var textrejectcode1 = document.getElementById("txtReturnCode");
+                var textrejectdesc1 = document.getElementById("txtReturnDesc");
+
+                var textrejectcode2 = document.getElementById("txtReturnCode2");
+                var textrejectdesc2 = document.getElementById("txtReturnDesc2");
+
+                var textrejectcode3 = document.getElementById("txtReturnCode3");
+                var textrejectdesc3 = document.getElementById("txtReturnDesc3");
+
+                var checkuncheck = elem;
+                if (checkuncheck.checked == true) {
+
+                    if (textrejectcode1.value == "") {
+                        checkedValues(checkuncheck, textrejectcode1, textrejectdesc1);
+
+                    }
+                    else if (textrejectcode2.value == "") {
+                        checkedValues(checkuncheck, textrejectcode2, textrejectdesc2);
+
+                    }
+                    else if (textrejectcode3.value == "") {
+                        checkedValues(checkuncheck, textrejectcode3, textrejectdesc3);
+
+                    }
+                    else if (textrejectcode1.value != "" && textrejectcode2.value != "" && textrejectcode3.value != "") {
+                        alert('Limit Exceed');
+                        checkuncheck.checked = false;
+                    }
+
+
+                }
+                if (checkuncheck.checked == false) {
+                    if ((checkuncheck.closest('tr').childNodes[3].innerHTML == textrejectcode1.value)) {
+                        uncheckValues(textrejectcode1, textrejectdesc1);
+
+                    }
+                    else if ((checkuncheck.closest('tr').childNodes[3].innerHTML == textrejectcode2.value)) {
+                        uncheckValues(textrejectcode2, textrejectdesc2);
+
+
+                    }
+                    else if ((checkuncheck.closest('tr').childNodes[3].innerHTML == textrejectcode3.value)) {
+                        uncheckValues(textrejectcode3, textrejectdesc3);
+
+                    }
+
+
+                    //}
+
+
+
+                    //var checkuncheck = document.getElementById('txtcb');
+                    //if (uncheck.checked == false) {
+                    //    if (uncheck.closest('tr').childNodes[3].innerHTML == textrejectcode1.value) {
+                    //        textrejectcode1.value = "";
+                    //        textrejectdesc1.value = "";
+                    //    }
+
+
+                }
+            }
+
+
+            var checkedValues = function (checkBox, textrejectcod, textrejectdes) {
+                var rejectcode = checkBox.closest('tr').childNodes[3].innerHTML;
+                var rejectDesc = checkBox.closest('tr').childNodes[5].innerHTML;
+                textrejectcod.value = rejectcode;
+                textrejectdes.value = rejectDesc;
+                //for (var i = 0; i < checkBox.length; i++) {
+
+
+                //    if (checkBox[i].checked == true) {
+                //        var rejectcode = checkBox[i].closest('tr').childNodes[3].innerHTML;
+                //        var rejectDesc = checkBox[i].closest('tr').childNodes[5].innerHTML;
+                //        textrejectcod.value = rejectcode;
+                //        textrejectdes.value = rejectDesc;
+
+
+                //    }
+                //}
+
+                //else if (checkBox[i].checked == true && j == 2) {
+                //    var rejectcode = checkBox[i].closest('tr').childNodes[3].innerHTML;
+                //    var rejectDesc = checkBox[i].closest('tr').childNodes[5].innerHTML;
+                //    textrejectcode2.value = rejectcode;
+                //    textrejectdesc2.value = rejectDesc;
+                //    j++;
+
+                //}
+                //else if (checkBox[i].checked == true && j == 3) {
+                //    var rejectcode = checkBox[i].closest('tr').childNodes[3].innerHTML;
+                //    var rejectDesc = checkBox[i].closest('tr').childNodes[5].innerHTML;
+                //    textrejectcode3.value = rejectcode;
+                //    textrejectdesc3.value = rejectDesc;
+                //    j++;
+                //}
+            }
+
+            var uncheckValues = function (txtrejectcode, txtrejectdesc) {
+
+
+                txtrejectcode.value = "";
+                txtrejectdesc.value = "";
+
+            }
+
+
+
+
+        </script>
+
+
+        <div class="div_before_table">
+            <input type="hidden" name="DataAction" value="@ViewBag.DataAction">
+            <input type="hidden" name="fldInwardItemId" value="@ViewBag.fldInwardItemId">
+            <input type="hidden" name="new_textRejectCode" value="@ViewBag.new_textRejectCode">
+            <input type="hidden" name="new_textRejectCode" value="@ViewBag.new_textRejectCode">
+            <input type="hidden" name="fldUIC2" value="@ViewBag.fldUIC2">
+
+            <input type="hidden" name="current_fldAccountNumber" value="@ViewBag.current_fldAccountNumber">
+            <input type="hidden" name="current_fldChequeSerialNo" value="@ViewBag.current_fldChequeSerialNo">
+            <input type="hidden" name="current_fldUIC" value="@ViewBag.current_fldUIC">
+            <input type="hidden" name="textAreaRemarks" value="@ViewBag.textAreaRemarks">
+            <input type="hidden" name="fldIssueBankBranch" value="@ViewBag.fldIssueBankBranch">
+            <input type="hidden" name="fldClearDate" value="@ViewBag.fldClearDate">
+
+            <input type="hidden" name="BranchActivation" value="@ViewBag.BranchActivation">
+            <input type="hidden" name="NextValue" value="@ViewBag.NextValue">
+            <input type="hidden" name="PreviousValue" value="@ViewBag.PreviousValue">
+
+        </div>
+        <br />
+        <br />
+        <div>
+            <table class="table ">
+                
+                <tr>
+                    
+                </tr>
+                <tr>
+                    <td class="textbox" width="10%">Remarks</td>
+                    <td style="width:100px;">
+                        <input class="textbox" type="text" id="txtRemarks" name="txtRemarks" size="50" value="">
+
+                    </td>
+                    <td>
+
+                        <button type="button" id="btnbrnremarks" class="btn btn-default normal-submit-Verification-branchremarks" data-action="@Url.Action("BranchApprove")">OK</button>
+
+                    </td>
+                </tr>
+
+
+            </table>
+            
+            
+        </div>
+    </div>
+}

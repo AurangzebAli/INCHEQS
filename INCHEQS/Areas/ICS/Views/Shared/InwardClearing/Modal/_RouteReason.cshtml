@@ -1,0 +1,340 @@
+﻿@using INCHEQS.Resources
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("RouteReason"), @Class = "form-inline secure-form", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+
+    <div id="routeandreturnreason">
+        <style>
+
+            .routetable {
+                overflow-y: scroll;
+                height: 225px;
+                display: block;
+            }
+
+            .div_before_table {
+                overflow: hidden;
+                overflow-y: scroll;
+                height: 340px;
+            }
+
+            th {
+                top: 0;
+                z-index: 2;
+                position: sticky;
+                background: #F4F4F4;
+            }
+        </style>
+
+        <script>
+
+
+
+            /*** Created By Ali ****/
+
+
+            var bindRouteReason = function (elem) {
+
+                // Get the checkbox
+
+                // Get the output text
+                var textrejectcode1 = document.getElementById("txtReturnCode");
+                var textrejectdesc1 = document.getElementById("txtReturnDesc");
+
+                var textrejectcode2 = document.getElementById("txtReturnCode2");
+                var textrejectdesc2 = document.getElementById("txtReturnDesc2");
+
+                var textrejectcode3 = document.getElementById("txtReturnCode3");
+                var textrejectdesc3 = document.getElementById("txtReturnDesc3");
+                var textremarks =  document.getElementById("txtRemarks");
+
+
+                var checkuncheck = elem;
+                if (checkuncheck.checked == true) {
+                    console.log(checkuncheck.closest('tr').childNodes[3].innerHTML);
+
+                    if (checkuncheck.closest('tr').childNodes[3].innerHTML == '801') {
+                        console.log("Remarks column enable");
+                        //$('#txtRemarks').prop("disabled", false);
+                        $('.inputDisabled').prop("disabled", false);
+
+                    } 
+                                            
+                        if (textrejectcode1.value == "") {
+                            checkedValues(checkuncheck, textrejectcode1, textrejectdesc1);
+                            
+                        }
+                        else if (textrejectcode2.value == "") {
+                            checkedValues(checkuncheck, textrejectcode2, textrejectdesc2);
+
+                        }
+                        else if (textrejectcode3.value == "") {
+                            checkedValues(checkuncheck, textrejectcode3, textrejectdesc3);
+
+                        }
+                        else if (textrejectcode1.value != "" && textrejectcode2.value != "" && textrejectcode3.value != "") {
+                            alert('Limit Exceed');
+                            checkuncheck.checked = false;
+                        }
+
+                    
+
+                    
+
+
+                }
+                if (checkuncheck.checked == false) {
+
+                    console.log(checkuncheck.closest('tr').childNodes[3].innerHTML);
+
+                    if (checkuncheck.closest('tr').childNodes[3].innerHTML == '801' ) {
+                        console.log("Remarks column disable");
+                        
+                        $('.inputDisabled').prop("disabled", true);
+                        
+                    } 
+
+                        if ((checkuncheck.closest('tr').childNodes[3].innerHTML == textrejectcode1.value)) {
+                            uncheckValues(textrejectcode1, textrejectdesc1);
+
+                        }
+                        else if ((checkuncheck.closest('tr').childNodes[3].innerHTML == textrejectcode2.value)) {
+                            uncheckValues(textrejectcode2, textrejectdesc2);
+
+
+                        }
+                        else if ((checkuncheck.closest('tr').childNodes[3].innerHTML == textrejectcode3.value)) {
+                            uncheckValues(textrejectcode3, textrejectdesc3);
+
+                        }
+                    
+
+                    //}
+
+
+
+                    //var checkuncheck = document.getElementById('txtcb');
+                    //if (uncheck.checked == false) {
+                    //    if (uncheck.closest('tr').childNodes[3].innerHTML == textrejectcode1.value) {
+                    //        textrejectcode1.value = "";
+                    //        textrejectdesc1.value = "";
+                    //    }
+
+
+                }
+            }
+
+
+            var checkedValues = function (checkBox, textrejectcod, textrejectdes) {
+                var rejectcode = checkBox.closest('tr').childNodes[3].innerHTML;
+                var rejectDesc = checkBox.closest('tr').childNodes[5].innerHTML;
+                textrejectcod.value = rejectcode;
+                textrejectdes.value = rejectDesc;
+                //for (var i = 0; i < checkBox.length; i++) {
+
+
+                //    if (checkBox[i].checked == true) {
+                //        var rejectcode = checkBox[i].closest('tr').childNodes[3].innerHTML;
+                //        var rejectDesc = checkBox[i].closest('tr').childNodes[5].innerHTML;
+                //        textrejectcod.value = rejectcode;
+                //        textrejectdes.value = rejectDesc;
+
+
+                //    }
+                //}
+
+                //else if (checkBox[i].checked == true && j == 2) {
+                //    var rejectcode = checkBox[i].closest('tr').childNodes[3].innerHTML;
+                //    var rejectDesc = checkBox[i].closest('tr').childNodes[5].innerHTML;
+                //    textrejectcode2.value = rejectcode;
+                //    textrejectdesc2.value = rejectDesc;
+                //    j++;
+
+                //}
+                //else if (checkBox[i].checked == true && j == 3) {
+                //    var rejectcode = checkBox[i].closest('tr').childNodes[3].innerHTML;
+                //    var rejectDesc = checkBox[i].closest('tr').childNodes[5].innerHTML;
+                //    textrejectcode3.value = rejectcode;
+                //    textrejectdesc3.value = rejectDesc;
+                //    j++;
+                //}
+            }
+
+            var uncheckValues = function (txtrejectcode, txtrejectdesc) {
+
+
+                txtrejectcode.value = "";
+                txtrejectdesc.value = "";
+
+            }
+
+
+            //// If the checkbox is checked, display the output text
+            //if (checkBox.checked == true) {
+
+            //    var rejectcode = checkBox.closest('tr').childNodes[3].innerHTML;
+            //    var rejectDesc = checkBox.closest('tr').childNodes[5].innerHTML;
+            //    //text.style.display = "block";
+
+
+            //} else {
+            //    textrejectcode1.value = "";
+            //    textrejectdesc1.value = "";
+            //    //text.style.display = "none";
+            //}
+
+
+
+        </script>
+
+
+        <div class="div_before_table">
+            <input type="hidden" name="DataAction" value="@ViewBag.DataAction">
+            <input type="hidden" name="fldInwardItemId" value="@ViewBag.fldInwardItemId">
+            <input type="hidden" name="new_textRejectCode" value="@ViewBag.new_textRejectCode">
+            <input type="hidden" name="new_textRejectCode" value="@ViewBag.new_textRejectCode">
+            <input type="hidden" name="fldUIC2" value="@ViewBag.fldUIC2">
+            <input type="hidden" name="NextValue" value="@ViewBag.NextValue ">
+            <input type="hidden" name="current_fldAccountNumber" value="@ViewBag.current_fldAccountNumber">
+            <input type="hidden" name="current_fldChequeSerialNo" value="@ViewBag.current_fldChequeSerialNo">
+            <input type="hidden" name="current_fldUIC" value="@ViewBag.current_fldUIC">
+            @*<input type="hidden" name="textAreaRemarks" value="@ViewBag.textAreaRemarks">*@
+            <input type="hidden" name="current_fldAmount" value="@ViewBag.current_fldAmount">
+
+            <input type="hidden" id="CCUActivation" name="CCUActivation" value="@ViewBag.CCUActivation">
+            <input type="hidden" id="BranchActivation" name="BranchActivation" value="@ViewBag.BranchActivation">
+
+
+            <table class="table table-bordered ">
+                <thead>
+                    <tr>
+                        <th class="fixed">
+                            Select
+                            @*<button type="button" class="modal-submit btn-medium btn-verification-border btn-verification" data-action="@Url.Action("IQAResult")">*@
+                        </th>
+                        <th class="fixed">
+                            Reject Code
+                        </th>
+
+                        <th class="fixed">
+                            Description
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in ViewBag.RouteReason.Rows)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" id="txtcb" onclick="javascript:bindRouteReason(this)" class="txtcb" name="" />
+                                    @*<span>Archival of Data to History Table based on Retention Period (Online Enquiry)</span>*@
+                                </td>
+
+                                <td class="rejectcode">@item[0]</td>
+                                <td class="rejectdescription">@item[1] </td>
+
+                            </tr>
+
+                        }
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <br />
+        <div>
+            <table>
+                @*@if (ViewBag.Title != "ReturnReason")
+            {
+                <tr>
+                    <td class="textbox" width="10%">Branch <br><span style="color:red; font-size:7pt;">Input Format : BranchCode. i.e. 0001</span></td>
+
+                </tr>
+
+                <tr>
+                    <td class="label2">
+                        <input class="textbox" onKeypress="" maxlength="4" type="text" id="txtPreferedBranch1" name="txtPreferedBranch1" size="58" value="" />
+                    </td>
+                </tr>
+
+            }*@
+                <tr>
+                    <td class="textbox" width="10%" colspan="2">Return Code/s</td>
+                </tr>
+                <tr>
+                    <td class="textbox txtbox1" style="white-space:nowrap" colspan="2">
+                        <div id="tdReturnCodes"></div>
+                    </td>
+                </tr>
+
+                <tr>
+
+                    <td class="textbox" nowrap colspan=2>
+                        <input class="textbox txtbox2" size="4" maxlength="3" type="text" id="txtReturnCode" name="txtReturnCode" readonly />
+                        <input class="textbox txtbox3" type="text" id="txtReturnDesc" name="txtReturnDesc" size="50" value="" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="textbox" nowrap colspan=2>
+                        <input class="textbox txtbox4" size="4" maxlength="3" type="text" id="txtReturnCode2" name="txtReturnCode2" onblur="jsFillReturnDesc(this.value); jsPopulateRejectRemarks(this.value)" readonly>
+                        <input class="textbox txtbox5" type="text" id="txtReturnDesc2" name="txtReturnDesc2" size="50" value="" readonly>
+                    </td>
+                </tr>
+                <tr>
+
+                    <td class="textbox" nowrap colspan=2>
+                        <input class="textbox txtbox6" size="4" maxlength="3" type="text" id="txtReturnCode3" name="txtReturnCode3" readonly>
+                        <input class="textbox txtbox7" type="text" id="txtReturnDesc3" name="txtReturnDesc3" size="50" value="" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="textbox" width="10%">Remarks</td>
+                </tr>
+                <tr>
+
+                    <td>
+                        @*<select name="selRemarks" id="selRemarks" style="display:'none'; font-weight:700" onchange="">
+                    </select><b> </b>*@
+                        <input class="textbox inputDisabled" disabled="disabled" type="text" id="txtRemarks" name="textAreaRemarks" size="50" value="">
+
+                    </td>
+                </tr>
+
+
+            </table>
+            <br />
+            @if (ViewBag.Title != "ReturnReason")
+            {
+                @*<button type="button" id="routeBtn" data-dismiss="modal"  class="btn btn-default">OK</button>*@
+                <button type="button" id="routeBtn" data-action="@Url.Action("VerificationRoute")" class="btn btn-default normal-submit-Verification-routereason">OK</button>
+                @*<button type="button" id="routeBtn" data-action="@Url.Action("VerificationRoute")" class="btn-verification-border btn-verification btn-medium normal-submit-Verification">Route</button>*@
+
+            }
+            @*Manual Verification Screen*@
+            else if (ViewBag.TaskId.ToString().Trim() == "306910")
+            {
+                <button type="button" id="Returnbtn" class="normal-submit-Manual-Returned btn btn-default" data-action="@Url.Action("ManualChequesReturned")">OK</button>
+
+            }
+            else if (ViewBag.TaskId.ToString().Trim() == "306260")
+            {
+                <button type="button" id="Returnbtn" class="normal-submit-Manual-Returned btn btn-default" data-action="@Url.Action("CreditPosting")">OK</button>
+
+            }
+            else
+            {
+                <button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn btn-default normal-submit-Verification-returnreason">OK</button>
+
+            }
+        </div>
+    </div>
+}

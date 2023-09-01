@@ -1,0 +1,172 @@
+﻿using INCHEQS.Models.SearchPageConfig;
+using INCHEQS.Security.AuditTrail;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using INCHEQS.Areas.COMMON.Models.Users;
+using INCHEQS.Security;
+using INCHEQS.TaskAssignment;
+using System.Data.SqlClient;
+using INCHEQS.Common.Resources;
+using INCHEQS.Security.SecurityProfile;
+
+namespace INCHEQS.Areas.COMMON.Controllers.Maintenance
+{
+    public class SecurityProfileCheckerController : Controller
+    {
+        private readonly ISecurityProfileDao securityProfileDao;
+        private readonly IAuditTrailDao auditTrailDao;
+        private IPageConfigDao pageConfigDao;
+        private readonly IUserDao userDao;
+
+        public SecurityProfileCheckerController(ISecurityProfileDao securityProfileDao, IAuditTrailDao auditTrailDao, IPageConfigDao pageConfigDao, IUserDao userDao)
+        {
+            this.securityProfileDao = securityProfileDao;
+            this.pageConfigDao = pageConfigDao;
+            this.auditTrailDao = auditTrailDao;
+            this.userDao = userDao;
+        }
+
+        [CustomAuthorize(TaskIds = TaskIdsOCS.SecurityProfileChecker.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Index()
+        {
+            ViewBag.SearchPage = pageConfigDao.GetSearchFormModelFromConfig(CurrentUser.Account, new PageSqlConfig(TaskIdsOCS.SecurityProfileChecker.INDEX));
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIdsOCS.SecurityProfileChecker.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public virtual ActionResult SearchResultPage(FormCollection collection)
+        {
+            ViewBag.SearchResult = pageConfigDao.getResultListFromDatabaseView(new PageSqlConfig(TaskIdsOCS.SecurityProfileChecker.INDEX, "View_SecurityProfileChecker", "", "", new[] {
+                    new SqlParameter("@fldBankCode",CurrentUser.Account.BankCode)}),
+            collection);
+            return View();
+        }
+        [CustomAuthorize(TaskIds = TaskIdsOCS.SecurityProfileChecker.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public virtual ActionResult SecurityProfile(FormCollection collection)
+        {
+            ViewBag.SecurityProfileTemp = securityProfileDao.GetSecurityProfileTemp();
+            ViewBag.SecurityProfile = securityProfileDao.GetSecurityProfile();
+
+            return View();
+        }
+
+
+        [CustomAuthorize(TaskIds = TaskIdsOCS.SecurityProfileChecker.VERIFY)]
+        [HttpPost]
+        public ActionResult VerifyA(FormCollection col)
+        {
+            try
+            {
+                //string formAction = col["formAction"];
+                List<string> arrResults = new List<string>();
+                if ((col["deleteBox"]) != null)
+                {
+
+                    SecurityProfileModel before = securityProfileDao.GetSecurityProfile();
+                    auditTrailDao.Log("Edit Security Profile - Before Change=> Password Expiry Interval : " + before.fldUserPwdExpiryInt + " Password Notification Interval :" + before.fldUserPwdNotificationInt + " User Account Expiry Interval :" + before.fldUserAcctExpiryInt + " User ID Length : MIN(" + before.fldUserIdLengthMin + ")MAX(" + before.fldUserIdLengthMax + ") User Password Length : MIN(" + before.fldUserPwdLengthMin + ")MAX(" + before.fldUserPwdLengthMax + ")" + " User Session Timeout:" + before.fldUserSessionTimeOut + " Password History List Reusable after :" + 1 + " Login Attempt:" + before.fldUserLoginAttempt, CurrentUser.Account);
+
+                    securityProfileDao.DeleteSecurityMaster();
+                    securityProfileDao.MovetoSecurityMasterfromTemp();
+                    securityProfileDao.DeleteSecurityMasterTemp();
+                    SecurityProfileModel after = securityProfileDao.GetSecurityProfile();
+                    auditTrailDao.Log("Edit Security Profile - After Change=> Password Expiry Interval : " + after.fldUserPwdExpiryInt + " Password Notification Interval :" + after.fldUserPwdNotificationInt + " User Account Expiry Interval :" + after.fldUserAcctExpiryInt + " User ID Length : MIN(" + after.fldUserIdLengthMin + ")MAX(" + after.fldUserIdLengthMax + ") User Password Length : MIN(" + after.fldUserPwdLengthMin + ")MAX(" + after.fldUserPwdLengthMax + ")" + " User Session Timeout:" + after.fldUserSessionTimeOut + " Password History List Reusable after :" + 1 + " Login Attempt:" + after.fldUserLoginAttempt, CurrentUser.Account);
+
+                    TempData["Notice"] = Locale.RecordsSuccsesfullyVerified;
+
+                    securityProfileDao.DeleteSecurityProfileChecker();
+                }
+                else
+                {
+                    TempData["Warning"] = Locale.PleaseSelectARecord;
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [CustomAuthorize(TaskIds = TaskIdsOCS.SecurityProfileChecker.VERIFY)]
+        [HttpPost]
+        public ActionResult VerifyR(FormCollection col)
+        {
+            try
+            {
+
+                List<string> arrResults = new List<string>();
+
+                if ((col["deleteBox"]) != null)
+                {
+                    securityProfileDao.DeleteSecurityMasterTemp();
+                    securityProfileDao.DeleteSecurityProfileChecker();
+                    TempData["Notice"] = Locale.RecordsSuccsesfullyVerified;
+                }
+                else
+                {
+                    TempData["Warning"] = Locale.PleaseSelectARecord;
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [CustomAuthorize(TaskIds = TaskIdsOCS.SecurityProfileChecker.VERIFY)]
+        [HttpPost]
+        public ActionResult VerifyA2(FormCollection col)
+        {
+            try
+            {
+                //string formAction = col["formAction"];
+           
+                    SecurityProfileModel before = securityProfileDao.GetSecurityProfile();
+                    auditTrailDao.Log("Edit Security Profile - Before Change=> Password Expiry Interval : " + before.fldUserPwdExpiryInt + " Password Notification Interval :" + before.fldUserPwdNotificationInt + " User Account Expiry Interval :" + before.fldUserAcctExpiryInt + " User ID Length : MIN(" + before.fldUserIdLengthMin + ")MAX(" + before.fldUserIdLengthMax + ") User Password Length : MIN(" + before.fldUserPwdLengthMin + ")MAX(" + before.fldUserPwdLengthMax + ")" + " User Session Timeout:" + before.fldUserSessionTimeOut + " Password History List Reusable after :" + 1 + " Login Attempt:" + before.fldUserLoginAttempt, CurrentUser.Account);
+
+                    securityProfileDao.DeleteSecurityMaster();
+                    securityProfileDao.MovetoSecurityMasterfromTemp();
+                    securityProfileDao.DeleteSecurityMasterTemp();
+                    SecurityProfileModel after = securityProfileDao.GetSecurityProfile();
+                    auditTrailDao.Log("Edit Security Profile - After Change=> Password Expiry Interval : " + after.fldUserPwdExpiryInt + " Password Notification Interval :" + after.fldUserPwdNotificationInt + " User Account Expiry Interval :" + after.fldUserAcctExpiryInt + " User ID Length : MIN(" + after.fldUserIdLengthMin + ")MAX(" + after.fldUserIdLengthMax + ") User Password Length : MIN(" + after.fldUserPwdLengthMin + ")MAX(" + after.fldUserPwdLengthMax + ")" + " User Session Timeout:" + after.fldUserSessionTimeOut + " Password History List Reusable after :" + 1 + " Login Attempt:" + after.fldUserLoginAttempt, CurrentUser.Account);
+
+                    TempData["Notice"] = Locale.RecordsSuccsesfullyVerified;
+
+                    securityProfileDao.DeleteSecurityProfileChecker();
+                
+               
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [CustomAuthorize(TaskIds = TaskIdsOCS.SecurityProfileChecker.VERIFY)]
+        [HttpPost]
+        public ActionResult VerifyR2(FormCollection col)
+        {
+            try
+            {
+
+                    securityProfileDao.DeleteSecurityMasterTemp();
+                    securityProfileDao.DeleteSecurityProfileChecker();
+                    TempData["Notice"] = Locale.RecordsSuccsesfullyVerified;
+              
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
+}
+

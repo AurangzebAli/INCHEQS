@@ -1,0 +1,25 @@
+﻿.overlay{
+    position:absolute;
+    display:none;
+    background-color:rgb(128,128,128,0.5);
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+}
+.popup{
+    position:fixed;
+    z-index:99;
+    vertical-align:central;
+    display:none;
+    margin-left:25%;
+    margin-bottom:30%;
+}
+.percentage {
+    position: fixed;
+    vertical-align: central;
+    margin-left: 15%;
+    margin-bottom: 50%;
+}
+
+

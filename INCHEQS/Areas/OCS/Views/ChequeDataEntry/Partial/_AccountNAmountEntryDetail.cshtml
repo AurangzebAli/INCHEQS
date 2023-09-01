@@ -1,0 +1,55 @@
+﻿@using INCHEQS.Resources
+<table class="table table-bordered mTop10">
+    <thead>
+        <tr>
+            <th>@Locale.RejectBtn</th>
+            <th>@Locale.ItemID</th>
+            <th>@Locale.Action</th>
+            <th>Type</th>
+            <th style="width: 150px;">Cheque Amount</th>
+            <th style="width: 200px;">Account Entry</th>
+            <th style="width: 150px;">Return Reason</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td td align="left"><span></span></td>
+            <td td align="left"><span>@ViewBag.OutwardItemViewModel.getField("flditemid")</span></td>
+            <td td align="left">
+                <button type="button" id="btnDataEntryEditRecord" class="btn btn-default btn-xs">Edit</button>
+                <button type="button" id="btnDataEntryRemoveRecord" class="btn btn-default btn-xs">@Locale.Remove</button>
+            </td>
+            <td td align="left"><span>@ViewBag.OutwardItemViewModel.getField("flditemtype")</span></td>
+            <td td align="left">
+                @if (@ViewBag.OutwardItemViewModel.getField("fldamount") == "0" || @ViewBag.OutwardItemViewModel.getField("fldamount") == "0.00")
+                {
+                    <input id="txtChequeAmountpartial" class="form-control" name="txtChequeAmount" style="font-size:medium;text-align:right; border: 1px; height:30px;" type="text" value="" disabled/>
+                }
+                else
+                {
+                    <input id="txtChequeAmountpartial" class="form-control" name="txtChequeAmount" style="font-size:medium;text-align:right ; border: 1px; height:30px;" type="text" value="@ViewBag.OutwardItemViewModel.getField("fldamount")" disabled/>
+                }
+             </td>
+            <td td align="right">
+                @if (@ViewBag.OutwardItemViewModel.getField("fldpvaccno") == "")
+                {
+                    <input id="txtChequeAccountNumberPartial" class="form-control number-only " name="txtChequeAccountNumber" style="font-size:medium;text-align:right; border: 1px; height:30px;" type="text" value="" disabled/>
+                }
+                else
+                {
+                    <input id="txtChequeAccountNumberPartial" class="form-control number-only" name="txtChequeAccountNumber" style="font-size:medium;text-align:right; border: 1px; height:30px;" type="text" value="@ViewBag.OutwardItemViewModel.getField("fldpvaccno")" disabled />
+                }
+             </td>
+            <td>
+                @if (@ViewBag.OutwardItemViewModel.getField("fldIntRejCode") == "")
+                {
+                    <div id="txtReasonDesc" style="color:red; word-wrap: break-word;"></div>
+                }
+                else
+                {
+                    <div id="txtReasonDesc" style="color:red; word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldIntRejCode") - @ViewBag.OutwardItemViewModel.getField("fldremark")</div>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>

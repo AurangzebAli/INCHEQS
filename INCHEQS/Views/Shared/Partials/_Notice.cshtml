@@ -1,0 +1,67 @@
+﻿@using INCHEQS.Resources
+
+<!--For Json Notice Start-->
+<div id="notice" Class="alert alert-success alert-dismissible hidden" role="alert">
+    <Button type="button" Class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span Class="sr-only">@Locale.btnClose</span></Button>
+    @*<b>@Locale.Notice:</b><br />*@
+    <div class="notice-body"></div>
+</div>
+
+<div id="ErrorMsg" Class="alert alert-danger alert-dismissible hidden" role="alert">
+    <Button type="button" Class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span Class="sr-only">@Locale.btnClose</span></Button>
+    @*<b>@Locale.Notice:</b><br />*@
+    <div class="notice-body"></div>
+</div>
+<!--For Json Notice End-->
+
+
+@if (TempData["Notice"] != null) {
+<div Class="alert alert-success alert-dismissible" role="alert">
+    <Button type="button" Class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span Class="sr-only">@Locale.btnClose</span></Button>
+    @*<b>@Locale.Notice:</b><br />*@
+    @TempData["Notice"]
+</div>
+}
+
+@if (TempData["Warning"] != null)
+{
+<div Class="alert alert-warning alert-dismissible" role="alert">
+    <Button type="button" Class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span Class="sr-only">@Locale.btnClose</span></Button>
+    <b>@Locale.Warning:</b><br />
+    @TempData["Warning"]
+</div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div Class="alert alert-danger alert-dismissible" role="alert">
+        <Button type="button" Class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span Class="sr-only">@Locale.btnClose</span></Button>
+        <b>@Locale.ThefollowingErrorencounter:</b><br />
+        @if(TempData["ErrorMsg"].GetType() == typeof(List<string>)){
+            foreach (var errMsg in TempData["ErrorMsg"] as List<string>) {
+                @errMsg<br />
+            }
+        }else if (TempData["ErrorMsg"].GetType() == typeof(Dictionary<string , string>)) {
+            foreach (var errMsg in TempData["ErrorMsg"] as Dictionary<string , string>) {
+                @errMsg.Value<br />
+            }
+        } else {
+            @TempData["ErrorMsg"]
+        }
+
+    </div>
+}   
+
+@if (TempData["LoginError"] != null) {
+    <div Class="alert alert-danger alert-dismissible" role="alert">
+        <Button type="button" Class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span Class="sr-only">@Locale.btnClose</span></Button>        
+        @if (TempData["LoginError"].GetType() == typeof(Dictionary<string,string>)) {
+            foreach (var errMsg in TempData["LoginError"] as Dictionary<string, string>) {
+                @errMsg.Value<br />
+            }
+        } else {
+            @TempData["LoginError"]
+        }
+
+    </div>
+}

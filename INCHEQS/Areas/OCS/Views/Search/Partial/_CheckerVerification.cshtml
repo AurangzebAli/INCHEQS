@@ -1,0 +1,63 @@
+﻿@using INCHEQS.Resources
+<input type="text" disabled="disabled" class="cheque-input new_fldCheckDigit number-only @(ViewBag.OutwardItemViewModel.getField("fldOriCheckDigit") == ""  ? "" : "txtRed")" value="@ViewBag.OutwardItemViewModel.getField("fldCheckDigit")" maxlength="2" />
+<input type="text" disabled="disabled" class="cheque-input new_fldSerial number-only @(ViewBag.OutwardItemViewModel.getField("fldOriSerial") == "" ? "" : "txtRed")" value="@ViewBag.OutwardItemViewModel.getField("fldSerial")" maxlength="6" />
+<input type="text" disabled="disabled" class="cheque-input new_fldBankCode number-only @(ViewBag.OutwardItemViewModel.getField("fldOriBankCode") == ""  ? "" : "txtRed")" value="@ViewBag.OutwardItemViewModel.getField("fldBankCode")" maxlength="2" />
+<input type="text" disabled="disabled" class="cheque-input new_fldBranchCode number-only @(ViewBag.OutwardItemViewModel.getField("fldOriBranchCode") == ""  ? "" : "txtRed")" value="@ViewBag.OutwardItemViewModel.getField("fldBranchCode")" maxlength="3" />
+<input type="text" disabled="disabled" class="cheque-input new_fldStateCode number-only @(ViewBag.OutwardItemViewModel.getField("fldOriStateCode") == ""  ? "" : "txtRed")" value="@ViewBag.OutwardItemViewModel.getField("fldStateCode")" maxlength="2" />
+<input type="text" disabled="disabled" class="cheque-input new_fldIssuerAccNo number-only @(ViewBag.OutwardItemViewModel.getField("fldOriIssuerAccNo") == ""  ? "" : "txtRed")" value="@ViewBag.OutwardItemViewModel.getField("fldIssuerAccNo")" maxlength="10" />
+<input type="text" disabled="disabled" class="cheque-input new_fldTCCode number-only @(ViewBag.OutwardItemViewModel.getField("fldOriTCCode") == ""  ? "" : "txtRed")" value="@ViewBag.OutwardItemViewModel.getField("fldTCCode")" maxlength="2" />
+<input type="hidden" id="remarkField" name="remarkField" value="">
+<input type="hidden" disabled="disabled" id="fldOriCheckDigit" name="fldOriCheckDigit" value="@ViewBag.OutwardItemViewModel.getField("fldOriCheckDigit")" maxlength="2" />
+<input type="hidden" disabled="disabled" id="fldOriSerial" name="fldOriSerial" value="@ViewBag.OutwardItemViewModel.getField("fldOriSerial")" maxlength="6" />
+<input type="hidden" disabled="disabled" id="fldOriBankCode" name="fldOriBankCode" value="@ViewBag.OutwardItemViewModel.getField("fldOriBankCode")" maxlength="2" />
+<input type="hidden" disabled="disabled" id="fldOriBranchCode" name="fldOriBranchCode" value="@ViewBag.OutwardItemViewModel.getField("fldOriBranchCode")" maxlength="3" />
+<input type="hidden" disabled="disabled" id="fldOriStateCode" name="fldOriStateCode" value="@ViewBag.OutwardItemViewModel.getField("fldOriStateCode")" maxlength="2" />
+<input type="hidden" disabled="disabled" id="fldOriIssuerAccNo" name="fldOriIssuerAccNo" value="@ViewBag.OutwardItemViewModel.getField("fldOriIssuerAccNo")" maxlength="10" />
+<input type="hidden" disabled="disabled" id="fldOriTCCode" name="fldOriTCCode" value="@ViewBag.OutwardItemViewModel.getField("fldOriTCCode")" maxlength="2" />
+<div class="ChequAmountEntry">
+    <div id="BoxTransparentdiv" class="BoxChequeAmountEntry">
+        <!--Include a header DIV with the same name as the draggable DIV, followed by "header":-->
+
+        <div id="BoxChequeAmountEntryheader" class="titlebar">
+            <span class="title">Amount Entry</span>
+        </div>
+        <div hidden>
+
+        </div>
+        <div class="BoxChequeAmountEntry">
+            <div>
+                &nbsp;
+            </div>
+            <div>
+                &nbsp;
+            </div>
+            <div class="container">
+                &nbsp;
+            </div>
+        </div>
+        <div>
+            <input id="TextBoxdiv" class="form-control"
+                   disabled="disabled"
+                   name="txtChequeAmount"
+                   style="font-size:medium"
+                   type="text"
+                   value="@ViewBag.OutwardItemViewModel.getField("fldAmount")" />
+        </div>
+
+    </div>
+</div>
+
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "ConfirmMICR"))
+{
+    <td><button data-action="@Url.Action("ConfirmMICR")" class="normal-submit btn btn-default">@Locale.btnConfirm</button></td>
+}
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "RepairMICR"))
+{
+    <td><button data-action="@Url.Action("RepairMICR")" class="normal-submit btn btn-default">@Locale.Repair</button></td>
+}
+<div class="row">
+    <div class="col-sm-9">
+        <span class="bold">@Locale.Remarks</span><br />
+        <textarea class="remarks" name="textAreaRemarks"></textarea>
+    </div>
+</div>

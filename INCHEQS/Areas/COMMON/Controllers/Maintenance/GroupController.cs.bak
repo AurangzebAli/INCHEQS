@@ -1,0 +1,483 @@
+﻿using INCHEQS.Security.AuditTrail;
+using INCHEQS.Models.SearchPageConfig;
+using INCHEQS.Models.SearchPageConfig.Services;
+using INCHEQS.TaskAssignment;
+using INCHEQS.Security.User;
+using INCHEQS.Resources;
+using INCHEQS.Security;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Web.Mvc;
+using INCHEQS.Security.SystemProfile;
+using INCHEQS.Security.SecurityProfile;
+using INCHEQS.DataAccessLayer;
+using INCHEQS.Common;
+using System.Data;
+using INCHEQS.Areas.COMMON.Models.Group;
+
+namespace INCHEQS.Areas.COMMON.Controllers.Maintenance
+{
+
+
+    public class GroupController : BaseController
+    {
+
+        private readonly IGroupProfileDao groupProfileDao;
+        private readonly IAuditTrailDao auditTrailDao;
+        private IPageConfigDao pageConfigDao;
+        protected readonly ISearchPageService searchPageService;
+        protected readonly ISystemProfileDao systemProfileDao;
+        private readonly ISecurityProfileDao securityProfileDao;
+        private readonly ApplicationDbContext dbContext;
+        
+
+        public GroupController(IGroupProfileDao groupProfileDao, IAuditTrailDao auditTrailDao, IPageConfigDao pageConfigDao, ISearchPageService searchPageService, ISystemProfileDao systemProfileDao, ISecurityProfileDao securityProfileDao, ApplicationDbContext dbContext)
+        {
+            this.pageConfigDao = pageConfigDao;
+            this.auditTrailDao = auditTrailDao;
+            this.searchPageService = searchPageService;
+            this.systemProfileDao = systemProfileDao;
+            this.securityProfileDao = securityProfileDao; 
+            this.dbContext = dbContext;
+            this.groupProfileDao = groupProfileDao;
+
+        }
+        
+        [CustomAuthorize(TaskIds = TaskIds.Group.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Index()
+        {
+            ViewBag.SearchPage = pageConfigDao.GetSearchFormModelFromConfig(CurrentUser.Account, new PageSqlConfig(TaskIds.Group.INDEX));
+            ViewBag.PageTitle = groupProfileDao.GetPageTitle(TaskIds.Group.INDEX);
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.Group.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public virtual ActionResult SearchResultPage(FormCollection collection)
+        {
+            ViewBag.SearchResult = pageConfigDao.getResultListFromDatabaseView(new PageSqlConfig(TaskIds.Group.INDEX, "View_Group", "", "fldBankCode =@fldBankCode", new[] {
+             new SqlParameter("@fldBankCode",CurrentUser.Account.BankCode)}),
+            collection);
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.Group.EDIT)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Edit(FormCollection collection, string groupIdParam = "")
+        {
+            string taskid = TaskIds.Group.EDIT;
+            if (CurrentUser.HasTask(taskid))
+            {
+                CurrentUser.Account.TaskId = taskid;
+            }
+
+            string securityProfile = securityProfileDao.GetValueFromSecurityProfile("fldDualApproval", CurrentUser.Account.BankCode).Trim();
+            Dictionary<string, string> filter = searchPageService.GetFormFiltersFromRow(collection);
+            string groupId = "";
+            if (string.IsNullOrEmpty(groupIdParam))
+            {
+                groupId = filter["fldGroupCode"].Trim();
+            }
+            else
+            {
+                groupId = groupIdParam;
+            }
+
+            ViewBag.Group = groupProfileDao.GetGroup(groupId, "Update");
+            ViewBag.SelectedUser = groupProfileDao.ListSelectedUserInGroup(groupId, CurrentUser.Account.BankCode);
+            ViewBag.AvailableUser = groupProfileDao.ListAvailableUserInGroup(CurrentUser.Account.BankCode);
+
+            ViewBag.PageTitle = groupProfileDao.GetPageTitle(TaskIds.Group.EDIT);
+
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.Group.UPDATE)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Update(FormCollection col)
+        {
+            string taskid = TaskIds.Group.UPDATE;
+            if (CurrentUser.HasTask(taskid))
+            {
+                CurrentUser.Account.TaskId = taskid;
+            }
+
+            string securityProfile = securityProfileDao.GetValueFromSecurityProfile("fldDualApproval", CurrentUser.Account.BankCode).Trim();
+            try
+            {
+                List<string> userIds = new List<string>();
+                string groupId = col["fldGroupCode"].Trim();
+
+                List<string> errorMessages = groupProfileDao.ValidateGroup(col, "Update", CurrentUser.Account.BankCode);
+                if ((errorMessages.Count > 0))
+                {
+                    TempData["ErrorMsg"] = errorMessages;
+                }
+                else
+                {
+                    if ("N".Equals(securityProfile))
+                    {
+                        if ((groupProfileDao.NoChangesGroupSelectedUser(col, groupId) == true) && (groupProfileDao.NoChangesGroup(col, groupId) == true))
+                        {
+                            TempData["ErrorMsg"] = Locale.NoChanges;
+                        }
+                        else
+                        {
+                            groupProfileDao.UpdateGroupMasterTable(col, CurrentUser.Account.UserId);
+
+                            auditTrailDao.Log("Update - Group Code: " + groupId + " Group Desc : " + col["fldGroupDesc"], CurrentUser.Account);
+
+                            if ((col["selectedUser"]) != null)
+                            {
+                                string beforeUser = "";
+                                List<UserModel> beforeUserLists = groupProfileDao.ListSelectedUserInGroup(groupId, CurrentUser.Account.BankCode);
+
+                                foreach (var beforeUserlist in beforeUserLists)
+                                {
+                                    beforeUser = beforeUser + beforeUserlist.fldUserAbb + ',';
+                                }
+                                auditTrailDao.Log("Update User In Group , Before Update => Group Code: " + groupId + " User : " + beforeUser, CurrentUser.Account);
+
+                                userIds = col["selectedUser"].Split(',').ToList();
+                                foreach (string userId1 in userIds)
+                                {
+                                    groupProfileDao.DeleteGroupUserNotSelected(groupId, userId1);
+                                }
+
+                                foreach (string userId2 in userIds)
+                                {
+                                    if (groupProfileDao.CheckGroupUserExist(groupId, userId2) == true)
+                                    {
+                                        groupProfileDao.UpdateGroupUserTable(groupId, userId2);
+                                    }
+                                    else
+                                    {
+                                        groupProfileDao.CreateGroupUser(col, userId2, "Update");
+                                    }
+                                }
+
+                                string afterUser = "";
+                                List<UserModel> afterUserLists = groupProfileDao.ListSelectedUserInGroup(groupId, CurrentUser.Account.BankCode);
+
+                                foreach (var afterUserlist in afterUserLists)
+                                {
+                                    afterUser = afterUser + afterUserlist.fldUserAbb + ',';
+                                }
+
+                                auditTrailDao.Log("Update User In Group , After Update => - Group Code: " + groupId + " User : " + afterUser, CurrentUser.Account);
+
+                            }
+                            else
+                            {
+                                string beforeUser = "";
+                                List<UserModel> beforeUserLists = groupProfileDao.ListSelectedUserInGroup(groupId, CurrentUser.Account.BankCode);
+                                foreach (var beforeUserlist in beforeUserLists)
+                                {
+                                    beforeUser = beforeUserlist.fldUserId;
+                                    groupProfileDao.DeleteGroupUserSelected(groupId, beforeUser);
+                                }
+
+                                string afterUser = "";
+                                List<UserModel> afterUserLists = groupProfileDao.ListSelectedUserInGroup(groupId, CurrentUser.Account.BankCode);
+                                foreach (var afterUserlist in afterUserLists)
+                                {
+                                    afterUser = afterUser + afterUserlist.fldUserAbb + ',';
+                                }
+
+                                auditTrailDao.Log("Update User In Group , After Update => - Group Code: " + groupId + " User : " + afterUser, CurrentUser.Account);
+                            }
+
+                            TempData["Notice"] = Locale.SuccessfullyUpdated;
+                        }
+                    }
+                    else //if systemprofile groupchecker=Y
+                    {
+                        if (groupProfileDao.CheckGroupMasterTempExistByID(groupId, "Update"))
+                        {
+                            TempData["Warning"] = Locale.GroupMasterPendingVerify;
+                        }
+                        else
+                        {
+                            //If there is no available user anymore.
+                            string availableUser = "";
+                            List<UserModel> availableUserLists = groupProfileDao.ListAvailableUserInGroup(CurrentUser.Account.BankCode);
+                            foreach (var afterUserlist in availableUserLists)
+                            {
+                                availableUser = availableUser + afterUserlist.fldUserAbb + ',';
+                            }
+
+                            if ((availableUser == "") && ((groupProfileDao.NoChangesGroup(col, groupId) == true) && (groupProfileDao.NoChangesGroupSelectedUser(col, groupId) == true)))
+                            {
+                                TempData["Warning"] = Locale.GroupUserEmpty;
+                                TempData["ErrorMsg"] = Locale.NoChanges;
+                                goto Done;
+                            }
+                            else if ((groupProfileDao.NoChangesGroupSelectedUser(col, groupId) == true) && (groupProfileDao.NoChangesGroup(col, groupId) == true))
+                            {
+                                TempData["ErrorMsg"] = Locale.NoChanges;
+                            }
+                            else
+                            {
+                                if ((col["selectedUser"]) != null)
+                                {
+                                    string beforeUser = "";
+                                    List<UserModel> beforeUserLists = groupProfileDao.ListSelectedUserInGroup(groupId, CurrentUser.Account.BankCode);
+                                    foreach (var beforeUserlist in beforeUserLists)
+                                    {
+                                        beforeUser = beforeUser + beforeUserlist.fldUserAbb + ',';
+
+                                    }
+
+                                    auditTrailDao.Log("Update User In Group , Before Update =>- Group Code: " + groupId + " User : " + beforeUser, CurrentUser.Account);
+
+                                    userIds = col["selectedUser"].Split(',').ToList();
+
+                                    foreach (string userId in userIds)
+                                    {
+                                        if (groupProfileDao.CheckGroupUserExistInTemp(groupId, userId, "Update"))
+                                        {
+                                            TempData["Warning"] = Locale.GroupUserStillPendingforApproval;
+                                            goto Done;
+                                        }
+                                        else
+                                        { 
+                                            groupProfileDao.CreateGroupUserTemp(groupId, userId, CurrentUser.Account.UserId, "CreateA");
+                                        }
+                                    }
+
+                                    string alreadyselecteduser = "";
+                                    List<UserModel> alreadyselecteduserLists = groupProfileDao.ListSelectedUserInGroup(groupId, CurrentUser.Account.BankCode);
+                                    foreach (var beforeUserlist in alreadyselecteduserLists)
+                                    {
+                                        alreadyselecteduser = beforeUserlist.fldUserId;
+                                        if (groupProfileDao.CheckGroupUserExistInTemp(groupId, alreadyselecteduser, "Update") == false)
+                                        {
+                                            groupProfileDao.CreateGroupUserTemp(groupId, alreadyselecteduser, CurrentUser.Account.UserId, "CreateD");
+                                        }
+
+                                    }
+                                }
+
+                                else
+                                {
+                                    string beforeUser = "";
+                                    List<UserModel> beforeUserLists = groupProfileDao.ListSelectedUserInGroup(groupId, CurrentUser.Account.BankCode);
+                                    foreach (var beforeUserlist in beforeUserLists)
+                                    {
+                                        beforeUser = beforeUserlist.fldUserId;
+                                        if (groupProfileDao.CheckGroupUserExistInTemp(groupId, beforeUser, "Update") == false)
+                                        {
+                                        groupProfileDao.CreateGroupUserTemp(groupId, beforeUser, CurrentUser.Account.UserId, "CreateD");
+                                    }
+                                }
+                                }
+
+                                groupProfileDao.CreateGroupMasterTemp(col, CurrentUser.Account.UserId, "Update");
+                                TempData["Notice"] = Locale.GroupMasterUpdateVerify;
+                                auditTrailDao.Log("Add into Temporary record to Update - Group Code: " + col["fldGroupCode"], CurrentUser.Account);
+
+                            }
+                        }
+                    }
+                }
+
+                    Done:
+                return RedirectToAction("Edit", new { groupIdParam = col["fldGroupCode"].Trim() });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.Group.CREATE)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Create()
+        {
+            ViewBag.AvailableUser = groupProfileDao.ListAvailableUserInGroup(CurrentUser.Account.BankCode);
+            ViewBag.PageTitle = groupProfileDao.GetPageTitle(TaskIds.Group.CREATE);
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.Group.SAVECREATE)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveCreate(FormCollection col)
+        {
+            string taskid = TaskIds.Group.SAVECREATE;
+            if (CurrentUser.HasTask(taskid))
+            {
+                CurrentUser.Account.TaskId = taskid;
+            }
+
+            string securityProfile = securityProfileDao.GetValueFromSecurityProfile("fldDualApproval", CurrentUser.Account.BankCode).Trim();
+            try
+            {
+                List<string> userIds = new List<string>();
+                List<string> groupIds = new List<string>();
+                string groupId = col["fldGroupCode"].Trim();
+                List<string> errorMessages = groupProfileDao.ValidateGroup(col, "Create", CurrentUser.Account.BankCode);
+                if ((errorMessages.Count > 0))
+                {
+                    TempData["ErrorMsg"] = errorMessages;
+                }
+                else
+                {
+                    if ("N".Equals(securityProfile))
+                    {
+                        auditTrailDao.Log("Add - Group Code: " + groupId + " Group Desc : " + col["fldGroupDesc"], CurrentUser.Account);
+
+                            if ((col["selectedUser"]) != null)
+                            {
+                                userIds = col["selectedUser"].Split(',').ToList();
+                                foreach (string userId in userIds)
+                                {
+                                    groupIds = groupId.Split(',').ToList();
+
+                                    groupProfileDao.CreateGroupUser(col, userId, "Create");
+                                }
+
+
+                                string afterUser = "";
+                                List<UserModel> afterUserLists = groupProfileDao.ListSelectedUserInGroup(groupId, CurrentUser.Account.BankCode);
+                                foreach (var afterUserlist in afterUserLists)
+                                {
+                                    afterUser = afterUser + afterUserlist.fldUserAbb + ",";
+                                }
+
+                                auditTrailDao.Log("Add User In Group , After Update => - Group Code: " + groupId + " User : " + afterUser, CurrentUser.Account);
+
+                            }
+                        groupProfileDao.CreateGroupMaster(col, CurrentUser.Account.BankCode);
+
+                        TempData["Notice"] = Locale.SuccessfullyCreated;
+                    }
+                    else //systemprofile='Y'
+                    {
+                        if (groupProfileDao.CheckGroupMasterTempExistByID(col["fldGroupCode"], "Create") ==true)
+                        {
+                            TempData["Warning"] = Locale.GroupMasterPendingVerify;
+                            goto Done;
+                        }
+                        else
+                        {
+                            if ((col["selectedUser"]) != null)
+                            {
+                                userIds = col["selectedUser"].Split(',').ToList();
+                                foreach (string userId in userIds)
+                                {
+                                    if (groupProfileDao.CheckGroupUserExistInTemp(groupId, userId, "Update")  == true)
+                                    {
+                                        TempData["Warning"] = Locale.GroupUserStillPendingforApproval;
+                                        goto Done;
+                                    }
+                                    else
+                                    {
+                                        groupProfileDao.CreateGroupUserTemp(groupId, userId, CurrentUser.Account.UserId, "CreateA");
+                                    }
+                                }
+
+
+                                string afterUser = "";
+                                List<UserModel> afterUserLists = groupProfileDao.ListSelectedUserInGroup(groupId, CurrentUser.Account.BankCode);
+                                foreach (var afterUserlist in afterUserLists)
+                                {
+                                    afterUser = afterUser + afterUserlist.fldUserAbb + ",";
+                                }
+
+                                auditTrailDao.Log("Add User In Group , After Update => - Group Code: " + groupId + " User : " + afterUser, CurrentUser.Account);
+
+
+                            }
+
+                            groupProfileDao.CreateGroupMasterTemp(col, CurrentUser.Account.UserId, "Create");
+                            TempData["Notice"] = Locale.GroupMasterCreateVerify;
+                            auditTrailDao.Log("Add into Temporary record to Create - Group Code: " + col["fldGroupCode"], CurrentUser.Account);
+                        }
+                    }
+                }
+                Done:
+                return RedirectToAction("Create", new { groupIdParam = col["fldGroupCode"].Trim() }); ;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.Group.DELETE)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(FormCollection col)
+        {
+            string taskid = TaskIds.Group.DELETE;
+            if (CurrentUser.HasTask(taskid))
+            {
+                CurrentUser.Account.TaskId = taskid;
+            }
+
+            string securityProfile = securityProfileDao.GetValueFromSecurityProfile("fldDualApproval", CurrentUser.Account.BankCode).Trim();
+            //string systemProfile = systemProfileDao.GetValueFromSystemProfile("GroupChecker", CurrentUser.Account.BankCode).Trim();
+
+
+            try
+            {
+                List<string> arrResults = new List<string>();
+                
+                if ((col["deleteBox"]) != null)
+                {
+                    if ("N".Equals(securityProfile))
+                    {
+                        arrResults = col["deleteBox"].Trim().Split(',').ToList();
+                        foreach (var arrResult in arrResults)
+                        {
+                            groupProfileDao.DeleteGroupUser(arrResult); 
+                            groupProfileDao.DeleteGroupTask(arrResult); 
+                            groupProfileDao.DeleteGroupMaster(arrResult); 
+
+                            auditTrailDao.Log("Delete Group - Group Code: " + arrResult, CurrentUser.Account);
+                        }
+                        TempData["Notice"] = Locale.SuccessfullyDeleted;
+                    }
+                    else
+                    {
+                        arrResults = col["deleteBox"].Trim().Split(',').ToList();
+                        foreach (var arrResult in arrResults)
+                        {
+                            if (groupProfileDao.CheckGroupMasterTempExistByID(arrResult, "Delete") == true)
+                            {
+                                TempData["Warning"] = Locale.GroupMasterPendingVerify;
+                                goto Done;
+                            }
+                            else
+                            {
+                                groupProfileDao.CreateGroupUserTemp(arrResult, "", CurrentUser.Account.UserId, "Delete");
+                            }
+
+                            groupProfileDao.CreateGroupMasterTempToDelete(arrResult, CurrentUser.Account.UserId, "Delete");
+
+                        }
+                                auditTrailDao.Log("Add into Temporary record to Delete - Group Code: " + col["deleteBox"], CurrentUser.Account);
+                                TempData["Notice"] = Locale.GroupMasterDeleteVerify;
+                            }
+                        }
+                else
+                {
+                    TempData["Warning"] = Locale.PleaseSelectARecord;
+                }
+                Done:
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
+}

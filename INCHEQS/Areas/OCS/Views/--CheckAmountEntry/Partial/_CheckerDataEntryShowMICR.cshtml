@@ -1,0 +1,47 @@
+﻿@using INCHEQS.Resources
+<table class="table table-bordered mTop10">
+    <thead>
+        <tr>
+            <th>Cheque Digit</th>
+            <th>@Locale.ChequeSerialNo</th>
+            <th>@Locale.BankCode</th>
+            <th>@Locale.BranchCode</th>
+            <th>@Locale.StateCode</th>
+            <th>@Locale.AccountNumber</th>
+            <th>@Locale.Transcode</th>
+            <th>@Locale.Remarks</th>
+            <th>@Locale.CreateTimeStamp</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><span>@ViewBag.OutwardItemViewModel.getField("fldCheckDigit")</span></td>
+            <td><span>@ViewBag.OutwardItemViewModel.getField("fldSerial")</span></td>
+            <td><span>@ViewBag.OutwardItemViewModel.getField("fldBankCode")</span></td>
+            <td><span>@ViewBag.OutwardItemViewModel.getField("fldBranchCode")</span></td>
+            <td><span>@ViewBag.OutwardItemViewModel.getField("fldStateCode")</span></td>
+            <td><span>@ViewBag.OutwardItemViewModel.getField("fldIssuerAccNo")</span></td>
+            <td><span>@ViewBag.OutwardItemViewModel.getField("fldTCCode")</span></td>
+            <td><span>@ViewBag.OutwardItemViewModel.getField("fldRemark")</span></td>
+            <td><span>@ViewBag.OutwardItemViewModel.getField("fldUpdateTimeStamp")</span></td>
+        </tr>
+        @if (ViewBag.ChequeRepair != null) //NUll check for Model
+        {
+            foreach (var row in ViewBag.ChequeRepair)
+            {
+                <tr>
+                    <td><span>@row.fldOriCheckDigit</span></td>
+                    <td><span>@row.fldOriSerial</span></td>
+                    <td><span>@row.fldOriBankCode</span></td>
+                    <td><span>@row.fldOriBranchCode</span></td>
+                    <td><span>@row.fldOriStateCode</span></td>
+                    <td><span>@row.fldOriIssuerAccNo</span></td>
+                    <td><span>@row.fldOriTCCode</span></td>
+                    <td><span>@row.fldOriRemark</span></td>
+                    <td><span>@row.fldCreateTimeStamp</span></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

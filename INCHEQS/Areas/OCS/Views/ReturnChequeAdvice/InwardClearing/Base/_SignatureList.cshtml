@@ -1,0 +1,56 @@
+﻿<div id="signatureListContainer" class="mBot5">
+    <div class="row">
+        <div class="col-xs-6">
+            <div id="signatureRules">
+                <table class="table table-condensed" id="signatureSelectedRulesTable">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Group</th>
+                            <th>Signature Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <table class="table table-condensed" id="signatureRulesTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Cond.</th>
+                            <th>Prod. Type.</th>
+                            <th>Effective (From - To)</th>
+
+                            @*<th>Signature No</th>*@
+                            @*<th>Signature/Rules</th>*@
+                            @*<th>Req</th>*@
+                            @*<th>Amount (From - To)</th>*@
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div id="signatureImages">
+                <div id="signatureSearchContainer">
+                    <div id="signatureResult" class="pull-left"></div>
+                    <div id="signatureSearch" class="pull-right">
+                        Account Number <input id="searchAccountNumber" value="@ViewBag.InwardItemViewModel.getField("fldHostAccountNo")" />
+                        <a id="searchSignature" class="btn btn-default btn-xs">Search</a>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+                <div id="signatureContainer">
+                    <img src="~/Content/Images/spin.gif" class="signature-loader small-loader hidden" style="position: absolute;margin: 70px;"/>
+                    <div id="signatureGallery"></div>
+                    <div style="clear:both"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿@using INCHEQS.ViewModels
+@using INCHEQS.Resources
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+
+}
+
+@using (Html.BeginForm("Login", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @Class = "form-horizontal", role = "form", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken();
+    <text>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @Class = "text-danger" })
+        <p>
+            @Html.LabelFor(m => m.UserAbbr)
+            <br />@Html.TextBoxFor(m => m.UserAbbr, new { autocomplete = "off" })
+            @Html.ValidationMessageFor(m => m.UserAbbr, "", new { @Class = "text-danger" })
+        </p>
+        <p>
+            @Html.LabelFor(m => m.UserPassword)
+            <br />@Html.PasswordFor(m => m.UserPassword, new { autocomplete = "off" })
+            @Html.ValidationMessageFor(m => m.UserPassword, "", new { @Class = "text-danger" })
+        </p>
+        <p class="@(ViewBag.EnableLoginAD == "Y" ? "" : "hidden") ">
+            @Html.LabelFor(m => m.SelectLoginAD)
+            <br />@Html.DropDownListFor(m => m.SelectLoginAD, new SelectList(new List<Object>{
+new { value = "Y" , text = "Login With AD"  },
+new { value = "N" , text = "Login Without AD" }},
+"value","text","Y"), new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.SelectLoginAD, "", new { @Class = "text-danger" })
+        </p>
+
+        @if (ViewBag.AuthMethod.fldUserAuthMethod != "LP")
+        {
+        <p>
+          @Html.LabelFor(m => m.Domain)
+            <br />
+            @Html.DropDownListFor(m => m.Domain, new SelectList(ViewBag.UserAuthMethod, "fldUserAuthMethod", "fldUserAuthMethodDesc"), new { @class = "form-control" })
+
+          @Html.ValidationMessageFor(m => m.Domain, "", new { @Class = "text-danger" })
+
+        </p>
+        }
+        else
+        {
+        <p>
+            @Html.LabelFor(m => m.Domain)
+            <br />
+            @Html.DropDownListFor(m => m.Domain, new SelectList(ViewBag.AuthSecurityProfile, "fldUserAuthMethod", "fldUserAuthMethodDesc"), new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(m => m.Domain, "", new { @Class = "text-danger" })
+
+        </p>
+        }
+
+
+        @*@if (ViewBag.AuthMethod.fldUserAuthMethod == "LP")
+        {
+
+            <p>
+                @Html.LabelFor(m => m.Domain)
+                <br />
+                @Html.DropDownListFor(m => m.Domain, new SelectList(ViewBag.AuthSecurityProfile, "fldUserAuthMethod", "fldUserAuthMethodDesc"), new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(m => m.Domain, "", new { @Class = "text-danger" })
+
+            </p>
+
+        }*@
+
+        <p>
+    <br />@Html.HiddenFor(m => m.macAddress, new { id = "macAddress" })
+        </p>
+        <p><button type="submit" class="btn btn-default">@Locale.LogInBtn</button></p>
+    </text>
+}
+<script src="~/Scripts/App/login.js"></script>

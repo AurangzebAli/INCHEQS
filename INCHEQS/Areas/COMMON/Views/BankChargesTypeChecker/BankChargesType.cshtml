@@ -1,0 +1,86 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("BankChargesType", "BankChargesTypeChecker", FormMethod.Post, new { @Class = "secure-form" })) {
+
+    @Html.AntiForgeryToken();
+
+<div class="form-horizontal">
+    
+    <h4>@Locale.BankChargesTypeChecker</h4>
+    
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <tbody>
+            @if (@ViewBag.BankChargesTypeMaster != null)
+            {
+                <tr>
+                    <th>@Locale.BankChargesType</th>
+                  
+
+
+                    <td>
+                        <input type="text" value="@ViewBag.BankChargesTypeMaster.fldBankChargesType" disabled/>
+                        <input type="text" name="fldBankChargesType" value="@ViewBag.BankChargesTypeMaster.fldBankChargesType" hidden />
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BankChargesTypeDesc</th>
+
+
+                    @if (@ViewBag.BankChargesTypeMaster.fldBankChargesDesc != @ViewBag.BankChargesTypeMasterTemp.fldBankChargesDesc)
+                    {
+                        <td>
+                            <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.BankChargesTypeMasterTemp.fldBankChargesDesc" autocomplete="off" maxlength="50" disabled />
+                            <input type="text" name="fldBankChargesDesc" value="@ViewBag.BankChargesTypeMasterTemp.fldBankChargesDesc" hidden />
+                            <input type="text" name="Action" value="@ViewBag.BankChargesTypeMasterTemp.fldApproveStatus" hidden />
+                            <span class="red-star">*</span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input type="text" value="@ViewBag.BankChargesTypeMaster.fldBankChargesDesc" autocomplete="off" maxlength="50" disabled />
+                            <input type="text" name="fldBankChargesDesc" value="@ViewBag.BankChargesTypeMaster.fldBankChargesDesc" hidden />
+                            <input type="text" name="Action" value="@ViewBag.BankChargesTypeMasterTemp.fldApproveStatus" hidden />
+                            <span class="red-star">*</span>
+                        </td>
+
+                    }
+
+
+                </tr>
+            }
+            else
+            {
+
+                <tr>
+                    <th>@Locale.BankChargesType</th>
+                    <td>
+                        <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.BankChargesTypeMasterTemp.fldBankChargesType" autocomplete="off" maxlength="50" disabled />
+                        <input type="text" name="fldBankChargesType" value="@ViewBag.BankChargesTypeMasterTemp.fldBankChargesType" hidden />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BankChargesTypeDesc</th>
+
+                        <td>
+                            <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.BankChargesTypeMasterTemp.fldBankChargesDesc" autocomplete="off" maxlength="50" disabled />
+                            <input type="text" name="fldBankChargesDesc" value="@ViewBag.BankChargesTypeMasterTemp.fldBankChargesDesc" hidden />
+                            <input type="text" name="Action" value="@ViewBag.BankChargesTypeMasterTemp.fldApproveStatus" hidden />
+                            <span class="red-star">*</span>
+                        </td>
+
+                </tr>
+
+            }
+        </tbody>
+    </table>
+    <button data-action="@Url.Action("/VerifyA2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsOCS.BankChargesTypeChecker.VERIFY) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+    <button data-action="@Url.Action("/VerifyR2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsOCS.BankChargesTypeChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+    <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.BankChargesTypeChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+</div>}
+
+<script src="~/Scripts/App/app.js"></script>

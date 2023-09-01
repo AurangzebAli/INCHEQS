@@ -1,0 +1,101 @@
+﻿@using INCHEQS.Resources
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline secure-form submit-onload", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+    <h4>@ViewBag.SearchPage.PageTitle</h4>
+    <div class="row">
+        <hr />
+        @Html.Partial("SearchPage/_GenericFieldsForm")
+    </div>
+    <style>
+        body {
+            font-family: Arial;
+        }
+
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            height: 40px;
+        }
+
+            /* Style the buttons inside the tab */
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: 0.3s;
+                font-size: 12px;
+            }
+
+                /* Change background color of buttons on hover */
+                .tab button:hover {
+                    background-color: #ddd;
+                }
+
+                /* Create an active/current tablink class */
+                .tab button.active {
+                    background-color: #ccc;
+                }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+    </style>
+
+    <script>
+function openCity(evt, actionName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(actionName).style.display = "block";
+    evt.currentTarget.className += " active";
+
+    document.getElementById("checkBox").checked = true;
+    document.getElementById("checkBox").value = actionName;
+}
+document.getElementById("defaultOpen").click();
+    </script>
+
+    <div class="tab">
+        <table>
+        <tr>
+            <td>
+                <button class="tablinks" id="defaultOpen" onclick="openCity(event, 'Ready')">Items Ready For Submission</button>
+            </td>
+            <td>
+                <button class="tablinks" id="2" onclick="openCity(event, 'Submitted')">Submitted Items</button>
+            </td>
+            <td>
+                <input hidden="hidden" type="checkbox" class="chk" id="checkBox" name="Type" value="M" />
+            </td>
+        </tr>
+        </table>
+    </div>
+
+    <div id="Submitted" class="tabcontent">
+        <hr />
+    </div>
+
+    <div id="Ready" class="tabcontent">
+        <hr />
+    </div>
+
+    <div id="resultContainer"></div>
+}
+
+        @Scripts.Render("~/bundles/SearchPage")

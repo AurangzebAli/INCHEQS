@@ -1,0 +1,37 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "CMSAccountInfo", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Maintenance - CMS Account Info</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>Account No</th>
+                    <td>
+                        <input type="hidden" value="@ViewBag.CmsAccount.fldAccountNo" name="fldAccountNo" maxlength="12"/>@ViewBag.CmsAccount.fldAccountNo
+                    </td>
+                </tr>
+                <tr>
+                    <th>Branch Code</th>
+                    <td>
+                        <input type="text" value="@ViewBag.CmsAccount.fldBranchCode" name="fldBranchCode" maxlength="4" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Account Holder Name</th>
+                    <td>
+                        <input type="text" value="@ViewBag.CmsAccount.fldAccountHolderName" name="fldAccountHolderName"/>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.CMSAccountInfo.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.CMSAccountInfo.INDEX) ? "" : "hidden")">@Locale.Back</a>
+    </div>
+}

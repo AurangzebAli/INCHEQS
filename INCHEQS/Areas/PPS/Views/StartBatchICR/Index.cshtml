@@ -1,0 +1,61 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+
+@{
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline submit-onload secure-form", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+    
+    
+    <input type="hidden" value="@Convert.ToDateTime(DateUtils.GetCurrentDate()).ToString("dd-MM-yyyy")" name="fldClearDate" />
+    <div>
+        <h4>PPS - Start Batch ICR</h4>
+        <table class="table table-bordered" style="width: 50%">
+            <thead>
+                <tr>
+                    <th>Region</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>KL</td>
+                    <td>@ViewBag.Status</td>
+                </tr>
+            </tbody>
+
+        </table>
+        <div>
+            <table>
+                <tr>
+                    <td>Machine ID:</td>
+                    <td>
+                        <select name="txtMachineID" id="txtMachineID" style="width:180px">
+                            @foreach (var items in ViewBag.MachineId)
+                            {
+                                <option value="@items.fldMachineID">@items.fldMachineID</option>
+
+                            }
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("StartBatchICR")">Start</button>
+        @*<button class="btn btn-default modal-submit" id="btnView" data-action="@Url.Action("ViewBatchICR")">View</button>*@
+
+
+    </div>
+
+    <div id="resultContainer"></div>
+}
+    <div id="dataProcessContainer" data-processname="@ViewBag.ProcessName"></div>
+    <input id="inwardProcessType" value="Other" type="hidden">
+    
+
+@Scripts.Render("~/bundles/DataProcessRealTime")
+@*@Scripts.Render("~/bundles/SearchPage")
+@Scripts.Render("~/bundles/SearchResultPage")*@

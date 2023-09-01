@@ -1,0 +1,28 @@
+﻿@using INCHEQS.Resources
+@using System.Data;
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @Scripts.Render("~/bundles/ChequeICS")
+</head>
+<body>
+    <div class="row">
+        <div class="col-sm-12 text-right">
+            @if (ViewBag.InwardItemViewModel != null)
+            {
+                @*<input id="fldInwardItemId" name="fldInwardItemId" type="hidden" value="@ViewBag.InwardItemViewModel.getField("fldInwardItemId")" />*@
+                @*<input id="PreviousValue" name="PreviousValue" type="hidden" value="" />*@
+                <input type="hidden" name="DataAction" value="@ViewBag.DataAction">
+                <input type="hidden" name="PreviousValue" value="@ViewBag.InwardItemViewModel.getField("fldInwardItemId")">
+                @*<input type="hidden" name="PreviousValue" value="@ViewBag.InwardItemViewModel.getField("fldInwardItemId")">*@
+                <button type="button" id="previousBtn" class="normal-submit btn btn-default btn-xs" data-action="@Url.Action("PrevCheque")">@Locale.Previous</button>
+
+            }
+            <a id="closeBtn" type="button" class="btn btn-default btn-xs" href="@Url.Action("Close")">@Locale.btnClose</a>
+        </div>
+        <h2 class="text-center">@Locale.Nochequeavailable</h2>
+    </div>
+</body>
+</html>

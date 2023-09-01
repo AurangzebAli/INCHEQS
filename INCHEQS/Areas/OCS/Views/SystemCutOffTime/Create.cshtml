@@ -1,0 +1,150 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using (Html.BeginForm("SaveCreate", "SystemCutOffTime", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+
+        <h4>@Locale.SystemCutOffTimeMaintenance</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <TBODY>
+                <tr>
+                    <th>@Locale.Description</th>
+                    <td>
+                        <input type="text" name="fldDesc" autocomplete="off" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <TR>
+                    <th>@Locale.TransactionType</th>
+                    <td>
+                        <select name="fldTransactionType" id="ajaxTransactionTypeSelectList"></select>
+                        <span class="red-star">*</span>
+                    </td>
+                </TR>
+                
+                <tr></tr>
+                <tr>
+                    <th>@Locale.ScheduleType</th>
+                    <td><input type="radio" name="fldRecurring" id="Recurring" value="Y" />&nbsp;@Locale.Recurring<span class="red-star">*</span></td>
+                    @*<td>
+                        <input type="radio" name="OneTime" id="OneTime" value="OneTime" />&nbsp;@Locale.OneTime  &nbsp;&nbsp;&nbsp;
+                        <input type="text" value="@ViewBag.Today" id="fldDate" name="fldDate" class="form-date" style="height:25px" />
+                    </td>*@
+                </tr>
+                <tr></tr>
+                @*<tr>
+                    <td></td>
+                    
+                </tr>*@
+                <tr></tr>
+            <tr>
+                <td></td>
+                <td>
+                    &nbsp;&nbsp;&nbsp;<input type="radio" name="RecurringType" id="Week" value="Week" />&nbsp;@Locale.Weekly &nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" name="fldDayMon" class="Days" value="Y" />&nbsp;@Locale.Monday &nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" name="fldDayTue" class="Days" value="Y" />&nbsp;@Locale.Tuesday &nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" name="fldDayWed" class="Days" value="Y" />&nbsp;@Locale.Wednesday &nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" name="fldDayThu" class="Days" value="Y" />&nbsp;@Locale.Thursday &nbsp;&nbsp;&nbsp;
+                </td>
+            </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="fldDayFri" class="Days" value="Y" />&nbsp;@Locale.Friday &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="fldDaySat" class="Days" value="Y" />&nbsp;@Locale.Saturday &nbsp;&nbsp;&nbsp; 
+                        <input type="checkbox" name="fldDaySun" class="Days" value="Y" />&nbsp;@Locale.Sunday &nbsp;&nbsp;&nbsp;
+                    </td>
+                </tr>
+            <tr></tr>
+            <tr>
+                <td></td>
+                @*<td id="MonthRadio">
+                    &nbsp;&nbsp;&nbsp;<input type="radio" name="RecurringType" id="Month" value="Month" />&nbsp;@Locale.Monthly &nbsp;&nbsp;&nbsp;
+                    <select class="dropdownWeek" id="dropdownWeek" name="dropdownWeek">
+                        <option value="1">1st</option>
+                        <option value="2">2nd</option>
+                        <option value="3">3rd</option>
+                        <option value="4">4th</option>
+                        <option value="5">5th</option>
+                    </select>&nbsp;
+                    of every &nbsp;
+                    <select class="dropdownWeek" id="dropdownDay" name="dropdownDay">
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
+                    </select>
+                </td>*@
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                @*<td>
+                    &nbsp;&nbsp;&nbsp;<input type="radio" name="RecurringType" id="Year" value="Year" />&nbsp; @Locale.Yearly  &nbsp;&nbsp;&nbsp;
+                    <input type="text" value="@ViewBag.Today" id="fldYearDate" name="fldYearDate" class="form-date" style="height:25px" />
+                </td>*@
+            </tr>
+
+            <tr>
+                <td>
+                    @Locale.StartTime (hh:mm)
+                </td>
+                <td>
+                    <select name="startHour" maxlength="20">
+                        @for (int hour = 0; hour < 24; hour++)
+                        {
+                            <option value="@hour.ToString("00")" @*@(hour.ToString("00") == ViewBag.CutOfftime.cutOffTimeHour ? "selected" : "")*@>@hour.ToString("00")</option>
+                        }
+                    </select><span>:</span>
+                    <select name="startMin" maxlength="20">
+                        @for (int min = 0; min < 60; min++)
+                        {
+                            <option value="@min.ToString("00")" @*@(ViewBag.CutOfftime.cutOffTimeMin == min.ToString("00") ? "selected" : "")*@>@min.ToString("00")</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+
+                <tr>
+                    <td>
+                        @Locale.EndTime &nbsp;(hh:mm)
+                    </td>
+                    <td>
+                        <select name="endHour" maxlength="20">
+                            @for (int hour = 0; hour < 24; hour++)
+                            {
+                                <option value="@hour.ToString("00")" @*@(hour.ToString("00") == ViewBag.CutOfftime.cutOffTimeHour ? "selected" : "")*@>@hour.ToString("00")</option>
+                            }
+                        </select><span>:</span>
+                        <select name="endMin" maxlength="20">
+                            @for (int min = 0; min < 60; min++)
+                            {
+                                <option value="@min.ToString("00")" @*@(ViewBag.CutOfftime.cutOffTimeMin == min.ToString("00") ? "selected" : "")*@>@min.ToString("00")</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+
+
+            
+                 
+                
+            </TBODY>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.SystemCutOffTime.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.SystemCutOffTime.INDEX) ? "" : "disabled")">@Locale.btnClose</a>
+    </div>
+}
+
+<script src="~/Scripts/App/transactionType.js"></script>
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/calender.js"></script>
+<script src="~/Scripts/App/app.js"></script>

@@ -1,0 +1,14 @@
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "BotProfile", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <table class="table form-table table-no-border">
+            <tbody>
+                </tbody>
+            </table>
+            <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.User.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+            <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.User.INDEX) ? "" : "hidden")">@Locale.BackBtn</a>
+    </div>
+}

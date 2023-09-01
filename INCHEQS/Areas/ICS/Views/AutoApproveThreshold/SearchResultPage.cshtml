@@ -1,0 +1,162 @@
+﻿@using INCHEQS.Resources;
+@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.TaskAssignment;
+@using INCHEQS.Security;
+@using INCHEQS.Common
+
+
+@Html.Partial("SearchPage/_InfoBox")
+@using (Html.BeginForm("Update", "AutoApproveThreshold", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken();
+
+    <h4>Inward Clearing - Inward Truncation</h4>
+    <hr />
+    <div id="" class="">
+        <table id="search-result-table" class="table table-striped table-hover table-bordered">
+            <thead>
+                <tr hidden>
+                    <th>Percentage</th>
+                    <td><input name="percentage" value="@ViewBag.Percentage" type="text" />%</td>
+                </tr>
+                <tr hidden>
+                    <th>Statistic Range</th>
+                    <td><input name="statisticRange" value="@ViewBag.statisticRange" type="text" /></td>
+                </tr>
+
+                <tr>
+                    <td>Total Item</td>
+                    <td>Total Amount</td>
+                    <td>Total Item in Pending Verification</td>
+                    <td>Total Amount Pending</td>
+                    <td>Total Item (@ViewBag.Percentage%)</td>
+                    <td>Total Amount (@ViewBag.Percentage%)</td>
+                    <td>Minimum Amount</td>
+                    <td>Maximum Amount</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <!--result goes here-->
+                    <td>@ViewBag.TotalRecord</td>
+                    <td>@StringUtils.FormatCurrency(ViewBag.TotalAmount.ToString())</td>
+                    <td>@ViewBag.TotalRecordPending</td>
+                    <td>@StringUtils.FormatCurrency(ViewBag.TotalAmountPending.ToString())</td>
+                    <td id="itemswithpercentage">@ViewBag.ItemsWithPercentage</td> <!--this one-->
+                    <td>@StringUtils.FormatCurrency(ViewBag.AmountWithPercentage)</td>
+                    <td>@StringUtils.FormatCurrency(ViewBag.MinAmount)</td>
+                    <td>@StringUtils.FormatCurrency(ViewBag.MaxAmount)</td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="search-result-table">
+            <thead>
+                <tr>
+                    <th style="color:dodgerblue">Truncation Amount Mechanism</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <!--and this-->
+                    <td style="color:dodgerblue">Inward Clearing Dated: <input type="text" value="@ViewBag.LoadDate" name="fldClearDate" /></td>
+                </tr>
+                <tr>
+                    <td style="color:dodgerblue">Total Inward Clearing (Pending): <input type="text" value="@ViewBag.ItemsWithPercentage" name="itemswithpercentage" /></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table id="search-result-table" class="table table-striped table-hover table-bordered">
+            <tbody>
+                <!--Use for loop-->
+                <tr>
+
+                    <td><strong>Amount Range</strong></td>
+                    @if (ViewBag.RangeList != null)
+                    {
+                        foreach (int row in ViewBag.RangeList)
+                        {
+                            <td>For Cheques RM <text style="color:red">@row</text> and below</td>
+                        }
+                    }
+
+                </tr>
+                <tr>
+                    <td><strong>Percentage</strong></td>
+                    @if (ViewBag.RangePercentage != null)
+                    {
+                        foreach (Double row in ViewBag.RangePercentage)
+                        {
+                            <td>@row%</td>
+
+                        }
+                    }
+                </tr>
+                <tr>
+                    <td><strong>Item</strong></td>
+                    @if (ViewBag.RangeItem != null)
+                    {
+                        foreach (int row in ViewBag.RangeItem)
+                        {
+                            <td>
+                                @row
+                            </td>
+                        }
+                    }
+                </tr>
+
+
+                <tr hidden>
+                    <td style="color:dodgerblue"><input type="hidden" value="@ViewBag.LoadDate" name="LoadDate1" /></td>
+
+                    <td style="color:dodgerblue"><input type="hidden" value="@ViewBag.Percentage" name="Percentage1" /></td>
+
+                    <td style="color:dodgerblue"><input type="hidden" value="@ViewBag.statisticRange" name="statisticRange1" /></td>
+
+                    <td style="color:dodgerblue"><input type="hidden" value="@ViewBag.TotalRecord" name="TotalRecord1" /></td>
+
+                    <td style="color:dodgerblue"><input type="hidden" value="@ViewBag.TotalAmount" name="TotalAmount1" /></td>
+
+                    <td style="color:dodgerblue"><input type="hidden" value="@ViewBag.TotalRecordPending" name="TotalRecordPending1" /></td>
+
+                    <td style="color:dodgerblue"><input type="hidden" value="@ViewBag.TotalAmountPending" name="TotalAmountPending1" /></td>
+
+                    <td style="color:dodgerblue"><input type="hidden" value="@ViewBag.ItemsWithPercentage" name="ItemsWithPercentage1" /></td>
+
+                    <td style="color:dodgerblue"><input type="hidden" value="@ViewBag.AmountWithPercentage" name="AmountWithPercentage1" /></td>
+
+                    <td style="color:dodgerblue"><input type="hidden" value="@ViewBag.MinAmount" name="MinAmount1" /></td>
+
+                    <td style="color:dodgerblue"><input type="hidden" value="@ViewBag.MaxAmount" name="MaxAmount1" /></td>
+
+
+                </tr>
+
+
+            </tbody>
+
+        </table>
+
+        <br>
+        @if (@ViewBag.AATPerformed)
+        {
+            <button disabled data-action="@Url.Action("Update")" Class="btn btn-default confirm getFormAction @(CurrentUser.HasTask(TaskIdsICS.AutoApproveThreshold.INDEX) ? "" : "hidden") " confirm-msg="Auto approve. Do you want to proceed?" value="Update">Approve</button>
+
+            <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsICS.AutoApproveThreshold.INDEX) ? "" : "hidden")">Back</a>
+        }
+        else
+        {
+
+
+            <button data-action="@Url.Action("Update")" Class="btn btn-default confirm getFormAction @(CurrentUser.HasTask(TaskIdsICS.AutoApproveThreshold.INDEX) ? "" : "hidden") " confirm-msg="Auto approve. Do you want to proceed?" value="Update">Approve</button>
+
+            @*<button type="submit" class="btn btn-default confirm  @(CurrentUser.HasTask(TaskIds.AutoApproveThreshold.INDEX) )" data-action="@Url.Action("Update")">Approve</button>*@
+            <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsICS.AutoApproveThreshold.INDEX) ? "" : "hidden")">Back</a>
+        }
+    </div>
+
+
+
+}
+<!--Scripts.Render("~/bundles/SearchResultPage")-->
+@Scripts.Render("~/bundles/app")

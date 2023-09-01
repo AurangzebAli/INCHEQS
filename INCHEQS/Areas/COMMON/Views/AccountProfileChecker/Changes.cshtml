@@ -1,0 +1,355 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("Changes", "AccountProfileChecker", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+<div class="form-horizontal">
+
+    <h4>@Locale.AccountProfileCheckerChanges </h4>
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+
+    <table class="table form-table table-no-border">
+        <TBODY>
+
+            <tr>
+                <Th>@Locale.AccountNumber</Th>
+                <td>
+                    <input style="width:200px;border:none" type="text" id="accountNumber" class="number-only" name="accountNumber" value="@ViewBag.AccountProfileTemp.accountNumber" disabled />
+                    <input type="hidden" name="haccountNumber" value="@ViewBag.AccountProfileTemp.accountNumber" />
+                </td>
+            </tr>
+
+            <tr>
+                <Th>@Locale.AccountName</Th>
+
+
+
+                <td>
+                    @if (@ViewBag.AccountProfileTemp.accountName != @ViewBag.AccountProfile.accountName)
+                    {
+                        <input style="width:250px;color: #FFFFFF;background-color: #FF0000;" type="text" id="accountName" name="accountName" value="@ViewBag.AccountProfileTemp.accountName" disabled />
+                    }
+                    else
+                    {
+                        <input style="width:250px;" type="text" id="accountName" name="accountName" value="@ViewBag.AccountProfileTemp.accountName" disabled />
+                    }
+
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+
+            <TR>
+                <Th>@Locale.AccountType</Th>
+                <td>
+                    <select style="width:150px" name="accountType" id="accountType">
+
+                        @if (@ViewBag.AccountProfileTemp.accountType != @ViewBag.AccountProfile.accountType)
+                        {
+                            foreach (var item in @ViewBag.AccountType)
+                            {
+                                <option disabled style="color: #FFFFFF;background-color: #FF0000;" value="@item.accountType" @(ViewBag.AccountProfileTemp.accountType.Trim() == item.accountType.Trim() ? "selected" : "")>@item.accountTypeDesc</option>
+                            }
+
+                        }
+                        else
+                        {
+                            foreach (var item in @ViewBag.AccountType)
+                            {
+                                <option disabled value="@item.accountType" @(ViewBag.AccountProfileTemp.accountType.Trim() == item.accountType.Trim() ? "selected" : "")>@item.accountTypeDesc</option>
+                            }
+                        }
+
+                    </select>
+                    <span class="red-star"> *</span>
+                </td>
+            </TR>
+
+            <TR>
+                <Th>@Locale.AccountStatus</Th>
+                <td>
+                    <select style="width:150px" name="accountStatus" id="accountStatus">
+                        @if (@ViewBag.AccountProfileTemp.accountStatus != @ViewBag.AccountProfile.accountStatus)
+                        {
+
+                            foreach (var item in @ViewBag.AccountStatus)
+                            {
+                                <option disabled style="color: #FFFFFF;background-color: #FF0000;" value="@item.accountStatus" @(ViewBag.AccountProfileTemp.accountStatus.Trim() == item.accountStatus.Trim() ? "selected" : "")>@item.accountStatusDesc</option>
+                            }
+
+                        }
+                        else
+                        {
+                            foreach (var item in @ViewBag.AccountStatus)
+                            {
+                                <option disabled value="@item.accountStatus" @(ViewBag.AccountProfileTemp.accountStatus.Trim() == item.accountStatus.Trim() ? "selected" : "")>@item.accountStatusDesc</option>
+                            }
+                        }
+
+                    </select>
+                    <span class="red-star"> *</span>
+                </td>
+            </TR>
+
+            <TR>
+                <Th>@Locale.BranchID</Th>
+                <td>
+                    <select class="default" name="branchId" id="branchId" maxlength="20">
+
+                        @if (@ViewBag.AccountProfileTemp.BranchID != @ViewBag.AccountProfile.BranchID)
+                        {
+                            foreach (var row in ViewBag.BranchDetails.Rows)
+                            {
+                                <option readonly style="color: #FFFFFF;background-color: #FF0000;" value="@row["fldbranchid"]" @(ViewBag.AccountProfileTemp.BranchID.Trim() == @row["fldbranchid"].Trim() ? "selected" : "")>@row["fldbranchid"]</option>
+                            }
+
+                        }
+                        else
+                        {
+                            foreach (var row in ViewBag.BranchDetails.Rows)
+                            {
+                                <option readonly value="@row["fldbranchid"]" @(ViewBag.AccountProfileTemp.BranchID.Trim() == @row["fldbranchid"].Trim() ? "selected" : "")>@row["fldbranchid"]</option>
+                            }
+                        }
+
+                    </select>
+                    <span class="red-star"> *</span>
+                </td>
+            </TR>
+
+            <TR>
+                <th>@Locale.Location</th>
+                <td>
+                    <span name="location"></span>
+
+                </td>
+            </TR>
+
+            <TR>
+                <th>@Locale.BankCode</th>
+                <td>
+                    <span name="bankcode"></span>
+                </td>
+            </TR>
+
+            <TR>
+                <th>@Locale.BranchCode</th>
+                <td>
+                    <span name="branchcode"></span>
+                </td>
+            </TR>
+
+            <tr>
+                <th>@Locale.OpeningDate</th>
+                <td>
+
+                    @if (@ViewBag.AccountProfileTemp.OpeningDate != @ViewBag.AccountProfile.OpeningDate)
+                    {
+                        <input type="text" style="color: #FFFFFF;background-color: #FF0000;height:25px;" value="@ViewBag.AccountProfileTemp.OpeningDate" id="OpeningDate" name="OpeningDate" class="form-date"  disabled />
+                    }
+                    else
+                    {
+
+                        <input type="text" value="@ViewBag.AccountProfileTemp.OpeningDate" id="OpeningDate" name="OpeningDate" class="form-date" style="height:25px" disabled />
+                    }
+                </td>
+            </tr>
+
+            <tr>
+                <th>@Locale.ClosingDate</th>
+                <td>
+
+                    @if (@ViewBag.AccountProfileTemp.ClosingDate != @ViewBag.AccountProfile.ClosingDate)
+                    {
+                        <input type="text" style="color: #FFFFFF;background-color: #FF0000;height:25px;" value="@ViewBag.AccountProfileTemp.ClosingDate" id="ClosingDate" name="ClosingDate" class="form-date" disabled />
+                    }
+                    else
+                    {
+
+                        <input type="text" value="@ViewBag.AccountProfileTemp.ClosingDate" id="ClosingDate" name="ClosingDate" class="form-date" style="height:25px" disabled />
+                    }
+
+
+                </td>
+            </tr>
+
+            <tr>
+                <th>@Locale.CustomerNumber</th>
+                <td>
+
+                    @if (@ViewBag.AccountProfileTemp.customerNumber != @ViewBag.AccountProfile.customerNumber)
+                    {
+                        <input style="width:200px;color: #FFFFFF;background-color: #FF0000;"  type="text" id="CustomerNumber" name="CustomerNumber" value="@ViewBag.AccountProfileTemp.customerNumber" disabled />
+                    }
+                    else
+                    {
+                        <input style="width:200px" type="text" id="CustomerNumber" name="CustomerNumber" value="@ViewBag.AccountProfileTemp.customerNumber" disabled />
+
+                    }
+
+                </td>
+            </tr>
+
+            <tr>
+                <Th>@Locale.ContactNumber</Th>
+                <td>
+
+                    @if (@ViewBag.AccountProfileTemp.contactNumber != @ViewBag.AccountProfile.contactNumber)
+                    {
+                        <input style="width:200px; color: #FFFFFF;background-color: #FF0000;"  type="text" id="ContactNumber" name="ContactNumber" class="number-only" value="@ViewBag.AccountProfileTemp.contactNumber" disabled />
+
+                    }
+                    else
+                    {
+                        <input style="width:200px" type="text" id="ContactNumber" name="ContactNumber" class="number-only" value="@ViewBag.AccountProfileTemp.contactNumber" disabled />
+                    }
+
+                </td>
+            </tr>
+
+            <tr>
+                <th>@Locale.EmailAddress</th>
+                <td>
+                    @if (@ViewBag.AccountProfileTemp.emailAddress != @ViewBag.AccountProfile.emailAddress)
+                    {
+                        <input style="width:200px; color: #FFFFFF;background-color: #FF0000;"  type="text" id="emailAddress" name="emailAddress" value="@ViewBag.AccountProfileTemp.emailAddress" disabled />
+
+                    }
+                    else
+                    {
+                        <input style="width:200px" type="text" id="emailAddress" name="emailAddress" value="@ViewBag.AccountProfileTemp.emailAddress" disabled />
+
+                    }
+
+
+                </td>
+            </tr>
+
+            <TR>
+                <Th>@Locale.Address1</Th>
+                <td>
+
+                    @if (@ViewBag.AccountProfileTemp.address1 != @ViewBag.AccountProfile.address1)
+                    {
+                        <input style="width:250px; color: #FFFFFF;background-color: #FF0000;"  type="text" id="address1" name="address1" maxlength="100" value="@ViewBag.AccountProfileTemp.address1" disabled />
+                    }
+                    else
+                    {
+                        <input style="width:250px;" type="text" id="address1" name="address1" maxlength="100" value="@ViewBag.AccountProfileTemp.address1" disabled />
+
+                    }
+
+
+                </td>
+            </TR>
+
+            <TR>
+                <Th>@Locale.Address2</Th>
+                <td>
+                    @if (@ViewBag.AccountProfileTemp.address2 != @ViewBag.AccountProfile.address2)
+                    {
+                        <input style="width:250px;color: #FFFFFF;background-color: #FF0000;"  type="text" id="address2" name="address2" maxlength="100" value="@ViewBag.AccountProfileTemp.address2" disabled />
+                    }
+                    else
+                    {
+                        <input style="width:250px;" type="text" id="address2" name="address2" maxlength="100" value="@ViewBag.AccountProfileTemp.address2" disabled />
+
+                    }
+                </td>
+
+            </TR>
+
+            <TR>
+                <Th>@Locale.Address3</Th>
+                <td>
+                    @if (@ViewBag.AccountProfileTemp.address3 != @ViewBag.AccountProfile.address3)
+                    {
+                        <input style="width:250px;color: #FFFFFF;background-color: #FF0000;" type="text" id="address3" name="address3" maxlength="100" value="@ViewBag.AccountProfileTemp.address3" disabled />
+                    }
+                    else
+                    {
+                        <input style="width:250px;" type="text" id="address3" name="address3" maxlength="100" value="@ViewBag.AccountProfileTemp.address3" disabled />
+
+                    }
+                </td>
+            </TR>
+
+            <tr>
+                <Th>@Locale.Postcode</Th>
+                <td>
+
+                    @if (@ViewBag.AccountProfileTemp.postCode != @ViewBag.AccountProfile.postCode)
+                    {
+                        <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" id="postCode" name="postCode" class="number-only" maxlength="5" value="@ViewBag.AccountProfileTemp.postCode" disabled />
+
+                    }
+                    else
+                    {
+                        <input type="text" id="postCode" name="postCode" class="number-only" maxlength="5" value="@ViewBag.AccountProfileTemp.postCode" disabled />
+
+                    }
+
+
+                </td>
+            </tr>
+
+            <tr>
+                <Th>@Locale.City</Th>
+                <td>
+
+                    @if (@ViewBag.AccountProfileTemp.city != @ViewBag.AccountProfile.city)
+                    {
+                        <input style="width:200px; color: #FFFFFF;background-color: #FF0000;" type="text" id="city" name="city" value="@ViewBag.AccountProfileTemp.city" disabled />
+                    }
+                    else
+                    {
+                        <input style="width:200px;" type="text" id="city" name="city" value="@ViewBag.AccountProfileTemp.city" disabled />
+                    }
+                </td>
+            </tr>
+
+            <TR>
+                <Th>@Locale.Country</Th>
+                <td>
+
+                    <select class="default" name="country" id="country" maxlength="20">
+
+                        @if (@ViewBag.AccountProfileTemp.countryCode != @ViewBag.AccountProfile.countryCode)
+                        {
+                            foreach (var item in ViewBag.Country)
+                            {
+                                <option disabled style="color: #FFFFFF;background-color: #FF0000;" value="@item.countryCode" @(ViewBag.AccountProfileTemp.countryCode.Trim() == item.countryCode.Trim() ? "selected" : "")>@item.countryDesc</option>
+
+                            }
+
+                        }
+                        else
+                        {
+                            foreach (var item in ViewBag.Country) //BranchDetails.Rows)
+                            {
+                                <option disabled value="@item.countryCode" @(ViewBag.AccountProfileTemp.countryCode.Trim() == item.countryCode.Trim() ? "selected" : "")>@item.countryDesc</option>
+
+                            }
+                        }
+                 
+                    </select>
+
+                </td>
+            </TR>
+
+        </TBODY>
+    </table>
+
+    <button data-action="@Url.Action("/VerifyAChanges")" Class="btn btn-default normal-submit-verifysave-action-button @(CurrentUser.HasTask(TaskIdsOCS.AccountProfileChecker.INDEX) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+    <button data-action="@Url.Action("/VerifyRChanges")" Class="btn btn-default normal-submit-verifydelete-action-button @(CurrentUser.HasTask(TaskIdsOCS.AccountProfileChecker.INDEX) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+    <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.AccountProfileChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+
+  
+
+</div>
+
+
+}
+
+@Scripts.Render("~/bundles/BankBranchMaintain")

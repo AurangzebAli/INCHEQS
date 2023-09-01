@@ -1,0 +1,194 @@
+﻿@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Resources
+
+
+
+
+<table class="table form-table table-no-border table-utility">
+    <tr style="display:none;">
+
+
+        <th style="display:none;">Mac Address Client</th>
+        <td style="display:none;"><input style="border:none" type="text" readonly="readonly" value="@ViewBag.ListMacAddress"></td>
+    </tr>
+    @if (ViewBag.capturePageInfo != null)
+    {
+
+        <tr>
+            <th>&nbsp;&nbsp;Clearing Date</th>
+            @*<td><input style="border:none" type="text" readonly="readonly" name="processDate" value="@Convert.ToDateTime(ViewBag.capturePageInfo.Rows[0]["fldProcessDate"]).ToString("dd-MM-yyyy")"></td>*@
+            <td><input style="border:none" type="text" readonly="readonly" name="processDate" value="@Convert.ToDateTime(ViewBag.captureDateInfo.Rows[0]["processdate"]).ToString("dd-MM-yyyy")"></td>
+        </tr>
+        <tr>
+            <th>&nbsp;&nbsp;Currency Code</th>
+            <td><input style="border:none" type="text" readonly="readonly" name="curcode" value="@ViewBag.capturePageInfo.Rows[0]["currencycode"].ToString()"></td>
+        </tr>
+        <tr>
+            <th>&nbsp;&nbsp;Presenting Bank</th>
+            <td><input style="border:none; width:30px;" type="text" readonly="readonly" name="bankcode" value="@ViewBag.capturePageInfo.Rows[0]["fldbankcode"].ToString()"> - <input style="border:none" type="text" readonly="readonly" name="bankdesc" value="@ViewBag.capturePageInfo.Rows[0]["fldBankDesc"].ToString()"></td>
+        </tr>
+        @* <tr>
+            <th>&nbsp;&nbsp;Scanner ID</th>
+            <td><input style="border:none" type="text" readonly="readonly" name="scannerid" value="@ViewBag.capturePageInfo.Rows[0]["fldscannerid"].ToString().PadLeft(3,'0')"></td>
+            </tr>*@
+        <tr>
+            <th>&nbsp;&nbsp;Capturing Branch</th>
+            <td>
+                <select name="fldCapturingBranchCode" id="fldCapturingBranchCode">
+                    <option value=""> </option>
+                    @if (ViewBag.captureBranchesInfo != null)
+                    {
+                        foreach (var item in ViewBag.captureBranchesInfo)
+                        {
+                            <option value="@item.BranchID" @(CurrentUser.Account.BranchCode == item.BranchCode.Trim() ? "selected" : "")>@item.BranchCode - @item.BranchDesc</option>
+                        }
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>&nbsp;&nbsp;Clearing Branch</th>
+            <td><input style="border:none; width:40px;" type="text" readonly="readonly" name="branchcode" value="@ViewBag.capturePageInfo.Rows[0]["fldbranchcode"].ToString()"> - <input style="border:none" type="text" readonly="readonly" name="branchdesc" value="@ViewBag.capturePageInfo.Rows[0]["fldbranchdesc"].ToString()"></td>
+        </tr>
+
+        <tr>
+            <th>&nbsp;&nbsp;Capturing Mode</th>
+            <td id="ajaxCapturingModeList"></td>
+            <td id="ajaxCapturingInfoList"></td>
+            <td>&nbsp;</td>
+        </tr>
+
+        <tr id="trChequeType">
+            <th>&nbsp;&nbsp;Capturing Type</th>
+            <td id="ajaxCapturingTypeList"></td>
+        </tr>
+
+
+        <tr>
+            <th>&nbsp;&nbsp;Posting Mode</th>
+            <td id="ajaxPostingModeList"></td>
+        </tr>
+        <tr>
+            <td>
+                <input type="radio" hidden name="radChequeStatus" id="radChequeStatus_0" value="N" checked />@* Non Post-Dated*@<br />@*Pending Locale Registration*@
+                <input type="radio" hidden name="radChequeStatus" id="radChequeStatus_1" value="Y" /> @*Post Dated*@<br />@*Pending Locale Registration*@
+            </td>
+        </tr>
+
+        @*</tr>
+                @*<tr><td>&nbsp;</td></tr>
+
+                @*<tr id="trEndorseAlignment">
+                <th>
+                    Presentment
+                </th>
+                <td>
+                    <input type="radio" name="rdEndorseAllignment" id="radLine1" value="Y" checked /> 1st Presentment<br />
+                    <input type="radio" name="rdEndorseAllignment" id="radLine2" value="Y" /> 2nd Presentment<br />
+                    <input type="radio" name="rdEndorseAllignment" id="radLine3" value="Y" /> 3rd Presentment<br />
+                </td>
+            </tr>
+            <tr><td>&nbsp;</td></tr>*@
+
+        <tr>
+
+            <td style="height: 25px">
+
+                @*<button type="submit" class="btn btn-default capturing-fullview">Submit</button>*@
+                &nbsp;&nbsp;<button type="submit" class="btn btn-default">Submit</button>
+                @*<a href="@Url.Action("Index")" Class="btn btn-default capturing-fullview_off btn-s secure-nav" id="btnClose">@Locale.btnClose</a>*@
+
+            </td>
+
+        </tr>
+
+    }
+    else
+
+    {
+        <tr>
+
+
+            <th>Clearing Date</th>
+            @*<td><input style="border:none" type="text" readonly="readonly" name="processDate" value="@Convert.ToDateTime(ViewBag.capturePageInfo.Rows[0]["fldProcessDate"]).ToString("dd-MM-yyyy")"></td>*@
+            <td><input style="border:none" type="text" readonly="readonly" name="processDate" value="-"></td>
+        </tr>
+        <tr>
+            <th>Currency Code</th>
+            <td><input style="border:none" type="text" readonly="readonly" name="curcode" value="-"></td>
+        </tr>
+        <tr>
+            <th>Scanner ID</th>
+            <td><input style="border:none" type="text" readonly="readonly" name="scannerid" value="-"></td>
+        </tr>
+        <tr>
+            <th>Presenting Bank</th>
+            <td><input style="border:none" type="text" readonly="readonly" name="bankcode" value="-"></td>
+        </tr>
+
+        <tr>
+            <th>Presenting Branch</th>
+            <td><input style="border:none" type="text" readonly="readonly" name="branchcode" value="-"></td>
+        </tr>
+
+        <tr hidden>
+            <th>
+                @*Capturing <br />Mode Pending Locale Registration
+                    </th>*@
+            <td id="ajaxCapturingModeList"></td>
+            <td id="ajaxCapturingInfoList"></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+
+        <tr id="trChequeType" hidden>
+            <th>
+                @*PCheque Typeending Locale Registration
+                    </th>*@
+            <td id="ajaxCapturingTypeList"></td>
+            <td id="tdLockBoxSelection">&nbsp;</td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr>
+            <td>
+                <input type="radio" hidden name="radChequeStatus" id="radChequeStatus_0" value="N" checked />@* Non Post-Dated*@<br />@*Pending Locale Registration*@
+                <input type="radio" hidden name="radChequeStatus" id="radChequeStatus_1" value="Y" /> @*Post Dated*@<br />@*Pending Locale Registration*@
+            </td>
+        </tr>
+
+        @*</tr>
+                @*<tr><td>&nbsp;</td></tr>
+
+                @*<tr id="trEndorseAlignment">
+                <th>
+                    Presentment
+                </th>
+                <td>
+                    <input type="radio" name="rdEndorseAllignment" id="radLine1" value="Y" checked /> 1st Presentment<br />
+                    <input type="radio" name="rdEndorseAllignment" id="radLine2" value="Y" /> 2nd Presentment<br />
+                    <input type="radio" name="rdEndorseAllignment" id="radLine3" value="Y" /> 3rd Presentment<br />
+                </td>
+            </tr>
+            <tr><td>&nbsp;</td></tr>*@
+
+    }
+
+
+</table>
+
+
+
+@*<div id="resultContainer"></div>*@
+@*}*@
+
+    @*}*@
+
+@*<script src="~/Scripts/OCS/MacAddressClient.js"></script>*@
+<script src="~/Scripts/OCS/capturing.js"></script>
+@Scripts.Render("~/bundles/SearchResultPage")
+@*<script src="~/Scripts/OCS/page.js"></script>*@
+
+
+
+
+

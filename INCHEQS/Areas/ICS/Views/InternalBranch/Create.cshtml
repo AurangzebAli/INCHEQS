@@ -1,0 +1,99 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "InternalBranch", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Locale.InternalBranchMaintenance</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+
+                <tbody>
+                    <tr>
+                        <th>@Locale.BankDescription</th>
+                        <td>
+                            <input type="hidden" value="@CurrentUser.Account.BankCode" name="bankDesc"  />
+                            @CurrentUser.Account.BankCode - @CurrentUser.Account.BankDesc
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>@Locale.BranchCode</th>
+                        <td>
+                            <select name="txtBranchCode1" id="ajaxStateSelectList"></select>
+                            <span class="red-star">*</span>
+                            <input type="text" value="" name="txtBranchCode2" maxlength="4"/><span class="red-star">*</span>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>@Locale.InternalBranchCode</th>
+                        <td>
+                            <input type="text" value="" name="txtMapBranchCode"  maxlength="5"/><span class="red-star">*</span>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>@Locale.BranchDescription</th>
+                        <td>
+                            <input type="text" value="" name="txtBranchDesc"  /><span class="red-star">*</span>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>@Locale.BranchAbbreviationName</th>
+                        <td>
+                            <input type="text" value="" name="txtBranchAbb"  maxlength="4"/>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>@Locale.EmailName</th>
+                        <td>
+                            <input type="text" value="" name="txtEmailName"  />
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>@Locale.EmailAddress</th>
+                        <td>
+                            <input type="text" value="" name="txtEmailAddress"  />
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>@Locale.Addressline1</th>
+                        <td>
+                            <input type="text" value="" name="txtAddress1"  />
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>@Locale.Addressline2</th>
+                        <td>
+                            <input type="text" value="" name="txtAddress2"  />
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>@Locale.Addressline3</th>
+                        <td>
+                            <input type="text" value="" name="txtAddress3"  />
+                        </td>
+
+
+                    </tr>
+                    <@*tr>
+                        <td> <input type="hidden" id="BRSTN" name="BRSTN" value="" />
+                        </td>
+                    </*@tr>
+</tbody>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.InternalBranch.UPDATE) ? "" : "text")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default  secure-nav @(CurrentUser.HasTask(TaskIds.InternalBranch.INDEX) ? "" : "text")">@Locale.btnClose</a>
+    </div>
+}
+
+<script src="~/Scripts/App/states.js"></script>

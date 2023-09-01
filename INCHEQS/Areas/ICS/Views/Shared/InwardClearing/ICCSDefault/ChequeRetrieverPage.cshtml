@@ -1,0 +1,231 @@
+﻿@using System.Data;
+@using INCHEQS.Common;
+@using INCHEQS.Resources;
+@{
+    ViewBag.Title = "ChequeRetrieverPage";
+    //Layout = "~/Views/Shared/_LayoutChequeVerification.cshtml";
+    Layout = "~/Views/Shared/_LayoutChequeRetriever.cshtml";
+}
+@{
+    int i = 0;
+
+}
+<div style="background-color: #ffffff">
+    <div class="row mTop10">
+        <div class="col-sm-5">
+            <span class="h4 bold">@ViewBag.PageTitle</span>
+            @if (ViewBag.UPI != null)
+            {
+                if (ViewBag.UPI.ToString().Trim() == "Y")
+                {
+                    <input type="hidden" name="ViewUPI" value="Y">
+                }
+                else
+                {
+                    <input type="hidden" name="ViewUPI" value="N">
+                }
+
+            }
+            else
+            {
+                <input type="hidden" name="ViewUPI" value="N">
+            }@*<div class="row">
+                    <div class="col-sm-6">
+                        <span class="h5 bold">
+                            @Locale.ChequeClearingDate :
+                        </span>
+                        <span>@DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <span class="h5 bold">UIC :</span>
+                        <span>@ViewBag.InwardItemViewModel.getField("fldUIC")</span>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                                <span class="h5 bold">HOST STATUS : </span>
+                                <span class="red">@(ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() == "" ? "NIL" : @ViewBag.HostStatus)</span><br />
+                        </div>
+                </div>*@
+        </div>
+        <div class="col-sm-7 text-right">
+            @Html.Partial("InwardClearing/Base/_ChequeControlAction")
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 text-left">
+            <div class="r-lg-4 h4">
+                @Html.Partial("InwardClearing/Base/_ChequeRetrieverDetail")
+
+            </div>
+
+            <div class="r-lg-6 h4">
+                @Html.Partial("InwardClearing/Base/_ChequeImageAction")
+
+            </div>
+            <div class="r-lg-6">
+                @Html.Partial("InwardClearing/Base/_ChequeImage")
+
+            </div>
+            <div class="r-lg-6">
+
+                @Html.Partial("InwardClearing/Base/_ChequeImageBack")
+            </div>
+
+        </div>
+        <div class="col-sm-4">
+
+            <div style="display:flex; align-items: center">
+                <label for="Remarks">Remarks:</label>
+                <div id="Remarks" style="width:200px; height:30px; background-color:#f0f8ff; border:1px solid #787878"></div>
+            </div>
+
+            <div>
+                <label for="ClearingDate">
+                    Cheque Clearing Date :
+                </label>
+
+                <span class="red bold">
+                    @DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))
+                </span>
+            </div>
+            @*<img alt="" src="@ViewBag.Base64String" style="height:300px;width:200px;" />*@
+            @*<div id="signatureInfo" style="width:300px; height:200px; background-color:#f0f8ff;  border:1px solid #787878"></div>*@
+            @*<div id="signatureInfo" style="width: 300px; background-color: #f0f8ff; border: 1px solid #787878 "></div>*@
+        </div>
+
+
+        <div class="col-sm-2">
+            @Html.Partial("InwardClearing/Base/_IQADetail")
+        </div>
+
+    </div>
+
+    <!--<div class="row">
+        <div class="col-sm-7 text-left">
+           @* @Html.Partial("InwardClearing/Base/_ChequeRetrieverDetail")
+        </div>
+        <div class="col-sm-5" style="overflow:scroll;height:200px">
+             @Html.Partial("InwardClearing/Modal/_ChequeHistoryPopup")
+        </div>-->
+    @*<div class="col-sm-5" style="overflow:scroll;height:200px">
+            @Html.Partial("InwardClearing/Modal/_ChequeHistoryPopup")
+        </div>
+    <!--<div class="col-sm-7">
+            @Html.Partial("InwardClearing/Base/_ChequeImageAction")
+            @Html.Partial("InwardClearing/Base/_ChequeImage")
+            <hr>-->
+            @Html.Partial("InwardClearing/Base/_ChequeImageActionBack")
+            @Html.Partial("InwardClearing/Base/_ChequeImageBack")
+            - @Html.Partial("InwardClearing/Base/_MICRDetail")
+           *@
+    <!--<br />
+            //Html.Partial("InwardClearing/Base/_ChequeImageUV")
+
+
+
+        </div>
+    </div>-->
+</div>
+
+<script type="text/javascript">
+
+        $(document).ready(function () {
+            bindAndDrawBackImageFromImageController();
+            
+
+
+        });
+
+
+
+        function bindAndDrawBackImageFromImageController() {
+            $(".modify-cheque-btn-back").off("click.cheque")
+                .on("click.cheque", function () {
+                    var actionClicked = $(this).data("btnfor");
+                    var imgFolder = $("#imageFolder").val();
+                    var imgId = $("#imageIdBack").val();
+                    var imgState = $("#imageStateBack").val();
+                    if (actionClicked === "reset") {
+                        //Reset Button Clicked.
+                        //Remove All State
+                        imgState = "bw,";
+                    } else if (actionClicked === "front") {
+                        imgState = imgState.replace("back", "");
+                    } else if (actionClicked === "back") {
+                        imgState = imgState.replace("front", "");
+                    } else if (actionClicked === "bw") {
+                        imgState += "," + "front";
+                        imgState = imgState.replace("greyscale", "");
+                        imgState = imgState.replace("uv", "");
+                        imgState = imgState.replace("back", "");
+                    } else if (actionClicked === "greyscale") {
+                        imgState += "," + "front";
+                        imgState = imgState.replace("bw", "");
+                        imgState = imgState.replace("uv", "");
+                        imgState = imgState.replace("back", "");
+                    } else if (actionClicked === "uv") {
+                        imgState = imgState.replace("bw", "");
+                        imgState = imgState.replace("greyscale", "");
+                        imgState = imgState.replace("back", "");
+                    }
+
+                    //If state clicked found in previous state, remove it.
+                    //This make the button act as Toggle
+                    if (imgState.indexOf(actionClicked) >= 0) {
+                        imgState = imgState.replace("," + actionClicked, "");
+                    } else {
+                        //Add the state
+                        imgState += "," + actionClicked;
+                    }
+
+                    //Replace ,, with ,
+                    imgState = imgState.replace(",,", ",");
+
+
+                    //Remove image to display preload unless for big image
+                    if (actionClicked !== "large") {
+                        $('#chequeImageBack').attr("src", "")
+                    }
+
+                    //Get only unique states for the server
+                    var arrayState = _.uniq(imgState.split(","));
+                    //If large state found. Draw in modal instead
+                    if ($.inArray("large", arrayState) > -1) {
+                        //alert("d");
+                        var imageHolder = "<img id='bigImageHolder'></img>";
+                        bootbox.alert({
+                            size: "large",
+                            message: imageHolder,
+                        });
+                        $("#bigImageHolder").parents(".bootbox-body").addClass("image-loader");
+                        $('#bigImageHolder').attr("src", App.ContextPath + "Image/LargeCheque?imageFolder=" + imgFolder + "&imageId=" + imgId + "&imageState=" + arrayState.join());
+                        $("#bigImageHolder").parents('.modal-dialog').css({
+                            width: 'auto',
+                            height: 'auto',
+                            'max-height': '80%'
+                        });
+                    } else {
+                        //Draw the image accordingly
+                        //alert("c");
+                        $("#imageState").val(arrayState.join());
+
+                        $('#chequeImageBack').attr("src", App.ContextPath + "Image/Cheque?imageFolder=" + imgFolder + "&imageId=" + imgId + "&imageState=" + arrayState.join());
+
+                        //Bind zoomable image
+                        $("#chequeImageBack").off("click.cheque").on("click.cheque", function (e) {
+                            extendEzPlusClickFunction("chequeImageBack", initializeEzPlus)
+                        });
+                    }
+                });
+            //Trigger first draw of image
+            $("#backBtn").trigger('click');
+
+
+    }
+    </script>
+

@@ -1,0 +1,12 @@
+﻿@using INCHEQS.TaskAssignment;
+<div id="dashboard" class="inward-progress">
+    @foreach (var row in ViewBag.Config.Rows) {
+      //  if (TaskIds.DashboardProgressStatus.MAIN.Equals(@row["taskId"])) { 
+            <div id="@row["divId"]" data-taskid="@row["taskId"]" data-widget-type="@row["widgetType"]" data-div-width="@row["DivWidth"]" class="dashboard-element col-lg-@row["DivWidth"]">
+                <div class="widget-body"></div>
+            </div>
+      //  }
+    }
+</div>
+
+@Scripts.Render("~/bundles/branchdashboard")

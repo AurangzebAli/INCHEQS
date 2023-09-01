@@ -1,0 +1,38 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.TaskAssignment;
+@using INCHEQS.Resources;
+@using (Html.BeginForm("Delete", "HubBranchProfile", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.MaintenanceHubBranchProfile</h4>
+        <hr />
+        <Table Class="table table-condensed table-striped table-hover data-table hidden">
+            <thead>
+                <tr>
+                    <th>@Locale.HubId</th>
+                    <th>@Locale.HubDescription</th>
+                    <th>@Locale.Delete?</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in @ViewBag.HubBranch.Rows) {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action(null)/Edit?hubId=@item["fldHubId"].Trim()" class="secure-nav @(CurrentUser.HasTask(TaskIds.HubBranchProfile.EDIT) ? "" : "disabled")">@item["fldHubId"]</a>
+                        </td>
+                        <td>
+                            @item["fldHubDesc"]
+                        </td>
+                        <td>
+                            <input type="checkbox" name="deleteBox" value="@item["fldHubId"]" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </Table>
+
+        <button type="submit" Class="btn btn-default confirm @(CurrentUser.HasTask(TaskIds.HubBranchProfile.DELETE) ? "" : "hidden")">@Locale.DeleteBtn</button>
+        <a href="@Url.Action(null)/Create" Class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.HubBranchProfile.CREATE) ? "" : "hidden")">@Locale.NewBtn</a>
+    </div>
+
+}

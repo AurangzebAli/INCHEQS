@@ -1,0 +1,40 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("SaveCreate", "StateCode", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.StateCodeMaintenance</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <TBODY>
+               
+                    <TR>
+                        <Th>@Locale.StateCode </Th>
+
+                        <td>
+                            <input type="text" maxlength="2" name="StateCode"  />
+                            <span class="red">*</span>
+                            
+                        </td>
+
+                    </TR>
+                    <TR>
+                        <Th>@Locale.StateDescription </Th>
+
+                        <td>
+                            <input type="text" name="StateDescription"  />
+                            <span class="red">*</span>
+                        </td>
+
+                    </TR>
+
+            </TBODY>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.StateCode.CREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.StateCode.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+
+
+    </div>
+}

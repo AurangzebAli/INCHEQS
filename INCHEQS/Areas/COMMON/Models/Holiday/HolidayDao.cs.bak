@@ -1,0 +1,693 @@
+﻿using INCHEQS.Models;
+using INCHEQS.Resources;
+using INCHEQS.Security;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
+using INCHEQS.Helpers;
+using INCHEQS.DataAccessLayer;
+using INCHEQS.Common;
+
+namespace INCHEQS.Areas.COMMON.Models.Holiday
+{
+    public class HolidayDao : iHolidayDao
+    {
+        private readonly ApplicationDbContext dbContext;
+        public HolidayDao(ApplicationDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+        public SqlDbType HolidayId { get; private set; }
+        public List<string> ValidateHoliday(FormCollection col, string action)
+        {
+            List<string> err = new List<string>();
+            if ((col["fldHolidayDescription"].Equals("")))
+            {
+                err.Add(Locale.HolidayDescriptionCannotBlank);
+            }
+            if (!col.AllKeys.Contains("RecurringType") && col["OneTime"].ToString() != "OneTime")
+            {
+                err.Add("Please select the Recurring type");
+            }
+            if (col.AllKeys.Contains("RecurringType"))
+            {
+                if (col["RecurringType"].ToString() == "Week" && !col.AllKeys.Contains("Days"))
+                {
+                    err.Add("Please select Day Name");
+                }
+            }
+            if (col["fldDate"] != null)
+            {
+            if (this.checkDateExist(col["fldDate"]))
+            {
+                err.Add("Holiday Date already exist");
+            }
+            if (this.checkDateExistTemp(col["fldDate"]))
+            {
+                err.Add("Holiday Date already exist");
+            }
+            }
+            if (col["fldYearDate"] != null)
+            {
+                if (this.checkDateExist(col["fldYearDate"]))
+                {
+                    err.Add("Holiday Date already exist");
+                }
+                if (this.checkDateExistTemp(col["fldYearDate"]))
+                {
+                    err.Add("Holiday Date already exist");
+                }
+            } 
+            
+            return err;
+        }
+        public async Task<DataTable> FindAsync(string HolidayId)
+        {
+            return await Task.Run(() => Find(HolidayId));
+        }
+        public DataTable Find(string RejectCode)
+        {
+
+            DataTable ds = new DataTable();
+
+            string stmt = "Select * FROM  tblholidaymvc WHERE fldHolidayId = @HolidayId";
+
+            ds = dbContext.GetRecordsAsDataTable(stmt, new[] { new SqlParameter("@HolidayId", HolidayId) });
+
+            return ds;
+        }
+
+        public bool checkDateExist(string date)
+        {
+            bool flag = false;
+            DataTable DT = new DataTable();
+            List<SqlParameter> SqlParameterNext = new List<SqlParameter>();
+            SqlParameterNext.Add(new SqlParameter("@HolidayDate", date));
+            SqlParameterNext.Add(new SqlParameter("@Action","M"));
+            DT = dbContext.GetRecordsAsDataTableSP("spcgDuplicateHoliday", SqlParameterNext.ToArray());
+            if (DT.Rows.Count > 0)
+            {
+                flag = true;
+            }
+            return flag;
+        }
+
+        public bool checkDateExistTemp(string date)
+        {
+            bool flag = false;
+            DataTable DT = new DataTable();
+            List<SqlParameter> SqlParameterNext = new List<SqlParameter>();
+            SqlParameterNext.Add(new SqlParameter("@HolidayDate", date));
+            SqlParameterNext.Add(new SqlParameter("@Action", "T"));
+            DT = dbContext.GetRecordsAsDataTableSP("spcgDuplicateHoliday", SqlParameterNext.ToArray());
+            if (DT.Rows.Count > 0)
+            {
+                flag = true;
+            }
+            return flag;
+        }
+
+        public HolidayModel InsertHoliday(FormCollection col)
+        {
+            dynamic bankCode = CurrentUser.Account.BankCode;
+            HolidayModel holiday = new HolidayModel();
+            string Recurring = "";
+            string RecurringType = "";
+            string RecurringDay = "";
+            string RecurringMonth = "0";
+            string getDate = "";
+            string mon = "N";
+            string tue = "N";
+            string wed = "N";
+            string thu = "N";
+            string fri = "N";
+            string sat = "N";
+            string sun = "N";
+            string getDateDb = "";
+            string IsActiveHoliday = "";
+            try
+            {
+                string OneTime = col["OneTime"].ToString();
+                if (!col.AllKeys.Contains("active"))
+                {
+                    IsActiveHoliday = "N";
+                }
+                else
+                {
+                    IsActiveHoliday = col["active"];
+                }
+                if (OneTime == "OneTime")
+                {
+                    Recurring = "N";
+                    getDate = col["fldDate"].ToString();
+                }
+                else
+                {
+                    Recurring = "Y";
+                    RecurringType = col["RecurringType"].ToString();
+                    if (RecurringType == "Week")
+                    {
+                        RecurringType = "W";
+                        //RecurringDay = col["Days"].ToString();
+                        string[] DayArray = (col["Days"].ToString()).Split(',');
+                        foreach (string dayArrayList in DayArray)
+                        {
+                            if (dayArrayList == "1")
+                            {
+                                mon = "Y";
+                            }
+                            if (dayArrayList == "2")
+                            {
+                                tue = "Y";
+                            }
+                            if (dayArrayList == "3")
+                            {
+                                wed = "Y";
+                            }
+                            if (dayArrayList == "4")
+                            {
+                                thu = "Y";
+                            }
+                            if (dayArrayList == "5")
+                            {
+                                fri = "Y";
+                            }
+                            if (dayArrayList == "6")
+                            {
+                                sat = "Y";
+                            }
+                            if (dayArrayList == "7")
+                            {
+                                sun = "Y";
+                            }
+                        }
+                    }
+                    if (RecurringType == "Month")
+                    {
+                        RecurringType = "M";
+                        RecurringMonth = col["dropdownWeek"].ToString();
+                        RecurringDay = col["dropdownDay"].ToString();
+                        if (RecurringDay == "1")
+                        {
+                            mon = "Y";
+                        }
+                        if (RecurringDay == "2")
+                        {
+                            tue = "Y";
+                        }
+                        if (RecurringDay == "3")
+                        {
+                            wed = "Y";
+                        }
+                        if (RecurringDay == "4")
+                        {
+                            thu = "Y";
+                        }
+                        if (RecurringDay == "5")
+                        {
+                            fri = "Y";
+                        }
+                        if (RecurringDay == "6")
+                        {
+                            sat = "Y";
+                        }
+                        if (RecurringDay == "7")
+                        {
+                            sun = "Y";
+                        }
+                    }
+                    if (RecurringType == "Year")
+                    {
+                        RecurringType = "Y";
+                        getDate = col["fldYearDate"].ToString();
+                    }
+                }
+                if (col["OneTime"].ToString() == "OneTime" || RecurringType == "Y")
+                {
+                    getDateDb = DateTime.ParseExact(getDate, "dd-MM-yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
+                    //getDateDb = Convert.ToDateTime(getDate).ToString("yyyy-MM-dd");
+                }
+
+                List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+                sqlParameterNext.Add(new SqlParameter("@TableName", "tblHolidayMVC"));
+                sqlParameterNext.Add(new SqlParameter("@NextNo", 0));
+                sqlParameterNext[1].Direction = ParameterDirection.Output;
+                dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcgCTCSNextSeqNo", sqlParameterNext.ToArray());
+                long iNextNo = (long)sqlParameterNext[1].Value;
+
+
+                string daf = DateTime.Now.ToString();
+                string stmt = "Insert into tblHolidayMVC " +
+                "(fldHolidayId,fldRecurring,fldRecurrType,fldRecurrMonth,fldHolidayDate,fldDesc,fldCreateUserId,fldCreateTimeStamp,fldUpdateUserId," +
+                "fldUpdateTimeStamp,fldConfirm,fldDelete,fldActiveHoliday,fldDayMon,fldDayTue,fldDayWed,fldDayThu,fldDayFri,fldDaySat,fldDaySun,fldBankCode)" +
+                "VALUES (@fldHolidayId,@fldRecurring,@fldRecurringType,@RecurringMonth,@fldHolidayDate,@fldHolidayDesc,@fldCreateUserId,@fldCreateTimeStamp,@fldUpdateUserId," +
+                "@fldUpdateTimeStamp,'Y','N',@fldActiveHoliday,@fldDayMon,@fldDayTue,@fldDayWed,@fldDayThu,@fldDayFri,@fldDaySat,@fldDaySun,@fldBankCode)";
+                dbContext.ExecuteNonQuery(stmt, new[] {
+                    new SqlParameter("@fldHolidayId", iNextNo),
+                    new SqlParameter("@fldRecurring", Recurring),
+                    new SqlParameter("@fldRecurringType", RecurringType),
+                    new SqlParameter("@RecurringMonth",RecurringMonth),
+                    new SqlParameter("@fldHolidayDate", getDateDb),
+                    new SqlParameter("@fldHolidayDesc", col["fldHolidayDescription"]),
+                    new SqlParameter("@fldCreateUserId", CurrentUser.Account.UserId),
+                    new SqlParameter("@fldCreateTimeStamp", DateTime.Now),
+                    new SqlParameter("@fldUpdateUserId", CurrentUser.Account.UserId),
+                    new SqlParameter("@fldUpdateTimeStamp", DateTime.Now),
+                    new SqlParameter("@fldActiveHoliday", IsActiveHoliday),
+                    new SqlParameter("@fldDayMon", mon),
+                    new SqlParameter("@fldDayTue", tue),
+                    new SqlParameter("@fldDayWed", wed),
+                    new SqlParameter("@fldDayThu", thu),
+                    new SqlParameter("@fldDayFri", fri),
+                    new SqlParameter("@fldDaySat", sat),
+                    new SqlParameter("@fldDaySun", sun),
+                    new SqlParameter("@fldBankCode", CurrentUser.Account.BankCode)
+                });
+                return holiday;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+        public bool CheckHolidayExist(string id)
+        {
+            DataTable ds = new DataTable();
+            bool Flag = false;
+            string stmt = "Select * from tblHolidayMVCTemp where fldholidayid=@fldHolidayId";
+            ds = dbContext.GetRecordsAsDataTable(stmt, new[] { new SqlParameter("@fldHolidayId", id) });
+            if (ds.Rows.Count > 0)
+            {
+                Flag = true;
+            }
+            return Flag;
+        }
+        public HolidayModel GetHolidayData(string id)
+        {
+            HolidayModel holiday = new HolidayModel();
+            DataTable ds = new DataTable();
+            string stmt = "Select * from view_Holiday where fldholidayid=@fldHolidayId";
+            ds = dbContext.GetRecordsAsDataTable(stmt, new[] { new SqlParameter("@fldHolidayId", id) });
+            if (ds.Rows.Count > 0)
+            {
+                DataRow row = ds.Rows[0];
+                if (row["fldHolidayDate"].ToString() == "")
+                {
+                    holiday.Date = "";
+                }
+                else
+                {
+                    holiday.Date = row["fldHolidayDate"].ToString();
+                    holiday.Date = DateTime.ParseExact(row["fldHolidayDate"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd-MM-yyyy");
+                }
+                holiday.Desc = row["fldDesc"].ToString();
+                holiday.recurring = row["fldRecurring"].ToString();
+                holiday.fldActiveHoliday = row["fldActiveHoliday"].ToString();
+                if (row["fldActiveHoliday"].ToString() == "Yes")
+                {
+                    holiday.Activecheck = true;
+                    holiday.fldActiveHoliday = "Y";
+                }
+                else
+                {
+                    holiday.Activecheck = false;
+                    holiday.fldActiveHoliday = "N";
+                }
+                if (holiday.recurring == "Yes")
+                {
+                    holiday.recurring = "Recurring";
+                    holiday.recurrType = row["fldRecurrType"].ToString();
+                    if (holiday.recurrType == "Month")
+                    {
+                        holiday.recurrType = "Month";
+                    }
+                    if (holiday.recurrType == "Week")
+                    {
+                        holiday.recurrType = "Week";
+
+                        if (row["fldDayMon"].ToString() == "Y")
+                        {
+                            holiday.fldDayMon = "Y";
+                            holiday.MonChecked = true;
+                        }
+                        else
+                        {
+                            holiday.fldDayMon = "N";
+                            holiday.MonChecked = false;
+                        }
+                        if (row["fldDayTue"].ToString() == "Y")
+                        {
+                            holiday.fldDayTue = "Y";
+                            holiday.tueChecked = true;
+                        }
+                        else
+                        {
+                            holiday.fldDayTue = "N";
+                            holiday.tueChecked = false;
+                        }
+                        if (row["fldDayWed"].ToString() == "Y")
+                        {
+                            holiday.fldDayWed = "Y";
+                            holiday.wedChecked = true;
+                        }
+                        else
+                        {
+                            holiday.fldDayWed = "N";
+                            holiday.wedChecked = false;
+                        }
+                        if (row["fldDayThu"].ToString() == "Y")
+                        {
+                            holiday.fldDayThu = "Y";
+                            holiday.thuChecked = true;
+                        }
+                        else
+                        {
+                            holiday.fldDayThu = "N";
+                            holiday.thuChecked = false;
+                        }
+                        if (row["fldDayFri"].ToString() == "Y")
+                        {
+                            holiday.fldDayFri = "Y";
+                            holiday.friChecked = true;
+                        }
+                        else
+                        {
+                            holiday.fldDayFri = "N";
+                            holiday.friChecked = false;
+                        }
+                        if (row["fldDaySat"].ToString() == "Y")
+                        {
+                            holiday.fldDaySat = "Y";
+                            holiday.satChecked= true;
+                        }
+                        else
+                        {
+                            holiday.fldDaySat = "N";
+                            holiday.satChecked = false;
+                        }
+                        if (row["fldDaySun"].ToString() == "Y")
+                        {
+                            holiday.fldDaySun = "Y";
+                            holiday.sunChecked = true;
+                        }
+                        else
+                        {
+                            holiday.fldDaySun = "N";
+                            holiday.sunChecked = false;
+                        }
+                    }
+                    if (holiday.recurrType == "Year")
+                    {
+                        holiday.recurrType = "Year";
+                        holiday.recurrTypeYearly = "True";
+                    }
+                }
+                else
+                {
+                    holiday.recurring = "N";
+                    holiday.recurrType = "OneTime";
+                }
+
+                holiday.HolidayId = row["fldHolidayId"].ToString();
+            }
+            return holiday;
+        }
+        public void UpdateHolidayTable(FormCollection col)
+        {
+            string IsActiveHoliday = "";
+            if (!col.AllKeys.Contains("active"))
+            {
+                IsActiveHoliday = "N";
+            }
+            else
+            {
+                IsActiveHoliday = col["active"];
+            }
+            string stmt = "UPDATE tblHolidayMVC SET fldDesc=@fldDesc,fldUpdateTimestamp=@fldUpdateTimestamp,fldUpdateUserId=@fldUpdateUserId,fldActiveHoliday=@fldActiveHoliday Where fldHolidayId=@fldHolidayId";
+            dbContext.ExecuteNonQuery(stmt, new[] {
+                            new SqlParameter("@fldHolidayId", col["HolidayId"]),
+                            new SqlParameter("@fldDesc", col["fldHolidayDescription"]),
+                            new SqlParameter("@fldUpdateUserId", CurrentUser.Account.UserId),
+                            new SqlParameter("@fldUpdateTimeStamp", DateTime.Now),
+                            new SqlParameter("@fldActiveHoliday", IsActiveHoliday),
+                            new SqlParameter("@fldBankCode", CurrentUser.Account.BankCode)
+            });
+        }
+        public void DeleteFromHolidayTable(string id)
+        {
+            string stmt = "delete from tblHolidayMVC where fldHolidayId=@fldHolidayId";
+            dbContext.ExecuteNonQuery(stmt, new[] { new SqlParameter("@fldHolidayId", id) });
+        }
+        public HolidayModel CreateHolidayToHolidayTemp(FormCollection col)
+        {
+            dynamic bankCode = CurrentUser.Account.BankCode;
+            HolidayModel holiday = new HolidayModel();
+            string Recurring = "";
+            string RecurringType = "";
+            string RecurringDay = "";
+            string RecurringMonth = "0";
+            string getDate = "";
+            string mon = "N";
+            string tue = "N";
+            string wed = "N";
+            string thu = "N";
+            string fri = "N";
+            string sat = "N";
+            string sun = "N";
+            string getDateDb = "";
+            string IsActiveHoliday = "";
+            try
+            {
+                string OneTime = col["OneTime"].ToString();
+                if (!col.AllKeys.Contains("active"))
+                {
+                    IsActiveHoliday = "N";
+                }
+                else
+                {
+                    IsActiveHoliday = col["active"];
+                }
+
+                if (OneTime == "OneTime")
+                {
+                    Recurring = "N";
+                    getDate = col["fldDate"].ToString();
+                }
+                else
+                {
+                    Recurring = "Y";
+                    RecurringType = col["RecurringType"].ToString();
+                    if (RecurringType == "Week")
+                    {
+                        RecurringType = "W";
+                        //RecurringDay = col["Days"].ToString();
+                        string[] DayArray = (col["Days"].ToString()).Split(',');
+                        foreach (string dayArrayList in DayArray)
+                        {
+                            if (dayArrayList == "1")
+                            {
+                                mon = "Y";
+                            }
+                            if (dayArrayList == "2")
+                            {
+                                tue = "Y";
+                            }
+                            if (dayArrayList == "3")
+                            {
+                                wed = "Y";
+                            }
+                            if (dayArrayList == "4")
+                            {
+                                thu = "Y";
+                            }
+                            if (dayArrayList == "5")
+                            {
+                                fri = "Y";
+                            }
+                            if (dayArrayList == "6")
+                            {
+                                sat = "Y";
+                            }
+                            if (dayArrayList == "7")
+                            {
+                                sun = "Y";
+                            }
+                        }
+                    }
+                    if (RecurringType == "Month")
+                    {
+                        RecurringType = "M";
+                        RecurringMonth = col["dropdownWeek"].ToString();
+                        RecurringDay = col["dropdownDay"].ToString();
+                        if (RecurringDay == "1")
+                        {
+                            mon = "Y";
+                        }
+                        if (RecurringDay == "2")
+                        {
+                            tue = "Y";
+                        }
+                        if (RecurringDay == "3")
+                        {
+                            wed = "Y";
+                        }
+                        if (RecurringDay == "4")
+                        {
+                            thu = "Y";
+                        }
+                        if (RecurringDay == "5")
+                        {
+                            fri = "Y";
+                        }
+                        if (RecurringDay == "6")
+                        {
+                            sat = "Y";
+                        }
+                        if (RecurringDay == "7")
+                        {
+                            sun = "Y";
+                        }
+                    }
+                    if (RecurringType == "Year")
+                    {
+                        RecurringType = "Y";
+                        getDate = col["fldYearDate"].ToString();
+                    }
+                }
+                if (col["OneTime"].ToString() == "OneTime" || RecurringType == "Y")
+                {
+                    getDateDb = DateTime.ParseExact(getDate, "dd-MM-yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
+                    //getDateDb = Convert.ToDateTime(getDate).ToString("yyyy-MM-dd");
+                }
+
+                List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+                sqlParameterNext.Add(new SqlParameter("@TableName", "tblHolidayMVC"));
+                sqlParameterNext.Add(new SqlParameter("@NextNo", 0));
+                sqlParameterNext[1].Direction = ParameterDirection.Output;
+                dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcgCTCSNextSeqNo", sqlParameterNext.ToArray());
+                long iNextNo = (long)sqlParameterNext[1].Value;
+
+                string daf = DateTime.Now.ToString();
+                string stmt = "Insert into tblHolidayMVCTemp " +
+                "(fldHolidayId,fldRecurring,fldRecurrType,fldRecurrMonth,fldHolidayDate,fldDesc,fldCreateUserId,fldCreateTimeStamp,fldUpdateUserId," +
+                "fldUpdateTimeStamp,fldConfirm,fldDelete,fldActiveHoliday,fldDayMon,fldDayTue,fldDayWed,fldDayThu,fldDayFri,fldDaySat,fldDaySun,fldBankCode,fldApproveStatus)" +
+                "VALUES (@fldHolidayId,@fldRecurring,@fldRecurringType,@RecurringMonth,@fldHolidayDate,@fldHolidayDesc,@fldCreateUserId,@fldCreateTimeStamp,@fldUpdateUserId," +
+                "@fldUpdateTimeStamp,'Y','N',@fldActiveHoliday,@fldDayMon,@fldDayTue,@fldDayWed,@fldDayThu,@fldDayFri,@fldDaySat,@fldDaySun,@fldBankCode,'A')";
+                dbContext.ExecuteNonQuery(stmt, new[] {
+                    new SqlParameter("@fldHolidayId", iNextNo),
+                    new SqlParameter("@fldRecurring", Recurring),
+                    new SqlParameter("@fldRecurringType", RecurringType),
+                    new SqlParameter("@RecurringMonth",RecurringMonth),
+                    new SqlParameter("@fldHolidayDate", getDateDb),
+                    new SqlParameter("@fldHolidayDesc", col["fldHolidayDescription"]),
+                    new SqlParameter("@fldCreateUserId", CurrentUser.Account.UserId),
+                    new SqlParameter("@fldCreateTimeStamp", DateTime.Now),
+                    new SqlParameter("@fldUpdateUserId", CurrentUser.Account.UserId),
+                    new SqlParameter("@fldUpdateTimeStamp", DateTime.Now),
+                    new SqlParameter("@fldActiveHoliday", IsActiveHoliday),
+                    new SqlParameter("@fldDayMon", mon),
+                    new SqlParameter("@fldDayTue", tue),
+                    new SqlParameter("@fldDayWed", wed),
+                    new SqlParameter("@fldDayThu", thu),
+                    new SqlParameter("@fldDayFri", fri),
+                    new SqlParameter("@fldDaySat", sat),
+                    new SqlParameter("@fldDaySun", sun),
+                    new SqlParameter("@fldBankCode", CurrentUser.Account.BankCode)
+                });
+                return holiday;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public void CreateHolidayinMain(string id)
+        {
+            string stmt = "Insert into tblHolidayMVC(fldHolidayId,fldRecurring, fldRecurrType, fldRecurrMonth, fldDayMon, fldDayTue, ";
+            stmt = stmt + "fldDayWed, fldDayThu, fldDayFri, fldDaySat, fldDaySun, fldHolidaydate, fldDesc, fldCreateUserId,";
+            stmt = stmt + "fldCreateTimeStamp, fldUpdateUserId, fldUpdateTimeStamp, fldConfirm, fldDelete, fldActiveHoliday, fldBankCode) ";
+            stmt = stmt + "select fldHolidayId,fldRecurring, fldRecurrType, fldRecurrMonth, fldDayMon, fldDayTue, fldDayWed, fldDayThu,";
+            stmt = stmt + "fldDayFri, fldDaySat, fldDaySun, fldHolidaydate, fldDesc, fldCreateUserId, fldCreateTimeStamp, fldUpdateUserId, ";
+            stmt = stmt + "fldUpdateTimeStamp, fldConfirm, fldDelete, fldActiveHoliday, fldBankCode from tblHolidayMVCTemp ";
+            stmt = stmt + " where fldHolidayId=@fldHolidayId ";
+            dbContext.ExecuteNonQuery(stmt, new SqlParameter[]
+            {
+                new SqlParameter("@fldHolidayId", id)
+            });
+        }
+        public void AddHolidayinTemptoDelete(string id)
+        {
+            string stmt = "Insert into tblHolidayMVCTemp(fldHolidayId,fldRecurring, fldRecurrType, fldRecurrMonth, fldDayMon, fldDayTue, ";
+            stmt = stmt + "fldDayWed, fldDayThu, fldDayFri, fldDaySat, fldDaySun, fldHolidaydate, fldDesc, fldCreateUserId,";
+            stmt = stmt + "fldCreateTimeStamp, fldUpdateUserId, fldUpdateTimeStamp, fldConfirm, fldDelete, fldActiveHoliday, fldBankCode,fldApproveStatus) ";
+            stmt = stmt + "select fldHolidayId,fldRecurring, fldRecurrType, fldRecurrMonth, fldDayMon, fldDayTue, fldDayWed, fldDayThu,";
+            stmt = stmt + "fldDayFri, fldDaySat, fldDaySun, fldHolidaydate, fldDesc, fldCreateUserId, fldCreateTimeStamp, fldUpdateUserId, ";
+            stmt = stmt + "fldUpdateTimeStamp, fldConfirm, fldDelete, fldActiveHoliday, fldBankCode, 'D' from tblHolidayMVC ";
+            stmt = stmt + " where fldHolidayId=@fldHolidayId";
+            dbContext.ExecuteNonQuery(stmt, new SqlParameter[]
+            {
+                new SqlParameter("@fldHolidayId", id)
+            });
+        }
+        public void AddHolidayinTemptoUpdate(FormCollection col)
+        {
+            string IsActiveHoliday = "";
+            if (!col.AllKeys.Contains("active"))
+            {
+                IsActiveHoliday = "N";
+            }
+            else
+            {
+                IsActiveHoliday = col["active"];
+            }
+            string stmt = "Insert into tblHolidayMVCTemp(fldHolidayId,fldRecurring, fldRecurrType, fldRecurrMonth, fldDayMon, fldDayTue, ";
+            stmt = stmt + "fldDayWed, fldDayThu, fldDayFri, fldDaySat, fldDaySun, fldHolidaydate, fldDesc, fldCreateUserId,";
+            stmt = stmt + "fldCreateTimeStamp, fldUpdateUserId, fldUpdateTimeStamp, fldConfirm, fldDelete, fldActiveHoliday, fldBankCode,fldApproveStatus) ";
+            stmt = stmt + "select fldHolidayId,fldRecurring, fldRecurrType, fldRecurrMonth, fldDayMon, fldDayTue, fldDayWed, fldDayThu,";
+            stmt = stmt + "fldDayFri, fldDaySat, fldDaySun, fldHolidaydate, @fldDesc, fldCreateUserId, fldCreateTimeStamp, @fldUpdateUserId, ";
+            stmt = stmt + "@fldUpdateTimeStamp, fldConfirm, fldDelete, @fldActiveHoliday, fldBankCode, 'U' from tblHolidayMVC ";
+            stmt = stmt + " where fldHolidayId=@fldHolidayId";
+            dbContext.ExecuteNonQuery(stmt, new SqlParameter[]
+            {
+                new SqlParameter("@fldHolidayId", col["HolidayId"]),
+                new SqlParameter("@fldDesc", col["fldHolidayDescription"]),
+                new SqlParameter("@fldActiveHoliday", IsActiveHoliday),
+                new SqlParameter("@fldUpdateUserId", CurrentUser.Account.UserId),
+                new SqlParameter("@fldUpdateTimeStamp", DateTime.Now)
+            });
+        }
+        public void DeleteHolidayinTemp(string Value, int count)
+        {
+            if (count < 15)
+            {
+                string stmt = "delete from tblHolidayMVCTemp where fldHolidayId=@fldHolidayId";
+                dbContext.ExecuteNonQuery(stmt, new[] { new SqlParameter("@fldHolidayId", Value) });
+            }
+            else
+            {
+                string getDateDb = "";
+                string stmt = "delete from tblHolidayMVCTemp where DATEDIFF(DAY,fldHolidaydate,@HolidayDate) = 0";
+                getDateDb = DateTime.ParseExact(Value, "yyyyMMdd", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
+                dbContext.ExecuteNonQuery(stmt, new[] { new SqlParameter("@HolidayDate", getDateDb) });
+            }
+
+        }
+        public void UpdateHolidayToMain(string id)
+        {
+            string stmt = "update tblHolidayMVC set fldDesc = tblHolidayMVCTemp.fldDesc , fldUpdateUserId = tblHolidayMVCTemp.fldUpdateUserId , fldUpdateTimeStamp = tblHolidayMVCTemp.fldUpdateTimeStamp , fldActiveHoliday = tblHolidayMVCTemp.fldActiveHoliday from tblHolidayMVC inner join tblHolidayMVCTemp on tblHolidayMVC.fldHolidayId = tblHolidayMVCTemp.fldHolidayId Where tblHolidayMVC.fldHolidayId=@fldHolidayId";
+            dbContext.ExecuteNonQuery(stmt, new[] {
+                            new SqlParameter("@fldHolidayId", id)
+            });
+        }
+
+    }
+}

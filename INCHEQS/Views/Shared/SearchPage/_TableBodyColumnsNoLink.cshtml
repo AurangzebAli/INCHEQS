@@ -1,0 +1,83 @@
+﻿@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Common;
+@using System.Globalization;
+<td class="row-result-params hidden">
+    @foreach (DataField dataField in Model)
+    {
+        if (string.Compare(dataField.isResultParameter, "Y") == 0)
+        {
+            <input name="row_@dataField.fieldId" value="@dataField.value" Type="hidden" />
+        }
+    }
+</td>
+@foreach (DataField dataField in Model)
+{
+    if (string.Compare(dataField.isResult, "Y") == 0)
+    {
+        if (string.Compare(dataField.fieldType, "Currency") == 0)
+        {
+
+            if (dataField.value.ToString() == "0.00")
+            {
+                <td class="txtBlack" align="right">@dataField.value</td>
+            }
+            else
+            {
+                <td class="currency txtBlack">@StringUtils.FormatCurrency(dataField.value.ToString())</td>
+            }
+        }
+        else if (string.Compare(dataField.fieldType, "DeleteBox") == 0)
+        {
+            if (dataField.taskId == "700101" && ViewBag.Type == "Submitted")
+            {
+                <td class="delete-checkbox" style="display:none">
+                    <input type="checkbox" name="deleteBox" value="@dataField.value.ToString() @dataField.fieldDefaultValue.ToString()" />
+                </td>
+            }
+            else
+            {
+                <td class="delete-checkbox">
+                    <input type="checkbox" name="deleteBox" value="@dataField.value.ToString() @dataField.fieldDefaultValue.ToString()" />
+                </td>
+            }
+
+
+
+        }
+        else if (string.Compare(dataField.fieldType, "CheckBox") == 0)
+        {
+            var value = dataField.value.ToString().Split('+');
+<td class="input-checkbox">
+    <input type="hidden" id="chk_genuineCheckvalue_" name="chk_genuineCheckvalue_" />
+
+    @if (value[1] == "0")
+    {
+        <input type="checkbox" name="chk_genuineCheckvalue_@value[0]" value="@value[0]" />
+    }
+    else
+    {
+        <input type="checkbox" name="chk_genuineCheckvalue_@value[0]" checked="checked" value="@value[0]" />
+    }
+</td>
+        }
+        else if (string.Compare(dataField.fieldType, "RadioButton") == 0)
+        {
+            <td class="input-radio">
+                <input type="radio" name="radioButton" value="@dataField.value.ToString()" />
+            </td>
+        }
+        else
+        {
+            if (dataField.fieldLabel == "Total Item")
+            {
+                <td align="right" class="txtBlack">@dataField.value</td>
+            }
+            else
+            {
+                <td class="txtBlack">@dataField.value</td>
+            }
+        }
+    }
+}
+
+@Scripts.Render("~/bundles/app")

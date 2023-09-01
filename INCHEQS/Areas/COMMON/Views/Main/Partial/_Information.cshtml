@@ -1,0 +1,34 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+<div class="lined">
+    <button id="appSwitcher" class="btn btn-default pull-right hidden">Log On To OCS</button>
+    <h5 class="heading">
+        <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span>
+        @Locale.WelcomeToINCHEQS
+    </h5>
+    <div class="welcome-warning">
+        <p><span class="red-title">@Locale.capsWARNING</span></p>
+        <p>@Locale.ThesystemmustonlybeaccessedbyauthorizedusersUnauthorizedsystemusageorabuseissubjecttocriminalprosecutionandsystemusagewillbemonitoredandlogged.</p>
+    </div>
+    <table class="table form-table table-condensed">
+        <tbody>
+
+            <tr>
+                <th>@Locale.UserName:</th>
+                <td>@CurrentUser.Account.UserAbbr</td>
+            </tr>
+            <tr>
+                <th>@Locale.Bank:</th>
+                <td>@CurrentUser.Account.BankDesc</td>
+            </tr>
+            <tr>
+                <th>@Locale.LastLogin:</th>
+                <td>@DateUtils.formatTimeStampFromSql(CurrentUser.Account.LastLoginDate)</td>
+            </tr>
+            <tr>
+                <th>@Locale.PasswordExpireDate:</th>
+                <td>@DateUtils.formatDateFromSql(CurrentUser.Account.PasswordExpDate)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

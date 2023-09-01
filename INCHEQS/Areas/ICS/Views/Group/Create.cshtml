@@ -1,0 +1,59 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "Group", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Locale.MaintenanceGroupProfile</h4>
+        <hr />
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.GroupID</th>
+                    <td><input type="text" name="fldGroupId" maxlength="10" required /></td>
+                </tr>
+                <tr>
+                    <th>@Locale.GroupDescription</th>
+                    <td><input type="text" name="fldGroupDesc" required /></td>
+                </tr>
+                <tr hidden>
+                    <th>@Locale.Branch</th>
+                    <td><input type="checkbox" name="fldBranchGroup" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form-select">
+                            <div>
+                                <b>@Locale.UserAvailableList</b><br>
+                                <select multiple="multiple" class="form-multiple select-from">
+                                    @foreach (var item in @ViewBag.AvailableUser) {
+                                        <option value="@item.fldUserId">@item.fldUserAbb</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-move">
+                                <br />
+                                <p>
+                                    <input type="button" title="select all" class="btn btn-default btn-move addAll" value="&gt;&gt;">
+                                </p>
+                                <p><input type="button" title="select" class="btn btn-default btn-move addOne" value="&gt;"></p>
+                                <p><input type="button" title="remove" class="btn btn-default btn-move rmOne" value="&lt;"></p>
+                                <p><input type="button" title="remove all" class="btn btn-default btn-move rmAll" value="&lt;&lt;"></p>
+                            </div>
+                            <div>
+                                <b>@Locale.UserSelectedList</b><br>
+                                <select multiple="multiple" class="form-multiple select-to" name="selectedUser"></select>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.Group.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.Group.INDEX) ? "" : "hidden")">@Locale.Back</a>
+    </div>
+}
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/app.js"></script>

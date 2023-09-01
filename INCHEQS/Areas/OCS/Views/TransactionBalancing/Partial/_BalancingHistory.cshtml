@@ -1,0 +1,330 @@
+﻿@using INCHEQS.Resources
+<div id="BalancinginfoSec">
+    <div class="row">
+        <div class="col-sm-12">
+            <span class="col-sm-1 h5 bold">TransNo : </span>
+            <div class="col-sm-1">@ViewBag.OutwardItemViewModel.getField("fldtransno")</div>
+
+            @if (ViewBag.BalancingHistory != null)
+            {
+                foreach (var Items in ViewBag.BalancingHistory)
+                {
+                    if (@Items.fldItemType != "C" && @Items.fldItemType != "c")
+                    {
+                        <span class="col-sm-1 h5 bold">@Locale.ItemID : </span>
+                        <div class="col-sm-1">@Items.fldItemID</div>
+                            <span class="col-sm-1 h5 bold">IPC : </span>
+                            <div class="col-sm-2" style="word-wrap: break-word;">
+                                <input readonly disabled type="text" id="txtIPCAmount" value="@Convert.ToDecimal(Convert.ToDecimal(Items.fldAmount)/100).ToString("#,##0.00")" class="cheque-input new_fldamount number-only " name="txtIPCAmount" maxlength="23" style="width: 150px; margin:auto; text-align:right;" />
+                            </div>
+                    }
+                    else
+                    {
+
+                        <span class="col-sm-1 h5 bold">CUST : </span>
+                                <div class="col-sm-2" style="word-wrap: break-word;">
+                                    <input readonly disabled type="text" id="txtCUSTAmount" value="@Convert.ToDecimal(Convert.ToDecimal(Items.fldAmount)/100).ToString("#,##0.00")" class="cheque-input new_fldamount number-only" name="txtCUSTAmount" maxlength="23" style="width: 150px; margin:auto; text-align:right;" />
+                                </div>
+                    }
+
+                }
+            }
+            <span class="col-sm-1 h5 bold">Diff : </span>
+            <div class="col-sm-1" style="word-wrap: break-word;">
+                <input readonly disabled type="text" id="txtDiffAmount" class="cheque-input new_fldamount number-only" name="txtDiffAmount" maxlength="23" value="0.00" style="width: 150px; margin:auto; text-align:right; color:white;" />
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table table-bordered mTop10" id="tblBalHistory">
+    <thead>
+        <tr>
+            <th>ItemID</th>
+            <th>Maker/Checker</th>
+            <th>Type</th>
+            <th>Serial</th>
+            <th>Bank Code</th>
+            <th style="width: 200px;">Payee Account Number</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.BalancingHistory != null)
+        {
+            foreach (var row in ViewBag.BalancingHistory)
+            {
+                <tr data-itemid="@row.fldItemType" id="BalHis_@row.fldItemType" class="BalanceHistory">
+                    <td  align="left"><button type="button" class="btn btn-default btn-xs btnBalancingEditRecord">@row.fldItemID</button></td>
+                    <td  align="left"><span>@row.CheckerMaker</span></td>
+                    <td  align="left"><span>@row.fldItemType</span></td>
+                    <td  align="left"><span>@row.fldSerial</span></td>
+                    <td  align="left"><span>@row.fldBankCode</span></td>
+                    <td  align="left"><span>@row.fldPVaccNo</span></td>
+                    <td  align="left" id="BalHisAmt_@row.fldItemID"><span>@Convert.ToDecimal(Convert.ToDecimal(row.fldAmount) / 100).ToString("#,##0.00")</span></td>
+                    <td  align="left" style="display:none;"  id="OrgAmount_@row.fldItemID"><span>@Convert.ToDecimal(Convert.ToDecimal(row.fldAmount) / 100).ToString("#,##0.00")</span></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(function () {
+        var ItemType;
+        var ItemID;
+        $("#htoUpdateBalancing").val("");
+        var input = ""; //holds current input as a string
+        var IPCAmount = $("#txtIPCAmount").val();
+        var CUSTAmount = $("#txtCUSTAmount").val();
+            if (IPCAmount != "") {
+                IPCAmount = IPCAmount.replace(/[^0-9]/g, '');
+            }
+
+            if (CUSTAmount != "") {
+                CUSTAmount = CUSTAmount.replace(/[^0-9]/g, '');
+            }
+        var Difference = 0.00;
+        if (IPCAmount > CUSTAmount) {
+            Difference = IPCAmount - CUSTAmount
+            Difference = (Difference / 100).toFixed(2)
+        }
+        else if (CUSTAmount > IPCAmount) {
+            Difference = CUSTAmount - IPCAmount
+            Difference = (Difference / 100).toFixed(2)
+        }
+        else if (CUSTAmount == IPCAmount) {
+            Difference = IPCAmount - CUSTAmount
+            Difference = (Difference / 100).toFixed(2)
+        }
+
+        if (Difference > 0) {
+            $('#txtDiffAmount').css('background-color', 'Red');
+            $("#txtDiffAmount").val(Difference);
+        }
+
+        $(".BalanceHistory").on('click', function () {
+            var BalancingDetail = $(this).closest('tr');
+            ItemID = BalancingDetail.find("td:eq(0)").text();
+            var MakerChecker = BalancingDetail.find("td:eq(1)").text();
+            ItemType = BalancingDetail.find("td:eq(2)").text();
+            var Serial = BalancingDetail.find("td:eq(3)").text();
+            var Amount = BalancingDetail.find("td:eq(6)").text();
+            $('.BalanceHistory').css('background-color', 'white');
+            $('#BalHis_' + ItemType).css('background-color', '#B3B6B7');
+            if (Amount != "") {
+                $('#txtChequeAmount').val("");
+                Amount = Amount.replace(/[^0-9]/g, '');
+                Amount = (Amount / 100).toFixed(2);
+                $('#txtChequeAmount').val(Amount);
+            }
+            //var IPCAmount = $("#txtIPCAmount").val().replace(/[^0-9]/g, '');
+            //var CUSTAmount = $("#txtCUSTAmount").val().replace(/[^0-9]/g, '');
+        });
+
+        $("#txtChequeAmount").keydown(function (event) {
+            var keycode = event.keyCode || event.which;
+            if (keycode == 13) {
+                jsCalculateDifference();
+            }
+        });
+
+        function jsCalculateDifference() {
+           
+            var userKeyInAmt = $('#txtChequeAmount').val().replace(/[^0-9]/g, '');
+            if (userKeyInAmt > 0) {
+                userKeyInAmt = (userKeyInAmt / 100).toFixed(2);
+                if (ItemType != "C") {
+                    $("#txtIPCAmount").val(userKeyInAmt);
+                    $('#BalHisAmt_' + ItemID).text(userKeyInAmt);
+                    var IPCUpdatedAmt = $("#txtIPCAmount").val().replace(/[^0-9]/g, '');
+                    var CustAmt = $("#txtCUSTAmount").val().replace(/[^0-9]/g, '');
+
+                    if (IPCUpdatedAmt > CustAmt) {
+                        Difference = IPCUpdatedAmt - CustAmt
+                        Difference = (Difference / 100).toFixed(2)
+                    }
+                    else if (CustAmt > IPCUpdatedAmt) {
+                        Difference = CustAmt - IPCUpdatedAmt
+                        Difference = (Difference / 100).toFixed(2)
+                    }
+                    else if (CustAmt == IPCUpdatedAmt) {
+                        Difference = IPCUpdatedAmt - CustAmt
+                        Difference = (Difference / 100).toFixed(2)
+                    }
+                    
+                    if (Difference == 0) {
+                        $('#txtDiffAmount').css('background-color', 'Green');
+                        $("#txtDiffAmount").val(Difference);
+                        //
+                        
+                        var Data="";
+                        var table = $("#tblBalHistory tbody");
+                        table.find('tr').each(function (i) {
+                            var $tds = $(this).find('td'),
+                                intItemID = $tds.eq(0).text(),
+                                intItemType = $tds.eq(2).text(),
+                                intAmount = $tds.eq(6).text().replace(/[^0-9]/g, ''),
+                                intOriginalAmount = $tds.eq(7).text().replace(/[^0-9]/g, '');
+                            if (intOriginalAmount != intAmount) {
+                                if (Data == "") {
+
+                                    Data = intItemID + "," + intItemType + "," + intAmount + "|";
+                                }
+                                else {
+                                    Data = Data + intItemID + "," + intItemType + "," + intAmount + "|";;
+                                }
+                            }
+
+                        });
+                        Data = Data.substring(0, Data.length - 1);
+                        $("#htoUpdateBalancing").val(Data);
+                    }
+                    else {
+                        $('#txtDiffAmount').css('background-color', 'Red');
+                        $("#txtDiffAmount").val(Difference);
+                    }
+
+                }
+                else {
+                    var userKeyInAmt = $('#txtChequeAmount').val().replace(/[^0-9]/g, '');
+                    $("#txtCUSTAmount").val(userKeyInAmt);
+                    $('#BalHisAmt_' + ItemID).text(userKeyInAmt);
+                    var CustUpdatedAmt = $("#txtCUSTAmount").val().replace(/[^0-9]/g, '');
+                    var IPCAmut = $("#txtIPCAmount").val().replace(/[^0-9]/g, '');
+
+                    if (IPCAmut > CustUpdatedAmt) {
+                        Difference = IPCAmut - CustUpdatedAmt
+                        Difference = (Difference / 100).toFixed(2)
+                    }
+                    else if (CustUpdatedAmt > IPCAmut) {
+                        Difference = CustUpdatedAmt - IPCAmut
+                        Difference = (Difference / 100).toFixed(2)
+                    }
+                    else if (CustUpdatedAmt == IPCAmut) {
+                        Difference = IPCAmut - CustUpdatedAmt
+                        Difference = (Difference / 100).toFixed(2)
+                    }
+                    
+                    if (Difference == 0) {
+                        $('#txtDiffAmount').css('background-color', 'Green');
+                        $("#txtDiffAmount").val(Difference);
+                        
+                        var Data="";
+                        var table = $("#tblBalHistory tbody");
+                        table.find('tr').each(function (i) {
+                            var $tds = $(this).find('td'),
+                                intItemID = $tds.eq(0).text(),
+                                intItemType = $tds.eq(2).text(),
+                                intAmount = $tds.eq(6).text().replace(/[^0-9]/g, ''),
+                                intOriginalAmount = $tds.eq(7).text().replace(/[^0-9]/g, '');
+                            if (intOriginalAmount != intAmount) {
+                                if (Data == "") {
+
+                                    Data = intItemID + "," + intItemType + "," + intAmount + "|";
+                                }
+                                else {
+                                    Data = Data + intItemID + "," + intItemType + "," + intAmount + "|";
+                                }
+                            }
+                        });
+                        Data = Data.substring(0, Data.length - 1);
+                        $("#htoUpdateBalancing").val(Data);
+                    }
+                    else {
+                        $('#txtDiffAmount').css('background-color', 'Red');
+                        $("#txtDiffAmount").val(Difference);
+                    }
+                }
+            }
+            else {
+                alert("Please Enter Amount");
+            }
+        }
+        $("#AddBalancingAmount").click(function () {
+            jsCalculateDifference()
+        });
+        $("#txtChequeAmount").keydown(function (e) {
+            //handle backspace key
+            if (e.keyCode == 8 && input.length > 0) {
+                input = input.slice(0, input.length - 1); //remove last digit
+                $(this).val(formatNumber(input));
+            }
+            else {
+                var key = getKeyValue(e.keyCode);
+                if (key) {
+                    input += key; //add actual digit to the input string
+                    $(this).val(formatNumber(input)); //format input string and set the input box value to it
+                }
+            }
+            return false;
+        });
+        $("#BtnDataEntryReject").click(function () {
+            var eTable = "<table id='DataEntryRejectReasons'><thead><tr><th>ReturnCode</th><th></th><th></th><th>ReturnDesc</th></tr></thead><tbody>"
+            $.ajax({
+                cache: false,
+                url: App.ContextPath + "CommonApi/ReasonCodeInternalList",
+                method: "POST",
+                success: function (data) {
+                    $.each(data, function (i, item) {
+                        eTable += "<tr style='cursor: pointer;'>";
+                        eTable += "<td class='fldReturnCode'>" + item.fldReturnCode + "</td>";
+                        eTable += "<td></td>";
+                        eTable += "<td></td>";
+                        eTable += "<td class='fldReturnDesc'>" + item.fldReturnDesc + "</td>";
+                        eTable += "</tr>";
+                    });
+                    eTable += "</tbody></table>";
+                    $("#DataEntryReturnReasonModal .modal-title").html("Return Reason List")
+                    $("#Reasons").html(eTable)
+                    $("#DataEntryReturnReasonModal_txtRejectCode").val("");
+                    $("#DataEntryReturnReasonModal_Detail").val("");
+                    $("input#DataEntryReturnReasonModal_Remarks").val("");
+                    $("input#DataEntryReturnReasonModal_Remarks").prop('disabled', true);
+                    $("#hIntRejCode").val("");
+                    $("#hRemark").val("");
+                    $("#DataEntryReturnReasonModal").modal();
+                }
+            });
+        });
+        $(document).on("click", "#DataEntryRejectReasons tbody tr", function () {
+            var tblReason = $(this).closest('tr');
+            var col1 = tblReason.find("td:eq(0)").text();
+            var col2 = tblReason.find("td:eq(3)").text();
+            if (col1 == "80" || col2 == "Others") {
+                $("#DataEntryReturnReasonModal_txtRejectCode").val(col1);
+                $("#DataEntryReturnReasonModal_Detail").val(col2);
+                $("input#DataEntryReturnReasonModal_Remarks").prop('disabled', false);
+            }
+            else {
+                $("#DataEntryReturnReasonModal_txtRejectCode").val(col1);
+                $("#DataEntryReturnReasonModal_Detail").val(col2);
+                $("input#DataEntryReturnReasonModal_Remarks").prop('disabled', true);
+            }
+            //txtReasonDesc
+        });
+        $("#DismissDataEntryModal").click(function () {
+            var RetCod = $("#DataEntryReturnReasonModal_txtRejectCode").val() + '-' + $("#DataEntryReturnReasonModal_Detail").val();
+            $("#txtReasonDesc").html(RetCod);
+            $("#hIntRejCode").val($("#DataEntryReturnReasonModal_txtRejectCode").val());
+            $("#hRemark").val($("#DataEntryReturnReasonModal_Detail").val() + '-' + $("input#DataEntryReturnReasonModal_Remarks").val());
+            //alert($("#hIntRejCode").val() + "-" + $("#hRemark").val());
+            $('#DataEntryReturnReasonModal').modal('hide');
+            //txtReasonDesc
+        });
+
+        function getKeyValue(keyCode) {
+            if (keyCode > 57) { //also check for numpad keys
+                keyCode -= 48;
+            }
+            if (keyCode >= 48 && keyCode <= 57) {
+                return String.fromCharCode(keyCode);
+            }
+        }
+        function formatNumber(input) {
+            if (isNaN(parseFloat(input))) {
+                return "0.00"; //if the input is invalid just set the value to 0.00
+            }
+            var num = parseFloat(input);
+            return (num / 100).toFixed(2); //move the decimal up to places return a X.00 format
+        }
+    });
+</script>

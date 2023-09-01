@@ -1,0 +1,43 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("Update", "NonConformanceFlag", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+<div class="form-horizontal">
+    <h4>@Locale.NonConformanceFlagMaintenanceEdit</h4>
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <TBODY>
+            @if (ViewBag.ncf != null)
+            {
+                <TR>
+                    <Th>@Locale.NCFValue </Th>
+
+                    <td>
+                        <input type="hidden" name="NCFCode" maxlength="2" value="@ViewBag.ncf[0].fldNCFCode" />
+                        @ViewBag.ncf[0].fldNCFCode
+                    </td>
+
+                </TR>
+                <TR>
+                    <Th>@Locale.NCFDesc </Th>
+
+
+                    <td>
+                        <textarea type="text" name="NCFDesc" style="width:250px">@ViewBag.ncf[0].fldNCFDesc</textarea>
+                        <span class="red-star"> *</span>
+                    </td>
+
+                </TR>
+
+            }
+        </TBODY>
+    </table>
+    <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.NCFlag.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+    <a href="@Url.Action("Edit", new {ncfCodeParam = @ViewBag.ncf[0].fldNCFCode})" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.NCFlag.INDEX) ? "" : "hidden")">@Locale.btnReset</a>
+    <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.NCFlag.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+
+</div>
+}

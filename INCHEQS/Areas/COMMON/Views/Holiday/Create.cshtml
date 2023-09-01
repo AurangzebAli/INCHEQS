@@ -1,0 +1,99 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "Holiday", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.MaintenanceHolidayAdd</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr></tr>
+                <tr>
+                    <th>@Locale.ScheduleType</th>
+                    <td>
+                        <input type="radio" name="OneTime" id="OneTime" value="OneTime" />&nbsp;@Locale.OneTime  &nbsp;&nbsp;&nbsp;
+                        <input type="text" value="@ViewBag.Today" id="fldDate" name="fldDate" class="form-date" style="height:25px" />
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr>
+                    <td></td>
+                    <td><input type="radio" name="OneTime" id="Recurring" value="Recurring" />&nbsp;@Locale.Recurring</td>
+                </tr>
+                <tr></tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        &nbsp;&nbsp;&nbsp;<input type="radio" name="RecurringType" id="Week" value="Week" />&nbsp;@Locale.Weekly &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="Days" class="Days" id="monday" value="1" />&nbsp;@Locale.Monday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="Days" class="Days" id="tuesday" value="2" />&nbsp;@Locale.Tuesday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="Days" class="Days" id="wednesday" value="3" />&nbsp;@Locale.Wednesday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="Days" class="Days" id="thursday" value="4" />&nbsp;@Locale.Thursday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="Days" class="Days" id="friday" value="5" />&nbsp;@Locale.Friday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="Days" class="Days" id="saturday" value="6" />&nbsp;@Locale.Saturday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="Days" class="Days" id="sunday" value="7" />&nbsp;@Locale.Sunday &nbsp;&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr></tr>
+                @*<tr>
+                        <td></td>
+                        <td id="MonthRadio">
+                            &nbsp;&nbsp;&nbsp;<input type="radio" name="RecurringType" id="Month" value="Month" />&nbsp;@Locale.Monthly &nbsp;&nbsp;&nbsp;
+                            <select class="dropdownWeek" id="dropdownWeek" name="dropdownWeek">
+                                <option value="1">1st</option>
+                                <option value="2">2nd</option>
+                                <option value="3">3rd</option>
+                                <option value="4">4th</option>
+                                <option value="5">5th</option>
+                            </select>&nbsp;
+                            of every &nbsp;
+                            <select class="dropdownWeek" id="dropdownDay" name="dropdownDay">
+                                <option value="1">Monday</option>
+                                <option value="2">Tuesday</option>
+                                <option value="3">Wednesday</option>
+                                <option value="4">Thursday</option>
+                                <option value="5">Friday</option>
+                            </select>
+                        </td>
+                    </tr>*@
+                <tr></tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        &nbsp;&nbsp;&nbsp;<input type="radio" name="RecurringType" id="Year" value="Year" />&nbsp; @Locale.Yearly  &nbsp;&nbsp;&nbsp;
+                        <input type="text" value="@ViewBag.Today" id="fldYearDate" name="fldYearDate" class="form-date" style="height:25px" />
+                    </td>
+                </tr>
+                @*<tr>
+                        <td></td>
+                        <td>
+                            <input type="radio" name="RecurringType" id="Year" value="Year" />&nbsp; @Locale.Yearly  &nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp; <input type="text" value="@ViewBag.Today" id="fldYearDate" name="fldYearDate" class="form-date" style="height:25px" />
+                        </td>
+                    </tr>*@
+                <tr>
+                    <th>@Locale.Description</th>
+                    <td>
+                        <input type="text" name="fldHolidayDescription" maxlength="100" style="width:620px;" autocomplete="off" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                @*<tr>
+                    <Th>Active</Th>
+                    <td>
+                        <input type="checkbox" name="active" id="active" value="N"><span> Yes</span>
+                    </td>
+                </tr>*@
+            </tbody>
+        </table>
+        <button type="submit" data-action="@Url.Action("/SAVECREATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIds.Holiday.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.Holiday.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/calender.js"></script>
+<script src="~/Scripts/App/app.js"></script>

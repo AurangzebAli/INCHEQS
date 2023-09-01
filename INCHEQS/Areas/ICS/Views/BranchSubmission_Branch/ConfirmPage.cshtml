@@ -1,0 +1,46 @@
+﻿@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using INCHEQS.Security
+@using (Html.BeginForm("ConfirmPage", "BranchSubmission", FormMethod.Post, new { @Class = "secure-form" }))
+
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+
+        <h2 id="branchSubmissionMessage" style="font-weight:bold">@ViewBag.displayMsg</h2>
+
+        <hr />
+
+        <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsICS.BranchSubmission.INDEX) ? "" : "hidden")">@Locale.btnOK</a>
+
+    </div>
+    if (ViewBag.MsgType != null && ViewBag.MsgType != "")
+    {
+        if (ViewBag.MsgType.ToString().Trim() == "Error")
+        {
+            <script>
+                $(document).ready(function () {
+
+                    $('#branchSubmissionMessage').css({
+                        'color': 'red'
+                    });
+                });
+            </script>
+        }
+
+        if (ViewBag.MsgType.ToString().Trim() == "Success")
+        {
+            <script>
+                $(document).ready(function () {
+
+                    $('#branchSubmissionMessage').css({
+                        'color': 'green'
+                    });
+                });
+            </script>
+        }
+    }
+
+
+}
+

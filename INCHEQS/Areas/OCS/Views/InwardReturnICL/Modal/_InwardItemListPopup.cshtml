@@ -1,0 +1,56 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+    ViewBag.Title = "InwardItemList";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_InwardItemHistory</title>
+</head>
+<body>
+    <div style="overflow-y: scroll; height:500px;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>UIC</th>
+                    <th>Check Digit</th>
+                    <th>Type</th>
+                    <th>Location</th>
+                    <th>Issuing Bank</th>
+                    <th>Issuing Branch</th>
+                    <th>Cheque Number</th>
+                    <th>Issuer Account Number</th>
+                    <th>Amount</th>
+                    <th>Creditor Account Number</th>
+                    <th>Match Status</th>
+                    <th>Return Reason</th>
+                    <th>Unmatch Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in ViewBag.InwardHistory.Rows)
+                {
+                    <tr>
+                        <td>@row["fldUIC"]</td>
+                        <td>@row["fldCheckDigit"]</td>
+                        <td>@row["fldchequetype"]</td>
+                        <td>@row["fldpresentinglocation"]</td>
+                        <td>@row["fldissuingbankcode"]</td>
+                        <td>@row["fldissuingbankbranchcode"]</td>
+                        <td>@row["fldSerial"]</td>
+                        <td>@row["fldpayoraccountnumber"]</td>
+                        <td>@StringUtils.FormatCurrency((row["fldAmount"]).ToString())</td>
+                        <td>@row["fldcreditoraccountnumber"]</td>
+                        <td>@row["fldmatchflag"]</td>
+                        <td>@row["fldreturnreason"]</td>
+                        <td></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

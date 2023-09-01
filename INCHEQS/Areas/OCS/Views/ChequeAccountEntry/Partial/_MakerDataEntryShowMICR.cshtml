@@ -1,0 +1,68 @@
+﻿@using INCHEQS.Resources
+<table class="table table-bordered mTop10">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Location</th>
+            <th>@Locale.BankCode</th>
+            <th>@Locale.BranchCode</th>
+            <th>@Locale.ChequeSerialNo</th>
+            <th>Issuer Account No</th>
+            <th>@Locale.Amount</th>
+            <th>Payee Account No</th>
+            <th>@Locale.Remarks</th>
+            <th>Status</th>
+            <th>Updated By</th>
+            <th>Updated Timestamp</th>
+            @*<th>@Locale.StateCode</th>
+        <th>@Locale.Transcode</th>*@
+            @*<th>TimeStamp</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @*<tr>
+                <td><span>@ViewBag.ChequeHistory.getField("fldcheckdigit")</span></td>
+                <td><span>@ViewBag.ChequeHistory.getField("fldserial")</span></td>
+                <td><span>@ViewBag.ChequeHistory.getField("fldbankcode")</span></td>
+                <td><span>@ViewBag.ChequeHistory.getField("fldbranchcode")</span></td>
+                <td><span>@ViewBag.ChequeHistory.getField("fldstatecode")</span></td>
+                <td><span>@ViewBag.ChequeHistory.getField("fldissueraccno")</span></td>
+                <td><span>@ViewBag.ChequeHistory.getField("fldtccode")</span></td>
+                <td><span>@ViewBag.ChequeHistory.getField("fldamount")</span></td>
+                <td><span>@ViewBag.ChequeHistory.getField("fldremark")</span></td>
+            </tr>*@
+        @if (ViewBag.ChequeRepair != null) //NUll check for Model
+        {
+            foreach (var row in ViewBag.ChequeRepair)
+            {
+                <tr>
+                    @*<td><span>@row.fldCheckDigit</span></td>
+
+                        <td><span>@row.fldBankCode</span></td>
+
+                        <td><span>@row.fldStateCode</span></td>
+                        <td><span>@row.fldIssuerAccNo</span></td>
+                        <td><span>@row.fldTCCode</span></td>
+                        <td td align="right"><span>@row.fldAmount</span></td>
+                        <td><span>@row.fldRemark</span></td>*@
+
+
+                    <td td align="left"><span>@row.fldType</span></td>
+                    <td td align="left"><span>@row.fldLocation</span></td>
+                    <td td align="left"><span>@row.fldBankCode</span></td>
+                    <td td align="left"><span>@row.fldBranchCode</span></td>
+                    <td td align="left"><span>@row.fldSerial</span></td>
+            <td td align="left"><span>@row.fldIssuerAccNo</span></td>
+            <td td align="right"><span>@row.fldAmount</span></td>
+            <td td align="left"><span>@row.fldPayeeAccNo</span></td>
+            <td td align="left"><span>@row.fldRemark</span></td>
+            <td td align="left"><span>@row.fldReasonCode</span></td>
+            <td td align="left"><span>@row.fldUpdateUser</span></td>
+            <td td align="left"><span>@row.fldCreateTimeStamp</span></td>
+
+            @*<td><span>@row.fldCreateTimeStamp</span></td>*@
+        </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,14 @@
+﻿@using INCHEQS.Resources
+<div id="">
+    <button type="button" data-btnfor="large" class="modify-cheque-btn-back btn-verification-border btn-verification btn-large btn-action-verification">Big Image (Back)</button>
+
+    <div id="imageHolder" class="rotated180">
+        <input type="hidden" id="itemIdBack" name="imageItemIdBack" value="@ViewBag.InwardItemViewModel.getField("fldInwardItemId")" />
+        <input type="hidden" id="imageFolderBack" name="imageFolderBack" value="@ViewBag.InwardItemViewModel.getFormatImageFolderPath()" />
+        <input type="hidden" id="imageIdBack" name="imageIdBack" value="@ViewBag.InwardItemViewModel.getField("fldImageFileName")" />
+        <input type="hidden" id="imageStateBack" name="imageStateBack" value="B,greyscale" />
+        <input type="hidden" id="System" name="System" value="greyscale" />
+        <img id="chequeImageBack" class="chequeImageBack" />
+    </div>
+
+</div>

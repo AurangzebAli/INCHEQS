@@ -1,0 +1,81 @@
+﻿@using System.Data;
+@using INCHEQS.Common;
+@using INCHEQS.Resources;
+@{
+    ViewBag.Title = "ChequeRetrieverPage";
+    //Layout = "~/Views/Shared/_LayoutChequeVerification.cshtml";
+    Layout = "~/Views/Shared/_LayoutChequeRetriever.cshtml";
+}
+@{
+    int i = 0;
+
+}
+<div style="background-color: #ffffff">
+    <div class="row mTop10">
+        <div class="col-sm-6">
+            <span class="h4 bold">@ViewBag.PageTitle</span>
+            @if (ViewBag.UPI != null)
+            {
+                if (ViewBag.UPI.ToString().Trim() == "Y")
+                {
+                    <input type="hidden" name="ViewUPI" value="Y">
+                }
+                else
+                {
+                    <input type="hidden" name="ViewUPI" value="N">
+                }
+
+            }
+            else
+            {
+                <input type="hidden" name="ViewUPI" value="N">
+            }@*<div class="row">
+            <div class="col-sm-6">
+                <span class="h5 bold">
+                    @Locale.ChequeClearingDate :
+                </span>
+                <span>@DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <span class="h5 bold">UIC :</span>
+                <span>@ViewBag.InwardItemViewModel.getField("fldUIC")</span>
+            </div>
+
+
+            <div class="col-sm-6">
+                        <span class="h5 bold">HOST STATUS : </span>
+                        <span class="red">@(ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() == "" ? "NIL" : @ViewBag.HostStatus)</span><br />
+                </div>
+        </div>*@
+        </div>
+        <div class="col-sm-6 text-right">
+            @Html.Partial("InwardClearing/Base/_ChequeControlAction")
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-7 text-left">
+            @Html.Partial("InwardClearing/Base/_ChequeRetrieverDetail")
+        </div>
+        <div class="col-sm-5" style="overflow:scroll;height:200px">
+            @Html.Partial("InwardClearing/Modal/_ChequeHistoryPopup")
+        </div>
+        @*<div class="col-sm-5" style="overflow:scroll;height:200px">
+            @Html.Partial("InwardClearing/Modal/_ChequeHistoryPopup")
+        </div>*@
+        <div class="col-sm-7">
+            @Html.Partial("InwardClearing/Base/_ChequeImageAction")
+            @Html.Partial("InwardClearing/Base/_ChequeImage")
+            <hr>
+            @Html.Partial("InwardClearing/Base/_ChequeImageActionBack")
+            @Html.Partial("InwardClearing/Base/_ChequeImageBack")
+            @Html.Partial("InwardClearing/Base/_MICRDetail")
+
+        </div>
+    </div>
+</div>
+
+

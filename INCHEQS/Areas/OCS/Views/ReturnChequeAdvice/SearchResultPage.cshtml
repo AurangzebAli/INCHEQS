@@ -1,0 +1,43 @@
+﻿@using INCHEQS.Resources;
+@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.TaskAssignment;
+@Html.Partial("SearchPage/_InfoBox")
+<table id="search-result-table" class="table table-striped table-hover table-bordered">
+
+    <thead>
+        <tr>
+            @Html.Partial("SearchPage/_TableHeaderColumns")
+            <th>@Locale.Action</th>
+        </tr>
+    </thead>
+    <br>
+
+    <tbody>
+
+        @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+        {
+
+            <tr>
+                @Html.Partial("SearchPage/_TableBodyColumnsNoLink", row)
+                <td>
+
+                    @*<a href="" class="btn btn-default btn-xs row-action-download" data-action="@Url.Action("Download")">Download</a>*@
+
+                    <button data-action="@Url.Action("/Print")" type="button" class="row-action-download-inward btn btn-default @(CurrentUser.HasTask(TaskIdsOCS.ReturnChequeAdvice.PRINT) ? "" : "hidden")">Download</button>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        @Html.Partial("SearchPage/_TablePaginationFooter")
+    </tfoot>
+</table>
+@*<button data-action="@Url.Action("/Print")" type="button" class="action-download-print btn btn-default @(CurrentUser.HasTask(TaskIdsOCS.ReturnChequeAdvice.PRINT) ? "" : "hidden")">@Locale.Print</button>*@
+@*<button data-action="@Url.Action("/Generate")" Class="btn btn-default secure-nav normal-submit-without-search @(CurrentUser.HasTask(TaskIdsOCS.ReturnChequeAdvice.GENERATE) ? "" : "hidden")">@Locale.Generate</button>*@
+@*<button data-action="@Url.Action("/Print")" type="button" class="action-download-print-radio btn btn-default @(CurrentUser.HasTask(TaskIdsOCS.ReturnChequeAdvice.PRINT) ? "" : "hidden")">@Locale.Print</button>*@
+@*<button data-action="@Url.Action("/Print")" Class="btn btn-default secure-nav normal-submit-without-search @(CurrentUser.HasTask(TaskIdsOCS.ReturnChequeAdvice.PRINT) ? "" : "hidden")">@Locale.Print</button>*@
+@*<button data-action="@Url.Action("Generate")" type="button"  class="a btn btn-default @(CurrentUser.HasTask(TaskIdsOCS.ReturnChequeAdvice.GENERATE) ? "" : "hidden")">@Locale.Generate</button>*@
+
+@Scripts.Render("~/bundles/SearchResultPage")
+<script src="~/Scripts/App/common.js"></script>

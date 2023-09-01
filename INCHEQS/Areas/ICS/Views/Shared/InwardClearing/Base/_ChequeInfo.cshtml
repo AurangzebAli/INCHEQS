@@ -1,0 +1,62 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@using System.Globalization;
+@{ 
+
+    DateTime currentdate = DateTime.Now;
+    DateTime sDate = currentdate.AddMonths(-6);
+    string staleDate = sDate.ToString("dd-MM-yyyy");
+
+}
+
+<table style="line-height: 23px; margin-top: 30px; font-size: 18px">
+
+    <tr>
+        <th class="col-sm-4 txtBlack">Cheque Clearing Date</th>
+        <th>:</th>
+        <td class="col-sm-5"><span class="h4 red bold">@DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4 txtBlack">Host Status</th>
+        <th>:</th>
+        <td class="col-sm-5"><span class="txtRed bold" style="font-size:12px">@(ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() == "" ? "NIL" : @ViewBag.HostStatus + " ("+ ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() + ")" )</span></td>
+    </tr>
+    @*<tr>
+        <th class="col-sm-4 txtBlack">Check Digit</th>
+        <th>:</th>
+        <td class="col-sm-5"><span class="txtBlack bold" style="font-size:12px">@ViewBag.InwardItemViewModel.getField("fldCheckDigit")</span></td>
+    </tr>*@
+    <tr>
+        <th class="col-sm-4 txtBlack">Presenting Bank Branch</th>
+        <th>:</th>
+        <td class="col-sm-5"><span class="txtBlack bold" style="font-size:12px">@ViewBag.InwardItemViewModel.getField("fldPreBankBranchCode")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4 txtBlack">Issuing Bank Branch</th>
+        <th>:</th>
+        <td class="col-sm-5"><span class="txtBlack bold" style="font-size:12px">@ViewBag.InwardItemViewModel.getField("fldIssueBankBranchCode")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4 txtBlack">Cheque Number</th>
+        <th>:</th>
+        <td class="col-sm-5"><span class="txtBlack bold" style="font-size:12px">@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4 txtBlack" style="font-size:16px">Account Number</th>
+        <th>:</th>
+        <td class="col-sm-5"><span class="txtBlack bold" style="font-size:12px">@ViewBag.InwardItemViewModel.getField("fldAccountNumber")</span></td>
+    </tr>
+    <!--<tr>-->
+        @*<th class="col-sm-4 txtBlack">Trans Code</th>
+        <th>:</th>*@
+        <span class="txtBlack bold" style="font-size:12px" hidden>@ViewBag.InwardItemViewModel.getField("fldTransCode")</span>
+    @*</tr>*@
+    <tr />
+    <tr />
+    <tr>
+        <th class="col-sm-4 txtBlack">Amount</th>
+        <th>:</th>
+        <td class="col-sm-5"><span class="h3 red bold">@StringUtils.FormatCurrency(ViewBag.InwardItemViewModel.getField("fldAmount"))</span></td>
+    </tr>
+    
+</table>

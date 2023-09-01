@@ -1,0 +1,28 @@
+﻿
+@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Security
+
+
+
+@*@using (Html.BeginForm("Redirect", "Capturing", FormMethod.Post, new { @Class = "secure-form" }))*@
+@*@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline secure-form", id = "searchForm" }))*@
+@using (Html.BeginForm("Redirect", "Capturing", FormMethod.Post, new { @Class = "form-inline secure-form", id = "searchForm" }))
+
+{
+    @Html.AntiForgeryToken();
+    <div id="search-fields-section">
+
+        <div id="capturingtitleindex">
+            <h4>OCS - Cheque Capturing</h4>
+        </div>
+
+        <hr />
+        <div class="row">
+            @Html.Partial("SearchResultPage")
+        </div>
+        <hr />
+
+    </div>
+
+}  

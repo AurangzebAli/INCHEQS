@@ -1,0 +1,44 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "HostReturnReason", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Locale.HostReturnStatusMaintenance</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.StatusId</th>
+                    <td>
+                        <input type="text" name="statusId">
+                        <span class="red">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.StatusDescription</th>
+                    <td>
+                        <input type="text" name="statusDesc">
+                        <span class="red">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.AutoReject</th>
+                    <td>
+                        <input type="checkbox" name="autoReject">
+                    </td>
+                </tr>
+                <TR>
+                    <Th>@Locale.AutoRoutetoBranch</Th>
+                    <td>
+                        <input type="checkbox" name="autoPending">
+                    </td>
+                </TR>
+            </tbody>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.HostReturnReason.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.HostReturnReason.INDEX) ? "" : "hidden")">@Locale.Back</a>
+    </div>
+}

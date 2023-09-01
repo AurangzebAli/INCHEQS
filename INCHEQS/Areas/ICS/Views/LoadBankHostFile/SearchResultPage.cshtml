@@ -1,0 +1,192 @@
+﻿@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@*@Html.Partial("SearchPage/_InfoBox")*@
+
+@{
+    
+    var i = 0;
+}
+
+
+<table class="table table-striped table-hover table-bordered">
+
+
+	@if (ViewBag.Type == "Summary")
+	{
+		<thead>
+
+
+			<tr>
+				@Html.Partial("SearchPage/_TableHeaderColumns")
+				<td  style="background-color: #BDEDFF;"><b>Details</b></td>
+			</tr>
+
+
+
+		</thead>
+		<tbody>
+			@foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+			{
+
+
+				<tr>
+					@Html.Partial("SearchPage/_TableBodyColumnsNoLink", row)
+					<td><button type="button" class="row-modal-submit-Posted-detail btn btn-default btn-xs" data-action="@Url.Action("GetMICRItemList")">Details</button></td>
+				</tr>
+
+			}
+		</tbody>
+	}
+
+	else if (ViewBag.Type == "Submitted")
+	{
+		<thead>
+
+
+			<tr>
+				@Html.Partial("SearchPage/_TableHeaderColumns")
+
+			</tr>
+
+
+
+		</thead>
+		<tbody>
+			@foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+			{
+
+				<tr>
+					@Html.Partial("SearchPage/_TableBodyColumnsNoLink", row)
+				</tr>
+
+			}
+
+		</tbody>
+	}
+	else if (ViewBag.Type == "Overview")
+	{
+		<thead>
+
+
+		</thead>
+		<tbody>
+			@*@foreach (var Items in ViewBag.ProgressStatus)
+			{
+
+				<tr>
+					<th>@Items.TotalItemLoadC</th>
+				</tr>
+
+			}*@
+            <div class="col-md-5">
+                @if (ViewBag.ProgressStatus != null)
+                {
+                    foreach (var Items in ViewBag.ProgressStatus)
+                    {
+                        <div class="row">
+                            <div><br /></div>
+                            <div style="font-size:15px; font-weight:bold;  background-color:#AED6F1; color:dimgray; height:20px;">Load Host File Details</div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;"> Total inward records           :</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" id="totalInwardRec"> @Items.totalInwardRec</span></div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;"> Total host file records        :</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" id="totalBankHostItem"> @Items.totalBankHostItem</span></div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;"> Total records updated          :</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" float:right" id="totalRecUpdated"> @Items.totalRecUpdated</span></div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;"> Total account not found        :</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" float:right" id="totalAccountNoFound"> @Items.totalAccountNoFound</span></div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;"> Total account got 2 host reject:</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" float:right" id="totalAccountTwoStatus"> @Items.totalAccountTwoStatus</span></div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;"> Total debug records            :</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" float:right" id="totalError"> @Items.totalError</span></div>
+                        </div>
+                        <div><br /></div>
+                        @*<div class="row">
+                    <div style="font-size:15px; font-weight:bold;  background-color:#AED6F1; color:dimgray; height:20px;">Overview For Host Items - Conventional</div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;">Total 03 - Insufficient Funds</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" id="TotalInsufficientFundC">: @Items.TotalInsufficientFundC</span></div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;">Total 04 - 1st Presented Cheque</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" id="Total1stPresentedChequeC">: @Items.Total1stPresentedChequeC</span></div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;">Total 05 - Data corrections</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" id="TotalDataCorrectionsC">: @Items.TotalDataCorrectionsC</span></div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;">Total 06 - Unposted</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" id="TotalUnpostedC">: @Items.TotalUnpostedC</span></div>
+                    <div class="col-sm-8" style="width:100%;border-bottom: 2px solid;"><hr /></div>
+
+                </div>*@
+                        @*<div class="col-sm-8" style="background-color:#D7DBDD;">Total Host Reject Item</div>
+                        <div class="col-sm-4" style="background-color:#D7DBDD;"><span style="color:orange; font-weight:bold; float:right" id="TotalRejectItemC">: @Items.TotalRejectItemC</span></div>*@
+                    }
+                }
+                @*@if (ViewBag.ProgressStatusIslam != null)
+        {
+
+            foreach (var Items in ViewBag.ProgressStatusIslam)
+            {
+                <div><br /></div>
+                <div class="row">
+                    <div style="font-size:15px; font-weight:bold;  background-color:#AED6F1; color:dimgray; height:20px;">Islamic Details</div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;"> Total host file items loaded</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" id="TotalItemLoadI">: @Items.TotalItemLoadI</span></div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;"> Total item tagged with host status</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" id="TotalItemTaggedI">: @Items.TotalItemTaggedI</span></div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;"> Total Item fail tagged with host status</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style="color:red; font-weight:bold; float:right" id="TotalItemUntaggedI">: @Items.TotalItemUntaggedI</span></div>
+                </div>
+                <div><br /></div>
+                <div class="row">
+                    <div style="font-size:15px; font-weight:bold;  background-color:#AED6F1; color:dimgray; height:20px;">Overview For Host Items - Islamic</div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;">Total 03 - Insufficient Funds</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" id="TotalInsufficientFundI">: @Items.TotalInsufficientFundI</span></div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;">Total 04 - 1st Presented Cheque</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" id="Total1stPresentedChequeI">: @Items.Total1stPresentedChequeI</span></div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;">Total 05 - Data corrections</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" id="TotalDataCorrectionsI">: @Items.TotalDataCorrectionsI</span></div>
+                    <div class="col-sm-8" style="background-color:#FFFFFF;">Total 06 - Unposted</div>
+                    <div class="col-sm-4" style="background-color:#FFFFFF;"><span style=" font-weight:bold; float:right" id="TotalUnpostedI">: @Items.TotalUnpostedI</span></div>
+                    <div class="col-sm-8" style="width:100%;border-bottom: 2px solid;"><hr /></div>
+                    <div class="col-sm-8" style="background-color:#D7DBDD;">Total Host Reject Item</div>
+                    <div class="col-sm-4" style="background-color:#D7DBDD;"><span style="color:orange; font-weight:bold; float:right" id="TotalRejectItemI">: @Items.TotalRejectItemI</span></div>
+                </div>
+            }
+        }*@
+            </div>
+		</tbody>
+	}
+
+	@*@if (ViewBag.Type == "Ready")
+		{
+			<tfoot>
+				@Html.Partial("SearchPage/_TablePaginationFooter")
+			</tfoot>
+		}
+		else
+		{*@
+	<tfoot>
+		@Html.Partial("SearchPage/_TablePaginationFooterForInward")
+	</tfoot>
+	@*}*@
+</table>
+
+@if (ViewBag.Type == "Submitted")
+{
+    //<button data-action="@Url.Action("/Reject")" Class="btn btn-default secure-nav normal-submit-without-search @(CurrentUser.HasTask(TaskIdsOCS.BranchClearing.REJECT) ? "" : "hidden")">@Locale.CancelBatch</button>*@
+}
+<script type="text/javascript">
+    function Confirm() {
+        var input = $("<input />");
+        input.attr("type", "hidden").attr("name", "confirm_value");
+        if (confirm("Confirm Action?")) {
+            input.val("Yes");
+            return true;
+        } else {
+            input.val("No");
+            return false;
+        }
+        $("form")[0].appendChild(input[0]);
+    }
+</script>
+
+
+@Scripts.Render("~/bundles/SearchResultPage")
+<script src="~/Scripts/App/common.js"></script>

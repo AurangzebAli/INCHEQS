@@ -1,0 +1,149 @@
+﻿#cssmenu ul,
+#cssmenu li,
+#cssmenu span,
+#cssmenu a {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+#cssmenu {
+    line-height: 1;
+    background: #fff;
+    width: auto;
+    border-bottom: 1px solid #e5e5e5;
+    border-top: 4px solid #428BCA;
+}
+#cssmenu:after,
+#cssmenu ul:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+#cssmenu a {
+  display: block;
+  font-family: Helvetica, Arial, Verdana, sans-serif;
+  padding: 8px 10px;
+  text-decoration: none;
+  text-transform:uppercase;
+}
+#cssmenu ul {
+  list-style: none;
+  margin-left: 20px;
+}
+#cssmenu > ul > li {
+  display: inline-block;
+  float: left;
+  margin-top: 4px;
+  border-bottom:4px solid transparent;
+}
+#cssmenu.align-center {
+  text-align: center;
+}
+#cssmenu.align-center > ul > li {
+  float: none;
+}
+#cssmenu.align-center ul ul {
+  text-align: left;
+}
+#cssmenu.align-right > ul {
+  float: right;
+}
+#cssmenu.align-right ul ul {
+  text-align: right;
+}
+#cssmenu > ul > li > a {
+  font-size: 12px;
+  color:#474747;
+}
+#cssmenu > ul > li:hover:after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  border-bottom: 10px solid #0fa1e0;
+  margin-left: -10px;
+}
+#cssmenu > ul > li.active ,
+#cssmenu > ul > li:hover  {
+border-bottom: 4px solid #CCCCCC;
+}
+#cssmenu .has-sub {
+  z-index: 1100;
+}
+.has-sub > a{
+  background: url("../img/caret.png") no-repeat center right 5px;
+
+}
+#cssmenu .has-sub:hover > ul {
+  display: block;
+  margin: 0;
+}
+#cssmenu .has-sub ul {
+  display: none;
+  position: absolute;
+  width: 200px;
+  top: 100%;
+  left: 0;
+  border: 1px solid #B6B6B6;
+}
+#cssmenu.align-right .has-sub ul {
+  left: auto;
+  right: 0;
+}
+#cssmenu .has-sub ul li {
+  *margin-bottom: -1px;
+}
+#cssmenu .has-sub ul li a {
+  background-color: #f77c15;
+  border-bottom: 1px solid #B6B6B6;
+  font-size: 11px;
+  filter: none;
+  display: block;
+  line-height: 120%;
+  padding: 10px;
+  color: #fff;
+}
+#cssmenu .has-sub ul li:hover a {
+  background-color: #C0C0C0 ;
+}
+#cssmenu ul ul li:hover > a {
+  color: #000;
+}
+#cssmenu .has-sub .has-sub:hover > ul {
+  display: block;
+}
+#cssmenu .has-sub .has-sub ul {
+  display: none;
+  position: absolute;
+  left: 100%;
+  top: 0;
+}
+#cssmenu.align-right .has-sub .has-sub ul,
+#cssmenu.align-right ul ul ul {
+  left: auto;
+  right: 100%;
+}
+#cssmenu .has-sub .has-sub ul li a {
+  background-color: #f77c15;
+  border-bottom: 1px solid #B6B6B6;
+}
+#cssmenu .has-sub .has-sub ul li a:hover {
+  background: #C0C0C0;
+}
+#cssmenu ul ul li.last > a,
+#cssmenu ul ul li:last-child > a,
+#cssmenu ul ul ul li.last > a,
+#cssmenu ul ul ul li:last-child > a,
+#cssmenu .has-sub ul li:last-child > a,
+#cssmenu .has-sub ul li.last > a {
+  border-bottom: 0;
+}
+.welcome-last{
+  float:right !important;
+  padding-right:10px !important;
+  padding-top: 7px !important;
+  color:#fff;
+}

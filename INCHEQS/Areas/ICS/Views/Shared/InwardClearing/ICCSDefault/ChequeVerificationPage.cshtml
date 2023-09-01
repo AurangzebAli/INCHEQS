@@ -1,0 +1,686 @@
+﻿@using System.Data;
+@using INCHEQS.Common
+@{
+    ViewBag.Title = "ChequeVerificationPage";
+    Layout = "~/Views/Shared/_LayoutChequeVerification.cshtml";
+}
+
+@{
+    int MinusTotalRecord;
+    int i = 0;
+    string OriTotalRecord = "";
+    if (ViewBag.NoLock != null && ViewBag.NoLock != false)
+    {
+        MinusTotalRecord = Convert.ToInt32("1");
+    }
+    else
+    {
+
+        if (ViewBag.MinusRecordIndicator != null && ViewBag.MinusRecordIndicator != false)
+        { // REENTERING  CHEQUE VERIFICATION PAGE
+
+            MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+            if (ViewBag.StoreProc != null)
+            {
+                MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+            }
+
+
+
+        }
+        else
+        {
+            // FIRST ENTERY TO CHEQUE VERIFICATION PAGE OR NEXT OR PREV
+            if (ViewBag.InwardItemViewModel.getField("TotalUnverified") == "")
+            {
+                MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalRecord"));
+            }
+            else if (ViewBag.InwardItemViewModel.getField("TotalRecord") == "1")
+            {
+                MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalRecord"));
+            }
+            else
+            {
+                MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+            }
+        }
+    }
+
+    if (ViewBag.LockIndicator != null)
+    {
+        OriTotalRecord = ViewBag.InwardItemViewModel.getField("TotalRecord");
+        <input type="hidden" id="OriTotalRecordHolder" value="@OriTotalRecord">
+    }
+
+    @*<div style="background-color: #cbe9ff; width:100%; height:100%;" class="row mTop20">*@
+    <div class="row">
+        <div style="background-color: #cbe9ff; width: 100%; height: 100%; padding:20px 20px 20px 20px">
+            @*<div class="row mTop10">*@
+            <div class="row">
+                <div class="col-sm-12">
+                    <span class="h4 bold txtBlack">@ViewBag.PageTitle</span>
+                    @if (ViewBag.TaskId.Trim() != "306510")
+                    {
+                        if (ViewBag.TaskId.Trim() == "308110" || ViewBag.TaskId.Trim() == "308170" || ViewBag.TaskId.Trim() == "308180" || ViewBag.TaskId.Trim() == "308190" || ViewBag.TaskId.Trim() == "308200")
+                        {
+                            if (ViewBag.InwardItemViewModel.getField("fldApprovalStatus").ToString().Trim() == "A")
+                            {
+                                //fldApprovalStatusPending
+                                <span class="txtBlack bold">[Passed]</span>
+                            }
+                            else if (ViewBag.InwardItemViewModel.getField("fldApprovalStatus").ToString().Trim() == "R")
+                            {
+                                <span class="txtBlue bold">[Rejected]</span>
+                            }
+                            else if (ViewBag.InwardItemViewModel.getField("fldApprovalStatus").ToString().Trim() == "B")
+                            {
+                                <span class="txtRed bold">[Pending]</span>
+                            }
+                        }
+                        else if (ViewBag.TaskId.Trim() == "306230")
+                        {
+                            if (ViewBag.InwardItemViewModel.getField("fldApprovalStatus").ToString().Trim() == "A")
+                            {
+                                <span class="txtBlack bold">[Passed]</span>
+                            }
+                            else if (ViewBag.InwardItemViewModel.getField("fldApprovalStatus").ToString().Trim() == "R")
+                            {
+                                <span class="txtBlue bold">[Rejected]</span>
+                            }
+                            else if (ViewBag.InwardItemViewModel.getField("fldApprovalStatus").ToString().Trim() == "B")
+                            {
+                                <span class="txtRed bold">[Pending]</span>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (ViewBag.InwardItemViewModel.getField("fldReviewed").ToString().Trim() == "1")
+                        {
+                            <span class="txtBlack bold">[Reviewed]</span>
+                        }
+                    }
+                    <input type="hidden" name="fldIssueBankBranch" value="@ViewBag.InwardItemViewModel.getField("fldIssueBankBranch")">
+                    <input type="hidden" name="new_textRejectCode" value="@ViewBag.new_textRejectCode">
+
+                    <input type="hidden" name="new_textRejectCode" value="@ViewBag.fld">
+                    <input type="hidden" name="new_textRejectCode" value="@ViewBag.new_textRejectCode">
+                    <input type="hidden" name="txtReturnCode" value="@ViewBag.RejectCode">
+                    <input type="hidden" name="txtReturnCode2" value="@ViewBag.RejectCode2">
+                    <input type="hidden" name="txtReturnCode3" value="@ViewBag.RejectCode3">
+                    <input type="hidden" name="txtReturnDesc" value="@ViewBag.fldReturnDescription1">
+                    <input type="hidden" name="txtReturnDesc2" value="@ViewBag.fldReturnDescription2">
+                    <input type="hidden" name="txtReturnDesc3" value="@ViewBag.fldReturnDescription3">
+                    <input type="hidden" name="textAreaRemarks" value="@ViewBag.fldRemarks">
+
+
+                    <input type="hidden" name="NextValue" value="@ViewBag.InwardItemViewModel.getField("NextValue")">
+                    <input type="hidden" name="PreviousValue" value="@ViewBag.InwardItemViewModel.getField("PreviousValue")">
+                    <input type="hidden" name="DataAction" value="@ViewBag.DataAction">
+                    @*Use in Buttons*@
+
+                    <input type="hidden" id="CCUActivation" name="CCUActivation" value="@ViewBag.CCUActivation">
+                    <input type="hidden" id="BranchActivation" name="BranchActivation" value="@ViewBag.BranchActivation">
+                    <input type="hidden" id="txtMessage"  value="@ViewBag.Message">
+
+
+                    @if (ViewBag.TaskId.Trim() != "306530" && ViewBag.TaskId.Trim() != "306540" && ViewBag.TaskId.Trim() != "306550")
+                    {
+                        if ((ViewBag.TaskId.Trim() == "306510" && ViewBag.DataAction.Trim() == "ChequeVerificationPage") || (ViewBag.TaskId.Trim() == "306520" && ViewBag.DataAction.Trim() == "ChequeVerificationPage"))
+                        {
+
+                        }
+                        else
+                        {
+                            <span class="red bold">[@MinusTotalRecord / </span>
+                            <span class="red bold" id="OriTotalRecord">1</span>
+                            <span class="red bold">]</span>
+                        }
+
+                    }
+                                        @*</div>
+        <div class="col-sm-9 text-right">*@
+                    @Html.Partial("InwardClearing/Base/_ChequeControlAction")
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5 text-left">
+                    <div class="r-lg-4">
+                        <label for="clearingtype">Clearing Type: </label>
+                        @*Normal*@
+                        @ViewBag.InwardItemViewModel.getField("fldCyclecode")
+
+
+                        @*<span class="red bold" style="float:left">Route Reason: </span>*@
+
+                    </div>
+                    <div class="r-lg-4">
+                        <label for="status">Status: </label>
+                        @*[Unauth, Realized]*@
+                        @if (ViewBag.TaskId.Trim() == "306230" || ViewBag.TaskId.Trim() == "306240")
+                        {
+
+                            <span class="blue bold">@ViewBag.InwardItemViewModel.getField("fldItemStatus").ToString()</span>
+
+                        }
+                        else
+                        {
+                            if (ViewBag.InwardItemViewModel.getField("fldApprovalStatus").ToString().Trim() == "A")
+                            {
+                                //fldApprovalStatusPending
+
+                                <span class="txtBlack bold">[Passed]</span>
+
+
+                            }
+                            else if (ViewBag.InwardItemViewModel.getField("fldApprovalStatus").ToString().Trim() == "R")
+                            {
+                                if (ViewBag.TaskId.Trim() == "306540" || ViewBag.TaskId.Trim() == "306510")
+                                {
+                                    <span class="txtBlue bold">[Rejected]</span>
+                                }
+                                else
+                                {
+                                    <span class="txtBlue bold">[unauth Rejected]</span>
+                                }
+
+                            }
+                            else if (ViewBag.InwardItemViewModel.getField("fldApprovalStatus").ToString().Trim() == "B")
+                            {
+                                <span class="txtRed bold">[Pending]</span>
+                            }
+                            else if (ViewBag.InwardItemViewModel.getField("fldManual").ToString().Trim() == "1")
+                            {
+                                <span class="txtRed bold">[Marked Manual]</span>
+                            }
+                            else if (ViewBag.InwardItemViewModel.getField("fldNonConfirmStatus").ToString().Trim() == "C")
+                            {
+                                <span class="txtRed bold">[unauth Passed]</span>
+                            }
+                            else if (ViewBag.InwardItemViewModel.getField("fldNonConfirmStatus").ToString().Trim() == "S")
+                            {
+                                <span class="txtRed bold">[unauth Rejected]</span>
+                            }
+                            else
+                            {
+                                <span class="txtBlack bold">[OutStanding]</span>
+                            }
+
+
+                        }
+
+                        @*@ViewBag.InwardItemViewModel.getField("fldItemStatus")*@
+
+
+                    </div>
+                    <div class="r-lg-4">
+                        <label for="UIC"> UIC : </label> @ViewBag.InwardItemViewModel.getField("fldUIC")
+
+                        @*<span class="red bold" style="float:right">Branch Remarks:       </span>*@
+
+                    </div>
+                    <div class="r-lg-6">
+
+                        <label> ATV Exception: </label>N/A
+
+                    </div>
+
+
+                </div>
+
+                <div class="col-sm-7 text-left">
+                    @if (@ViewBag.InwardItemViewModel.getField("fldReturnDescription1") != "" || @ViewBag.InwardItemViewModel.getField("fldReturnDescription2") != "" || @ViewBag.InwardItemViewModel.getField("fldReturnDescription3") != "")
+                    {
+                        <span class="red bold" style="float:left">
+
+                            Route Reason:
+                            @ViewBag.InwardItemViewModel.getField("fldReturnDescription1"),@ViewBag.InwardItemViewModel.getField("fldReturnDescription2"),@ViewBag.InwardItemViewModel.getField("fldReturnDescription3")
+
+
+
+                        </span>
+                    }
+                    <span class="red bold" style="float:right">
+                    </span>
+                    <br />
+
+
+
+                    @if (@ViewBag.InwardItemViewModel.getField("fldRemarks1stLevel") != "")
+                    {
+                        <span class="red bold" style="float:left">
+                            Remarks: @ViewBag.InwardItemViewModel.getField("fldRemarks1stLevel")
+                        </span>
+
+                    }
+                    else if (@ViewBag.InwardItemViewModel.getField("fldRemarks2ndLevel") != "")
+                    {
+                        <span class="red bold" style="float:left">
+                            Remarks: @ViewBag.InwardItemViewModel.getField("fldRemarks2ndLevel")
+                        </span>
+
+                    }
+                    @if (ViewBag.TaskId.Trim() == "306550" || ViewBag.TaskId.Trim() == "306220" || ViewBag.TaskId.Trim() == "306230")
+                    {
+                        <span class="red bold" style="float:left">
+                            CCU Remarks: @ViewBag.InwardItemViewModel.getField("fldRemarks")
+                        </span>
+                        <br />
+
+                    }
+                    @if (ViewBag.TaskId.Trim() == "308110")
+                    {
+                        <span class="red bold" style="float:left">
+                            CCU Remarks: @ViewBag.InwardItemViewModel.getField("fldRemarks")
+                        </span>
+                        <br />
+                        <br />
+                        <span class="red bold" style="float:left">
+                            Refer Back Remarks: @ViewBag.InwardItemViewModel.getField("fldBranchAuthorizerReferRemarks")
+                        </span>
+
+                    }
+                    @if (ViewBag.TaskId.Trim() == "308120")
+                    {
+                        <br />
+                        <span class="red bold" style="float:left">
+                            CCU Remarks: @ViewBag.InwardItemViewModel.getField("fldRemarks")
+                        </span>
+                        <br />
+                        <br />
+
+                        <span class="red bold" style="float:left">
+                            Branch Remarks: @ViewBag.InwardItemViewModel.getField("BranchPendingRemarks")
+                        </span>
+                    }
+                    <br />
+                    @if (ViewBag.TaskId.Trim() != "308110" && ViewBag.TaskId.Trim() != "308120")
+                    {
+                        //if (ViewBag.InwardItemViewModel.getField("fldBranchRemarks") != "")
+                        if (ViewBag.InwardItemViewModel.getField("BranchPendingRemarks") != "")
+                        {
+                            <span class="red bold" style="float:left">
+                                Branch Remarks: @ViewBag.InwardItemViewModel.getField("BranchPendingRemarks")
+                                @*Branch Remarks:ViewBag.InwardItemViewModel.getField("fldBranchRemarks")*@
+                            </span>
+                        }
+                    }
+
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 text-left">
+                    <div class="r-lg-4 h4">
+                        @Html.Partial("InwardClearing/Base/_ChequeImageAction")
+
+                    </div>
+
+                    <div class="r-lg-6 h4">
+                        @Html.Partial("InwardClearing/Base/_ChequeImage")
+
+                    </div>
+                    <div class="r-lg-6">
+                        @Html.Partial("InwardClearing/Base/_MICRDetail")
+
+                    </div>
+                    <div class="r-lg-6">
+                        @Html.Partial("InwardClearing/Base/_ChequeImageBack")
+
+                        <br />
+                        @Html.Partial("InwardClearing/Base/_ChequeImageUV")
+
+                    </div>
+
+
+                    @*<tr>
+                            <td class="col-lg-2 ">
+                                Cheque Clearing Date :
+                                <span class="red bold">
+                                    @DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))
+                                </span>
+                            </td>
+                            <td class="col-lg-2">
+                                <span class="red bold ">Match Cases</span>
+                            </td>
+                            <td class="col-lg-2"></td>
+                        </tr>*@
+                </div>
+                <div class="col-sm-4">
+
+                    <div style="display:flex; align-items: center">
+                        <label for="Remarks">Remarks:</label>
+                        <input id="txtRemarks" name="txtRemarks" style="width:200px; height:30px; background-color:#f0f8ff; border:1px solid #787878" />
+                    </div>
+
+                    <div>
+                        <label for="ClearingDate">
+                            Cheque Clearing Date :
+                        </label>
+
+                        <span class="red bold">
+                            @DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))
+                        </span>
+
+                    </div>
+                    @*<img id="SSCard" alt="" src="@ViewBag.Base64String" style=" width:300px;" />*@
+
+
+                    @*<div id="signatureInfo" style="width:300px; height:200px; background-color:#f0f8ff;  border:1px solid #787878"></div>*@
+                    <!--SSCard Comment-->
+                    @if (ViewBag.dtSSCard != null)
+                    {
+
+                        <iframe id="SSCardshow" alt="" src="@ViewBag.Base64String" style="width: 300px;"></iframe>
+                        <span class="hidden"> (@i = 1)</span>
+
+                        foreach (var item in ViewBag.dtSSCard.Rows)
+                        {
+                            <div id="Sig-@i" class="sigclasshidden hidden">
+
+                                <iframe id="SSCard" alt="" src="data:image/png;base64,@item["SIG_TEXT"]" style="width: 300px;"></iframe>
+
+                            </div>
+                            i++;
+                        }
+
+
+                        <div id="signatureInfo" style="width: 300px; background-color: #f0f8ff; border: 1px solid #787878 ">
+                            <span class="hidden"> (@i = 1)</span>
+                            @foreach (var item in ViewBag.dtSSCard.Rows)
+                            {
+                                //btn - verification - border btn - verification
+                                <button type="button" id="btnSSCard" name="SSCardCurrentValue" value="@item["SPECIMEN_SEQ_NO"]" rel="Sig-@i" class="btn-sig btn-medium" style="margin-left: 5px; background: #0054AC; color: white;">@item["SPECIMEN_SEQ_NO"]</button>
+                                <br />
+                                i++;
+                            }
+                            @*<button type="button" id="btnSSCard2" data-action="" value="1211210277" class="btn-verification-border btn-verification btn-medium normal-submit-Verification" style="margin-left: 5px; background: #0054AC; color: white; ">1211210277</button>*@
+                        </div>
+
+
+                    }
+                    else
+                    {
+                <div id="signatureInfo" style="width: 300px; text-align:center;  background-color: #f0f8ff;  border: 1px solid #787878 ">
+                    <span class="red bold">Service is not working </span>
+                </div>
+
+                    }
+                            <br />
+                            @*<div style="display:flex; align-items: center">
+                    <input id="Remarks" style="width:200px; height:30px; background-color:#f0f8ff; border:1px solid #787878" />
+                    <button type="button" id="btnfetch" data-action="" value="Fetch" class="btn-verification-border btn-verification btn-medium normal-submit-Verification" style="margin-left :5px;display: inline-block;">Fetch</button>
+                </div>*@
+                            @*@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationAction"))
+                {
+                    if (CurrentUser.Account.isBranchUser())
+                    {
+                        @Html.Partial("InwardClearing/ICCSDefault/Partial/_BranchAction")
+                    }
+                    else
+                    {
+                        @Html.Partial("InwardClearing/ICCSDefault/Partial/_Action")
+                    }
+                }*@
+                        </div>
+
+                        <div class="col-sm-2">
+                            @Html.Partial("InwardClearing/Base/_IQADetail")
+                        </div>
+                    </div>
+
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 text-left">
+
+            </div>
+
+        </div>
+
+
+        @*<div class="row" style="height:240px">
+                <div class="col-sm-12">
+                    @Html.Partial("InwardClearing/Base/_SignatureList")
+                </div>
+            </div>*@
+
+        @*<div class="row">
+                <br />
+                @if (ViewBag.Taskid == "308110" || ViewBag.TaskId.Trim() == "308170" || ViewBag.TaskId.Trim() == "308180" || ViewBag.TaskId.Trim() == "308190" || ViewBag.TaskId.Trim() == "308200")
+                {
+                    <div class="col-sm-12 text-left">
+                        @Html.Partial("InwardClearing/ICCSDefault/Partial/_BranchAction2")
+                    </div>
+                }
+                else
+                {
+                    <div class="col-sm-12 text-left">
+                        @Html.Partial("InwardClearing/ICCSDefault/Partial/_Action3")
+                    </div>
+                }
+
+            </div>*@
+
+    </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            bindAndDrawBackImageFromImageController();
+            bindAndDrawUVImageFromImageController();
+            bindMultipleSignature();
+
+
+        });
+        function bindMultipleSignature() {
+            $('.btn-sig').click(function (e) {
+                e.preventDefault();
+                //$('.SSCardshow').removeClass('active');
+                $('#SSCardshow').addClass('hidden');
+                
+                  var content = $(this).attr('rel');
+                
+                //$('.active').removeClass('active');
+                //$('.sigclasshidden').addClass('hidden');
+                //$('#Sig-2').removeClass('hidden');
+
+                var signature = $('#' + content);
+                
+                $('.sigclasshidden').addClass('hidden');
+                console.log(signature);
+
+                signature.removeClass('hidden');
+                console.log(signature);
+
+                //signature.removeClass('hidden');
+                //$('#' + content).show();
+            });
+        }
+
+
+
+
+        function bindAndDrawBackImageFromImageController() {
+            $(".modify-cheque-btn-back").off("click.cheque")
+                .on("click.cheque", function () {
+                    var actionClicked = $(this).data("btnfor");
+                    var imgFolder = $("#imageFolder").val();
+                    var imgId = $("#imageIdBack").val();
+                    var imgState = $("#imageStateBack").val();
+                    if (actionClicked === "reset") {
+                        //Reset Button Clicked.
+                        //Remove All State
+                        imgState = "bw,";
+                    } else if (actionClicked === "front") {
+                        imgState = imgState.replace("back", "");
+                    } else if (actionClicked === "back") {
+                        imgState = imgState.replace("front", "");
+                    } else if (actionClicked === "bw") {
+                        imgState += "," + "front";
+                        imgState = imgState.replace("greyscale", "");
+                        imgState = imgState.replace("uv", "");
+                        imgState = imgState.replace("back", "");
+                    } else if (actionClicked === "greyscale") {
+                        imgState += "," + "front";
+                        imgState = imgState.replace("bw", "");
+                        imgState = imgState.replace("uv", "");
+                        imgState = imgState.replace("back", "");
+                    } else if (actionClicked === "uv") {
+                        imgState = imgState.replace("bw", "");
+                        imgState = imgState.replace("greyscale", "");
+                        imgState = imgState.replace("back", "");
+                    }
+
+                    //If state clicked found in previous state, remove it.
+                    //This make the button act as Toggle
+                    if (imgState.indexOf(actionClicked) >= 0) {
+                        imgState = imgState.replace("," + actionClicked, "");
+                    } else {
+                        //Add the state
+                        imgState += "," + actionClicked;
+                    }
+
+                    //Replace ,, with ,
+                    imgState = imgState.replace(",,", ",");
+
+
+                    //Remove image to display preload unless for big image
+                    if (actionClicked !== "large") {
+                        $('#chequeImageBack').attr("src", "")
+                    }
+
+                    //Get only unique states for the server
+                    var arrayState = _.uniq(imgState.split(","));
+                    //If large state found. Draw in modal instead
+                    if ($.inArray("large", arrayState) > -1) {
+                        //alert("d");
+                        var imageHolder = "<img id='bigImageHolder'></img>";
+                        bootbox.alert({
+                            size: "large",
+                            message: imageHolder,
+                        });
+                        $("#bigImageHolder").parents(".bootbox-body").addClass("image-loader");
+                        $('#bigImageHolder').attr("src", App.ContextPath + "Image/LargeCheque?imageFolder=" + imgFolder + "&imageId=" + imgId + "&imageState=" + arrayState.join());
+                        $("#bigImageHolder").parents('.modal-dialog').css({
+                            width: 'auto',
+                            height: 'auto',
+                            'max-height': '80%'
+                        });
+                    } else {
+                        //Draw the image accordingly
+                        //alert("c");
+                        $("#imageState").val(arrayState.join());
+
+                        $('#chequeImageBack').attr("src", App.ContextPath + "Image/Cheque?imageFolder=" + imgFolder + "&imageId=" + imgId + "&imageState=" + arrayState.join());
+
+                        //Bind zoomable image
+                        $("#chequeImageBack").off("click.cheque").on("click.cheque", function (e) {
+                            extendEzPlusClickFunction("chequeImageBack", initializeEzPlus)
+                        });
+                    }
+                });
+            //Trigger first draw of image
+            $("#backBtn").trigger('click');
+
+
+        }
+        function bindAndDrawUVImageFromImageController() {
+            $(".modify-cheque-btn-uv").off("click.cheque")
+                .on("click.cheque", function () {
+
+                    var actionClicked = $(this).data("btnfor");
+                    var imgFolder = $("#imageFolder").val();
+                    var imgId = $("#imageIdUV").val();
+
+                    var imgState = $("#imagestateUV").val();
+                    if (actionClicked === "reset") {
+                        //Reset Button Clicked.
+                        //Remove All State
+                        imgState = "bw,";
+                    } else if (actionClicked === "front") {
+                        imgState = imgState.replace("back", "");
+                    } else if (actionClicked === "back") {
+                        imgState = imgState.replace("front", "");
+                    } else if (actionClicked === "bw") {
+                        imgState += "," + "front";
+                        imgState = imgState.replace("greyscale", "");
+                        imgState = imgState.replace("uv", "");
+                        imgState = imgState.replace("back", "");
+                    } else if (actionClicked === "greyscale") {
+                        imgState += "," + "front";
+                        imgState = imgState.replace("bw", "");
+                        imgState = imgState.replace("uv", "");
+                        imgState = imgState.replace("back", "");
+                    } else if (actionClicked === "uv") {
+                        imgState = imgState.replace("bw", "");
+                        imgState = imgState.replace("greyscale", "");
+                        imgState = imgState.replace("back", "");
+                    }
+
+                    //If state clicked found in previous state, remove it.
+                    //This make the button act as Toggle
+                    if (imgState.indexOf(actionClicked) >= 0) {
+                        imgState = imgState.replace("," + actionClicked, "");
+                    } else {
+                        //Add the state
+                        imgState += "," + actionClicked;
+                    }
+
+                    //Replace ,, with ,
+                    imgState = imgState.replace(",,", ",");
+
+
+                    //Remove image to display preload unless for big image
+                    if (actionClicked !== "large") {
+                        $('#chequeImageUV').attr("src", "")
+                    }
+
+                    //Get only unique states for the server
+                    var arrayState = _.uniq(imgState.split(","));
+                    //If large state found. Draw in modal instead
+                    if ($.inArray("large", arrayState) > -1) {
+                        //alert("d");
+                        var imageHolder = "<img id='bigImageHolder'></img>";
+                        bootbox.alert({
+                            size: "large",
+                            message: imageHolder,
+                        });
+                        $("#bigImageHolder").parents(".bootbox-body").addClass("image-loader");
+                        $('#bigImageHolder').attr("src", App.ContextPath + "Image/LargeCheque?imageFolder=" + imgFolder + "&imageId=" + imgId + "&imageState=" + arrayState.join());
+                        $("#bigImageHolder").parents('.modal-dialog').css({
+                            width: 'auto',
+                            height: 'auto',
+                            'max-height': '80%'
+                        });
+                    } else {
+                        //Draw the image accordingly
+                        //alert("c");
+                        $("#imageState").val(arrayState.join());
+
+                        $('#chequeImageUV').attr("src", App.ContextPath + "Image/Cheque?imageFolder=" + imgFolder + "&imageId=" + imgId + "&imageState=" + arrayState.join());
+
+                        //Bind zoomable image
+                        $("#chequeImageUV").off("click.cheque").on("click.cheque", function (e) {
+                            extendEzPlusClickFunction("chequeImageBack", initializeEzPlus)
+                        });
+                    }
+                });
+            //Trigger first draw of image
+            $("#chequeUV").trigger('click');
+
+        }
+
+
+    </script>
+
+}
+
+
+
+
+
+
+

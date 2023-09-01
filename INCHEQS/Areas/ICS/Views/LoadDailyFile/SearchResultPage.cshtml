@@ -1,0 +1,172 @@
+﻿@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@*@Html.Partial("SearchPage/_InfoBox")*@
+
+@{
+    
+    var i = 0;
+}
+
+
+<table class="table table-striped table-hover table-bordered">
+
+
+    @if (ViewBag.Type == "Summary")
+    {
+        <thead>
+
+
+            <tr>
+                @Html.Partial("SearchPage/_TableHeaderColumns")
+                <td><b>Details</b></td>
+            </tr>
+
+
+
+        </thead>
+        <tbody>
+            @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+            {
+
+
+                <tr>
+                    @Html.Partial("SearchPage/_TableBodyColumnsNoLink", row)
+                    <td><button type="button" class="row-modal-submit-Posted-detail btn btn-default btn-xs" data-action="@Url.Action("GetLoadDailyFileList")">Details</button></td>
+                </tr>
+
+            }
+        </tbody>
+    }
+
+    else if (ViewBag.Type == "Submitted")
+    {
+        <thead>
+
+
+            <tr>
+                @Html.Partial("SearchPage/_TableHeaderColumns")
+
+            </tr>
+
+
+
+        </thead>
+        <tbody>
+            @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+            {
+
+                <tr>
+                    @Html.Partial("SearchPage/_TableBodyColumnsNoLink", row)
+
+                </tr>
+
+            }
+
+        </tbody>
+    }
+
+    else if (ViewBag.Type == "List")
+    {
+        if(ViewBag.FileListA != null && ViewBag.FileListB != null)
+        {
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>File Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var file in ViewBag.FileListA)
+                {
+                    <tr>
+                        <td><input type="checkbox" name="action" value="@file.fileNameOnly" checked/>
+                            @*<input type="hidden" name="action" value="@file.fileNameOnly" />*@
+                        </td>
+                        <td>@file.fileNameOnly</td>
+                    </tr>
+                }
+                @foreach (var file in ViewBag.FileListB)
+                {
+                    <tr>
+                        <td><input type="checkbox" name="action" value="@file.fileNameOnly" checked/>
+                            @*<input type="hidden" name="action" value="@file.fileNameOnly" />*@
+                        </td>
+                        <td>@file.fileNameOnly</td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            <thead>
+
+            </thead>
+            <tbody>
+                <tr>
+                    <td>File Not Found</td>
+                </tr>
+            </tbody>
+        }
+
+        @*<thead>
+
+
+            <tr>
+                @Html.Partial("SearchPage/_TableHeaderColumns")
+
+            </tr>
+
+
+
+        </thead>
+        <tbody>
+            @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+            {
+
+                <tr>
+                    @Html.Partial("SearchPage/_TableBodyColumns", row)
+
+                </tr>
+
+            }
+
+        </tbody>*@
+    }
+
+    @*@if (ViewBag.Type == "Ready")
+        {
+            <tfoot>
+                @Html.Partial("SearchPage/_TablePaginationFooter")
+            </tfoot>
+        }
+        else
+        {*@
+    <tfoot>
+        @Html.Partial("SearchPage/_TablePaginationFooterForInward")
+    </tfoot>
+    @*}*@
+</table>
+
+@if (ViewBag.Type == "Submitted")
+{
+    //<button data-action="@Url.Action("/Reject")" Class="btn btn-default secure-nav normal-submit-without-search @(CurrentUser.HasTask(TaskIdsOCS.BranchClearing.REJECT) ? "" : "hidden")">@Locale.CancelBatch</button>*@
+}
+<script type="text/javascript">
+    function Confirm() {
+        var input = $("<input />");
+        input.attr("type", "hidden").attr("name", "confirm_value");
+        if (confirm("Confirm Action?")) {
+            input.val("Yes");
+            return true;
+        } else {
+            input.val("No");
+            return false;
+        }
+        $("form")[0].appendChild(input[0]);
+    }
+</script>
+
+
+@Scripts.Render("~/bundles/SearchResultPage")
+<script src="~/Scripts/App/common.js"></script>

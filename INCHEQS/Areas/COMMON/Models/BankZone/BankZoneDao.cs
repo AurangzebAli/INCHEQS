@@ -1,0 +1,287 @@
+﻿using INCHEQS.Models;
+using INCHEQS.Resources;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
+using INCHEQS.Helpers;
+using INCHEQS.DataAccessLayer;
+using INCHEQS.Common;
+using INCHEQS.Security.SystemProfile;
+using INCHEQS.Security.SecurityProfile;
+using System.Text.RegularExpressions;
+using INCHEQS.Security;
+
+namespace INCHEQS.Areas.COMMON.Models.BankZone
+{
+
+    public class BankZoneDao : IBankZoneDao
+    {
+        private readonly ApplicationDbContext dbContext;
+        //private readonly ISystemProfileDao systemProfileDao;
+        //private readonly ISecurityProfileDao securityProfileDao;
+        public BankZoneDao(ApplicationDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+            //this.systemProfileDao = systemProfileDao;
+            //this.securityProfileDao = securityProfileDao;
+        }
+
+        public BankZoneModel GetBankZone(string bankzonecode)
+        {
+
+            DataTable resultTable = new DataTable();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            BankZoneModel zone = new BankZoneModel();
+            sqlParameterNext.Add(new SqlParameter("@fldBankZoneCode", bankzonecode));
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgBankZone", sqlParameterNext.ToArray());
+
+            if (resultTable.Rows.Count > 0)
+            {
+                DataRow row = resultTable.Rows[0];
+                zone.fldBankZoneCode = row["fldBankZoneCode"].ToString();
+                zone.fldBankZoneDesc = row["fldBankZoneDesc"].ToString();
+            }
+            else
+            {
+                zone = null;
+            }
+            return zone;
+        }
+
+        public BankZoneModel GetBankZoneTemp(string bankzonecode)
+        {
+
+            DataTable resultTable = new DataTable();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            BankZoneModel zone = new BankZoneModel();
+            sqlParameterNext.Add(new SqlParameter("@fldBankZoneCode", bankzonecode));
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgBankZoneTemp", sqlParameterNext.ToArray());
+
+            if (resultTable.Rows.Count > 0)
+            {
+                DataRow row = resultTable.Rows[0];
+                zone.fldBankZoneCode = row["fldBankZoneCode"].ToString();
+                zone.fldBankZoneDesc = row["fldBankZoneDesc"].ToString();
+                zone.fldApproveStatus = row["fldApproveStatus"].ToString();
+            }
+            else
+            {
+                zone = null;
+            }
+            return zone;
+        }
+
+        //Validate BankZone
+        public List<string> ValidateBankZone(FormCollection col, string action, string bankcode)
+        {
+
+            //string systemLoginAD = systemProfileDao.GetValueFromSystemProfileWithoutCurrentUser("LoginAD").Trim();
+            //string domain = securityProfileDao.GetSecurityProfile().fldUserAuthMethod;
+            //dynamic securityProfile = securityProfileDao.GetSecurityProfile();
+            List<string> err = new List<string>();
+
+            if ((action.Equals("Update")))
+            {
+                if ((col["fldBankZoneDesc"].Equals("")))
+                {
+                    err.Add(Locale.BankZoneDesccannotbeblank);
+                }
+            }
+            else if ((action.Equals("Create")))
+            {
+                BankZoneModel CheckUserExist = GetBankZone(col["fldBankZoneCode"]);
+                if ((CheckUserExist != null))
+                {
+                    err.Add(Locale.BankZoneCodeExist);
+                }
+                if ((col["fldBankZoneDesc"].Equals("")))
+                {
+                    err.Add(Locale.BankZoneDesccannotbeblank);
+                }
+                if ((col["fldBankZoneCode"].Equals("")))
+                {
+                    err.Add(Locale.BankZoneCodecannotbeblank);
+                }
+                else {
+                if (!(new Regex("^[a-zA-Z0-9]+$")).IsMatch(col["fldBankZoneCode"]))
+                {
+                        err.Add(Locale.BankZoneCodecannotbespecialcharacters);
+                }
+                }
+               
+            }
+                return err;
+
+        }
+
+        public bool UpdateBankZoneMaster(FormCollection col)
+        {
+
+            int intRowAffected;
+            bool blnResult = false;
+            /*dynamic fldBranchCode = "";
+            dynamic passwordChecker = "";
+            dynamic encryptedPassword = "";
+            dynamic verificationclass = "";
+            dynamic verificationlimit = "";
+            */
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldBankZoneCode", col["fldBankZoneCode"]));
+            sqlParameterNext.Add(new SqlParameter("@fldBankZoneDesc", col["fldBankZoneDesc"]));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", DateTime.Now.ToString("yyyy-MM-dd")));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", CurrentUser.Account.UserId));
+
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcuBankZoneMaster", sqlParameterNext.ToArray());
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+            return blnResult;
+        }
+        //CreateBankZoneMasterTemp(col, CurrentUser.Account.BankCode, arrResult, "Delete");
+        public void CreateBankZoneMasterTemp(FormCollection col, string bankcode, string crtUser, string Action)
+        {
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            dynamic bankCode = bankcode;/*CurrentUser.Account.BankCode*/
+            dynamic fldApproveStatus = "";
+            dynamic fldBankZoneCode = "";
+            dynamic fldCreateUserId = "";
+
+
+            if (Action == "Update")
+            {
+                Action = "Update";
+                fldApproveStatus = "U";
+                fldCreateUserId = crtUser;
+                fldBankZoneCode = col["fldBankZoneCode"].ToString();
+            }
+            else if (Action == "Create")
+            {
+                Action = "Create";
+                fldApproveStatus = "A";
+                fldBankZoneCode = col["fldBankZoneCode"].ToString();
+                fldCreateUserId = crtUser;
+            }
+            else {
+                Action = "Delete";
+                fldApproveStatus = "D";
+                fldBankZoneCode = crtUser;
+            }
+
+            sqlParameterNext.Add(new SqlParameter("@fldBankCode", bankCode));
+            sqlParameterNext.Add(new SqlParameter("@fldBankZoneCode", fldBankZoneCode));
+            sqlParameterNext.Add(new SqlParameter("@fldBankZoneDesc", col["fldBankZoneDesc"].ToString()));
+            sqlParameterNext.Add(new SqlParameter("@fldApproveStatus", fldApproveStatus));
+            sqlParameterNext.Add(new SqlParameter("@fldCreateUserId", fldCreateUserId));
+            sqlParameterNext.Add(new SqlParameter("@fldCreateTimeStamp", DateTime.Now.ToString("yyyy-MM-dd")));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", crtUser));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", DateTime.Now.ToString("yyyy-MM-dd")));
+            sqlParameterNext.Add(new SqlParameter("@Action", Action));
+
+            dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciBankZoneMasterTemp", sqlParameterNext.ToArray());
+
+        }
+
+        public bool DeleteBankZoneMaster(string bankzonecode, string bankcode)
+        {
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldBankZoneCode", bankzonecode));
+            sqlParameterNext.Add(new SqlParameter("@fldBankCode", bankcode));
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcdBankZoneMaster", sqlParameterNext.ToArray());
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+            return blnResult;
+        }
+
+        public bool CheckBankZoneMasterTempById(string bankzonecode, string bankcode)
+        {
+            DataTable resultTable = new DataTable();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldBankZoneCode", bankzonecode));
+            sqlParameterNext.Add(new SqlParameter("@fldBankCode", bankcode));
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgBankZoneMasterTempById", sqlParameterNext.ToArray());
+            if (resultTable.Rows.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool CreateBankZoneMaster(FormCollection col, string bankcode)
+        {
+
+            int intRowAffected;
+            bool blnResult = false;
+            
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldBankCode", bankcode));
+            sqlParameterNext.Add(new SqlParameter("@fldBankZoneCode", col["fldBankZoneCode"]));
+            sqlParameterNext.Add(new SqlParameter("@fldBankZoneDesc", col["fldBankZoneDesc"]));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", DateTime.Now.ToString("yyyy-MM-dd")));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", CurrentUser.Account.UserId));
+            sqlParameterNext.Add(new SqlParameter("@fldCreateUserId", CurrentUser.Account.UserId));
+            sqlParameterNext.Add(new SqlParameter("@fldCreateTimeStamp", DateTime.Now.ToString("yyyy-MM-dd")));
+
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciBankZoneMaster", sqlParameterNext.ToArray());
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+            return blnResult;
+        }
+
+        public void MoveToBankZoneMasterFromTemp(string bankzonecode, string Action)
+        {
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldBankZoneCode", bankzonecode));
+            sqlParameterNext.Add(new SqlParameter("@Action", Action));
+            dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciBankZoneMasterFromTemp", sqlParameterNext.ToArray());
+        }
+
+        public bool DeleteBankZoneMasterTemp(string bankzonecode)
+        {
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldBankZoneCode", bankzonecode));
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcdBankZoneMasterTemp", sqlParameterNext.ToArray());
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+            return blnResult;
+        }
+
+    }
+}

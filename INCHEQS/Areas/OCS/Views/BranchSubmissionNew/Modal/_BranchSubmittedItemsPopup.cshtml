@@ -1,0 +1,50 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+    ViewBag.Title = "SubmittedItemHistory";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_SubmittedItemHistory</title>
+</head>
+<body>
+    <div style="overflow-y: scroll; height:500px;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>UIC</th>
+                    <th>Check Digit</th>
+                    <th>Type</th>
+                    <th>Location</th>
+                    <th>Issuing Bank</th>
+                    <th>Issuing Branch</th>
+                    <th>Cheque Number</th>
+                    <th>Issuer Account Number</th>
+                    <th>Amount</th>
+                    <th>Creditor Account Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in ViewBag.BranchSubmittedItems.Rows)
+                {
+                    <tr>
+                        <td>@row["fldUIC"]</td>
+                        <td>@row["fldCheckDigit"]</td>
+                        <td>@row["fldType"]</td>
+                        <td>@row["fldLocation"]</td>
+                        <td>@row["fldBankCode"]</td>
+                        <td>@row["fldBranchCode"]</td>
+                        <td>@row["fldSerial"]</td>
+                        <td>@row["fldIssuerAccNo"]</td>
+                        <td>@StringUtils.FormatCurrency((row["fldAmount"] / 100).ToString())</td>
+                        <td>@row["fldPVaccNo"]</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

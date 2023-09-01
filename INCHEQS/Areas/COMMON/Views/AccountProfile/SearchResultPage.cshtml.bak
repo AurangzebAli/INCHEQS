@@ -1,0 +1,28 @@
+﻿@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using INCHEQS.Models.SearchPageConfig;
+@Html.Partial("SearchPage/_InfoBox")
+<table id="search-result-table" class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            @Html.Partial("SearchPage/_TableHeaderColumns")
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (List<DataField> row in ViewBag.SearchResult.TableData) {
+            <tr class="clickable-row-without-search" data-action="@Url.Action("Edit")">
+                @Html.Partial("SearchPage/_TableBodyColumns", row)
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        @Html.Partial("SearchPage/_TablePaginationFooter")
+    </tfoot>
+</table>
+
+<button data-action="@Url.Action("/Delete")" Class="btn btn-default normal-submit-delete-action-button  @(CurrentUser.HasTask(TaskIdsOCS.AccountProfile.DELETE) ? "" : "hidden")">@Locale.DeleteBtn</button>
+<button data-action="@Url.Action("/Create")" Class="btn btn-default secure-nav normal-submit-without-search @(CurrentUser.HasTask(TaskIdsOCS.AccountProfile.CREATE) ? "" : "hidden")">@Locale.NewBtn</button>
+<button class="btn btn-default modal-print" data-action="@Url.Content("~/ICS/PrintReport?p=page&tId="+TaskIds.InternalBranch.INDEX)" data-title="Print">@Locale.Print</button>
+<button class="btn btn-default modal-print" data-action="@Url.Content("~/ICS/PrintReport?p=all&tId="+TaskIds.InternalBranch.INDEX)" data-title="Print All">@Locale.PrintAll</button>
+
+@Scripts.Render("~/bundles/SearchResultPage")

@@ -1,0 +1,78 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("Update", "ReturnCode", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.MSReturnCodeMaintenance</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <TBODY>
+                <TR>
+                    <Th>@Locale.ReturnCode</Th>
+                    @if (ViewBag.ReturnCode != null)
+                    {
+                        <td>
+                            <input type="hidden" name="txtRejectCode" id="txtRejectCode" value="@ViewBag.ReturnCode["fldRejectCode"]">@ViewBag.ReturnCode["fldRejectCode"]
+                        </td>
+                    }
+                </TR>
+
+                <TR>
+                    <Th>@Locale.ReturnDescription</Th>
+                    @if (ViewBag.ReturnCode != null)
+                    {
+
+                        <td>
+                            <input type="text" name="txtRejectDesc" id="txtRejectDesc" value="@ViewBag.ReturnCode["fldRejectDesc"]">
+                            <span class="red-star"> *</span>
+                        </td>
+                    }
+                </TR>
+
+                <TR>
+                    <Th>@Locale.ReturnType</Th>
+                    <td>
+                        <select class="default" name="txtType" id="txtType" maxlength="20">
+                            @foreach (var row in ViewBag.RejectTypes.Rows)
+                            {
+                                <option value="@row["fldRejectType"]" @(ViewBag.ReturnCode["fldType"] == row["fldRejectType"] ? "selected" : "")>
+                                    @row["fldRejectType"]
+                                </option>
+                            }
+                    </td>
+
+                </TR>
+
+                <tr style="DISPLAY: none">
+                    <th>@Locale.UnpostedEntry</th>
+
+                    <td><input checked type="checkbox" id="txtUnposted" name="txtUnposted" value="1"></td>
+
+                </tr>
+
+                  @*<TR>
+                    <Th>@Locale.WaiveCharges</Th>
+                    <td>
+                        <select class="default" id="txtCharges" name="txtCharges">
+                            <option value="1" @(ViewBag.ReturnCode["fldPCHCCode"] == "014" ? "selected" : "")>@Locale.NO</option>
+                            <option value="0" @(ViewBag.ReturnCode["fldPCHCCode"] == "024" ? "selected" : "")> @Locale.YES</option>
+                        </select>
+                    </td>
+                </TR>*@
+
+                <TR>
+                    <TD>
+                        <button id=btnsave alt=Save type="submit" value=Save name=btnSave class="btn btn-default @(CurrentUser.HasTask(TaskIds.ReturnCode.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+
+                        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.ReturnCode.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+                    </TD>
+
+                </TR>
+            </TBODY>
+        </table>
+
+    </div>
+}

@@ -1,0 +1,25 @@
+﻿@using System.Data;
+@{
+    ViewBag.Title = "ChequeRetrieverPage";
+    Layout = "~/Views/Shared/_LayoutChequeVerification.cshtml";
+}
+<div>
+    <div class="row mTop10">
+        <div class="col-sm-6">
+            <span class="h4">Inward Data</span>
+        </div>
+        <div class="col-sm-6 text-right">
+            @Html.Partial("InwardClearing/Base/_ChequeControlAction")
+        </div>
+    </div><hr />
+    <div class="row">
+        <div class="col-sm-8">
+            @Html.Partial("InwardClearing/Base/_ChequeDetail")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            @Html.Partial("InwardClearing/Base/_ChequeImage")
+        </div>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "CreditAccount", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.CreditAccountEdit</h4>
+
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.CreditAccountColumn</th>
+
+                    <td>
+                        <input type="hidden" value="@ViewBag.CreditAccount.fldCreditAccountId" name="fldCreditAccountId" />@ViewBag.CreditAccount.fldCreditAccountNumber
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.ClearingType</th>
+
+                    <td>
+                        <select class="default" maxlength="20" name="fldClearingType" id="fldClearingType">
+                            <option value=""> </option>
+                            @foreach (var item in @ViewBag.Clearing)
+                            {
+                                @*<option value="@item.fldInternalBranchId">@item.fldCBranchId,@item.fldIBranchId - @item.fldBranchDesc</option>*@
+                                <option value="@item.fldClearingValue" @(@ViewBag.CreditAccount.fldClearingType.Trim() == item.fldClearingValue.Trim() ? "selected" : "")>
+                                    @item.fldClearingValue,@item.fldClearingType
+                                </option>
+                            }
+                        </select>
+
+                        <span class="red-star">*</span>
+                        @*<span class="red-star" id="BranchCoderedstar" name="BranchCoderedstar" style="visibility:hidden;">*</span>*@
+
+                        @*<input style="width:250px" type="text" name="fldClearingType" value="" autocomplete="off" maxlength="100" />
+        <span class="red-star">*</span>*@
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.StateCode</th>
+
+                    <td>
+                        <select class="default" maxlength="20" name="fldStateCode" id="fldStateCode">
+                            <option value=""> </option>
+                            @foreach (var item in @ViewBag.StateCode)
+                            {
+                                @*<option value="@item.fldInternalBranchId">@item.fldCBranchId,@item.fldIBranchId - @item.fldBranchDesc</option>*@
+                                <option value="@item.fldStateCode" @(@ViewBag.CreditAccount.fldStateCode.Trim() == item.fldStateCode.Trim() ? "selected" : "")>
+                                    @item.fldStateCode,@item.fldStateDesc
+                                </option>
+                            }
+                        </select>
+
+
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+
+
+            </tbody>
+        </table>
+        <button type="submit" data-action="@Url.Action("/UPDATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIds.CreditAccount.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <button data-action="@Url.Action("/Edit")" Class="btn btn-default secure-nav normal-submit-without-search @(CurrentUser.HasTask(TaskIds.CreditAccount.EDIT) ? "" : "hidden")">@Locale.Reset</button>
+        <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.CreditAccount.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+<script src="~/Scripts/App/app.js"></script>

@@ -1,0 +1,101 @@
+﻿@using INCHEQS.Resources
+<html>
+<head>
+    <style>
+        .image {
+            position: relative;
+        }
+
+        .ChequAmountEntry {
+            position: absolute;
+            margin-left: 400px;
+            margin-top: -280px;
+            width: 270px;
+            resize: both;
+        }
+
+        #BoxChequeAmountEntrydiv {
+            position: absolute;
+            z-index: 9;
+            background-color: #f1f1f1;
+            border: 1px solid #d3d3d3;
+            text-align: center;
+        }
+
+        #BoxChequeAmountEntryheader {
+            padding: 10px;
+            cursor: move;
+            z-index: 10;
+            background-color: #2196F3;
+            color: #fff;
+            text-align: center;
+            line-height: 150%;
+            font-size: 18px;
+            /*position: relative;*/
+        }
+
+        #BoxTransparentdiv {
+            width:365px;
+            border: 1px;
+            text-align: right;
+            padding: 0px;
+            background-color: transparent !important;
+            outline-style: solid;
+            left: 316px;
+            bottom: 90px;
+            position: absolute;
+        }
+
+        #TextBoxdiv {
+            background-color: yellow;
+            border: 1px;
+        }
+
+        #ContainerDiv {
+            background-color: yellow;
+            border: 1px;
+            height: 1000%;
+            min-height: 1000%;
+        }
+
+        #ContainerEmptyDiv {
+            min-height: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chequeImageContainer">
+        @*<button type="button" data-btnfor="reset" class="modify-cheque-btn btn btn-default btn-s">@Locale.Reset</button>
+            <button type="button" id="frontBtn" data-btnfor="front" class="modify-cheque-btn btn btn-default btn-s">@Locale.Front</button>
+            <button type="button" data-btnfor="back" class="modify-cheque-btn btn btn-default btn-s">@Locale.Back</button> &nbsp; &nbsp; &nbsp;
+            <button type="button" data-btnfor="bw" class="modify-cheque-btn btn btn-default btn-s">Black White</button>
+            <button type="button" data-btnfor="greyscale" class="modify-cheque-btn btn btn-default btn-s">Greyscale</button>
+
+            <button type="button" data-btnfor="rotate" class="modify-cheque-btn btn btn-default btn-s">@Locale.Rotate</button>
+            <button type="button" data-btnfor="invert" class="modify-cheque-btn btn btn-default btn-s">@Locale.Invert</button>
+            <button type="button" data-btnfor="large" class="modify-cheque-btn btn btn-default btn-s">@Locale.BigImage</button>*@
+        <hr />
+        @*<div id="imageHolder" class="cheque-img rotated180">
+                <input type="hidden" id="itemId" name="imageItemId" value="@ViewBag.OutwardItemViewModel.getField("fldItemID")" />
+                <input type="hidden" id="imageFolder" name="imageFolder" value="@ViewBag.OutwardItemViewModel.getFormatImageFolderPath()" />
+                <input type="hidden" id="imageId" name="imageId" value="@ViewBag.OutwardItemViewModel.getField("fldGFrontIMG")" />
+                <input type="hidden" id="imageState" name="imageState" value="greyscale" />
+                <input type="hidden" id="System" name="System" value="OCS" />
+                <img id="chequeImage" class="chequeImage" />
+            </div>*@
+        <script src="@Url.Content("~/Scripts/OCS/ChequeAmountEntry.js")" type="text/javascript"></script>
+        <div id="imageHolder" class="image">
+
+            <input type="hidden" id="itemId" name="imageItemId" value="@ViewBag.OutwardItemViewModel.getField("flditemid")" />
+            <input type="hidden" id="imageFolder" name="imageFolder" value="@ViewBag.OutwardItemViewModel.getFormatImageFolderPath()" />
+            <input type="hidden" id="imageId" name="imageId" value="@ViewBag.OutwardItemViewModel.getField("flduic")" />
+            <input type="hidden" id="imageState" name="imageState" value="greyscale" />
+            <input type="hidden" id="System" name="System" value="OCS" />
+            <img id="chequeImage" class="chequeImage" />
+
+        </div>
+
+
+    </div>
+</body>
+</html>

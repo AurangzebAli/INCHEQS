@@ -1,0 +1,55 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using INCHEQS.Common;
+@using (Html.BeginForm("Update", "HighRiskAccount", FormMethod.Post, new { @Class = "secure-form" }))
+{
+	@Html.AntiForgeryToken()
+
+	<div class="form-horizontal">
+		<h4>Maintenance > Account Setting > High Risk Account Profile (Edit)</h4>
+		<hr />
+		<span class="red"><i>*@Locale.RequiredField</i></span>
+		<table class="table form-table table-no-border">
+			<tbody>
+
+				<tr>
+					<th>Internal Branch Code</th>
+					<td>
+						<input type="text" value="@ViewBag.HighRiskAccount.fldInternalBranchCode" name="fldInternalBranchCode" disabled />
+						<span class="red-star"> *</span>
+					</td>
+				</tr>
+
+				<tr>
+					<th>Account Number</th>
+					<td>
+						<input type="text" value="@ViewBag.HighRiskAccount.fldHighRiskAccount" name="fldHighRiskAccount" disabled />
+						<input type="hidden" value="@ViewBag.HighRiskAccount.fldHighRiskAccount" name="fldHighRiskAccount" />
+						<span class="red-star"> *</span>
+					</td>
+				</tr>
+
+				<tr>
+					<th>Amount</th>
+					<td>
+						@*<input type="text" value="@String.Format("{0:n}", ViewBag.HighRiskAccount.fldHighRiskAmount)" name="fldHighRiskAmount" />*@
+						@*@String.Format("{0:n}", ViewBag.findVerificationLimit["fld1stAmt"])*@
+						<input type="text" value="@StringUtils.FormatCurrency(@ViewBag.HighRiskAccount.fldHighRiskAmount)" name="fldHighRiskAmount" id="fldHighRiskAmount"/>
+						<span class="red-star"> *</span>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+		<button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.HighRiskAccount.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+		<a href="@Url.Action("Edit", new {HighRiskParam = @ViewBag.HighRiskAccount.fldHighRiskAccount})" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.HighRiskAccount.INDEX) ? "" : "hidden")">@Locale.btnReset</a>
+		<a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.HighRiskAccount.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+	</div>
+	<script type="text/javascript">
+		$(function () {
+			$('#fldHighRiskAmount').maskMoney({ allowZero: true });
+		})
+
+	</script>
+}

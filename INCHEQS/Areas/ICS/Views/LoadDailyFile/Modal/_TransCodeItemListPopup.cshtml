@@ -1,0 +1,38 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+    ViewBag.Title = "Imported File Details";
+    var i = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Imported File Details</title>
+</head>
+<body>
+    <div style="overflow-y: scroll; height:500px;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Transaction Code</th>
+                    <th>Transaction Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in ViewBag.FileList.Rows)
+                {
+                <tr>
+                    <td>@{i++;} @i</td>
+                    <td>@row["fldTransCode"]</td>
+                    <td>@row["fldTransCodeDesc"]</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

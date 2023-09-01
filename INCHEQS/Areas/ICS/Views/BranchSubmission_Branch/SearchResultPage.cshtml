@@ -1,0 +1,20 @@
+﻿@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Confirm", "BranchSubmission", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+<div class="form-horizontal">
+    <h4>Branch - Branch Submisson</h4>
+    <hr />
+    <table class="table form-table table-no-border">
+        <TBODY>
+            <tr>
+                <th>Cheque Clearing Date</th>
+                <td><input type="text" value="@ViewBag.LoadDate" id="ClearingDate" name="ClearingDate" class="form-date" style="height:25px" /></td>
+            </tr>
+        </TBODY>
+    </table>
+    <button type="submit" data-action="@Url.Action("Confirm")" Class="btn btn-default normal-submit-save-action-button">Confirm</button>
+</div>
+ }
+        

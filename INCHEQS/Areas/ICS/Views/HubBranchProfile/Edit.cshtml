@@ -1,0 +1,63 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "HubBranchProfile", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Locale.HQCenterProfileMaintenance</h4>
+        <hr />
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.HubId</th>
+                    <td>
+                        <input type="hidden" value="@ViewBag.HubBranchIds["fldHubId"]" name="hubId" />@ViewBag.HubBranchIds["fldHubId"]
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.HubDescription</th>
+                    <td>
+                        <input type="text" value="@ViewBag.HubBranchIds["fldHubDesc"]" name="hubDesc" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form-select">
+                            <div>
+                                <b>@Locale.BranchAvailableList</b><br>
+                                <select multiple="multiple" class="form-multiple select-from">
+                                    @foreach (var item in ViewBag.AvailableBranchList.Rows) {
+                                        <option value="@item["fldBranchCode"]" >@item["fldStateDesc"] - @item["fldBranchCode"] - @item["fldBranchDesc"]</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-move">
+                                <br />
+                                <p>
+                                    <input type="button" title="select all" class="btn btn-default btn-move addAll" value="&gt;&gt;">
+                                </p>
+                                <p><input type="button" title="select" class="btn btn-default btn-move addOne" value="&gt;"></p>
+                                <p><input type="button" title="remove" class="btn btn-default btn-move rmOne" value="&lt;"></p>
+                                <p><input type="button" title="remove all" class="btn btn-default btn-move rmAll" value="&lt;&lt;"></p>
+                            </div>
+                            <div>
+                                <b>@Locale.BranchSelectedList</b><br>
+                                <select multiple="multiple" class="form-multiple select-to" name="selectedhubbranch">
+                                    @foreach (var item in ViewBag.SelectedBranchList.Rows) {
+                                        <option value="@item["fldBranchCode"]">@item["fldStateDesc"] - @item["fldBranchCode"] - @item["fldBranchDesc"]</option>
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.HubBranchProfile.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav" @(CurrentUser.HasTask(TaskIds.HubBranchProfile.INDEX) ? "" : "hidden")>@Locale.BackBtn</a>
+    </div>
+}
+
+<script src="~/Scripts/App/multiSelectList.js"></script>

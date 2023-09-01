@@ -1,0 +1,40 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("Update", "PullOutReason", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.PullOutReasonMaintenance</h4>
+        <hr/>
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <TBODY>
+                @if (ViewBag.PullOutReasonId.Rows[0] != null) {
+                <TR>
+                    <Th>@Locale.Pulloutid</Th>
+                   
+                        <td>
+                            <input type="hidden" name="pullOutReasonID" value="@ViewBag.PullOutReasonId.Rows[0]["fldPullOutID"]">@ViewBag.PullOutReasonId.Rows[0]["fldPullOutID"]
+                        </td>
+                    
+                </TR>
+
+                <TR>
+                    <Th>@Locale.Pulloutreason</Th>
+                    
+
+                        <td>
+                            <input type="text" name="pullOutDesc" value="@ViewBag.PullOutReasonId.Rows[0]["fldPullOutReason"]">
+                            <span class="red-star"> *</span>
+                        </td>
+                    
+                </TR>
+                }
+            </TBODY>
+        </table>
+        <button id=btnsave alt=Save type="submit" value=Save name=btnSave class="btn btn-default @(CurrentUser.HasTask(TaskIds.PullOutReason.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.PullOutReason.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+
+    </div>
+}

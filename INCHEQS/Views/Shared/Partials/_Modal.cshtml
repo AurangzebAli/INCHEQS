@@ -1,0 +1,86 @@
+﻿@using INCHEQS.Resources
+
+<!-- Modal -->
+
+@*<style>
+    .modal {
+        /* this will hide the scrollbar in internet explorers */
+        -ms-overflow-style: none;
+    }
+    /* this will hide the scrollbar in internet explorers */
+    ::-webkit-scrollbar {
+        display: none;
+    }
+</style>*@
+
+<div id="myModal" class="modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content" id="modalContent">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Locale.ModalHeader</h4>
+            </div>
+            <div class="modal-body">
+                <p>Some text in the modal.</p>
+            </div>
+
+
+
+            <div class="modal-footer">
+                
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Locale.btnClose</button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div id="emptyModal" class="modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>Some text in the modal.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="logout_popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <div style="padding-top: 10px;">
+                        <h4>Your session is about to expire!</h4>
+                        <p style="font-size: 15px;">You will be logged out in <span id="timer" style="display: inline;font-size: 30px;font-weight: bold">10</span> seconds.</p>
+                        <p style="font-size: 15px;">Do you want to stay signed in?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="text-center" style="margin: 20px;">
+                @*<a href="javascript:;" onclick="resetTimer()" class="btn btn-primary" aria-hidden="true">Yes, Keep me signed in</a>
+                    <a href="javascript:;" onclick="signOut()" class="btn btn-danger" aria-hidden="true">No, Sign me out</a>*@
+                <btn onclick="resetTimer()" class="btn btn-primary" aria-hidden="true">Yes, Keep me signed in</btn>
+                <btn onclick="signOut()" class="btn btn-danger" aria-hidden="true">No, Sign me out</btn>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(function () {
+
+        $('.modal').draggable({
+            handle: ".modal-content",
+            scroll: true
+        });
+
+    });
+</script>

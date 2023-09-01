@@ -1,0 +1,96 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+<table class="table form-table table-no-border">
+    <tr>
+        <th>@Locale.ChequeClearingDate</th>
+        <td>@DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))</td>
+    </tr>
+    <tr>
+        <th>UIC</th>
+        <td>@ViewBag.InwardItemViewModel.getField("fldUIC")</td>
+    </tr>
+    <tr>
+        <th>Account Number</th>
+        <td>@ViewBag.InwardItemViewModel.getField("fldAccountNumber")</td>
+    </tr>
+    <tr>
+        <th>Cheque Number</th>
+        <td>@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo")</td>
+    </tr>
+    <tr>
+        <th>Paying Bank</th>
+        <td>@ViewBag.InwardItemViewModel.getField("fldPreBankCode")</td>
+    </tr>
+
+    <tr>
+        <th>Presenting Bank</th>
+        <td>@ViewBag.InwardItemViewModel.getField("fldPreBankDesc")</td>
+    </tr>
+    <tr>
+        <th>@Locale.Amount</th>
+        <td>@StringUtils.FormatCurrency(ViewBag.InwardItemViewModel.getField("fldAmount"))</td>
+    </tr>
+    <tr>
+        <th>NC Flag</th>
+ @if (ViewBag.NCFFlag == "")
+        {
+            <td>NIL</td>
+        }
+        else if (ViewBag.NCFFlag == "0")
+        {
+            <td>@ViewBag.NCFFlag - @ViewBag.NCFDesc</td>
+
+        }
+        else
+        {
+            <td>@ViewBag.NCFFlag - @ViewBag.NCFDesc</td>
+
+        }
+    </tr>
+    <tr>
+        <th>NC Flag2</th>
+        @if (ViewBag.NCFFlag2 == "")
+        {
+            <td>NIL</td>
+        }
+        else if (ViewBag.NCFFlag2 == "0")
+        {
+            <td>@ViewBag.NCFFlag2 - @ViewBag.NCFDesc2</td>
+
+        }
+        else
+        {
+            <td>@ViewBag.NCFFlag2 - @ViewBag.NCFDesc2</td>
+
+        }
+    </tr>
+    <tr>
+        <th>Host Reject</th>
+                @if (ViewBag.RejectStatus1 != "" && ViewBag.RejectStatus2 != "")
+                {
+                    <td>@ViewBag.RejectStatus1 - @ViewBag.StatusDesc,@ViewBag.RejectStatus2 - @ViewBag.StatusDesc2</td>
+                }
+                else if (ViewBag.RejectStatus1 != "")
+                {
+                    <td>@ViewBag.RejectStatus1 - @ViewBag.StatusDesc</td>
+
+                }
+                else if (ViewBag.RejectStatus2 != "")
+                {
+                    <td>@ViewBag.RejectStatus2 - @ViewBag.StatusDesc2</td>
+
+                }
+                else if (ViewBag.RejectStatus1 == "" && ViewBag.RejectStatus2 == "")
+                {
+                    <td>NIL</td>
+                }
+    </tr>
+    <tr>
+        <th>Return Reason</th>
+        <td>
+            Return Code: @ViewBag.InwardItemViewModel.getField("fldRejectCode") - @ViewBag.InwardItemViewModel.getField("fldRejectDesc") <br />
+            Remarks: @ViewBag.InwardItemViewModel.getField("fldRemarks")
+        </td>
+
+    </tr>
+</table>

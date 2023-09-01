@@ -1,0 +1,33 @@
+﻿@using INCHEQS.Resources
+<div id="chequeImageContainer">
+    <button type="button" id="ResetBtn" data-btnfor="reset" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Reset</button>
+    @if (ViewBag.taskid == "311113" && ViewBag.OutwardItemViewModel.getField("flditemtype") == "V")
+    {
+        <button type="button" id="frontBtn" data-btnfor="back" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Front</button>
+    }
+    else
+    {
+        <button type="button" id="frontBtn" data-btnfor="front" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Front</button>
+    }
+    <button type="button" id="BackBtn" data-btnfor="back" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Back</button> 
+    @*@if (ViewBag.TaskRole == "ChequeAmountEntry")
+    {
+        <button type="button" id="frontBtn" data-btnfor="front" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Front</button>
+        <button type="button" data-btnfor="back" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Back</button>
+    }
+    @if (ViewBag.TaskRole == "ChequeAccountEntry")
+    {
+        <button type="button" data-btnfor="front" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Front</button>
+        <button type="button" id="frontBtn" data-btnfor="back" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Back</button>
+    }*@
+
+    <button type="button" id="bwBtn" data-btnfor="bw" class="modify-cheque-btn btn btn-default btn-xs">Black White</button>
+    <button type="button" id="greyscaleBtn" data-btnfor="greyscale" class="modify-cheque-btn btn btn-default btn-xs">Greyscale</button>
+    <button type="button" id="uvBtn" data-btnfor="uv" class="modify-cheque-btn btn btn-default btn-xs">UV</button>
+    <button type="button" id="rotateBtn" data-btnfor="rotate" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Rotate</button>
+    <button type="button" id="invertBtn" data-btnfor="invert" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Invert</button>
+    <button type="button" id="largeBtn" data-btnfor="large" class="modify-cheque-btn btn btn-default btn-xs">@Locale.BigImage</button>
+
+    <hr />
+
+</div>

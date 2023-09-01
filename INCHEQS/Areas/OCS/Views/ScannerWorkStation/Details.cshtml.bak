@@ -1,0 +1,128 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using (Html.BeginForm("Update", "ScannerWorkStation", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+ <div class="form-horizontal">
+
+        <h4>@Locale.ScannerWorkStationEdit</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <TBODY>
+                <TR>
+                    <Th>@Locale.WorkstationScannerId</Th>
+
+                    <TD>
+                        <input type="text" name="scannerId" style="border: none" value="@ViewBag.ScannerId.PadLeft(3, '0')" readonly>
+                    </TD>
+
+                </TR>
+                <TR>
+                    <Th>@Locale.WorkstationScannerName</Th>
+                    <td>
+                        <input type="hidden" name="scannerTypeH" value="@ViewBag.ScannerType">
+                        <select class="default" name="scannerType" id="scannerType" maxlength="20" disabled>
+
+                            <option>
+                                @ViewBag.ScannerBranchName
+                            </option>
+
+                        </select>
+                    </td>
+                </TR>
+
+                <TR style="display:none">
+                    <Th>@Locale.WorkstationScannerName</Th>
+
+                    <TD>
+                        <input type="text" name="scannerType" style="border: none" value="@ViewBag.ScannerType" readonly>
+                    </TD>
+                </TR>
+
+                <TR>
+                    <Th>@Locale.WorkstationScannerBranch</Th>
+
+                    <td>
+                        <input type="hidden" name="branchIdH" value="@ViewBag.BranchId">
+                        <select class="default" name="branchId" id="branchId" maxlength="20" disabled>
+                            <option value="@ViewBag.BranchId">@ViewBag.BranchId - @ViewBag.ScannerDesc</option>
+                            @foreach (var row in ViewBag.BranchDetails.Rows)
+                            {
+                                <option value="@row["fldbranchid"]">
+                                    @row["fldbranchid"] - @row["fldBranchDesc"]
+                                </option>
+                            }
+                        </select>
+                    </td>
+                </TR>
+
+                <TR style="display:none">
+                    <Th>@Locale.WorkstationScannerBranch</Th>
+
+                    <TD>
+                        <input type="text" name="branchId" style="border: none" value="@ViewBag.BranchId" readonly>
+                    </TD>
+                </TR>
+
+                <TR>
+                    <Th>@Locale.WorkstationScannerLocation</Th>
+
+                    <td>
+                        <span name="location"></span>
+                    </td>
+                </TR>
+                <TR>
+                    <Th>@Locale.WorkstationScannerBank</Th>
+
+                    <td>
+                        <span name="bankcode"></span>
+                    </td>
+                </TR>
+                <TR>
+                    <Th>@Locale.WorkstationScannerBranchCode</Th>
+
+                    <td>
+                        <span name="branchcode"></span>
+                    </td>
+                </TR>
+                <TR>
+                    <Th>Mac Address 1</Th>
+
+                    <TD>
+                        <input type="text" name="macAdd1" id="macAdd1" maxlength="150" value="@ViewBag.Mac1">
+                        <span class="red-star">*</span>
+                    </TD>
+                </TR>
+                <TR>
+                    <Th>Mac Address 2</Th>
+
+                    <TD>
+                        <input type="text" name="macAdd2" id="macAdd2" maxlength="150" value="@ViewBag.Mac2">
+                    </TD>
+                </TR>
+                <TR>
+                    <Th>Mac Address 3</Th>
+
+                    <TD>
+                        <input type="text" name="macAdd3" id="macAdd3" maxlength="150" value="@ViewBag.Mac3">
+                    </TD>
+                </TR>
+                <TR>
+                    <Th>@Locale.Active</Th>
+
+                    <TD>
+                        <input type="checkbox" name="chkActive" id="chkActive" @ViewBag.Active> YES
+                    </TD>
+                </TR>
+            </TBODY>
+        </table>
+
+        <button type="submit" data-action="@Url.Action("/UPDATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIds.ScannerWorkStation.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.ScannerWorkStation.INDEX) ? "" : "disabled")">@Locale.btnClose</a>
+    </div>
+
+}
+
+@Scripts.Render("~/bundles/BankBranchMaintain")

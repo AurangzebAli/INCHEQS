@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Report Page";
+}
+@using INCHEQS.Resources
+@using INCHEQS.Common
+<form id="searchForm" action="@Url.Action("GenerateReport")" method="POST" class="form-inline" target="_blank">
+    <div id="search-fields-section">
+        <h4>Reports > OCS > @ViewBag.SearchPage.PageTitle</h4>
+        <hr />
+        <div class="row">
+            <div class="form-horizontal col-sm-2">
+                <label style="font-size-adjust:initial">Capturing Date</label>
+            </div>
+            <div class="form-horizontal col-sm-6">
+                <strong style="font-size-adjust:initial"> From:</strong>
+                <input type="text" value="@ViewBag.CapturingDate" id="fldstartDate" name="fldStartDate" class="form-date" style="height:25px" />
+                <strong style="font-size-adjust:initial"> To:</strong>
+                <input type="text" value="@ViewBag.CapturingDate" id="fldendDate" name="fldEndDate" class="form-date" style="height:25px" />
+            </div>
+        </div>
+        
+        @*<div class="form-horizontal"> 
+                       
+            <label style="font-size-adjust:initial">Capturing Date      </label>
+            &nbsp;&nbsp;&nbsp;&emsp;  <strong style="font-size-adjust:initial"> From:</strong>
+            <input type="text" value="@ViewBag.CapturingDate" id="fldstartDate" name="fldStartDate" class="form-date" style="height:25px" /> 
+
+            <strong style="font-size-adjust:initial"> To:</strong>
+            <input type="text" value="@ViewBag.CapturingDate" id="fldendDate" name="fldEndDate" class="form-date" style="height:25px" />
+        </div>*@
+        <div class="form-horizontal">
+                @Html.Partial("SearchPage/_GenericFields")
+        </div>
+        <br />
+            <div class="row">
+                <div class="form-group col-sm-2">
+                    <input type="hidden" name="bankDesc" value="@ViewBag.CurrentUser.BankDesc">
+                    <input type="hidden" name="bankCode" value="@ViewBag.CurrentUser.BankCode">
+                    <input type="hidden" name="reportTitle" value="@ViewBag.SearchPage.PageTitle">
+                    <label style="font-size-adjust:initial">@Locale.ReportType       </label>
+                </div>
+                <div class="form-group col-sm-1">
+                    <select name="reportType">
+                        @foreach (var reportType in ReportType.Extensions)
+                        {
+                            <option value="@reportType.Key">@reportType.Key</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <hr />
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">@Locale.Generate</button>
+            </div>
+        </div>
+</form>
+

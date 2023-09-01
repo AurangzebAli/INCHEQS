@@ -1,0 +1,214 @@
+﻿@using INCHEQS.Resources
+@using (Html.BeginForm("SaveCreate", "ICSProcessDate", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken();
+    <h4>Utilities - ICS Process Date</h4>
+    <div class="row">
+        <hr />
+        @*@Html.Partial("SearchPage/_GenericFieldsForm")*@
+    </div>
+    <hr />
+    @*<div class="form-group">
+            <button type="submit" class="btn btn-default" data-action="@Url.Action("SearchResultPage")">@Locale.Search</button>
+        </div>*@
+    <div>
+        <table>
+            <tr>
+                <th>Current ICS Process Date</th>
+                <td>:<input type="text" readonly="readonly" id="currentDate" name="currentDate" value="@Convert.ToDateTime(ViewBag.CurrentDate).ToString("dd-MM-yyyy")">@*@ViewBag.CurrentDate*@</td>
+            </tr>
+
+            <tr>
+                <th>Next ICS Process Date</th>
+                <td>:<input type="text" readonly="readonly" id="processDate" name="processDate" value="@ViewBag.ProcessDate">@*@ViewBag.ProcessDate*@</td>
+
+            </tr>
+        </table>
+        <button type="submit" id="Confirm" name="Confirm" class="btn btn-default" formaction='@Url.Action("SaveCreate", "ICSProcessDateContoller")'>Confirm</button>
+    </div>
+    <br />
+    <div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div id="my-calendar"></div>
+            </div>
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="col-sm" style="font-weight:bold;">Legend</div>
+                    <br />
+                    <div class="col-sm">
+                        <table style="border-collapse:separate; border-spacing:0 5px; ">
+                            <tr>
+                                <td bgcolor="#54c571">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>Current Process Date</td>
+                            </tr>
+                            <tr>
+                                <td bgcolor="#ffff00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>Next Process Date</td>
+                            </tr>
+                            <tr>
+                                <td bgcolor="#c0c0c0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>Holiday</td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+    </div>
+    
+
+    @*<div id="resultContainer"></div>*@
+
+}
+
+@*<script type="application/javascript">
+        function drawSignatureRulesTable(accountNo, $holder) {
+                //Call ajax and draw table
+                //Return JSON
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: App.ContextPath + "Signature/RulesList",
+                    data: "accountNo=" + accountNo,
+                    beforeSend: function () {
+                        $('.rules-loader').removeClass("hidden")
+                    },
+                    success: function (data) {
+                        $('.rules-loader').addClass("hidden")
+                        //Draw Rules using template
+                        $holder.append(_.template(signatureRulesTemplate)({ data: data }));
+                        //Trigger validation on change
+                        $("#signatureGallery input[type=checkbox]").on("change", function (e) {
+                            signatureValidateSubmit();
+                        })
+                    }
+                });
+            }
+
+            var signatureRulesTemplate = [
+
+                    "<tr>",
+                         "<td><%=i.accountName%></td>",
+                        "<td><%=i.accountType%></td>",
+                        "<td><%=i.accountStatus%></td>",
+                        "<td><%=i.condition%></td>",
+                         "<td><%=i.ProductTypeCode%></td>",
+                        "<td><%=i.AccEffective%> to <%=i.AccExpiry%></td>",
+                    "</tr>",
+                "<% }) %>"
+            ].join("\n");
+    </script>*@
+<script type="application/javascript">
+                @*var eventData = [
+                  {"date":"2020-06-01","badge":false,"title":"Example 1"},
+                  {"date":"2020-06-02","badge":true,"title":"Example 2"}
+                ];*@
+                var eventData1 = "";
+                var strcurrentDate = $("#currentDate").val();
+                strcurrentDate = toDate(strcurrentDate);
+                strcurrentDate = formatDate(strcurrentDate);
+                var strNextprocessDate = $("#processDate").val();
+                 strNextprocessDate = toDate(strNextprocessDate);
+                strNextprocessDate = formatDate(strNextprocessDate);
+                var dateString = (new Date()).toISOString().split("T")[0];
+                eventData1 += '{"date":"' + strcurrentDate + '","badge": false,"title": "Current Process Date","classname": "CurrentProcessDate"},';
+                eventData1 += '{"date":"' + strNextprocessDate + '","badge": false,"title": "Next Process Date","classname": "NextProcessDate"},';
+                 $.ajax({
+                    async: false,
+                    cache: false,
+                    url: App.ContextPath + "CommonApi/ReturnHolidayDates",
+                    method: "POST",
+                    data: "Recurring=999",
+                    success: function (response) {
+                        $.each(response, function (i, item) {
+                        eventData1 = eventData1 + "{";
+                        eventData1 = eventData1 + '"date"';
+                        eventData1 = eventData1 + ":";
+                        eventData1 = eventData1 + '"' + item.fldHolidayDate + '"';
+                        eventData1 = eventData1 + ",";
+                        eventData1 = eventData1 + '"badge" : false';
+                        eventData1 = eventData1 + ",";
+                        eventData1 = eventData1 + '"title" : "' + item.fldHolidayDesc + '"';
+                        eventData1 = eventData1 + ",";
+                        eventData1 = eventData1 + '"classname" : "Weekend"';
+                        eventData1 = eventData1 + "},";
+                        });
+                    }
+                });
+
+
+            $(document).ready(function () {
+                var aaa = eventData1.replace(/,\s*$/, "");
+                var eventData = "[@@data]";
+                eventData = eventData.replace("@@data",aaa);
+                eventData = JSON.parse(eventData)
+                $("#my-calendar").zabuto_calendar({
+                    @*legend: [{
+                      type: "block",
+                      label: "Todays Date",
+                      classname: "rose"
+                    }],*@
+                    action: function() { myDateFunction(this.id); },
+                    data: eventData,
+                    language: "en",
+                    cell_border: true,
+                    today: true
+                    @*,,
+                    show_days: false,
+                    weekstartson: 0*@
+
+                    @*nav_icon: {
+                    prev: '<i class="fa fa-chevron-circle-left"></i>',
+                    next: '<i class="fa fa-chevron-circle-right"></i>'
+                    }*@
+            });
+
+            });
+
+    function myDateFunction(id) {
+        //debugger
+        var date = $("#" + id).data("date");
+        var hasEvent = $("#" + id).data("hasEvent");
+        var tempdate = new Array();
+        tempdate = date.split("-");
+        var NewDate = tempdate[2] + "-" + tempdate[1] + "-" + tempdate[0];
+        $("#processDate").val(NewDate);
+        //alert("NewDate" + NewDate);
+        //alert(date);
+    }
+     function toDate(dateStr) {
+      var parts = dateStr.split("-")
+      return new Date(parts[2], parts[1] - 1, parts[0])
+    }
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+</script>
+<style>
+    .CurrentProcessDate 
+    {
+        background-color: #54c571;
+    }
+    .NextProcessDate 
+    {
+        background-color: #ffff00;
+    }
+    .Weekend 
+    {
+        background-color: #c0c0c0;
+    }
+</style>
+@Scripts.Render("~/bundles/calendar")
+@Styles.Render("~/Content/calendar")

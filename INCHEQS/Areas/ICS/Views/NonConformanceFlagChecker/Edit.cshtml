@@ -1,0 +1,66 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("Update", "NonConformanceFlagChecker", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+<div class="form-horizontal">
+    <h4>@Locale.NonConformanceFlagMaintenanceChecker</h4>
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <TBODY>
+            @if (ViewBag.ncft != null)
+            {
+                <TR>
+                    <Th>@Locale.NCFValue </Th>
+
+                    <td>
+                        <input type="hidden" name="Status" maxlength="2" value="@ViewBag.ncft[0].fldApproveStatus" />
+                        <input type="hidden" name="NCFCode" maxlength="2" value="@ViewBag.ncft[0].fldNCFCode" />
+                        @ViewBag.ncft[0].fldNCFCode
+                    </td>
+
+                </TR>
+                <TR>
+                    <Th>@Locale.NCFDesc </Th>
+
+                    @if (ViewBag.ncf != null)
+                    {
+                        if (ViewBag.ncf[0].fldNCFDesc != ViewBag.ncft[0].fldNCFDesc)
+                        {
+                            <td>
+                                <input type="hidden" name="NCFDesc" value="@ViewBag.ncft[0].fldNCFDesc" />
+                                <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.ncft[0].fldNCFDesc" autocomplete="off" disabled />
+                                <span class="red-star"> *</span>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input type="hidden" name="NCFDesc" value="@ViewBag.ncft[0].fldNCFDesc" />
+                                <input type="text" value="@ViewBag.ncft[0].fldNCFDesc" autocomplete="off" disabled />
+                                <span class="red-star"> *</span>
+                            </td>
+                        }
+                    }
+                    else
+                    {
+                        <td>
+                            <input type="hidden" name="NCFDesc" value="@ViewBag.ncft[0].fldNCFDesc" />
+                            <input type="text" value="@ViewBag.ncft[0].fldNCFDesc" autocomplete="off" disabled />
+                            <span class="red-star"> *</span>
+                        </td>
+                    }
+
+                </TR>
+
+            }
+        </TBODY>
+    </table>
+    <button data-action="@Url.Action("/Approve2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.NCFlagChecker.VERIFY) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+    <button data-action="@Url.Action("/Reject2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.NCFlagChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+    <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.NCFlagChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+
+</div>
+}

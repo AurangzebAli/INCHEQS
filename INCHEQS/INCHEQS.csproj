@@ -1,0 +1,2681 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3A7E4FAA-4384-4C9D-B6BE-869CF0447A3A}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>INCHEQS</RootNamespace>
+    <AssemblyName>INCHEQS</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+    <TypeScriptToolsVersion>2.7</TypeScriptToolsVersion>
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <FilesToIncludeForPublish>OnlyFilesToRunTheApp</FilesToIncludeForPublish>
+    <TypeScriptTarget>ES6</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <FilesToIncludeForPublish>OnlyFilesToRunTheApp</FilesToIncludeForPublish>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.5.8\lib\net45\CommonServiceLocator.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Elmah">
+      <HintPath>..\packages\External\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.Mvc, Version=2.1.2.1389, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\External\Elmah.Mvc.2.1.2\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\External\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\External\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="FujiIQA_activeXdll, Version=1.0.5980.27772, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\IQA\FujiIQA_activeXdll.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSSecurity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=561141ee79855b0c, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\ICSSecurity.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageProcessor, Version=2.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\External\ImageProcessor.2.6.0\lib\net452\ImageProcessor.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.BNM, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\INCHEQS.BNM.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\INCHEQS.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.ConfigVerficationBranch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\INCHEQS.ConfigVerficationBranch.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.DataAccessLayer.ATV">
+      <HintPath>..\packages\Internal\INCHEQS.DataAccessLayer.ATV.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.DataAccessLayer.ICS">
+      <HintPath>..\packages\Internal\INCHEQS.DataAccessLayer.ICS.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.DataAccessLayer.OCS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Internal\INCHEQS.DataAccessLayer.OCS.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.DataAccessLayer.RPA, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Internal\INCHEQS.DataAccessLayer.RPA.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.DataAccessLayer.SDS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Internal\INCHEQS.DataAccessLayer.SDS.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.DataAccessLayer.SVS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\INCHEQS.DataAccessLayer.SVS.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.OracleDataAccessLayer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\INCHEQS.OracleDataAccessLayer.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.PCHC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\INCHEQS.PCHC.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.PPS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Internal\INCHEQS.PPS.dll</HintPath>
+    </Reference>
+    <Reference Include="InsiteMYLicensing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=561141ee79855b0c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\InsiteMYLicensing.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\External\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.4.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.4.3\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.4.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.4.3\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.7.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.Unity, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Internal\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\External\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1537.0\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1537.0\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1537.0\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1537.0\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebDesign, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1537.0\lib\net40\Microsoft.ReportViewer.WebDesign.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1537.0\lib\net40\Microsoft.ReportViewer.WebForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1427.0\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\External\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="RDLCReportRunner, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RDLCReportRunner.1.0.0\lib\RDLCReportRunner.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RestSharp, Version=110.2.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.110.2.0\lib\net471\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.SqlClient, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\External\System.Data.SqlClient.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Dynamic" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Text.Encodings.Web, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.7.0.0\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=7.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.7.0.2\lib\net462\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\External\System.Web.Mvc\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\External\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Web.WebPages">
+      <HintPath>..\packages\External\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment">
+      <HintPath>..\packages\External\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\External\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Unity.Abstractions">
+      <HintPath>..\packages\External\Unity.5.5.8\lib\net45\Unity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mvc5, Version=1.3.0.0, Culture=neutral, PublicKeyToken=43da31bc42a85347, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\External\Unity.Mvc5.dll</HintPath>
+    </Reference>
+    <Reference Include="VBUtilites, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\MVC\01-Core\01-Library\VBUtilites\VBUtilites\bin\Debug\VBUtilites.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\External\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Data\ActionFilters\ExceptionHandlerAttribute.cs" />
+    <Compile Include="App_Data\ActionFilters\GenericFilter.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\GlobalFiltersConfig.cs" />
+    <Compile Include="App_Start\LogConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="Areas\ATV\ATVAreaRegistration.cs" />
+    <Compile Include="Areas\ATV\Concerns\DataCorrection.cs" />
+    <Compile Include="Areas\ATV\Controller\ATV\DataCorrectionController.cs" />
+    <Compile Include="Areas\ATV\Models\DataCorrection\DataCorrectionDao.cs" />
+    <Compile Include="Areas\ATV\Models\DataCorrection\DataCorrectionModel.cs" />
+    <Compile Include="Areas\ATV\Models\DataCorrection\IDataCorrectionDao.cs" />
+    <Compile Include="Areas\ATV\ViewModels\InwardItemViewModel.cs" />
+    <Compile Include="Areas\ATV\ViewModels\ResultPageViewModel.cs" />
+    <Compile Include="Areas\ATV\ViewModels\SearchPageViewModel.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\AccountProfileCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\AccountProfileController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\ApprovedGroupCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\ApprovedHubBranchCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\ApprovedHubUserCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\ApprovedTaskCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\ApprovedUserCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\BankChargesCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\BankChargesController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\BankChargesTypeCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\BankChargesTypeController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\BankHostStatusCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\BankHostStatusController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\BankHostStatusKBZCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\BankHostStatusKBZController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\BankZoneCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\BankZoneController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\BranchCodeCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\CreditAccountController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\EnableUserIDController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\GroupCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\GroupController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\HolidayApprovedCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\HubBranchController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\HubUserController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\InternalBranchCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\InternalBranchKBZCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\InternalBranchKBZController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\MessageCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\MessageController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\ReturnCodeCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\StateCodeCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\StateCodeController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\TaskCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\UserProfileCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Utilities\SecurityAuditLogController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Utilities\SecurityProfileCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Models\AccountProfile\AccountProfileDao.cs" />
+    <Compile Include="Areas\COMMON\Models\AccountProfile\AccountProfileModel.cs" />
+    <Compile Include="Areas\COMMON\Models\AccountProfile\IAccountProfileDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BankChargesType\BankChargesTypeDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BankChargesType\BankChargesTypeModel.cs" />
+    <Compile Include="Areas\COMMON\Models\BankChargesType\IBankChargesTypeDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BankCharges\BankChargesDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BankCharges\BankChargesModel.cs" />
+    <Compile Include="Areas\COMMON\Models\BankCharges\IBankChargesDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BankCode\BankCodeDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BankCode\BankCodeModel.cs" />
+    <Compile Include="Areas\COMMON\Models\BankCode\IBankCodeDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BankHostStatusKBZ\BankHostStatusKBZDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BankHostStatusKBZ\BankHostStatusKBZModel.cs" />
+    <Compile Include="Areas\COMMON\Models\BankHostStatusKBZ\BankHostReturnStatusKBZModel.cs" />
+    <Compile Include="Areas\COMMON\Models\BankHostStatusKBZ\IBankHostStatusKBZDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BankHostStatus\BankHostStatusDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BankHostStatus\BankHostStatusModel.cs" />
+    <Compile Include="Areas\COMMON\Models\BankHostStatus\IBankHostStatusDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BankZone\BankZoneDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BankZone\BankZoneModel.cs" />
+    <Compile Include="Areas\COMMON\Models\BankZone\IBankZoneDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BranchCode\BranchCodeDao.cs" />
+    <Compile Include="Areas\COMMON\Models\BranchCode\BranchCodeModel.cs" />
+    <Compile Include="Areas\COMMON\Models\BranchCode\IBranchCodeDao.cs" />
+    <Compile Include="Areas\COMMON\Models\Branch\BranchDao.cs" />
+    <Compile Include="Areas\COMMON\Models\Branch\BranchModel.cs" />
+    <Compile Include="Areas\COMMON\Models\Branch\IBranchDao.cs" />
+    <Compile Include="Areas\COMMON\Models\CreditAccount\CreditAccountDao.cs" />
+    <Compile Include="Areas\COMMON\Models\CreditAccount\CreditAccountModel.cs" />
+    <Compile Include="Areas\COMMON\Models\CreditAccount\ICreditAccountDao.cs" />
+    <Compile Include="Areas\COMMON\Models\EnableUserID\EnableUserIDDao.cs" />
+    <Compile Include="Areas\COMMON\Models\EnableUserID\EnableUserIDModel.cs" />
+    <Compile Include="Areas\COMMON\Models\EnableUserID\IEnableUserIDDao.cs" />
+    <Compile Include="Areas\COMMON\Models\GroupProfile\GroupProfileDao.cs" />
+    <Compile Include="Areas\COMMON\Models\GroupProfile\GroupProfileModel.cs" />
+    <Compile Include="Areas\COMMON\Models\GroupProfile\IGroupProfileDao.cs" />
+    <Compile Include="Areas\COMMON\Models\Holiday\HolidayDao.cs" />
+    <Compile Include="Areas\COMMON\Models\Holiday\HolidayModel.cs" />
+    <Compile Include="Areas\COMMON\Models\Holiday\iHolidayDao.cs" />
+    <Compile Include="Areas\COMMON\Models\HubBranch\HubBranchDao.cs" />
+    <Compile Include="Areas\COMMON\Models\HubBranch\HubBranchModel.cs" />
+    <Compile Include="Areas\COMMON\Models\HubBranch\IHubBranchDao.cs" />
+    <Compile Include="Areas\COMMON\Models\HubUser\HubDao.cs" />
+    <Compile Include="Areas\COMMON\Models\HubUser\HubModel.cs" />
+    <Compile Include="Areas\COMMON\Models\HubUser\IHubDao.cs" />
+    <Compile Include="Areas\COMMON\Models\InternalBranchKBZ\IInternalBranchKBZDao.cs" />
+    <Compile Include="Areas\COMMON\Models\InternalBranchKBZ\InternalBranchKBZDao.cs" />
+    <Compile Include="Areas\COMMON\Models\InternalBranchKBZ\InternalBranchKBZModel.cs" />
+    <Compile Include="Areas\COMMON\Models\InternalBranch\IInternalBranchDao.cs" />
+    <Compile Include="Areas\COMMON\Models\InternalBranch\InternalBranchDao.cs" />
+    <Compile Include="Areas\COMMON\Models\InternalBranch\InternalBranchModel.cs" />
+    <Compile Include="Areas\COMMON\Models\Message\IMessageDao.cs" />
+    <Compile Include="Areas\COMMON\Models\Message\MessageDao.cs" />
+    <Compile Include="Areas\COMMON\Models\Message\MessageModel.cs" />
+    <Compile Include="Areas\COMMON\Models\ReturnCode\IReturnCodeDao.cs" />
+    <Compile Include="Areas\COMMON\Models\ReturnCode\ReturnCodeDao.cs" />
+    <Compile Include="Areas\COMMON\Models\ReturnCode\ReturnCodeModel.cs" />
+    <Compile Include="Areas\COMMON\Models\SecurityAuditTemplates\Administrator\ChangePasswordModel.cs" />
+    <Compile Include="Areas\COMMON\Models\SecurityAuditTemplates\Administrator\ISecurityAuditLogDao.cs" />
+    <Compile Include="Areas\COMMON\Models\SecurityAuditTemplates\Administrator\SecurityAuditLogDao.cs" />
+    <Compile Include="Areas\COMMON\Models\SecurityAuditTemplates\Maintenance\IMaintenanceAuditLogDao.cs" />
+    <Compile Include="Areas\COMMON\Models\SecurityAuditTemplates\Maintenance\MaintenanceAuditLogDao.cs" />
+    <Compile Include="Areas\COMMON\Models\SecurityAuditTemplates\Maintenance\ThresholdModel.cs" />
+    <Compile Include="Areas\COMMON\Models\StateCode\IStateCodeDao.cs" />
+    <Compile Include="Areas\COMMON\Models\StateCode\StateCodeDao.cs" />
+    <Compile Include="Areas\COMMON\Models\StateCode\StateCodeModel.cs" />
+    <Compile Include="Areas\COMMON\Models\Users\IUserDao.cs" />
+    <Compile Include="Areas\COMMON\Models\Users\UserDao.cs" />
+    <Compile Include="Areas\COMMON\Models\Users\UserModel.cs" />
+    <Compile Include="Areas\COMMON\ViewModels\InwardItemViewModel.cs" />
+    <Compile Include="Areas\COMMON\ViewModels\ResultPageViewModel.cs" />
+    <Compile Include="Areas\COMMON\ViewModels\SearchPageViewModel.cs" />
+    <Compile Include="Areas\ICS\Concerns\InwardItemConcern.cs" />
+    <Compile Include="Areas\ICS\Controllers\HostFileProcessing\HostFiles\Base\HostFileBaseController.cs" />
+    <Compile Include="Areas\ICS\Controllers\HostFileProcessing\HostFiles\GenerateCreditFileController.cs" />
+    <Compile Include="Areas\ICS\Controllers\HostFileProcessing\HostFiles\GenerateDebitFileController.cs" />
+    <Compile Include="Areas\ICS\Controllers\HostFileProcessing\HostFiles\GenerateRepairedDebitFileController.cs" />
+    <Compile Include="Areas\ICS\Controllers\HostFileProcessing\HostFiles\LoadHostFileController.cs" />
+    <Compile Include="Areas\ICS\Controllers\HostFileProcessing\ICSAPICreditPosting\ICSCreditPostingController.cs" />
+    <Compile Include="Areas\ICS\Controllers\HostFileProcessing\ICSAPIDebitPosting\ICSDebitPostingController.cs" />
+    <Compile Include="Areas\ICS\Controllers\HostFileProcessing\LoadBankHostFile2nd\Base\LoadBankHostFile2ndBaseController.cs" />
+    <Compile Include="Areas\ICS\Controllers\HostFileProcessing\LoadBankHostFile2nd\LoadBankHostFile2ndImportController.cs" />
+    <Compile Include="Areas\ICS\Controllers\HostFileProcessing\LoadBankHostFile\Base\LoadBankHostFileBaseController.cs" />
+    <Compile Include="Areas\ICS\Controllers\HostFileProcessing\LoadBankHostFile\LoadBankHostFileImportController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\BranchMonitoring\BranchActivationController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\BranchSubmission\BranchSubmissionController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\BranchSubmission\BranchSubmission_BranchController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\GenerateOutwardReturn\Base\OutwardReturnICLBaseController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\GenerateOutwardReturn\GenerateOutwardReturnICLController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\GenerateUPI\Base\GenerateUPIBaseController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\GenerateUPI\GenerateUPIController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\HostValidation\Base\HostValidationBaseController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\HostValidation\HostValidationController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\LoadDailyFile\Base\LoadDailyFileBaseController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\LoadDailyFile\LoadDailyFileImportController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\MICRImage\Base\MICRImageBaseController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\MICRImage\MICRImageImportController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\ProgressMonitoring\BranchProgressStatusController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\ProgressMonitoring\ProgressStatusController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\Signature\SignatureInfoController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\UPI\LateReturnedMaintenanceController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\Verification\AutoApproveThresholdController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\Verification\Base\ICCSBaseController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\Verification\BranchController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\Verification\RejectReentryController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\Verification\VerificationController.cs" />
+    <Compile Include="Areas\ICS\Controllers\MainController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\BandQueueSettingController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\CMSAccountInfoController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\DedicatedBranchOfficerController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\GLReplacementController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\HighRiskAccountCheckerController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\HighRiskAccountController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\HostReturnReasonController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\ICSRetentionPeriodCheckerController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\ICSRetentionPeriodController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\ICSStartOfDayCheckerController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\ICSStartOfDayController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\ICSStartOfDayMakerController .cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\LargeAmountCheckerController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\LargeAmountController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\RationalBranchCheckerController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\RationalBranchController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\TransCodeCheckerController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\NonConformanceFlagCheckerController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\TransCodeController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\PullOutReasonController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\NonConformanceFlagController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\StateCodeController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\ThresholdSettingCheckerController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\ThresholdSettingController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\VerificationLimitCheckerController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Maintenance\VerificationLimitController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Reports\DefaultReportController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Reports\ICCSPrintReportController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Reports\PrintReportController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Utilities\ArchiveController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Utilities\ClearDataProcessController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Utilities\DataHouseKeepController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Utilities\DayEndProcessController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Utilities\LoadNcf\Base\LoadNcfBaseController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Utilities\LoadNcf\LoadNcfImportController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Utilities\ReleaseBranchLockedChequeController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Utilities\ReleaseLockedChequeController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Utilities\ScheduledTaskController.cs" />
+    <Compile Include="Areas\ICS\Controllers\Utilities\SendEmailController.cs" />
+    <Compile Include="Areas\ICS\ICSAreaRegistration.cs" />
+    <Compile Include="Areas\ICS\Models\AutoApproveThreshold\AutoApproveThresholdDao.cs" />
+    <Compile Include="Areas\ICS\Models\AutoApproveThreshold\AutoApproveThresholdModel.cs" />
+    <Compile Include="Areas\ICS\Models\AutoApproveThreshold\IAutoApproveThresholdDao.cs" />
+    <Compile Include="Areas\ICS\Models\BandQueueSetting\BandQueueSettingDao.cs" />
+    <Compile Include="Areas\ICS\Models\BandQueueSetting\BandQueueSettingModel.cs" />
+    <Compile Include="Areas\ICS\Models\BandQueueSetting\IBandQueueSettingDao.cs" />
+    <Compile Include="Areas\ICS\Models\BranchSubmission\BranchSubmissionDao.cs" />
+    <Compile Include="Areas\ICS\Models\BranchSubmission\BranchSubmissionModel.cs" />
+    <Compile Include="Areas\ICS\Models\BranchSubmission\IBranchSubmissionDao.cs" />
+    <Compile Include="Areas\ICS\Models\CommonInwardItem\CommonInwardItemDao.cs" />
+    <Compile Include="Areas\ICS\Models\CommonInwardItem\ICommonInwardItemDao.cs" />
+    <Compile Include="Areas\ICS\Models\DashboardConfig\DashboardConfigDao.cs" />
+    <Compile Include="Areas\ICS\Models\DashboardConfig\IDashboardConfigDao.cs" />
+    <Compile Include="Areas\ICS\Models\DedicatedBranchDay\DedicatedBranchDayDao.cs" />
+    <Compile Include="Areas\ICS\Models\DedicatedBranchDay\DedicatedBranchDayModel.cs" />
+    <Compile Include="Areas\ICS\Models\DedicatedBranchDay\IDedicatedBranchDayDao.cs" />
+    <Compile Include="Areas\ICS\Models\DedicatedBranchOfficer\DedicatedBranchOfficerDao.cs" />
+    <Compile Include="Areas\ICS\Models\DedicatedBranchOfficer\DedicatedBranchOfficerModel.cs" />
+    <Compile Include="Areas\ICS\Models\DedicatedBranchOfficer\IDedicatedBranchOfficerDao.cs" />
+    <Compile Include="Areas\ICS\Models\FileInformation\FileInformationModel.cs" />
+    <Compile Include="Areas\ICS\Models\FileInformation\FileInformationService.cs" />
+    <Compile Include="Areas\ICS\Models\FileInformation\FileManagerDao.cs" />
+    <Compile Include="Areas\ICS\Models\FileInformation\IFileManagerDao.cs" />
+    <Compile Include="Areas\ICS\Models\GenerateCreditFile\GenerateCreditFileDao.cs" />
+    <Compile Include="Areas\ICS\Models\GenerateCreditFile\GenerateCreditFileModel.cs" />
+    <Compile Include="Areas\ICS\Models\GenerateCreditFile\IGenerateCreditFileDao.cs" />
+    <Compile Include="Areas\ICS\Models\GenerateRepairedDebitFile\GenerateRepairedDebitFileDao.cs" />
+    <Compile Include="Areas\ICS\Models\GenerateRepairedDebitFile\GenerateRepairedDebitFileModel.cs" />
+    <Compile Include="Areas\ICS\Models\GenerateRepairedDebitFile\IGenerateRepairedDebitFileDao.cs" />
+    <Compile Include="Areas\ICS\Models\GenerateUPI\GenerateUPIDao.cs" />
+    <Compile Include="Areas\ICS\Models\GenerateUPI\GenerateUPIModel.cs" />
+    <Compile Include="Areas\ICS\Models\GenerateUPI\IGenerateUPIDao.cs" />
+    <Compile Include="Areas\ICS\Models\GLReplacement\GLReplacementDao.cs" />
+    <Compile Include="Areas\ICS\Models\GLReplacement\GLReplacementModel.cs" />
+    <Compile Include="Areas\ICS\Models\GLReplacement\IGLReplacementDao.cs" />
+    <Compile Include="Areas\ICS\Models\HighRiskAccount\HighRiskAccountDao.cs" />
+    <Compile Include="Areas\ICS\Models\HighRiskAccount\HighRiskAccountModel.cs" />
+    <Compile Include="Areas\ICS\Models\HighRiskAccount\IHighRiskAccountDao.cs" />
+    <Compile Include="Areas\ICS\Models\HostFile\HostFileDao.cs" />
+    <Compile Include="Areas\ICS\Models\HostFile\HostFileModel.cs" />
+    <Compile Include="Areas\ICS\Models\HostFile\IHostFileDao.cs" />
+    <Compile Include="Areas\ICS\Models\HostReturnReason\HostReturnReasonDao.cs" />
+    <Compile Include="Areas\ICS\Models\HostReturnReason\HostReturnReasonModel.cs" />
+    <Compile Include="Areas\ICS\Models\HostReturnReason\IHostReturnReasonDao.cs" />
+    <Compile Include="Areas\ICS\Models\HostValidation\HostValidationDao.cs" />
+    <Compile Include="Areas\ICS\Models\HostValidation\HostValidationModel.cs" />
+    <Compile Include="Areas\ICS\Models\HostValidation\IHostValidationDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSAPICreditPosting\ICSCreditPostingDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSAPICreditPosting\IICSCreditPostingDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSAPICreditPosting\PostingStatusModel.cs" />
+    <Compile Include="Areas\ICS\Models\ICSAPIDebitPosting\APIFundsTransfer.cs" />
+    <Compile Include="Areas\ICS\Models\ICSAPIDebitPosting\ICSDebitPostingDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSAPIDebitPosting\IICSDebitPostingDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSAPIDebitPosting\PostingStatusModel.cs" />
+    <Compile Include="Areas\ICS\Models\ICSAPIHostValidation\APIHostValidation.cs" />
+    <Compile Include="Areas\ICS\Models\ICSChequeImage\ICSChequeImageDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSChequeImage\IICSChequeImageDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSDataProcess\ICSDataProcessDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSDataProcess\ICSDataProcessModel.cs" />
+    <Compile Include="Areas\ICS\Models\ICSDataProcess\ICSIDataProcessDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSReleaseLockedCheque\ICSIReleaseLockedChequeDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSReleaseLockedCheque\ICSReleaseLockedChequeDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSRetentionPeriod\ICSRetentionPeriodDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSRetentionPeriod\ICSRetentionPeriodModel.cs" />
+    <Compile Include="Areas\ICS\Models\ICSRetentionPeriod\IICSRetentionPeriodDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSStartOfDayMaker\ICSStartOfDayMakerDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSStartOfDayMaker\IICSStartOfDayMakerDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSStartOfDay\ICSStartOfDayDao.cs" />
+    <Compile Include="Areas\ICS\Models\ICSStartOfDay\IICSStartOfDayDao.cs" />
+    <Compile Include="Areas\ICS\Models\LargeAmount\ICSILargeAmountDao.cs" />
+    <Compile Include="Areas\ICS\Models\LargeAmount\ICSLargeAmountDao.cs" />
+    <Compile Include="Areas\ICS\Models\LargeAmount\LargeAmountModel.cs" />
+    <Compile Include="Areas\ICS\Models\LateReturnedMaintenance\ILateReturnedMaintenanceDao.cs" />
+    <Compile Include="Areas\ICS\Models\LateReturnedMaintenance\LateReturnedMaintenanceDao.cs" />
+    <Compile Include="Areas\ICS\Models\LateReturnedMaintenance\LateReturnMaintenanceModal.cs" />
+    <Compile Include="Areas\ICS\Models\LoadBankHostFile2nd\ILoadBankHostFile2ndDao.cs" />
+    <Compile Include="Areas\ICS\Models\LoadBankHostFile2nd\LoadBankHostFile2ndDao.cs" />
+    <Compile Include="Areas\ICS\Models\LoadBankHostFile2nd\LoadBankHostFile2ndModel.cs" />
+    <Compile Include="Areas\ICS\Models\LoadBankHostFile\ILoadBankHostFileDao.cs" />
+    <Compile Include="Areas\ICS\Models\LoadBankHostFile\LoadBankHostFileDao.cs" />
+    <Compile Include="Areas\ICS\Models\LoadBankHostFile\LoadBankHostFileModel.cs" />
+    <Compile Include="Areas\ICS\Models\LoadDailyFile\ILoadDailyFileDao.cs" />
+    <Compile Include="Areas\ICS\Models\LoadDailyFile\LoadDailyFileDao.cs" />
+    <Compile Include="Areas\ICS\Models\LoadDailyFile\LoadDailyFileModel.cs" />
+    <Compile Include="Areas\ICS\Models\LoadNcf\ILoadNcfDao.cs" />
+    <Compile Include="Areas\ICS\Models\LoadNcf\LoadNcfDao.cs" />
+    <Compile Include="Areas\ICS\Models\LoadNcf\LoadNcfModel.cs" />
+    <Compile Include="Areas\ICS\Models\MICRImage\IMICRImageDao.cs" />
+    <Compile Include="Areas\ICS\Models\MICRImage\MICRImageDao.cs" />
+    <Compile Include="Areas\ICS\Models\MICRImage\MICRImageModel.cs" />
+    <Compile Include="Areas\ICS\Models\RationalBranch\IRationalBranchDao.cs" />
+    <Compile Include="Areas\ICS\Models\RationalBranch\RationalBranchDao.cs" />
+    <Compile Include="Areas\ICS\Models\RationalBranch\RationalBranchModel.cs" />
+    <Compile Include="Areas\ICS\Models\Signature\ISignatureDao.cs" />
+    <Compile Include="Areas\ICS\Models\Signature\JWTTokenModel.cs" />
+    <Compile Include="Areas\ICS\Models\Signature\SignatureDao.cs" />
+    <Compile Include="Areas\ICS\Models\Signature\SignatureInfo.cs" />
+    <Compile Include="Areas\ICS\Models\TransCode\ITransCodeDao.cs" />
+    <Compile Include="Areas\ICS\Models\TransCode\TransCodeDao.cs" />
+    <Compile Include="Areas\ICS\Models\TransCode\TransCodeModel.cs" />
+    <Compile Include="Areas\ICS\Models\NonConformanceFlag\NonConformanceModel.cs" />
+    <Compile Include="Areas\ICS\Models\OutwardReturnICL\IOutwardReturnICLDao.cs" />
+    <Compile Include="Areas\ICS\Models\OutwardReturnICL\OutwardReturnICLDao.cs" />
+    <Compile Include="Areas\ICS\Models\OutwardReturnICL\OutwardReturnICLModel.cs" />
+    <Compile Include="Areas\ICS\Models\ProgressStatus\IProgressStatus.cs" />
+    <Compile Include="Areas\ICS\Models\ProgressStatus\ProgressStatusDao.cs" />
+    <Compile Include="Areas\ICS\Models\ProgressStatus\ProgressStatusModel.cs" />
+    <Compile Include="Areas\ICS\Models\Progress\ProgressDao.cs" />
+    <Compile Include="Areas\ICS\Models\PullOutReason\IPullOutReasonDao.cs" />
+    <Compile Include="Areas\ICS\Models\PullOutReason\PullOutReasonDao.cs" />
+    <Compile Include="Areas\ICS\Models\PullOutReason\PullOutReasonModel.cs" />
+    <Compile Include="Areas\ICS\Models\RejectReentry\IRejectReentryDao.cs" />
+    <Compile Include="Areas\ICS\Models\RejectReentry\RejectReentryDao.cs" />
+    <Compile Include="Areas\ICS\Models\ScheduledTask\IScheduledTaskDao.cs" />
+    <Compile Include="Areas\ICS\Models\ScheduledTask\ScheduledTaskDao.cs" />
+    <Compile Include="Areas\ICS\Models\SendEmail\ISendEmailDao.cs" />
+    <Compile Include="Areas\ICS\Models\SendEmail\SendEmailDao.cs" />
+    <Compile Include="Areas\ICS\Models\Sequence\ISequenceDao.cs" />
+    <Compile Include="Areas\ICS\Models\Sequence\SequenceDao.cs" />
+    <Compile Include="Areas\ICS\Models\NonConformanceFlag\INonConformanceFlagDao.cs" />
+    <Compile Include="Areas\ICS\Models\NonConformanceFlag\NonConformanceFlagDao.cs" />
+    <Compile Include="Areas\ICS\Models\State\IStateDao.cs" />
+    <Compile Include="Areas\ICS\Models\State\StateDao.cs" />
+    <Compile Include="Areas\ICS\Models\Truncation\ITruncationDao.cs" />
+    <Compile Include="Areas\ICS\Models\Truncation\TruncationDao.cs" />
+    <Compile Include="Areas\ICS\Models\Truncation\TruncationModel.cs" />
+    <Compile Include="Areas\ICS\Models\VerificationLimit\IVerificationLimitDao.cs" />
+    <Compile Include="Areas\ICS\Models\VerificationLimit\VerificationLimitDao.cs" />
+    <Compile Include="Areas\ICS\Models\VerificationLimit\VerificationLimitModel.cs" />
+    <Compile Include="Areas\ICS\Models\Verification\IVerificationDao.cs" />
+    <Compile Include="Areas\ICS\Models\Verification\VerificationDao.cs" />
+    <Compile Include="Areas\ICS\Models\Verification\VerificationStatus.cs" />
+    <Compile Include="Areas\ICS\Service\SVSSOAPRequest.cs" />
+    <Compile Include="Areas\ICS\ViewModels\InwardItemViewModel.cs" />
+    <Compile Include="Areas\ICS\ViewModels\ResultPageViewModel.cs" />
+    <Compile Include="Areas\ICS\ViewModels\SearchPageViewModel.cs" />
+    <Compile Include="Areas\OCS\Concerns\OutwardItemConcern.cs" />
+    <Compile Include="Areas\OCS\Controllers\DayEndProcess\DayeEndProcessController.cs" />
+    <Compile Include="Areas\OCS\Controllers\HostFileProcessing\HostFiles\Base\HostFileBaseOCSController.cs" />
+    <Compile Include="Areas\OCS\Controllers\HostFileProcessing\HostFiles\GenerateDebitFileOCSController.cs" />
+    <Compile Include="Areas\OCS\Controllers\HostFileProcessing\OCSAPICreditPosting\OCSCreditPostingController.cs" />
+    <Compile Include="Areas\OCS\Controllers\HostFileProcessing\OCSAPIDebitPosting\OCSDebitPostingController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\Base\AIFFileBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\HubBranchController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\HubController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\OCSAIFFileUploadController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\OCSProcessDateController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\OCSRetentionPeriodCheckerController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\OCSRetentionPeriodController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\ProcessDateController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\ScannerWorkStationCheckerController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\ScannerWorkStationController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\SystemCutOffTimeController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\SystemProfileController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\TCCodeController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\TransactionCodeController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Maintenance\TransactionTypeController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\AIFImport\AIFImportController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\AIFImport\Base\AIFImportBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ChequeDateAmountEntry\Base\ChequeDateAmountEntryBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ChequeDateAmountEntry\ChequeDateAmountEntryController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ChequeTransactionBalancing\Base\ChequeTransactionBalancingBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ChequeTransactionBalancing\ChequeTransactionBalancingController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ClearingItems\ClearingItemsController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ClearingItemsSummary\ClearingItemsSummaryController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\DataEntry\Base\DataEntryBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\DataEntry\DataEntryController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\GenerateOutwardClearing\GenerateOutwardClearingICLController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\InwardReturnICL\Base\InwardReturnICLBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\InwardReturnICL\InwardReturnICLController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\MicrRepair\Base\MicrRepairBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\MicrRepair\MicrRepairController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\TransactionBalancing\Base\TransactionBalancingBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\TransactionBalancing\TransactionBalancingController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\BranchClearingItem\BranchClearingItemController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\BranchEndOfDay\BranchEndOfDayController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ChequeAccountEntry\Base\ChequeAccountEntryBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ChequeAccountEntry\ChequeAccountEntryController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ChequeAmountEntry\Base\ChequeAmountEntryBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ChequeAmountEntry\ChequeAmountEntryController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ChequeDataEntry\Base\ChequeDataEntryBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ChequeDataEntry\ChequeDataEntryController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\InwardReturn\Base\InwardReturnBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\InwardReturn\InwardReturnImportController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ProgressMonitoring\ProgressStatusController.cs" />
+    <Compile Include="Areas\OCS\Controllers\OutwardClearing\ReturnChequeAdvice\ReturnChequeAdviceController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Processing\CapturingController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Processing\CheckAmountEntry\Base\CheckAmountEntryBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Processing\CheckAmountEntry\CheckAmountEntryController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Reports\DefaultReportController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Reports\ICCSPrintReportController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Reports\PrintReportController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Utilities\BranchEndOfDaySummary\BranchEndOfDaySummaryController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Utilities\ClearDataProcessController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Submission\ClearingSummary\Base\ClearingSummaryBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Submission\ClearingSummary\ClearingSummaryController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Submission\Clearing\Base\ClearingBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Submission\Clearing\ClearingController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Utilities\ReleasedLockedChequeController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Utilities\Search\Base\SearchBaseController.cs" />
+    <Compile Include="Areas\OCS\Controllers\Utilities\Search\SearchController.cs" />
+    <Compile Include="Areas\OCS\Models\AIFImport\AIFImportDao.cs" />
+    <Compile Include="Areas\OCS\Models\AIFImport\AIFImportModel.cs" />
+    <Compile Include="Areas\OCS\Models\AIFImport\FileMaster.cs" />
+    <Compile Include="Areas\OCS\Models\AIFImport\IAIFImportDao.cs" />
+    <Compile Include="Areas\OCS\Models\AuditTrailOCS\AuditTrailOCSDao.cs" />
+    <Compile Include="Areas\OCS\Models\AuditTrailOCS\AuditTrailOCSModel.cs" />
+    <Compile Include="Areas\OCS\Models\AuditTrailOCS\IAuditTrailOCSDao.cs" />
+    <Compile Include="Areas\OCS\Models\BankBranchesOcs\BankBranchesOcsdao.cs" />
+    <Compile Include="Areas\OCS\Models\BankBranchesOcs\IBankBranchesOcs.cs" />
+    <Compile Include="Areas\OCS\Models\BranchEndOfDaySummary\BranchEndOfDayDaoSummary.cs" />
+    <Compile Include="Areas\OCS\Models\BranchEndOfDaySummary\IBranchEndOfDayDaoSummary.cs" />
+    <Compile Include="Areas\OCS\Models\ChequeDateAmountEntry\ChequeDateAmountEntryDao.cs" />
+    <Compile Include="Areas\OCS\Models\ChequeDateAmountEntry\IChequeDateAmountEntryDao.cs" />
+    <Compile Include="Areas\OCS\Models\ClearingItemsSummary\ClearingItemsSummaryDao.cs" />
+    <Compile Include="Areas\OCS\Models\ClearingItemsSummary\IClearingItemsSummaryDao.cs" />
+    <Compile Include="Areas\OCS\Models\ClearingItem\ClearingItemDao.cs" />
+    <Compile Include="Areas\OCS\Models\ClearingItem\IClearingItemDao.cs" />
+    <Compile Include="Areas\OCS\Models\HostFile\HostFileOCSDao.cs" />
+    <Compile Include="Areas\OCS\Models\HostFile\HostFileOCSModel.cs" />
+    <Compile Include="Areas\OCS\Models\HostFile\IHostFileOCSDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSAPICreditPosting\IOCSCreditPostingDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSAPICreditPosting\OCSCreditPostingDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSAPICreditPosting\PostingStatusModel.cs" />
+    <Compile Include="Areas\OCS\Models\OCSAPIDebitPosting\OCSDebitPostingDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSAPIDebitPosting\IOCSDebitPostingDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSAPIDebitPosting\PostingStatusModel.cs" />
+    <Compile Include="Areas\OCS\Models\InwardReturnICL\IInwardReturnICLDao.cs" />
+    <Compile Include="Areas\OCS\Models\InwardReturnICL\InwardReturnICLDao.cs" />
+    <Compile Include="Areas\OCS\Models\InwardReturnICL\InwardReturnICLModel.cs" />
+    <Compile Include="Areas\OCS\Models\MicrRepair\IMicrRepairDaoController.cs" />
+    <Compile Include="Areas\OCS\Models\MicrRepair\MicrRepairDaoController.cs" />
+    <Compile Include="Areas\OCS\Models\OCSAIFFileUpload\IOCSAIFFileUploadDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSAIFFileUpload\OCSAIFFileUploadDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSAIFFileUpload\OCSAIFFileUploadModel.cs" />
+    <Compile Include="Areas\OCS\Models\OCSChequeImage\IOCSChequeImageDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSChequeImage\OCSChequeImageDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSRetentionPeriod\IOCSRetentionPeriodDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSRetentionPeriod\OCSRetentionPeriodDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSRetentionPeriod\OCSRetentionPeriodModel.cs" />
+    <Compile Include="Areas\OCS\Models\OutwardClearingICL\IOutwardClearingICLDao.cs" />
+    <Compile Include="Areas\OCS\Models\OutwardClearingICL\OutwardClearingICLDao.cs" />
+    <Compile Include="Areas\OCS\Models\ProgressStatus\IOCSProgressStatusDao.cs" />
+    <Compile Include="Areas\OCS\Models\Search\ISearchDao.cs" />
+    <Compile Include="Areas\OCS\Models\Search\SearchDao.cs" />
+    <Compile Include="Areas\OCS\Models\TransactionBalancing\ITransactionBalancingDao.cs" />
+    <Compile Include="Areas\OCS\Models\TransactionBalancing\TransactionBalancingDao.cs" />
+    <Compile Include="Areas\OCS\Models\BranchClearingItem\BranchClearingItemDao.cs" />
+    <Compile Include="Areas\OCS\Models\BranchClearingItem\BranchItemReadyModel.cs" />
+    <Compile Include="Areas\OCS\Models\BranchClearingItem\IBranchClearingItemDao.cs" />
+    <Compile Include="Areas\OCS\Models\BranchEndOfDay\BranchEndOfDayDao.cs" />
+    <Compile Include="Areas\OCS\Models\BranchEndOfDay\IBranchEndOfDayDao.cs" />
+    <Compile Include="Areas\OCS\Models\Capturing\CapturingDao.cs" />
+    <Compile Include="Areas\OCS\Models\Capturing\CapturingModel.cs" />
+    <Compile Include="Areas\OCS\Models\Capturing\ICapturingDao.cs" />
+    <Compile Include="Areas\OCS\Models\CheckAmountEntry\CheckAmountEntryDao.cs" />
+    <Compile Include="Areas\OCS\Models\CheckAmountEntry\CheckAmountEntryModel.cs" />
+    <Compile Include="Areas\OCS\Models\CheckAmountEntry\ICheckAmountEntryDao.cs" />
+    <Compile Include="Areas\OCS\Models\ChequeAccountEntry\ChequeAccountEntryDao.cs" />
+    <Compile Include="Areas\OCS\Models\ChequeAccountEntry\IChequeAccountEntryDao.cs" />
+    <Compile Include="Areas\OCS\Models\ChequeAmountEntry\ChequeAmountEntryDao.cs" />
+    <Compile Include="Areas\OCS\Models\ChequeAmountEntry\IChequeAmountEntryDao.cs" />
+    <Compile Include="Areas\OCS\Models\ChequeDataEntry\ChequeDataEntryDao.cs" />
+    <Compile Include="Areas\OCS\Models\ChequeDataEntry\IChequeDataEntryDao.cs" />
+    <Compile Include="Areas\OCS\Models\ClearingSummary\ClearingSummaryDao.cs" />
+    <Compile Include="Areas\OCS\Models\ClearingSummary\ClearingSummaryModel.cs" />
+    <Compile Include="Areas\OCS\Models\ClearingSummary\IClearingSummaryDao.cs" />
+    <Compile Include="Areas\OCS\Models\Clearing\ClearingDao.cs" />
+    <Compile Include="Areas\OCS\Models\Clearing\ClearingModel.cs" />
+    <Compile Include="Areas\OCS\Models\Clearing\IClearingDao.cs" />
+    <Compile Include="Areas\OCS\Models\CommonOutwardItem\ChequeRepairHistoryModel.cs" />
+    <Compile Include="Areas\OCS\Models\CommonOutwardItem\CommonOutwardItemDao.cs" />
+    <Compile Include="Areas\OCS\Models\CommonOutwardItem\ICommonOutwardItemDao.cs" />
+    <Compile Include="Areas\OCS\Models\HubBranch\HubBranchDao.cs" />
+    <Compile Include="Areas\OCS\Models\HubBranch\IHubBranchDao.cs" />
+    <Compile Include="Areas\OCS\Models\InwardReturn\IInwardReturnDao.cs" />
+    <Compile Include="Areas\OCS\Models\InwardReturn\InwardReturnDao.cs" />
+    <Compile Include="Areas\OCS\Models\InwardReturn\InwardReturnModel.cs" />
+    <Compile Include="Areas\OCS\Models\OCSDataProcess\OCSDataProcessDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSDataProcess\OCSDataProcessModel.cs" />
+    <Compile Include="Areas\OCS\Models\OCSDataProcess\OCSIDataProcessDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSProcessDate\IOCSProcessDateDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSProcessDate\OCSProcessDateDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSReleaseLockedCheque\OCSIReleaseLockedChequeDao.cs" />
+    <Compile Include="Areas\OCS\Models\OCSReleaseLockedCheque\OCSReleaseLockedChequeDao.cs" />
+    <Compile Include="Areas\OCS\Models\ProcessDate\IProcessDateDao.cs" />
+    <Compile Include="Areas\OCS\Models\ProcessDate\ProcessDateDao.cs" />
+    <Compile Include="Areas\OCS\Models\ProgressStatus\OCSProgressStatusDao.cs" />
+    <Compile Include="Areas\OCS\Models\ProgressStatus\OCSProgressStatusModel.cs" />
+    <Compile Include="Areas\OCS\Models\ScannerWorkStation\IScannerWorkStationDao.cs" />
+    <Compile Include="Areas\OCS\Models\ScannerWorkStation\ScannerWorkStationDao.cs" />
+    <Compile Include="Areas\OCS\Models\ScannerWorkStation\ScannerWorkStationModel.cs" />
+    <Compile Include="Areas\OCS\Models\SystemCutOffTime\ISystemCutOffTime.cs" />
+    <Compile Include="Areas\OCS\Models\SystemCutOffTime\SystemCutOffTimeDao.cs" />
+    <Compile Include="Areas\OCS\Models\TCCode\ITCCodeDao.cs" />
+    <Compile Include="Areas\OCS\Models\TCCode\TCCodeDao.cs" />
+    <Compile Include="Areas\OCS\Models\TransactionCode\ITransactionCodeDao.cs" />
+    <Compile Include="Areas\OCS\Models\TransactionCode\TransactionCodeDao.cs" />
+    <Compile Include="Areas\OCS\Models\TransactionType\ITransactionTypeDao.cs" />
+    <Compile Include="Areas\OCS\Models\TransactionType\TransactionTypeDao.cs" />
+    <Compile Include="Areas\OCS\Models\TransactionType\TransactionTypeModel.cs" />
+    <Compile Include="Areas\OCS\Models\WebAPI\JWTTokenModel.cs" />
+    <Compile Include="Areas\OCS\Models\WebAPI\SignatureEnquiryModel.cs" />
+    <Compile Include="Areas\OCS\Models\WebAPI\SignatureInputParameterModel.cs" />
+    <Compile Include="Areas\OCS\OCSAreaRegistration.cs" />
+    <Compile Include="Areas\COMMON\COMMONAreaRegistration.cs" />
+    <Compile Include="Areas\COMMON\Controllers\MainController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\ApprovedCheckerController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\BankCodeController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\BranchCodeController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\HolidayController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\InternalBranchController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\TaskController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\UserController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Utilities\AuditLogController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Utilities\ChangePasswordController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Utilities\ClearUserSessionController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Utilities\SecurityProfileController.cs" />
+    <Compile Include="Areas\COMMON\Controllers\Maintenance\ReturnCodeController.cs" />
+    <Compile Include="Areas\OCS\ViewModels\InwardItemViewModel.cs" />
+    <Compile Include="Areas\OCS\ViewModels\OutwardItemViewModel.cs" />
+    <Compile Include="Areas\OCS\ViewModels\ResultPageViewModel.cs" />
+    <Compile Include="Areas\OCS\ViewModels\SearchPageViewModel.cs" />
+    <Compile Include="Areas\PPS\Controllers\LoadCOFileController.cs" />
+    <Compile Include="Areas\PPS\Controllers\LoadPPSFileController.cs" />
+    <Compile Include="Areas\PPS\Controllers\PositivePayMatchingController.cs" />
+    <Compile Include="Areas\PPS\Controllers\Reports\DefaultReportController.cs" />
+    <Compile Include="Areas\PPS\Controllers\Reports\ICCSPrintReportController.cs" />
+    <Compile Include="Areas\PPS\Controllers\Reports\PrintReportController.cs" />
+    <Compile Include="Areas\PPS\Controllers\StartBatchICRController.cs" />
+    <Compile Include="Areas\PPS\Controllers\Verification\Base\ICCSBaseController.cs" />
+    <Compile Include="Areas\PPS\Controllers\Verification\VerificationController.cs" />
+    <Compile Include="Areas\PPS\Controllers\ViewPPSFileController.cs" />
+    <Compile Include="Areas\PPS\Models\LoadPPSFile\ILoadPPSFileDao.cs" />
+    <Compile Include="Areas\PPS\Models\LoadPPSFile\LoadPPSFileDao.cs" />
+    <Compile Include="Areas\PPS\Models\PositivePayMatching\IPositivePayMatchingDao.cs" />
+    <Compile Include="Areas\PPS\Models\PositivePayMatching\PositivePayMatchingDao.cs" />
+    <Compile Include="Areas\PPS\Models\PositivePayMatching\PositivePayMatchingModel.cs" />
+    <Compile Include="Areas\PPS\Models\StartBatchICR\IStartBatchICRDao.cs" />
+    <Compile Include="Areas\PPS\Models\StartBatchICR\StartBatchICRDao.cs" />
+    <Compile Include="Areas\PPS\Models\StartBatchICR\StartBatchICRModel.cs" />
+    <Compile Include="Areas\PPS\Models\Verification\IVerificationDao.cs" />
+    <Compile Include="Areas\PPS\Models\Verification\VerificationDao.cs" />
+    <Compile Include="Areas\PPS\Models\Verification\VerificationModel.cs" />
+    <Compile Include="Areas\PPS\Models\Verification\VerificationStatus.cs" />
+    <Compile Include="Areas\PPS\Models\ViewPPSFile\IViewPPSFileDao.cs" />
+    <Compile Include="Areas\PPS\Models\ViewPPSFile\ViewPPSFileDao.cs" />
+    <Compile Include="Areas\PPS\Models\ViewPPSFile\ViewPPSFileModel.cs" />
+    <Compile Include="Areas\PPS\PPSAreaRegistration.cs" />
+    <Compile Include="Areas\RPA\Controller\Maintenance\BotProfileController.cs" />
+    <Compile Include="Areas\RPA\Controller\MainController.cs" />
+    <Compile Include="Areas\RPA\RPAAreaRegistration.cs" />
+    <Compile Include="Areas\RPA\ViewModels\ResultPageViewModel.cs" />
+    <Compile Include="Areas\RPA\ViewModels\SearchPageViewModel.cs" />
+    <Compile Include="Controllers\Api\DashboardApiController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="CurrentUser.cs" />
+    <Compile Include="CustomAuthorizeAttribute.cs" />
+    <Compile Include="CustomPrinciple.cs" />
+    <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Helpers\RequestHelper.cs" />
+    <Compile Include="Helpers\ViewHelper.cs" />
+    <Compile Include="INCHEQS_ICSDataSet.cs">
+      <DependentUpon>INCHEQS_ICSDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="INCHEQS_ICSDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>INCHEQS_ICSDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbJoin\IDbJoinDao.cs" />
+    <Compile Include="Models\Report\IReportServiceOCS.cs" />
+    <Compile Include="Models\Report\ReportService.cs" />
+    <Compile Include="Models\Report\ReportServiceOCS.cs" />
+    <Compile Include="Models\SearchPageConfig\ConfigTable.cs" />
+    <Compile Include="Models\DbJoin\DbJoinDao.cs" />
+    <Compile Include="Models\SearchPageConfig\Dao\IPageConfigDaoICS.cs" />
+    <Compile Include="Models\SearchPageConfig\Dao\IPageConfigDaoOCS.cs" />
+    <Compile Include="Models\SearchPageConfig\Dao\IPageConfigDaoRPA.cs" />
+    <Compile Include="Models\SearchPageConfig\Dao\PageConfigDaoICS.cs" />
+    <Compile Include="Models\SearchPageConfig\Dao\PageConfigDaoOCS.cs" />
+    <Compile Include="Models\SearchPageConfig\PageConfigDaoRPA.cs" />
+    <Compile Include="Models\SearchPageConfig\QueueSqlConfig.cs" />
+    <Compile Include="Models\SearchPageConfig\Services\ISearchPageService.cs" />
+    <Compile Include="Config\ICSConfig.cs" />
+    <Compile Include="Controllers\Base\BaseController.cs" />
+    <Compile Include="Controllers\Reports\Base\ReportBaseController.cs" />
+    <Compile Include="Controllers\Api\CommonApiController.cs" />
+    <Compile Include="Controllers\Api\DataProcessApiController.cs" />
+    <Compile Include="Controllers\Api\ImageController.cs" />
+    <Compile Include="Controllers\Api\RejectCodesApiController.cs" />
+    <Compile Include="Controllers\Api\SignatureController.cs" />
+    <Compile Include="Controllers\Api\TaskMenuController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TaskMenu\ITaskMenuDao.cs" />
+    <Compile Include="Models\SearchPageConfig\Dao\IPageConfigDao.cs" />
+    <Compile Include="Models\SearchPageConfig\DataField.cs" />
+    <Compile Include="Models\SearchPageConfig\PageSqlConfig.cs" />
+    <Compile Include="Models\SearchPageConfig\Dao\PageConfigDao.cs" />
+    <Compile Include="Models\SearchPageConfig\Helpers\SearchSqlHelper.cs" />
+    <Compile Include="Models\SearchPageConfig\Services\SearchPageService.cs" />
+    <Compile Include="Models\SearchPageConfig\ValueTextField.cs" />
+    <Compile Include="Models\Report\IReportService.cs" />
+    <Compile Include="Models\Report\ReportModel.cs" />
+    <Compile Include="Models\TaskMenu\TaskMenuModel.cs" />
+    <Compile Include="Models\TaskMenu\TaskMenuDao.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Locale.Designer.cs" />
+    <Compile Include="Resources\Locale.ms-MY.Designer.cs" />
+    <Compile Include="RHB_DEMO_ICSDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RHB_DEMO_ICSDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Email\EmailModel.cs" />
+    <Compile Include="Services\Email\EmailService.cs" />
+    <Compile Include="Services\Email\IEmailService.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="TaskAssignment\TaskIdsICS.cs" />
+    <Compile Include="TaskAssignment\TaskIdsOCS.cs" />
+    <Compile Include="TaskAssignment\TaskIdsSDS.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Start\bin\CommonServiceLocator.dll" />
+    <Content Include="App_Start\bin\dllme.txt" />
+    <Content Include="App_Start\bin\Elmah.dll" />
+    <Content Include="App_Start\bin\Elmah.Mvc.dll" />
+    <Content Include="App_Start\bin\EntityFramework.dll" />
+    <Content Include="App_Start\bin\EntityFramework.SqlServer.dll" />
+    <Content Include="App_Start\bin\ICSSecurity.dll" />
+    <Content Include="App_Start\bin\ImageProcessor.dll" />
+    <Content Include="App_Start\bin\INCHEQS.BNM.dll" />
+    <Content Include="App_Start\bin\INCHEQS.Calendar.dll" />
+    <Content Include="App_Start\bin\INCHEQS.Common.dll" />
+    <Content Include="App_Start\bin\INCHEQS.ConfigVerficationBranch.dll" />
+    <Content Include="App_Start\bin\INCHEQS.ConfigVerification.dll" />
+    <Content Include="App_Start\bin\INCHEQS.DataAccessLayer.ATV.dll" />
+    <Content Include="App_Start\bin\INCHEQS.DataAccessLayer.dll" />
+    <Content Include="App_Start\bin\INCHEQS.DataAccessLayer.ICS.dll" />
+    <Content Include="App_Start\bin\INCHEQS.DataAccessLayer.OCS.dll" />
+    <Content Include="App_Start\bin\INCHEQS.DataAccessLayer.RPA.dll" />
+    <Content Include="App_Start\bin\INCHEQS.DataAccessLayer.SDS.dll" />
+    <Content Include="App_Start\bin\INCHEQS.DataAccessLayer.SVS.dll" />
+    <Content Include="App_Start\bin\INCHEQS.dll" />
+    <Content Include="App_Start\bin\INCHEQS.EOD.dll" />
+    <Content Include="App_Start\bin\INCHEQS.InternalBranch.dll" />
+    <Content Include="App_Start\bin\INCHEQS.OracleDataAccessLayer.dll" />
+    <Content Include="App_Start\bin\INCHEQS.PCHC.dll" />
+    <Content Include="App_Start\bin\INCHEQS.pdb" />
+    <Content Include="App_Start\bin\INCHEQS.PPS.dll" />
+    <Content Include="App_Start\bin\INCHEQS.Processes.dll" />
+    <Content Include="App_Start\bin\INCHEQS.Security.dll" />
+    <Content Include="App_Start\bin\INCHEQS.TaskAssignment.dll" />
+    <Content Include="App_Start\bin\InsiteMYLicensing.dll" />
+    <Content Include="App_Start\bin\log4net.dll" />
+    <Content Include="App_Start\bin\Microsoft.Practices.Unity.Configuration.dll" />
+    <Content Include="App_Start\bin\Microsoft.Practices.Unity.dll" />
+    <Content Include="App_Start\bin\Microsoft.ReportViewer.Common.dll" />
+    <Content Include="App_Start\bin\Microsoft.ReportViewer.WebForms.DLL" />
+    <Content Include="App_Start\bin\Microsoft.ReportViewer.WinForms.dll" />
+    <Content Include="App_Start\bin\Oracle.ManagedDataAccess.dll" />
+    <Content Include="App_Start\bin\System.Data.SqlClient.dll" />
+    <Content Include="App_Start\bin\Unity.Abstractions.dll" />
+    <Content Include="App_Start\bin\Unity.Mvc5.dll" />
+    <Content Include="App_Start\bin\WinSCP.exe" />
+    <Content Include="Areas\COMMON\Views\Main\Dashboard.cshtml" />
+    <Content Include="Areas\COMMON\Views\Main\Partial\_Information.cshtml" />
+    <Content Include="Areas\ICS\Controllers\Maintenance\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\Signature\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\Archive\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\Archive\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\BandQueueSetting\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\BandQueueSetting\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\BandQueueSetting\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\BandQueueSetting\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\BranchActivation\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\BranchActivation\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\BranchProgressStatus\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\BranchProgressStatus\Progress.cshtml" />
+    <Content Include="Areas\ICS\Views\ClearDataProcess\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\CMSAccountInfo\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\CMSAccountInfo\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\CMSAccountInfo\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\CMSAccountInfo\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\DataHouseKeep\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\DayEndProcess\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\DedicatedBranchDay\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\DedicatedBranchDay\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\DedicatedBranchDay\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\DedicatedBranchDay\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\DedicatedBranchOfficer\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\DedicatedBranchOfficer\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\DedicatedBranchOfficer\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateDebitFile\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateDebitFile\OutwardReturnDetail.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateDebitFile\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\GLReplacement\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\GLReplacement\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\GLReplacement\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\GLReplacement\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\HighRiskAccount\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\HighRiskAccount\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\HighRiskAccount\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\HighRiskAccount\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\HostReturnReason\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\HostReturnReason\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\HostReturnReason\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\HostReturnReason\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\LargeAmount\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\LateReturnedMaintenance\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\LateReturnedMaintenance\Delete.cshtml" />
+    <Content Include="Areas\ICS\Views\LateReturnedMaintenance\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\LateReturnedMaintenance\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadHostFile\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadHostFile\Partial\_FileManager.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadHostFile\Partial\_UploadForm.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadHostFile\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\ProgressStatus\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ProgressStatus\Progress_old.cshtml" />
+    <Content Include="Areas\ICS\Views\PullOutReason\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\PullOutReason\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\PullOutReason\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\PullOutReason\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\RejectReentry\ChequeVerificationPage.cshtml" />
+    <Content Include="Areas\ICS\Views\RejectReentry\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\RejectReentry\Partial\_CheckerVerification.cshtml" />
+    <Content Include="Areas\ICS\Views\RejectReentry\Partial\_MakerVerification.cshtml" />
+    <Content Include="Areas\ICS\Views\RejectReentry\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\ReleaseBranchLockedCheque\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ReleaseLockedCheque\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ScheduledTask\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ScheduledTask\ScheduledHistory.cshtml" />
+    <Content Include="Areas\ICS\Views\SendEmail\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ServiceActivate\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ServiceActivate\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\Common\_TransactionCodeSelectList.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\Error.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_ChequeControlAction.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_ChequeDetail.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_ChequeImage.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_ChequeInfo.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_EmptyChequeVerification.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_RejectReentryShowMICR.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_ShowMICR.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_SignatureList.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_SignatureViewer.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\ChequeRetrieverPage.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\ChequeVerificationPage.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\Partial\_Action.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\Partial\_BranchAction.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Modal\_ChequeHistoryPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Modal\_ClosePopup.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Modal\_EmptyPrint.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Modal\_PasswordPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\StateCode\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\StateCode\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\StateCode\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\StateCode\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\ThresholdSetting\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\ThresholdSetting\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\ThresholdSetting\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ThresholdSetting\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\VerificationLimit\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\VerificationLimit\Details.cshtml" />
+    <Content Include="Areas\ICS\Views\VerificationLimit\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\VerificationLimit\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\web.config" />
+    <Content Include="Areas\ICS\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\OCS\Models\ScannerWorkStation\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\TransactionCode\Create.cshtml" />
+    <Content Include="Areas\OCS\Views\TransactionCode\Details.cshtml" />
+    <Content Include="Areas\OCS\Views\TransactionCode\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\TransactionCode\SearchResultPage.cshtml" />
+    <Content Include="bin\bin\IQA\AxFBIQA3XLib.dll" />
+    <Content Include="bin\bin\IQA\DBAccessLayer.dll" />
+    <Content Include="bin\bin\IQA\FBIQA3XLib.dll" />
+    <Content Include="bin\bin\IQA\FujiIQA_activeXdll.dll" />
+    <Content Include="bin\bin\IQA\FujiIQA_activeXdll.pdb" />
+    <Content Include="bin\bin\IQA\INCHEQSException.dll" />
+    <Content Include="bin\bin\IQA\Interop.FBIQA3Lib.dll" />
+    <Content Include="bin\bin\IQA\Interop.FBIQA3XLib.dll" />
+    <Content Include="bin\bin\IQA\TPODAppConfig.dll" />
+    <Content Include="bin\INCHEQS.BNM.dll" />
+    <Content Include="bin\INCHEQS.DataAccessLayer.dll" />
+    <Content Include="bin\INCHEQS.DataAccessLayer.SVS.dll" />
+    <Content Include="bin\INCHEQS.OracleDataAccessLayer.dll" />
+    <Content Include="bin\INCHEQS.TaskAssignment.dll" />
+    <Content Include="bin\IQA\AxFBIQA3XLib.dll" />
+    <Content Include="bin\IQA\DBAccessLayer.dll" />
+    <Content Include="bin\IQA\FBIQA3XLib.dll" />
+    <Content Include="bin\IQA\FujiIQA_activeXdll.dll" />
+    <Content Include="bin\IQA\FujiIQA_activeXdll.pdb" />
+    <Content Include="bin\IQA\INCHEQSException.dll" />
+    <Content Include="bin\IQA\Interop.FBIQA3Lib.dll" />
+    <Content Include="bin\IQA\Interop.FBIQA3XLib.dll" />
+    <Content Include="bin\IQA\TPODAppConfig.dll" />
+    <Content Include="bin\Oracle.ManagedDataAccess.dll" />
+    <Content Include="Content\Images\download.png" />
+    <Content Include="Content\ProgressBarWindow.css" />
+    <Content Include="Content\Signature\cheque.jpg" />
+    <Content Include="Content\Signature\example.png" />
+    <Content Include="Content\zabuto_calendar.css" />
+    <Content Include="IQA\AxFBIQA3XLib.dll" />
+    <Content Include="IQA\DBAccessLayer.dll" />
+    <Content Include="IQA\FBIQA3XLib.dll" />
+    <Content Include="IQA\FujiIQA_activeXdll.dll" />
+    <Content Include="IQA\FujiIQA_activeXdll.pdb" />
+    <Content Include="IQA\INCHEQSException.dll" />
+    <Content Include="IQA\Interop.FBIQA3Lib.dll" />
+    <Content Include="IQA\Interop.FBIQA3XLib.dll" />
+    <Content Include="IQA\TPODAppConfig.dll" />
+    <Content Include="CAB\BPROOCX.CAB" />
+    <Content Include="CAB\BPROOCX_20161011.CAB" />
+    <Content Include="CAB\BPROOCX_Test.CAB" />
+    <Content Include="CAB\BPROOCX_Working %282%29.CAB" />
+    <Content Include="CAB\BPROOCX_Working.CAB" />
+    <Content Include="CAB\BPROOCX_WorkingWorking.CAB" />
+    <Content Include="CAB\BPROOCX_Working_20161020.CAB" />
+    <Content Include="CAB\Canon.CAB" />
+    <Content Include="CAB\DCCOCX.CAB" />
+    <Content Include="CAB\DCCOCX1091.CAB" />
+    <Content Include="CAB\DCCOCX20140423.CAB" />
+    <Content Include="CAB\DCCOCXARJ.CAB" />
+    <Content Include="CAB\DCCOCXBSN.CAB" />
+    <Content Include="CAB\DCCOCXPakistan.CAB" />
+    <Content Include="CAB\DisplayTIFFOCX.CAB" />
+    <Content Include="CAB\FUJIOCX.CAB" />
+    <Content Include="CAB\FUJIOCX20131224.CAB" />
+    <Content Include="CAB\FUJIOCX20160703.CAB" />
+    <Content Include="CAB\FUJIOCX_20150929.CAB" />
+    <Content Include="CAB\FUJIOCX_20160409.CAB" />
+    <Content Include="CAB\FUJIOCX_20160414.CAB" />
+    <Content Include="CAB\FUJIOCX_20160416.CAB" />
+    <Content Include="CAB\FUJIOCX_20160703.CAB" />
+    <Content Include="CAB\FUJIOCX_20160721.CAB" />
+    <Content Include="CAB\FUJIOCX_3Scanned.CAB" />
+    <Content Include="CAB\FUJIOCX_DIR.CAB" />
+    <Content Include="CAB\FUJIOCX_Julian.CAB" />
+    <Content Include="CAB\FUJIOCX_Old_20160530.CAB" />
+    <Content Include="CAB\FUJIOCX_OLD_Working.CAB" />
+    <Content Include="CAB\FUJIOCX_ORI21072015.CAB" />
+    <Content Include="CAB\FUJIOCX_original_17052015.CAB" />
+    <Content Include="CAB\FUJIOCX_Orig_Julian.CAB" />
+    <Content Include="CAB\FUJIOCX_showMaxCount.CAB" />
+    <Content Include="CAB\FUJIOCX_UV.CAB" />
+    <Content Include="CAB\FUJIOCX_yy - Copy.CAB" />
+    <Content Include="Areas\OCS\Views\ScannerWorkStation\Create.cshtml" />
+    <Content Include="Areas\OCS\Views\ScannerWorkStation\Details.cshtml" />
+    <Content Include="Areas\OCS\Views\ScannerWorkStation\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ScannerWorkStation\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ScannerWorkStation\vssver2.scc" />
+    <Content Include="bin\CommonServiceLocator.dll" />
+    <Content Include="bin\Elmah.dll" />
+    <Content Include="bin\Elmah.Mvc.dll" />
+    <Content Include="bin\EntityFramework.dll" />
+    <Content Include="bin\EntityFramework.SqlServer.dll" />
+    <Content Include="bin\ICSSecurity.dll" />
+    <Content Include="bin\ImageProcessor.dll" />
+    <Content Include="bin\INCHEQS.Calendar.dll" />
+    <Content Include="bin\INCHEQS.Common.dll" />
+    <Content Include="bin\INCHEQS.ConfigVerficationBranch.dll" />
+    <Content Include="bin\INCHEQS.ConfigVerification.dll" />
+    <Content Include="bin\INCHEQS.DataAccessLayer.ATV.dll" />
+    <Content Include="bin\INCHEQS.DataAccessLayer.ICS.dll" />
+    <Content Include="bin\INCHEQS.DataAccessLayer.OCS.dll" />
+    <Content Include="bin\INCHEQS.DataAccessLayer.RPA.dll" />
+    <Content Include="bin\INCHEQS.DataAccessLayer.SDS.dll" />
+    <Content Include="bin\INCHEQS.EOD.dll" />
+    <Content Include="bin\INCHEQS.InternalBranch.dll" />
+    <Content Include="bin\INCHEQS.PCHC.dll" />
+    <Content Include="bin\INCHEQS.PPS.dll" />
+    <Content Include="bin\INCHEQS.Processes.dll" />
+    <Content Include="bin\INCHEQS.Security.dll" />
+    <Content Include="bin\InsiteMYLicensing.dll" />
+    <Content Include="bin\log4net.dll" />
+    <Content Include="bin\Microsoft.Practices.Unity.Configuration.dll" />
+    <Content Include="bin\Microsoft.Practices.Unity.dll" />
+    <Content Include="bin\Microsoft.ReportViewer.Common.dll" />
+    <Content Include="bin\Microsoft.ReportViewer.WebForms.dll" />
+    <Content Include="bin\Microsoft.ReportViewer.WinForms.dll" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\System.Data.SqlClient.dll" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Optimization.dll" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\Unity.Abstractions.dll" />
+    <Content Include="bin\Unity.Mvc5.dll" />
+    <Content Include="bin\WebGrease.dll" />
+    <Content Include="connections.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Content\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap-reboot.css" />
+    <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Demo.css" />
+    <Content Include="Content\Images\loading_small.svg" />
+    <Content Include="Content\Images\no-cheque.jpg" />
+    <Content Include="Content\Images\spin.gif" />
+    <Content Include="Content\Images\spin_big.gif" />
+    <Content Include="Content\Images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\Images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\Images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\Images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\Images\ui-icons_454545_256x240.png" />
+    <Content Include="DbScripts\-Guide-SixDigitTaskId.txt" />
+    <Content Include="DbScripts\-SQL-Development.sql" />
+    <Content Include="DbScripts\-SQL-Guide.txt" />
+    <Content Include="DbScripts\PH\A-Configuration\A-Initial TableData.sql" />
+    <Content Include="DbScripts\PH\A-Configuration\B-Directory Data.sql" />
+    <Content Include="DbScripts\PH\A-Configuration\D-Task-Data.sql" />
+    <Content Include="DbScripts\PH\A-Configuration\C-User Data %28sample%29.sql" />
+    <Content Include="DbScripts\PH\A-Configuration\E-Views.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\ApproveMaintenance.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\AuditLog.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\BandQueueSetting.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\CMSAccountInfo.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\GLReplacement.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\ThresholdSetting.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\BankCode.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\BranchCode.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\Group.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\HostReturnReasonCode.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\InternalBranch.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\PullOutReason.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\ReleaseLockedCheque.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\ReturnCode.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\StateCode.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\TaskAssignment.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\TransactionCode.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\TransactionType.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\HighRiskAccount.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\User.sql" />
+    <Content Include="DbScripts\PH\B-Maintenance And Utility\VerificationLimit.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\A-Import\A1-MICRImport%28ICL%29.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\A-Import\A2-MICRImport%28ECCS%29.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\B-Reject Reentry\B1-RejectReentryMaker.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\B-Reject Reentry\B2-RejectReentryChecker.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\H-Service Activate\A1-SOA Service.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\C1-Verification.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\C2-Verification 1st.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\C3-Verification 2nd.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\C4-Verification 3rd.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\D1-Band1.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\D2-Band2.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\D3-Band3.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\D4-Band4.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\E1-ReviewMine.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\E2-PullOutData.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\E3-ApprovedItem.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\E4-InwardRejected.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\E5-PendingBranchConfirmation.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\F1-ApproveAll.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\C-Verification\F2-ReturnAll.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\D-Host File\A1-Generate Debit File.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\D-Host File\A2-Load Host HREJ.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\D-Host File\A3-Generate HREP File.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\E-Monitoring\A-Progress Status.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\E-Monitoring\B-Not Complete View.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\F-Branch Activation\A-BranchActivation.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\G-Outward Return\A1-Generate Outward Return.sql" />
+    <Content Include="DbScripts\PH\C-Inward Item\G-Outward Return\A2-Generate CTTUM File.sql" />
+    <Content Include="DbScripts\PH\D-Branch\A-PendingDataMaker.sql" />
+    <Content Include="DbScripts\PH\D-Branch\B-PendingDataChecker.sql" />
+    <Content Include="DbScripts\PH\D-Branch\C-ReviewMineBranch.sql" />
+    <Content Include="DbScripts\PH\E-SearchCheques\SearchCheques.sql" />
+    <Content Include="DbScripts\PH\F-Dashboard\A-Dashboard Online User.sql" />
+    <Content Include="DbScripts\PH\F-Dashboard\B-Dasboard Progress Status.sql" />
+    <Content Include="DbScripts\PH\G-Report\Free Item Report.sql" />
+    <Content Include="DbScripts\PH\G-Report\Host Status Report.sql" />
+    <Content Include="DbScripts\PH\G-Report\LargeAmount.sql" />
+    <Content Include="DbScripts\PH\G-Report\Match Item Report.sql" />
+    <Content Include="DbScripts\PH\G-Report\Missing Item Report.sql" />
+    <Content Include="DbScripts\PH\G-Report\PendingBranchDecisionReport.sql" />
+    <Content Include="DbScripts\PH\G-Report\PrintCheque.sql" />
+    <Content Include="DbScripts\PH\G-Report\Rejected Items Report.sql" />
+    <Content Include="DbScripts\PH\G-Report\ReturnItemduetoTechnicalDefect.sql" />
+    <Content Include="DbScripts\PH\G-Report\Summary of Return Item Report.sql" />
+    <Content Include="DbScripts\PH\G-Report\VerificationSummaryReport.sql" />
+    <Content Include="DbScripts\PH\SQLCMD-AUTOS.sql" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="App_Data\Logs\Incheqs-log.log" />
+    <Content Include="mssccprj.scc" />
+    <Content Include="Areas\ATV\Views\web.config" />
+    <Content Include="Areas\ATV\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\ATV\Views\DataCorrection\Index.cshtml" />
+    <Content Include="Areas\ATV\Views\DataCorrection\SearchResultPage.cshtml" />
+    <Content Include="Areas\ATV\Views\DataCorrection\Edit.cshtml" />
+    <Content Include="Areas\ATV\Views\DataCorrection\_DataChequeImage.cshtml" />
+    <Content Include="Areas\ATV\Views\DataCorrection\Edit2.cshtml" />
+    <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Areas\RPA\Views\BotProfile\Create.cshtml" />
+    <Content Include="Areas\RPA\Views\BotProfile\Edit.cshtml" />
+    <Content Include="Areas\RPA\Views\BotProfile\Index.cshtml" />
+    <Content Include="Areas\RPA\Views\BotProfile\SearchResultPage.cshtml" />
+    <Content Include="Areas\RPA\Views\_ViewStart.cshtml" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="App_Start\bin\INCHEQS.dll.config" />
+    <Content Include="App_Start\bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="App_Start\bin\System.Web.Mvc.dll" />
+    <Content Include="App_Start\bin\System.Web.Optimization.dll" />
+    <Content Include="App_Start\bin\System.Web.Razor.dll" />
+    <Content Include="App_Start\bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="App_Start\bin\System.Web.WebPages.dll" />
+    <Content Include="App_Start\bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="App_Start\bin\WebGrease.dll" />
+    <Content Include="Content\dropDown.css" />
+    <Content Include="Content\font-awesome.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Images\cal.jpg" />
+    <Content Include="Content\Images\calendar.gif" />
+    <Content Include="Content\Images\calendar.png" />
+    <Content Include="Content\Images\help.png" />
+    <Content Include="Content\Images\link.jpg" />
+    <Content Include="Content\Images\loading.gif" />
+    <Content Include="Content\Images\logo.jpg" />
+    <Content Include="Content\Images\minus.jpg" />
+    <Content Include="Content\Images\plus.jpg" />
+    <Content Include="Content\Images\sort_asc.png" />
+    <Content Include="Content\Images\sort_both.png" />
+    <Content Include="Content\Images\sort_desc.png" />
+    <Content Include="Content\Images\switcher.png" />
+    <Content Include="Content\Images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="Content\Images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="Content\Images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="Content\Images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="Content\Images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="Content\Images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\Images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="Content\Images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="Content\Images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="Content\Images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\Images\ui-icons_228ef1_256x240.png" />
+    <Content Include="Content\Images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="Content\Images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="Content\Images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\jquery.dataTable-1.10.11.min.css" />
+    <Content Include="Content\pivot.min.css" />
+    <Content Include="Scripts\app.js" />
+    <Content Include="Scripts\App\APICalls.js" />
+    <Content Include="Scripts\App\BankBranchesOcsSW.js" />
+    <Content Include="Scripts\App\BankBranchesOcsSWMaintain.js" />
+    <Content Include="Scripts\App\chequePPSVerification.js" />
+    <Content Include="Scripts\App\dataProcessRefreshPage.js" />
+    <Content Include="Scripts\App\InternalBranchCodeIslamic.js" />
+    <Content Include="Scripts\App\InternalBranchCodeConv.js" />
+    <Content Include="Scripts\App\BranchCodeMaintDetails.js" />
+    <Content Include="Scripts\App\calender.js" />
+    <Content Include="Scripts\App\ChequeAmountEntry.js" />
+    <Content Include="Scripts\App\chequeVerification.js" />
+    <Content Include="Scripts\App\common.js" />
+    <Content Include="Scripts\App\dedicatedbranch.js" />
+    <Content Include="Scripts\App\Holiday.js" />
+    <Content Include="Scripts\App\IssuingBankBranch.js" />
+    <Content Include="Scripts\App\lateReturnedMaintenance.js" />
+    <Content Include="Scripts\App\login.js" />
+    <Content Include="Scripts\App\moneymask.js" />
+    <Content Include="Scripts\App\rejectCodeBranchApi.js" />
+    <Content Include="Scripts\App\rejectCodeApi.js" />
+    <Content Include="Scripts\App\ReturnReason.js" />
+    <Content Include="Scripts\App\searchbtn.js" />
+    <Content Include="Scripts\App\SecurityProfile.js" />
+    <Content Include="Scripts\App\startBatchICR.js" />
+    <Content Include="Scripts\App\transactionType.js" />
+    <Content Include="Scripts\App\verificationLimit.js" />
+    <Content Include="Scripts\App\appConfig.js" />
+    <Content Include="Scripts\App\session.js" />
+    <Content Include="Scripts\App\bandQueue.js" />
+    <Content Include="Scripts\App\dataProcessRealTime.js" />
+    <Content Include="Scripts\App\fileUpload.js" />
+    <Content Include="Scripts\App\imageImport.js" />
+    <Content Include="Scripts\App\report.js" />
+    <Content Include="Scripts\bootstrap.bundle.js" />
+    <Content Include="Scripts\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\BranchDashboard\branchdashboard-app.js" />
+    <Content Include="Scripts\BranchDashboard\branchdashboard-functions.js" />
+    <Content Include="Scripts\BranchDashboard\branchdashboard-templates.js" />
+    <Content Include="Scripts\Dashboard\dashboard-functions.js" />
+    <Content Include="INCHEQS_ICSDataSet.xsc">
+      <DependentUpon>INCHEQS_ICSDataSet.xsd</DependentUpon>
+    </Content>
+    <Content Include="app.config" />
+    <Content Include="Scripts\dataProcessRefreshPage.js" />
+    <Content Include="Scripts\ICS\branchcheque.js" />
+    <Content Include="Scripts\ICS\chequeBack.js" />
+    <Content Include="Scripts\ICS\signature.js" />
+    <Content Include="Scripts\ICS\chequeBranch.js" />
+    <Content Include="Scripts\ICS\cheque.js" />
+    <Content Include="Scripts\ICS\OutwardReturnItems.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.3.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.3.min.js" />
+    <Content Include="Scripts\OCSDashboard\ocsdashboard-app.js" />
+    <Content Include="Scripts\OCSDashboard\ocsdashboard-functions.js" />
+    <Content Include="Scripts\OCSDashboard\ocsdashboard-templates.js" />
+    <Content Include="Scripts\OCS\BankCharges.js" />
+    <Content Include="Scripts\OCS\branchEOD.js" />
+    <Content Include="Scripts\OCS\BranchSubmission.js" />
+    <Content Include="Scripts\OCS\cheque.js" />
+    <Content Include="Scripts\OCS\ChequeAmountEntry.js" />
+    <Content Include="Scripts\OCS\ChequeDateAmountEntry.js" />
+    <Content Include="Scripts\OCS\close.js" />
+    <Content Include="Scripts\OCS\confirm.js" />
+    <Content Include="Scripts\OCS\DataEntry.js" />
+    <Content Include="Scripts\OCS\dcc.js" />
+    <Content Include="Scripts\OCS\fuji.js" />
+    <Content Include="Scripts\OCS\capturing.js" />
+    <Content Include="Scripts\OCS\GetInternalBranchSelfClearingId.js" />
+    <Content Include="Scripts\OCS\OutwardClearingItems.js" />
+    <Content Include="Scripts\OCS\page.js" />
+    <Content Include="Scripts\OCS\scan.js" />
+    <Content Include="Scripts\OCS\TransactionBalancing.js" />
+    <Content Include="Scripts\zabuto_calendar.js" />
+    <Content Include="Scripts\zabuto_calendar.min.js" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WinSCP.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\COMMON\Views\web.config" />
+    <Content Include="Areas\COMMON\Views\ApprovedChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\AuditLog\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\AuditLog\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankCode\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankCode\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankCode\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankCode\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\BranchCode\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\BranchCode\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\BranchCode\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BranchCode\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\ChangePassword\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\Group\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\Group\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\Group\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\Group\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\SecurityProfile\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\Task\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\Task\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\Task\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\User\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\User\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\User\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\User\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\COMMON\Views\ClearUserSession\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\Main\Partial\vssver2.scc" />
+    <Content Include="Areas\COMMON\Views\Main\vssver2.scc" />
+    <Content Include="Areas\COMMON\Views\ReturnCode\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\ReturnCode\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\ReturnCode\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranch\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranch\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranch\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranch\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\Holiday\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\Holiday\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\Holiday\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\Holiday\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\OCS\Views\web.config" />
+    <Content Include="Areas\OCS\Views\TransactionType\Create.cshtml" />
+    <Content Include="Areas\OCS\Views\TransactionType\Details.cshtml" />
+    <Content Include="Areas\OCS\Views\TransactionType\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\TransactionType\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Concerns\vssver2.scc" />
+    <Content Include="Areas\ICS\Controllers\InwardClearing\BranchMonitoring\vssver2.scc" />
+    <Content Include="Areas\ICS\Controllers\InwardClearing\ProgressMonitoring\vssver2.scc" />
+    <Content Include="Areas\ICS\Controllers\InwardClearing\Verification\Base\vssver2.scc" />
+    <Content Include="Areas\ICS\Controllers\InwardClearing\Verification\vssver2.scc" />
+    <Content Include="Areas\ICS\Controllers\Reports\vssver2.scc" />
+    <Content Include="Areas\ICS\Controllers\Utilities\vssver2.scc" />
+    <Content Include="Areas\ICS\Controllers\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\BandQueueSetting\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\CommonInwardItem\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\DashboardConfig\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\DedicatedBranchDay\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\DedicatedBranchOfficer\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\FileInformation\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\GLReplacement\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\HostFile\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\HostReturnReason\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\ProgressStatus\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\Progress\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\PullOutReason\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\RejectReentry\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\ScheduledTask\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\SendEmail\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\Sequence\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\State\vssver2.scc" />
+    <Content Include="Areas\ICS\Models\Verification\vssver2.scc" />
+    <Content Include="Areas\ICS\ViewModels\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\Archive\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\BandQueueSetting\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\BranchActivation\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\BranchProgressStatus\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\ClearDataProcess\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\CMSAccountInfo\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\DataHouseKeep\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\DayEndProcess\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\DedicatedBranchDay\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\DedicatedBranchOfficer\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\GenerateDebitFile\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\GLReplacement\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\HighRiskAccount\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\HostReturnReason\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\LargeAmount\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\LoadHostFile\Partial\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\LoadHostFile\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\ProgressStatus\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\PullOutReason\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\RejectReentry\Partial\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\RejectReentry\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\ReleaseBranchLockedCheque\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\ReleaseLockedCheque\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\ScheduledTask\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\SendEmail\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\ServiceActivate\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\Shared\Common\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\Partial\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Modal\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\Shared\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\StateCode\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\ThresholdSetting\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\VerificationLimit\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\vssver2.scc" />
+    <Content Include="Areas\ICS\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\TCCode\Create.cshtml" />
+    <Content Include="Areas\OCS\Views\TCCode\Details.cshtml" />
+    <Content Include="Areas\OCS\Views\TCCode\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\TCCode\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\Hub\Create.cshtml" />
+    <Content Include="Areas\OCS\Views\Hub\Edit.cshtml" />
+    <Content Include="Areas\OCS\Views\Hub\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\Hub\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Models\HubBranch\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\HubBranch\Edit.cshtml" />
+    <Content Include="Areas\OCS\Views\HubBranch\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\HubBranch\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Models\SystemCutOffTime\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\SystemCutOffTime\Create.cshtml" />
+    <Content Include="Areas\OCS\Views\SystemCutOffTime\Edit.cshtml" />
+    <Content Include="Areas\OCS\Views\SystemCutOffTime\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\SystemCutOffTime\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\SystemProfile\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\SystemProfile\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\Capturing\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\Capturing\FUJI.cshtml" />
+    <Content Include="Areas\OCS\Views\Capturing\CapturingPage.cshtml" />
+    <Content Include="CAB\BPROOCX.CAB_Single.BAK" />
+    <Content Include="Areas\OCS\Views\ClearingItems\Index_.cshtml" />
+    <Content Include="Areas\OCS\Views\ClearingItems\SearchResultPage_.cshtml" />
+    <Content Include="Areas\OCS\Views\ClearingItemsSummary\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ClearingItemsSummary\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\Capturing\DCC.cshtml" />
+    <Content Include="Areas\OCS\Controllers\OutwardClearing\ChequeAmountEntry\Base\vssver2.scc" />
+    <Content Include="Areas\OCS\Models\ChequeAmountEntry\vssver2.scc" />
+    <Content Include="Areas\OCS\Models\CommonOutwardItem\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base-\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base-\_ChequeControlAction.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base-\_ChequeDetail.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base-\_ChequeImage.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base-\_ChequeImageAction.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base-\_ChequeInfo.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base-\_EmptyChequeVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base-\_ShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base-\_SignatureList.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base-\_SignatureViewer.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\_ChequeControlAction.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\_ChequeDetail.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\_ChequeImage.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\_ChequeImageAction.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\_ChequeInfo.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\_EmptyChequeVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\_RejectReentryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\_ShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\_SignatureList.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\_SignatureViewer.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Modal\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Modal\_ChequeHistoryPopup.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Modal\_ClosePopup.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Modal\_EmptyPrint.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Modal\_PasswordPopup.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\OCSDefault\ChequeRetrieverPage.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\OCSDefault\ChequeVerificationPage.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\OCSDefault\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\OCSDefault\Partial\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\OCSDefault\Partial\_Action.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\OCSDefault\Partial\_BranchAction.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\OCSDefault\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\OCSDefault\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\AIFImport\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\AIFImport\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\AIFImport\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\BranchClearingItem\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\BranchClearingItem\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAmountEntry\ChequeVerificationPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAmountEntry\ChequeVerificationPage_bak20181017.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAmountEntry\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAmountEntry\Partial-\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\ChequeAmountEntry\Partial-\_CheckerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAmountEntry\Partial-\_MakerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAmountEntry\Partial\_CheckerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAmountEntry\Partial\_CheckerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAmountEntry\Partial\_MakerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAmountEntry\Partial\_MakerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAmountEntry\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAmountEntry\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\ProcessDate\Create.cshtml" />
+    <Content Include="Areas\OCS\Views\ProcessDate\Details.cshtml" />
+    <Content Include="Areas\OCS\Views\ProcessDate\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ProcessDate\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ProcessDate\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\Search\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\Search\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Models\OCSDataProcess\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\ClearDataProcess\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\--CheckAmountEntry\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\--CheckAmountEntry\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSProcessDate\Index.cshtml" />
+    <Content Include="Areas\OCS\Models\ChequeAccountEntry\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\ChequeAccountEntry\ChequeVerificationPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAccountEntry\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAccountEntry\Partial\_CheckerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAccountEntry\Partial\_CheckerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAccountEntry\Partial\_MakerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAccountEntry\Partial\_MakerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAccountEntry\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAccountEntry\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\ProgressStatus\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ProgressStatus\Progress.cshtml" />
+    <Content Include="Areas\OCS\Views\ProgressStatus\vssver2.scc" />
+    <Content Include="Areas\OCS\Models\ProgressStatus\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\InwardReturnImport\FileListing.cshtml" />
+    <Content Include="Areas\OCS\Views\InwardReturnImport\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\InwardReturnImport\MatchListing.cshtml" />
+    <Content Include="Areas\OCS\Views\InwardReturnImport\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\InwardReturnImport\UnmatchListing.cshtml" />
+    <Content Include="Areas\OCS\Views\ReturnChequeAdvice\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ReturnChequeAdvice\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Controllers\OutwardClearing\ProgressMonitoring\vssver2.scc" />
+    <Content Include="Areas\OCS\Models\OCSReleaseLockedCheque\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\ReleaseLockedCheque\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ReturnChequeAdvice\InwardClearing\Modal\_EmptyPrint.cshtml" />
+    <Content Include="Areas\OCS\Views\DayIndex.cshtml" />
+    <Content Include="Areas\OCS\Views\--CheckAmountEntry\ChequeVerificationPage.cshtml" />
+    <Content Include="Areas\OCS\Views\--CheckAmountEntry\Partial\_CheckerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\--CheckAmountEntry\Partial\_ChequeAmountImage.cshtml" />
+    <Content Include="Areas\OCS\Views\--CheckAmountEntry\Partial\_MakerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\--CheckAmountEntry\Partial\_MakerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDataEntry\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDataEntry\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDataEntry\ChequeDataEntryVerificationPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDataEntry\Partial\_DataEntryControlBox.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDataEntry\Partial\_AccountNAmountEntryDetail.cshtml" />
+    <Content Include="Areas\OCS\Views\BranchEndOfDay\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\TransactionBalancing\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\TransactionBalancing\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\TransactionBalancing\TransactionBalancingVerificationPage.cshtml" />
+    <Content Include="Areas\OCS\Views\TransactionBalancing\Partial\_BalancingControlBox.cshtml" />
+    <Content Include="Areas\OCS\Views\TransactionBalancing\Partial\_BalancingHistory.cshtml" />
+    <Content Include="Areas\OCS\Views\BranchEndOfDaySummary\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\BranchEndOfDaySummary\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\GenerateDebitFileOCS\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\GenerateDebitFileOCS\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ClearingItems\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ClearingItems\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeAmountEntry\Partial\_AmountInfo.cshtml" />
+    <Content Include="Areas\OCS\Views\MicrRepair\Partial\_CheckerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\MicrRepair\Partial\_CheckerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\MicrRepair\Partial\_MakerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\MicrRepair\Partial\_MakerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\MicrRepair\Partial\_MicrRepairInfo.cshtml" />
+    <Content Include="Areas\OCS\Views\MicrRepair\ChequeVerificationPage.cshtml" />
+    <Content Include="Areas\OCS\Views\MicrRepair\ChequeVerificationPage_bak20181017.cshtml" />
+    <Content Include="Areas\OCS\Views\MicrRepair\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\MicrRepair\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\Search\Partial\_CheckerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\Search\Partial\_CheckerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\Search\Partial\_LayoutChequeSearchVerificationOutward.cshtml" />
+    <Content Include="Areas\OCS\Views\Search\Partial\_MakerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\Search\Partial\_MakerDataEntryShowMICRbup.cshtml" />
+    <Content Include="Areas\OCS\Views\Search\ChequeVerificationPage.cshtml" />
+    <Content Include="Areas\OCS\Views\Search\_ChequeInfo2.cshtml" />
+    <Content Include="Areas\OCS\Views\Search\_ChequeInfo3.cshtml" />
+    <Content Include="Areas\OCS\Views\Search\_ChequeSearchControlAction.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSAIFFileUpload\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSAIFFileUpload\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\HolidayApprovedChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\HolidayApprovedChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedUserChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedUserChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\Capturing\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankCodeChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankCodeChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ScannerWorkStationChecker\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ScannerWorkStationChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\_ChequeAmountImage.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\ChequeInfo1.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedGroupChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedGroupChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\DataEntry\ChequeDataEntryVerificationPage.cshtml" />
+    <Content Include="Areas\OCS\Views\DataEntry\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\DataEntry\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\DataEntry\Partial\_AmountInfo.cshtml" />
+    <Content Include="Areas\OCS\Views\DataEntry\Partial\_CheckerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\DataEntry\Partial\_CheckerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\DataEntry\Partial\_MakerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\DataEntry\Partial\_MakerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\DataEntry\Partial\_DataEntryControlBox.cshtml" />
+    <Content Include="Areas\OCS\Views\DataEntry\Partial\_AccountNAmountEntryDetail.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedHubUserChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedHubUserChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\HubUser\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\HubUser\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\HubUser\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\HubUser\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\BranchCodeChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BranchCodeChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranchChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranchChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\ReturnCodeChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\ReturnCodeChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\_ChequeDataEntryImage.cshtml" />
+    <Content Include="Areas\ICS\Views\ReleaseLockedCheque\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ReleaseLockedCheque\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeTransactionBalancing\ChequeVerificationPage.cshtml" />
+    <Content Include="Areas\OCS\Views\Shared\OutwardClearing\Base\_ChequeTransactionBalancingImage.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeTransactionBalancing\Partial\_MakerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeTransactionBalancing\Partial\_MakerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeTransactionBalancing\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeTransactionBalancing\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeTransactionBalancing\Partial\_BalancingControlBox.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeTransactionBalancing\Partial\_AccountNAmountEntryDetail.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeTransactionBalancing\Partial\_BalancingHistory.cshtml" />
+    <Content Include="Areas\COMMON\Views\AccountProfile\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\AccountProfile\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\AccountProfile\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\AccountProfile\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\AccountProfileChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\AccountProfileChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\LargeAmount\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\LargeAmount\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\LargeAmountChecker\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\LargeAmountChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\VerificationLimitChecker\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\VerificationLimitChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\ThresholdSettingChecker\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ThresholdSettingChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\GenerateOutwardClearingICL\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\GenerateOutwardClearingICL\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ClearDataProcess\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedGroupChecker\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\ClearUserSession\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedTaskChecker\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedTaskChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedTaskChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedHubBranchChecker\Details.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedHubBranchChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedHubBranchChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\HubBranch\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\HubBranch\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\HubBranch\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\ApprovedHubUserChecker\Details.cshtml" />
+    <Content Include="Areas\OCS\Views\Search\Partial\_MakerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\GenerateOutwardClearingICL\Modal\_CenterSubmittedItemsPopup.cshtml" />
+    <Content Include="Areas\OCS\Views\GenerateOutwardClearingICL\Modal\_ReadyforCenterClearingPopup.cshtml" />
+    <Content Include="Areas\COMMON\Views\SecurityProfileChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\SecurityProfileChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\SecurityProfileChecker\SecurityProfile.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDateAmountEntry\ChequeVerificationPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDateAmountEntry\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDateAmountEntry\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDateAmountEntry\Partial\_AmountInfo.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDateAmountEntry\Partial\_CheckerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDateAmountEntry\Partial\_CheckerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDateAmountEntry\Partial\_MakerDataEntryShowMICR.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDateAmountEntry\Partial\_MakerVerification.cshtml" />
+    <Content Include="Areas\OCS\Views\ChequeDateAmountEntry\Partial\_MakerVerification_20200706.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateOutwardReturnICL\Generate.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateOutwardReturnICL\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateOutwardReturnICL\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_SignatureListing.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_ChequeDetail2.cshtml" />
+    <Content Include="Areas\ICS\Views\ClearDataProcess\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\InwardReturnICL\Modal\_InwardItemListPopup.cshtml" />
+    <Content Include="Areas\OCS\Views\InwardReturnICL\FileListing.cshtml" />
+    <Content Include="Areas\OCS\Views\InwardReturnICL\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\InwardReturnICL\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatus\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatus\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatus\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatus\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatusChecker\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatusChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatusChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\AccountProfileChecker\Changes.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankZone\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankZone\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankZone\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankZone\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankZoneChecker\BankZone.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankZoneChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankZoneChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankChargesType\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankChargesType\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankChargesType\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankChargesType\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankChargesTypeChecker\BankChargesType.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankChargesTypeChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankChargesTypeChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatusKBZ\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatusKBZ\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatusKBZ\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatusKBZ\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatusKBZChecker\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatusKBZChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankHostStatusKBZChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankCharges\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankCharges\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankCharges\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankCharges\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankChargesChecker\BankCharges.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankChargesChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankChargesChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\SecurityAuditLog\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\SecurityAuditLog\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranchChecker\InternalBranch.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranchKBZ\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranchKBZ\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranchKBZ\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranchKBZ\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranchKBZChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranchKBZChecker\InternalBranchKBZ.cshtml" />
+    <Content Include="Areas\COMMON\Views\InternalBranchKBZChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSCreditPosting\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSCreditPosting\Modal\_PostedItemHistoryPopUp.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSCreditPosting\Modal\_ReadyToPostedPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSCreditPosting\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSDebitPosting\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSDebitPosting\Modal\_PostedItemHistoryPopUp.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSDebitPosting\Modal\_ReadyToPostedPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSDebitPosting\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSDebitPosting\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSDebitPosting\Modal\_PostedItemHistoryPopUp.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSDebitPosting\Modal\_ReadyToPostedPopup.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSDebitPosting\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSCreditPosting\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSCreditPosting\Modal\_PostedItemHistoryPopUp.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSCreditPosting\Modal\_ReadyToPostedPopup.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSCreditPosting\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSRetentionPeriod\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSRetentionPeriodChecker\ICSRetentionPeriod.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSRetentionPeriodChecker\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSRetentionPeriodChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSRetentionPeriodChecker\Index.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSRetentionPeriodChecker\OCSRetentionPeriod.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSRetentionPeriodChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\OCS\Views\OCSRetentionPeriod\Index.cshtml" />
+    <Content Include="Areas\OCS\Controllers\Utilities\Search\Base\SearchBaseController.cs.bak" />
+    <Content Include="Areas\OCS\Controllers\Utilities\Search\SearchController.cs.bak" />
+    <Content Include="Areas\ICS\Views\NonConformanceFlag\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\NonConformanceFlag\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\NonConformanceFlag\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\NonConformanceFlag\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\NonConformanceFlag\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\NonConformanceFlagChecker\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\NonConformanceFlagChecker\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\NonConformanceFlagChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\TransCode\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\TransCode\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\TransCode\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\TransCode\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\TransCode\vssver2.scc" />
+    <Content Include="Areas\OCS\Views\TransactionCode\vssver2.scc" />
+    <Content Include="Areas\OCS\Models\TransactionCode\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\TransCodeChecker\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\TransCodeChecker\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\TransCodeChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\MessageChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\MessageChecker\Message.cshtml" />
+    <Content Include="Areas\COMMON\Views\MessageChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\Message\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\Message\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\Message\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\Message\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\ReturnCode\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\ReturnCodeChecker\ReturnCode.cshtml" />
+    <Content Include="Areas\COMMON\Views\BankCodeChecker\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\BranchCodeChecker\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\EnableUserID\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\EnableUserID\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\StateCodeChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\StateCodeChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\StateCodeChecker\StateCode.cshtml" />
+    <Content Include="Areas\COMMON\Views\StateCode\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\StateCode\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\StateCode\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\StateCode\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\HighRiskAccountChecker\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\HighRiskAccountChecker\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\HighRiskAccountChecker\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\HighRiskAccountChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\HighRiskAccountChecker\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\ICSStartOfDayChecker\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSStartOfDayMaker\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSStartOfDay\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\RationalBranchChecker\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\RationalBranchChecker\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\RationalBranchChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\RationalBranch\Create.cshtml" />
+    <Content Include="Areas\ICS\Views\RationalBranch\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\RationalBranch\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\RationalBranch\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_MICRDetail.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\Partial\_BranchAction2.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\Partial\_ReturnReasonDropdown.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\Partial\_Remarks.cshtml" />
+    <Content Include="Areas\ICS\Models\ICSDataProcess\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\MICRImage\GWCListing.cshtml" />
+    <Content Include="Areas\ICS\Views\MICRImage\Index_new.cshtml" />
+    <Content Include="Areas\ICS\Views\MICRImage\Modal\_InwardItemListPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\MICRImage\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_Signature.cshtml" />
+    <Content Include="Areas\PPS\Controllers\Reports\vssver2.scc" />
+    <Content Include="Areas\PPS\Controllers\Verification\Base\vssver2.scc" />
+    <Content Include="Areas\PPS\Controllers\Verification\vssver2.scc" />
+    <Content Include="Areas\PPS\Views\LoadCOFile\Index.cshtml" />
+    <Content Include="Areas\PPS\Views\LoadCOFile\SearchResultPage.cshtml" />
+    <Content Include="Areas\PPS\Views\LoadCOFile\vssver2.scc" />
+    <Content Include="Areas\PPS\Views\LoadPPSFile\Index.cshtml" />
+    <Content Include="Areas\PPS\Views\LoadPPSFile\SearchResultPage.cshtml" />
+    <Content Include="Areas\PPS\Views\LoadPPSFile\vssver2.scc" />
+    <Content Include="Areas\PPS\Views\PositivePayMatching\Index.cshtml" />
+    <Content Include="Areas\PPS\Views\PositivePayMatching\SearchResultPage.cshtml" />
+    <Content Include="Areas\PPS\Views\PositivePayMatching\ViewMatchingResult.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\vssver2.scc" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_ChequeControlAction.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_ChequeDetail.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_ChequeDetail2.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_ChequeImage.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_ChequeInfo.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_EmptyChequeVerification.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_PPSChequeInfo.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_RejectReentryShowMICR.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_ShowMICR.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_signatureInfo.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_SignatureList.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_SignatureViewer.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\ICCSDefault\ChequeRetrieverPage.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\ICCSDefault\ChequeVerificationPage.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\ICCSDefault\Index.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\ICCSDefault\Partial\vssver2.scc" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\ICCSDefault\Partial\_Action.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\ICCSDefault\Partial\_BranchAction.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\ICCSDefault\SearchResultPage.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\ICCSDefault\vssver2.scc" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Modal\vssver2.scc" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Modal\_ChequeHistoryPopup.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Modal\_ClosePopup.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Modal\_EmptyPrint.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Modal\_PasswordPopup.cshtml" />
+    <Content Include="Areas\PPS\Views\StartBatchICR\Index.cshtml" />
+    <Content Include="Areas\PPS\Views\StartBatchICR\SearchResultPage.cshtml" />
+    <Content Include="Areas\PPS\Views\StartBatchICR\StartBatchICR.cshtml" />
+    <Content Include="Areas\PPS\Views\Verification\VerificationPullOut.cshtml" />
+    <Content Include="Areas\PPS\Views\ViewPPSFile\Index.cshtml" />
+    <Content Include="Areas\PPS\Views\ViewPPSFile\SearchResultPage.cshtml" />
+    <Content Include="Areas\PPS\Views\ViewPPSFile\View.cshtml" />
+    <Content Include="Areas\ICS\Models\VerificationLimit\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\LoadNcf\GWCListing.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadNcf\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadNcf\Modal\_InwardItemListPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadNcf\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateCreditFile\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateCreditFile\Modal\_PostedItemHistoryPopUp.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateCreditFile\Modal\_ReadyToPostedPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateCreditFile\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateRepairedDebitFile\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateRepairedDebitFile\Modal\_PostedItemHistoryPopUp.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateRepairedDebitFile\Modal\_ReadyToPostedPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateRepairedDebitFile\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadDailyFile\Modal\_BankFileItemListPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadDailyFile\Modal\_BankTypeItemListPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadDailyFile\Modal\_BranchItemListPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadDailyFile\Modal\_RejectCodeItemListPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadDailyFile\Modal\_TransCodeItemListPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadDailyFile\GWCListing.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadDailyFile\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadDailyFile\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\BranchSubmission\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\BranchSubmission\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateUPI\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateUPI\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\ICSDebitPosting\Modal\ReadGWCConsolidatedFiles.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadBankHostFile2nd\GWCListing.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadBankHostFile2nd\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadBankHostFile2nd\Modal\_InwardItemListPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadBankHostFile2nd\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadBankHostFile\GWCListing.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadBankHostFile\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadBankHostFile\Modal\_InwardItemListPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\LoadBankHostFile\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\Partial\_Action3.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_ChequeImageAction.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\ICCSDefault\Partial\_Action2.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\BranchChequeVerificationPage.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_BranchChequeDetail.cshtml" />
+    <Content Include="Areas\PPS\Views\LoadPPSFile\PPSFileListing.cshtml" />
+    <Content Include="Areas\ICS\Views\ProgressStatus\ProgressStatusWithBranch.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_ChequeRetrieverDetail.cshtml" />
+    <Content Include="Areas\ICS\Views\BranchSubmission_Branch\ConfirmPage.cshtml" />
+    <Content Include="Areas\ICS\Views\BranchSubmission_Branch\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\BranchSubmission_Branch\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\DayEndProcess\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\SignatureInfo\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_ChequeImageActionBack.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_ChequeImageBack.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Modal\_Reminder.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_EmptyChequeVerificationReminder.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_EmptyChequeVerificationReminder.cshtml" />
+    <Content Include="Areas\ICS\Views\Verification\VerificationPullOut.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_MICRDetail - Copy.cshtml" />
+    <Content Include="Areas\ICS\Views\RejectReentry\Partial\_MakerVerification - Copy.cshtml" />
+    <Content Include="Areas\COMMON\Views\UserProfileChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\UserProfileChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Models\AutoApproveThreshold\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\AutoApproveThreshold\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\AutoApproveThreshold\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\AutoApproveThreshold\vssver2.scc" />
+    <Content Include="Areas\ICS\Views\Truncation\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\Truncation\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\Truncation\_Calculate.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\ICCSDefault\Partial\_Action3.cshtml" />
+    <Content Include="Areas\COMMON\Views\GroupChecker\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\GroupChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\GroupChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Modal\_MatchingDetailsPopup.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_ChequeImageAction.cshtml" />
+    <Content Include="Areas\PPS\Views\Shared\PositivePay\Base\_MICRDetail.cshtml" />
+    <Content Include="Areas\COMMON\Views\TaskChecker\Edit.cshtml" />
+    <Content Include="Areas\COMMON\Views\TaskChecker\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\TaskChecker\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\MICRImage\Modal\_Popup_new.cshtml" />
+    <Content Include="Areas\ICS\Views\MICRImage\ProgressBar.cshtml" />
+    <Content Include="Areas\ICS\Views\MICRImage\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\MICRImage\Modal\_Popup.cshtml" />
+    <Content Include="Areas\COMMON\Views\CreditAccount\Create.cshtml" />
+    <Content Include="Areas\COMMON\Views\CreditAccount\SearchResultPage.cshtml" />
+    <Content Include="Areas\COMMON\Views\CreditAccount\Index.cshtml" />
+    <Content Include="Areas\COMMON\Views\CreditAccount\Edit.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_ChequeImageUV.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Base\_IQADetail.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Modal\_IQAResultPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Modal\_RouteReason.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\ICCSDefault\ChequeRetrieverPage - Copy.cshtml" />
+    <Content Include="Areas\ICS\Views\ProgressStatus\Progress.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Modal\_BranchRemarks.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Modal\ManuallyMarkedCheques.cshtml" />
+    <Content Include="Areas\ICS\Views\Shared\InwardClearing\Modal\ManualChequesReturned.cshtml" />
+    <Content Include="Areas\ICS\Views\ProgressStatus\Progress - Copy.cshtml" />
+    <Content Include="Areas\ICS\Views\HostValidation\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\HostValidation\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\HostValidation\Modal\_Popup.cshtml" />
+    <Content Include="Areas\ICS\Views\DayEndProcess\Modal\_Popup.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateUPI\Modal\_PostedItemHistoryPopUp.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateUPI\Modal\_ReadyToPostLateReturnPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateUPI\Modal\_ReadyToPostPopup.cshtml" />
+    <Content Include="Areas\ICS\Views\GenerateUPI\Modal\_Popup.cshtml" />
+    <None Include="INCHEQS_ICSDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>INCHEQS_ICSDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="INCHEQS_ICSDataSet.xss">
+      <DependentUpon>INCHEQS_ICSDataSet.xsd</DependentUpon>
+    </Content>
+    <Content Include="Scripts\esm\popper-utils.js" />
+    <Content Include="Scripts\esm\popper-utils.min.js" />
+    <Content Include="Scripts\esm\popper.js" />
+    <Content Include="Scripts\esm\popper.min.js" />
+    <Content Include="Scripts\jquery-3.1.0.js" />
+    <Content Include="Scripts\esm\popper.min.js.map" />
+    <Content Include="Scripts\esm\popper.js.map" />
+    <Content Include="Scripts\esm\popper-utils.min.js.map" />
+    <Content Include="Scripts\esm\popper-utils.js.map" />
+    <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\INCHEQS.pubxml" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Scripts\bootstrap.min.js.map" />
+    <Content Include="Scripts\bootstrap.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.js.map" />
+    <Content Include="Reports\ICS\LargeAmountLimitReport.rdlc" />
+    <Content Include="Reports\ICS\Hub.rdlc" />
+    <Content Include="Reports\ICS\HubBranch.rdlc" />
+    <Content Include="Reports\OCS\ChequePrint.rdlc" />
+    <Content Include="Reports\ICS\DailyInwardClearingSummaryReport.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Reports\OCS\DailyOutwardClearingSummaryReport.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Reports\OCS\DailyOutwardClearingDetailsReport.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Reports\ICS\AccountProfilePrint.rdlc" />
+    <Content Include="Reports\OCS\DailyOCSCreditPostingReport%28API%29.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Reports\OCS\DailyOCSCreditPostingReport%28File%29.rdlc" />
+    <Content Include="Reports\ICS\BankHostStatusPrint.rdlc" />
+    <Content Include="Reports\OCS\BankZoneReport.rdlc" />
+    <Content Include="Reports\OCS\BankChargesTypeReport.rdlc" />
+    <Content Include="Reports\OCS\BankChargesReport.rdlc" />
+    <Content Include="Reports\ICS\DailyICSCreditPostingReport%28API%29.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Reports\ICS\DailyICSCreditPostingReport%28File%29.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Reports\ICS\DailyICSDebitPostingReport%28API%29.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Reports\ICS\DailyICSDebitPostingReport%28File%29.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Reports\ICS\InternalBranchKBZPrint.rdlc" />
+    <Content Include="RHB_DEMO_ICSDataSet.xsc">
+      <DependentUpon>RHB_DEMO_ICSDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="RHB_DEMO_ICSDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>RHB_DEMO_ICSDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="RHB_DEMO_ICSDataSet.xss">
+      <DependentUpon>RHB_DEMO_ICSDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.3.1.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <Content Include="Scripts\jquery.filedownload.js" />
+    <Content Include="Scripts\App\multiSelectList.js" />
+    <Content Include="Scripts\App\pagination.js" />
+    <Content Include="Scripts\App\searchResultPage.js" />
+    <Content Include="Scripts\App\states.js" />
+    <Content Include="Scripts\bootbox.min.js" />
+    <Content Include="Scripts\jquery.moneymask.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\popper-utils.js" />
+    <Content Include="Scripts\popper-utils.min.js" />
+    <Content Include="Scripts\popper.js" />
+    <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\umd\popper-utils.js" />
+    <Content Include="Scripts\umd\popper-utils.min.js" />
+    <Content Include="Scripts\umd\popper.js" />
+    <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="Views\Shared\SearchPage\SearchResultPage.cshtml" />
+    <Content Include="Views\Shared\Report\GenerateReport.cshtml" />
+    <Content Include="Views\Shared\Report\SearchPage.cshtml" />
+    <Content Include="packages.config" />
+    <Content Include="Scripts\jquery.elevateZoom-3.0.8.min.js" />
+    <Content Include="Scripts\App\magnifier.js" />
+    <Content Include="Scripts\jquery.ez-plus.js" />
+    <Content Include="Scripts\Dashboard\dashboard-templates.js" />
+    <Content Include="Scripts\Dashboard\dashboard-app.js" />
+    <Content Include="Scripts\pivot.min.js" />
+    <Content Include="log4net.config" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Scripts\App\app.js" />
+    <Content Include="Scripts\App\chequeVerification_org20200714.js" />
+    <Content Include="Scripts\App\menu.js" />
+    <Content Include="Scripts\App\searchpage.js" />
+    <Content Include="Scripts\App\user.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery.cookie.js" />
+    <Content Include="Scripts\jquery.dataTable-1.10.11.min.js" />
+    <Content Include="Scripts\lodash.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\moment-min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\Partials\_Footer.cshtml" />
+    <Content Include="Views\Shared\Partials\_Header.cshtml" />
+    <Content Include="Views\Shared\Partials\_LeftMenu.cshtml" />
+    <Content Include="Views\Shared\Partials\_Modal.cshtml" />
+    <Content Include="Views\Shared\Partials\_Notice.cshtml" />
+    <Content Include="Views\Shared\Partials\_TopMenu.cshtml" />
+    <Content Include="Views\Shared\_EmptyLayout.cshtml" />
+    <Content Include="Views\Shared\_LayoutChequeVerification.cshtml" />
+    <Content Include="Views\Shared\SearchPage\_TableHeaderColumns.cshtml" />
+    <Content Include="Views\Shared\SearchPage\_TableBodyColumns.cshtml" />
+    <Content Include="Views\Shared\SearchPage\_InfoBox.cshtml" />
+    <Content Include="Views\Shared\Security\_TaskIdNotice.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Login\ChangePassword.cshtml" />
+    <Content Include="Views\Shared\_ErrorLayout.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Shared\Report\ReportParentForm.cshtml" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Scripts\umd\popper.min.js.map" />
+    <Content Include="Scripts\umd\popper.js.map" />
+    <Content Include="Scripts\umd\popper-utils.min.js.map" />
+    <Content Include="Scripts\umd\popper-utils.js.map" />
+    <Content Include="Scripts\README.md" />
+    <Content Include="Scripts\popper.min.js.map" />
+    <Content Include="Scripts\popper.js.map" />
+    <Content Include="Scripts\popper-utils.min.js.map" />
+    <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="ViewModels\Services\vssver2.scc" />
+    <Content Include="ViewModels\vssver2.scc" />
+    <Content Include="Web-Debug.config" />
+    <Content Include="Views\Shared\_LayoutCapturing.cshtml" />
+    <Content Include="Views\Shared\_LayoutChequeVerificationOutward.cshtml" />
+    <Content Include="Scripts\OCSDashboard\vssver2.scc" />
+    <Content Include="Views\Shared\SearchPage\_TableBodyColumnsNoLink.cshtml" />
+    <Content Include="Views\Shared\SearchPage\_TablePaginationFooterForSearch.cshtml" />
+    <Content Include="Views\Shared\Report\SearchPage2.cshtml" />
+    <Content Include="Views\Shared\Report\SearchPage3.cshtml" />
+    <Content Include="Views\Shared\Report\OCSSearchPage.cshtml" />
+    <Content Include="Views\Shared\SearchPage\_GenericFields.cshtml" />
+    <Content Include="Views\Shared\Report\SearchPage4.cshtml" />
+    <Content Include="Views\Shared\SearchPage\_TablePaginationFooterForInward.cshtml" />
+    <Content Include="Views\Shared\Report\ICSSearchPage.cshtml" />
+    <Content Include="Views\Shared\Report\SearchPage5.cshtml" />
+    <Content Include="Views\Shared\Report\SearchPage6.cshtml" />
+    <Content Include="Views\Shared\Report\SearchPage7.cshtml" />
+    <Content Include="Views\Shared\Report\SearchPage8.cshtml" />
+    <Content Include="Views\Shared\SearchPage\_TablePaginationFooterForVerification.cshtml" />
+    <Content Include="Views\Shared\_LayoutPPSChequeVerification.cshtml" />
+    <Content Include="Views\Shared\Report\SearchPage10.cshtml" />
+    <Content Include="Views\Shared\Report\SearchPage11.cshtml" />
+    <Content Include="Views\Shared\Report\SearchPage9.cshtml" />
+    <Content Include="Views\Shared\SearchPage\_GenericFieldsSearch.cshtml" />
+    <Content Include="Views\Shared\_LayoutBranchChequeVerification.cshtml" />
+    <Content Include="Views\Shared\_LayoutChequeRetriever.cshtml" />
+    <Content Include="Views\Shared\_LayoutRejectVerification.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\SearchPage\_GenericFieldsForm.cshtml" />
+    <Content Include="Views\Shared\SearchPage\_GenericFieldsTable.cshtml" />
+    <Content Include="Views\Shared\SearchPage\_GenericFormAttributesHidden.cshtml" />
+    <Content Include="Views\Shared\SearchPage\_TablePaginationFooter.cshtml" />
+    <Content Include="Views\Shared\_LoginLayout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\ATV\Controller\ATV\Shared\" />
+    <Folder Include="Areas\COMMON\Views\Shared\" />
+    <Folder Include="Areas\OCS\Controllers\InwardClearing\" />
+    <Folder Include="Areas\OCS\Views\NewFolder1\" />
+    <Folder Include="Areas\RPA\Models\" />
+    <Folder Include="Areas\RPA\Views\Main\" />
+    <Folder Include="bin\bin\ms-MY\" />
+    <Folder Include="bin\Content\" />
+    <Folder Include="bin\ms-MY\" />
+    <Folder Include="bin\Reports\" />
+    <Folder Include="Package\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\ICS\ApprovedItemsReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\AuditTrailMaintenance.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\BankCodePrint.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\BankHostMABPrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\BranchApprovedReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\BranchCodePrint.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\BranchInwardReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\BranchMCGCReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\BranchNOWReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\BranchReturnedReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\BranchSubmissionPrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ChequePrint.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\ChequePrintPPS.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ChequeRetrieverPrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\CMSAccountInfoPrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\CODDDVBAReport%28Branch%29.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\CODDDVBAReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\CreditItemsException.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\DailyAbstractReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\DailyICSCreditPostingReport%28API%29%28Excel%29.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\DailyICSDebitPostingReport%28API%29%28Excel%29.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\DailyICSDetailsbyDateReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\DailyICSSummarybyBankReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\DailyICSSummarybyDateReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\DailyInwardClearingDetailsReport%28byPresentingBank%29%28Excel%29.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\DailyInwardClearingDetailsReport%28byPresentingBank%29.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\DailyInwardClearingDetailsReport%28Excel%29.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\DailyInwardClearingDetailsReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\DailyInwardClearingSummaryReport%28byPresentingBank%29.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\DailyOutwardReturnDetailsReport%28Excel%29.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\DailyOutwardReturnDetailsReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\DailyOutwardReturnSummaryReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\DebitItemsException.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\DigitalSigningReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\DMIReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\DuplicatedRecordsInPPSReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\DuplicateInwardItemReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\DuplicateItemInRejectedPending.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\DuplicateReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ExtractedInwardDataBranchPending.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\ExtractedInwardDataBranch.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\ExtractedInwardData.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\ExtractedInwardDataMine.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ExtractedInwardDataSummaryBranch.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ExtractedInwardDataSummary.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\FreeItemReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\GenECCSReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\GLReplacementPrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\GroupPrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\HighRiskAccountPrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\HolidayCalendar.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\HostRejectExceptionReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\HostReturnReasonPrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\HostStatusByCollectingBankReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\HostStatusReport%28Branch%29.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\HostStatusReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\InternalBranchPrint.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\InwardItemWithoutBranchReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\InwardOthersReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\InwardReportByBank.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\InwardReturnedReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\IQAReport%28Excel%29.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\IQAReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ItemsPerPresentingBankReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\LargeAmountDataReport%28Branch%29.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\LargeAmountReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\LateReturnedMaintenancebyBankBranchesReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\LateReturnedMaintenancebyCollectingBankReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ListICLReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ListNowReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ManualVerification.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\MatchItemReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\MissingItemReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\NonConformanceReportExcel.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\NonConformanceReport%28Updated%29.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\NonConformanceReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\OutwardbyBankBranchesReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\OutwardbyCollectingBankReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\OutwardReturnedOverallReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\OutwardReturnedReport%28Branch%29.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\PendingBranchDecisionReportExcel.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\PendingBranchReport%28Branch%29.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\PPS2ndLevelVerification.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\PPSApprovedItems.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\PPSExtractedInwardData.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\PPSPullOutItems.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\PPSRejectedItems.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\PullOutReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ReplicationReconciliationSummaryReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ReturnMemo%28Excel%29.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ReturnMemo.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\RptAccountNumberMaintenance.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\rptDebitFile.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\RptInwardNotInPPS.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\rptOCRInsufficientFund.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\RptPPSApprovedItems.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\RptPPSMatchedResult.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\RptPPSRejectedItems.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\RptPPSUnmatchedResult.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\rptSummaryOfDigitalSigning.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\RptSummaryOfPositivePay.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\SecurityAuditLog.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\SummaryOfReturnedReasonReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\TransCodeReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\PaidChecksReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\PaidChequeReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\PendingBranchDecisionReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\PendingItemsReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\PullOutReasonPrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\RejectedInwardReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\RejectedItemReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\RejectReentryReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\NCFlagReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\SOAReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\StateCodePrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\SummaryPerPresentingBankReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\SummaryReturnItemReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\SummaryTotalInwardClearingChequeReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\TaskPrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ThresholdSettingPrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\TotalCheqeusReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\TotalICLReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\TotOutwardReturnItemsReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\TransactionCodePrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\TransactionTypePrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\UserPerformanceReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\UserPerformanceReportbyTime.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\UserPerformanceReportMonthly.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\UserPerformanceReportWeekly.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\UserPerformanceReportYearly.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\UserPrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\VerificationLimitPrint.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\VerificationSummaryReport.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\ViewUPIReport.rdlc" />
+    <EmbeddedResource Include="Reports\OCS\ChequePrint_org.rdlc" />
+    <EmbeddedResource Include="Reports\OCS\DailyBranchInwardReturn.rdlc" />
+    <EmbeddedResource Include="Reports\OCS\DailyBranchReport.rdlc" />
+    <EmbeddedResource Include="Reports\OCS\DailyInwardReturn.rdlc" />
+    <EmbeddedResource Include="Reports\OCS\DailyInwardReturnDetailsReport%28Excel%29.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OCS\DailyInwardReturnDetailsReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OCS\DailyInwardReturnSummaryReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OCS\DailyOCSCreditPostingReport%28API%29%28Excel%29.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OCS\DailyOCSDebitPostingReport%28API%29.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OCS\DailyOCSDebitPostingReport%28File%29.rdlc" />
+    <EmbeddedResource Include="Reports\OCS\DailyOCSDetailsbyDateReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OCS\DailyOCSSummarybyBankReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OCS\DailyOCSSummarybyDateReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OCS\DailyOutwardClearingDetailsReport%28byDraweeBank%29%28Excel%29.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OCS\DailyOutwardClearingDetailsReport%28byDraweeBank%29.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OCS\DailyOutwardClearingDetailsReport%28Excel%29.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OCS\DailyOutwardClearingSummaryReport%28byDraweeBank%29.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OCS\DailyOutwardReport.rdlc" />
+    <EmbeddedResource Include="Reports\OCS\Hub.rdlc" />
+    <EmbeddedResource Include="Reports\OCS\HubAll.rdlc" />
+    <EmbeddedResource Include="Reports\OCS\HubBranch.rdlc" />
+    <EmbeddedResource Include="Reports\OCS\HubBranchAll.rdlc" />
+    <EmbeddedResource Include="Reports\OCS\MessageMaintenance.rdlc" />
+    <EmbeddedResource Include="Reports\OCS\ReturnChequeAdvice.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ICS\ReturnCodePrint.rdlc" />
+    <EmbeddedResource Include="Reports\OCS\ScannerWorkstationPrint.rdlc" />
+    <EmbeddedResource Include="Resources\Locale.ms-MY.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Locale.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\01-Level 1\02-Trunk\INCHEQS.DataAccessLayer-00.000.00.01\INCHEQS.DataAccessLayer.csproj">
+      <Project>{fc8aa598-5543-4376-a492-1a1c75b66e6b}</Project>
+      <Name>INCHEQS.DataAccessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\02-Level 2\02-Trunk\INCHEQS.BoPServices\INCHEQS.BoPServices\INCHEQS.BoPServices.csproj">
+      <Project>{778f9912-3c0a-4b2f-b230-6383848bf05d}</Project>
+      <Name>INCHEQS.BoPServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\02-Level 2\02-Trunk\INCHEQS.Processes-00.000.00.01\INCHEQS.Processes.csproj">
+      <Project>{a2017de6-9518-404c-95cb-a814598fe9fb}</Project>
+      <Name>INCHEQS.Processes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\02-Level 2\02-Trunk\INCHEQS.Security-00.000.02.01\INCHEQS.Security.csproj">
+      <Project>{cad046fb-934b-4e6d-927d-85fda7c99553}</Project>
+      <Name>INCHEQS.Security</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\02-Level 2\02-Trunk\INCHEQS.TaskAssignment-00.000.00.01\INCHEQS.TaskAssignment\INCHEQS.TaskAssignment.csproj">
+      <Project>{674c2e5e-1fe3-4672-a2c9-4b09a61f46d9}</Project>
+      <Name>INCHEQS.TaskAssignment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\03-Level 3\02-Trunk\INCHEQS.EOD-00.000.00.01\INCHEQS.EOD.csproj">
+      <Project>{e1f76810-7e37-4564-a64b-3c385593b0c5}</Project>
+      <Name>INCHEQS.EOD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\04-Level 4\02-Trunk\INCHEQS.ConfigVerification-00.000.00.01\INCHEQS.ConfigVerification.csproj">
+      <Project>{8612ed92-a76f-47af-b9a9-10a374234895}</Project>
+      <Name>INCHEQS.ConfigVerification</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>49929</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:29929/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

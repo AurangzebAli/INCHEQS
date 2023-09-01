@@ -1,0 +1,152 @@
+﻿@using INCHEQS.Resources
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline secure-form", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+
+    <div id="CenterClearedItemsDetailModal" class="modal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Detail</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12" id="CenterClearedItemsDetailModal_body">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@Locale.btnClose</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    @*<h4>Normal User Submission</h4>*@
+    <h4>@ViewBag.SearchPage.PageTitle</h4>
+    <div class="row">
+        <hr />
+
+        @Html.Partial("SearchPage/_GenericFieldsForm")
+
+    </div>
+
+    <div><button type="submit" class="btn btn-default init-search" data-action="@Url.Action("SearchResultPage")">@Locale.Search</button></div>
+    <br>
+    <style>
+        body {
+            font-family: Arial;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            height: 40px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+            /* Style the buttons inside the tab */
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: 0.3s;
+                font-size: 14px;
+            }
+
+                /* Change background color of buttons on hover */
+                .tab button:hover {
+                    background-color: #ddd;
+                }
+
+                /* Create an active/current tablink class */
+                .tab button.active {
+                    background-color: #737373;
+                }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            //border-top: none;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+    </style>
+
+    <script>
+        function openCity(evt, actionName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(actionName).style.display = "block";
+            evt.currentTarget.className += " active";
+
+            document.getElementById("checkBox").checked = true;
+            document.getElementById("checkBox").value = actionName;
+        }
+        document.getElementById("defaultOpen").click();
+    </script>
+
+
+    <div class="tab">
+        <table>
+
+            <tr>
+                <td>
+                    <input hidden="hidden" type="checkbox" class="chk" id="checkBox" name="Type" value="M" />
+                </td>
+                <td>
+
+                    <button class="tablinks" id="defaultOpen" onclick="openCity(event, 'Ready')">Items Ready to Generate</button>
+                </td>
+                <td>
+                    <button class="tablinks" id="2" onclick="openCity(event, 'Submitted')">Generated Items</button>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+
+    <div id="Submitted">
+
+    </div>
+
+    <div id="Ready">
+
+    </div>
+
+    <div id="resultContainer" style="margin-bottom:0px"></div>
+
+    
+        <button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("Generate")">Generate</button>
+    
+  
+   
+
+}
+<div id="dataProcessContainer" data-pospaytype="ICSGenOutwardReturnICL" data-processname="ICSGenerateOutwardReturnICL"></div>
+<input id="dataProcessType" value="ICL" type="hidden">
+<input id="inwardProcessType" value="ICL" type="hidden">
+
+@Scripts.Render("~/bundles/SearchPage")
+@Scripts.Render("~/bundles/DataProcessRealTime")

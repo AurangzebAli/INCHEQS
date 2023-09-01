@@ -1,0 +1,15 @@
+﻿@using INCHEQS.Resources
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline submit-onload secure-form " }))
+{
+    @Html.AntiForgeryToken();
+    <h4>@ViewBag.SearchPage.PageTitle</h4>
+        <div class="row">
+    <hr />
+            @*@Html.Partial("SearchPage/_GenericFieldsForm")*@
+    </div>
+
+    <div id="resultContainer"></div>
+}
+
+
+@Scripts.Render("~/bundles/SearchPage")

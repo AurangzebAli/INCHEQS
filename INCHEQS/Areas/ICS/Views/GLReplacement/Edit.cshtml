@@ -1,0 +1,37 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "GLReplacement", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Maintenance - GL Replacement</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>GL Replacement ID</th>
+                    <td>
+                        <input type="hidden" value="@ViewBag.GLReplacement.fldGLReplacementID" name="fldGLReplacementID" />@ViewBag.GLReplacement.fldGLReplacementID
+                    </td>
+                </tr>
+                <tr>
+                    <th>GL Account Number</th>
+                    <td>
+                        <input type="text" value="@ViewBag.GLReplacement.fldGLAccountNumber" name="fldGLAccountNumber" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>
+                        <input type="text" value="@ViewBag.GLReplacement.fldDescription" name="fldDescription" />
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.GLReplacement.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.GLReplacement.INDEX) ? "" : "hidden")">@Locale.Back</a>
+    </div>
+}

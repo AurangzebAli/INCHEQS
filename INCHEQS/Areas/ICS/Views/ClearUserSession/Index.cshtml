@@ -1,0 +1,47 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using (Html.BeginForm("ClearSession", "ClearUserSession", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.UtilitiesClearUserSession</h4>
+        <hr/>
+            <table class="table table-condensed table-striped table-hover data-table hidden">
+
+                <thead>
+                    <tr>
+                        <th>@Locale.UserAbbreviation</th>
+                        <th>@Locale.UserName</th>
+                        <th>@Locale.LastActiveDatetime</th>
+                        <th>@Locale.Delete</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in ViewBag.ClearUserSession.Rows) {
+                        <tr>
+                            <td>
+                                @row["fldUserAbb"]
+                            </td>
+                            <td>
+                                @row["fldUserDesc"]
+                            </td>
+                            <td>
+                                @row["fldLastActiveTimeStamp"]
+                            </td>
+                            <td>
+                                @if (string.Compare(CurrentUser.Account.UserId.ToString().Trim(), row["fldUserId"].ToString().Trim()) == 0) {
+                                } else {
+                                    <input type="checkbox" id="chkdelete" name="chkdelete" value="@row["fldUserId"]">
+
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <button type="submit" Class="btn btn-default confirm @(CurrentUser.HasTask(TaskIds.ClearUserSession.DELETE) ? "" : "hidden")">@Locale.DeleteBtn</button>
+
+        </div>
+}

@@ -1,0 +1,457 @@
+﻿<style type="text/css">
+    .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+        width:50%;
+    }
+
+        .tg td {
+            border-color: black;
+            border-style: solid;
+            border-width: 1px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            overflow: hidden;
+            padding: 10px 5px;
+            word-break: normal;
+            border-collapse: collapse;
+        }
+
+        .tg th {
+            border-color: black;
+            border-style: solid;
+            border-width: 1px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: normal;
+            overflow: hidden;
+            padding: 10px 5px;
+            word-break: normal;
+            background: #FFFFFF;
+            color: #284DA6;
+        }
+
+        .tg .tg-lboi {
+            border-color: inherit;
+            text-align: center;
+            vertical-align: middle
+        }
+
+        .tg .tg-c3ow {
+            border-color: inherit;
+            text-align: center;
+            vertical-align: central;
+            background: #7EA6E1;
+            color: #051C3B;
+        }
+        .tg .tg-c2ow {
+            border-color: inherit;
+            text-align: center;
+            vertical-align: top;
+            background: #FFFFFF;
+        }
+
+        .tg .tg-0pky {
+            border-color: inherit;
+            text-align: center;
+            vertical-align: top;
+            color: #0B1E3E;
+            background:#FFFFFF;
+        }
+        .tg .tg-1pky {
+            border-color: inherit;
+            text-align: center;
+            vertical-align: top;
+            color: #0B1E3E;
+            background: #fff44f
+        }
+        .tg .tg-2pky {
+            border-color: inherit;
+            text-align: center;
+            vertical-align: top;
+            background: #FC2815;
+        }
+        .tg .tg-c2ow .btn-IQA {
+            background-color: #FFFFFF;
+            border-color: #FFFFFF #FFFFFF #FFFFFF #FFFFFF;
+            color: #0066cc;
+            opacity: inherit;
+            border-top-width: 0px;
+            border-right-width: 0px;
+            border-bottom-width: 0px;
+            border-left-width: 0px;
+            font-weight:bold;
+        }
+    
+</style>
+<table class="tg">
+    <thead>
+        <tr>
+            <th class="tg-c2ow" colspan="2">
+                @*<button type="button" class="modal-submit btn-medium btn-verification-border btn-verification" data-action="@Url.Action("IQAResult")">*@
+                <button type="button" class="modal-submit btn-IQA" data-action="@Url.Action("IQAResult")">
+                    IQA Result
+                </button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+
+
+
+            @{
+                if (ViewBag.IQA == "2")
+                {
+
+                    <td class="tg-0pky">IQA</td>
+                }
+                else if (ViewBag.IQA == "1")
+                {
+                    <td class="tg-2pky">IQA</td>
+                }
+                else
+                {
+                    <td class="tg-1pky">IQA</td>
+
+                }
+            }
+
+            @{
+                if (ViewBag.UV == "2")
+                {
+
+                    <td class="tg-0pky">UV</td>
+                }
+                else if (ViewBag.UV == "1")
+                {
+                    <td class="tg-2pky">UV</td>
+                }
+                else
+                {
+                    <td class="tg-1pky">UV</td>
+
+                }
+            }
+
+
+        </tr>
+        <tr>
+        </tr>
+        <tr>
+            @{
+                if (ViewBag.QRCode == "2")
+                {
+
+                    <td class="tg-0pky">QR Code</td>
+                }
+                else if (ViewBag.QRCode == "1")
+                {
+                    <td class="tg-2pky">QR Code</td>
+                }
+                else
+                {
+                    <td class="tg-1pky">QR Code</td>
+
+                }
+            }
+            @{
+                if (ViewBag.MicrPresent == "2")
+                {
+
+                    <td class="tg-0pky">MICR</td>
+                }
+                else
+                {
+                    <td class="tg-2pky">MICR</td>
+
+                }
+            }
+
+        </tr>
+        <tr>
+        </tr>
+        <tr>
+            @{
+                if (ViewBag.STD == "2")
+                {
+                    <td class="tg-0pky">Standard</td>
+                }
+                else
+                {
+                    <td class="tg-2pky">Not Standard</td>
+
+                }
+            }
+
+            @{
+                if (ViewBag.Duplicate == "2")
+                {
+
+                    <td class="tg-1pky">Duplicate</td>
+                }
+                else if (ViewBag.Duplicate == "1")
+                {
+                    <td class="tg-2pky">NOT OK</td>
+                }
+                else
+                {
+                    <td class="tg-0pky">Not Duplicate</td>
+
+                }
+            }
+        </tr>
+        <tr>
+            @{
+                if (ViewBag.Capture == "N")
+                {
+                    <td class="tg-0pky">NIFT</td>
+                }
+                else
+                {
+                    <td class="tg-1pky">Branch</td>
+
+                }
+            }
+            @{
+                if (ViewBag.Defered == "1")
+                {
+                    <td class="tg-2pky">Defered Check</td>
+                }
+                else
+                {
+                    <td class="tg-0pky">Non Deferred Check</td>
+                }
+            }
+        </tr>
+
+        <tr>
+            @{
+                if (ViewBag.Fraud == "1")
+                {
+                    <td class="tg-2pky">Fraud <br />History <br />reported</td>
+                }
+                else
+                {
+                    <td class="tg-0pky">No Fraud<br /> History <br />Reported </td>
+                }
+            }
+            @{
+                if (ViewBag.UnderSizeImage == "1")
+                {
+                    <td class="tg-2pky">Under Size Image</td>
+                }
+                else if (ViewBag.UnderSizeImage == "2")
+                {
+
+                     <td class="tg-0pky">Under Size Image</td>
+                }
+                else
+                {
+                   <td class="tg-1pky">Under Size Image</td>
+                }
+            }
+        </tr>
+
+        <tr>
+            @if (ViewBag.FoldedorTornDocumentCorners == "1")
+            {
+                <td class="tg-2pky">Folded or <br />Torn Document <br /> Corners</td>
+            }
+            else if (ViewBag.FoldedorTornDocumentCorners == "2")
+            {
+
+                <td class="tg-0pky">Folded or <br />Torn Document <br /> Corners</td>
+            }
+            else
+            {
+                <td class="tg-1pky">Folded or <br />Torn Document <br /> Corners</td>
+            }
+            @if (ViewBag.FramingError == "1")
+            {
+                <td class="tg-2pky">Folded or <br />Torn Document <br />Edges</td>
+            }
+            else if (ViewBag.FramingError == "2")
+            {
+
+                <td class="tg-0pky">Folded or <br />Torn Document <br />Edges</td>
+            }
+            else
+            {
+                <td class="tg-1pky">Folded or <br />Torn Document <br />Edges</td>
+            }
+
+        </tr>
+        <tr>
+            @if (ViewBag.fldDocumentSkew == "1")
+            {
+                <td class="tg-2pky">Document Skew</td>
+            }
+            else if (ViewBag.fldDocumentSkew == "2")
+            {
+
+                <td class="tg-0pky">Document Skew</td>
+            }
+            else
+            {
+                <td class="tg-1pky">Document Skew</td>
+            }
+            @if (ViewBag.fldOversizeImage == "1")
+            {
+                <td class="tg-2pky">Oversize Instrument</td>
+            }
+            else if (ViewBag.fldOversizeImage == "2")
+            {
+
+            <td class="tg-0pky">Oversize Instrument</td>
+            }
+            else
+            {
+                <td class="tg-1pky">Oversize Instrument</td>
+            }
+
+
+        </tr>
+        <tr>
+            @if (ViewBag.fldPiggybackImage == "1")
+            {
+                <td class="tg-2pky">Piggy Back</td>
+            }
+            else if (ViewBag.fldPiggybackImage == "2")
+            {
+
+                <td class="tg-0pky">Piggy Back</td>
+            }
+            else
+            {
+                <td class="tg-1pky">Piggy Back </td>
+            }
+            @if (ViewBag.fldImageTooLight == "1")
+            {
+                <td class="tg-2pky">Image Too Light</td>
+            }
+            else if (ViewBag.fldImageTooLight == "2")
+            {
+
+                <td class="tg-0pky">Image Too Light</td>
+            }
+            else
+            {
+                <td class="tg-1pky">Image Too Light </td>
+            }
+
+
+        </tr>
+        <tr>
+            @if (ViewBag.fldImageTooDark == "1")
+            {
+                    <td class="tg-2pky">Image Too Dark</td>
+            }
+            else if (ViewBag.fldImageTooDark == "2")
+            {
+
+                    <td class="tg-0pky">Image Too Dark</td>
+            }
+            else
+            {
+                    <td class="tg-1pky">Image Too Dark </td>
+            }
+            @if (ViewBag.fldHorizontalStreaks == "1")
+            {
+                <td class="tg-2pky">Horizontal Streaks</td>
+            }
+            else if (ViewBag.fldHorizontalStreaks == "2")
+            {
+
+                <td class="tg-0pky">Horizontal Streaks</td>
+            }
+            else
+            {
+                <td class="tg-1pky">Horizontal Streaks</td>
+            }
+
+        </tr>
+
+        <tr>
+            @if (ViewBag.fldBelowMinimumCompressedImageSize == "1")
+            {
+                    <td class="tg-2pky">Below Minimum <br />Compressed <br />Image Size</td>
+            }
+            else if (ViewBag.fldBelowMinimumCompressedImageSize == "2")
+            {
+
+                    <td class="tg-0pky">Below Minimum <br />Compressed Image<br /> Size</td>
+            }
+            else
+            {
+                    <td class="tg-1pky">Below Minimum <br />Compressed Image <br />Size </td>
+            }
+            @if (ViewBag.fldAboveMaximumCompressedImageSize == "1")
+            {
+                <td class="tg-2pky">Above Maximum <br />Compressed Image <br />Size</td>
+            }
+            else if (ViewBag.fldAboveMaximumCompressedImageSize == "2")
+            {
+
+                <td class="tg-0pky">Above Maximum <br />Compressed Image <br />Size</td>
+            }
+            else
+            {
+                <td class="tg-1pky">Above Maximum <br />Compressed Image <br />Size</td>
+            }
+
+        </tr>
+
+        <tr>
+            @if (ViewBag.fldFrontRearDimensionMismatch == "1")
+            {
+                <td class="tg-2pky">Front Rear <br />Dimension <br />Mismatch</td>
+            }
+            else if (ViewBag.fldFrontRearDimensionMismatch == "2")
+            {
+
+                <td class="tg-0pky">Front Rear <br />Dimension <br />Mismatch</td>
+            }
+            else
+            {
+                <td class="tg-1pky">Front Rear <br />Dimension <br />Mismatch</td>
+            }
+            @if (ViewBag.fldCarbonStrip == "1")
+            {
+                <td class="tg-2pky">Carbon Strip</td>
+            }
+            else if (ViewBag.fldCarbonStrip == "2")
+            {
+
+                <td class="tg-0pky">Carbon Strip</td>
+            }
+            else
+            {
+                <td class="tg-1pky">Carbon Strip</td>
+            }
+
+        </tr>
+        <tr>
+        <tr>
+            @if (ViewBag.fldOutofFocus == "1")
+            {
+                <td class="tg-2pky">Out of <br />Focus</td>
+            }
+            else if (ViewBag.fldOutofFocus == "2")
+            {
+
+        <td class="tg-0pky">Out of <br />Focus</td>
+            }
+            else
+            {
+        <td class="tg-1pky">Out of <br />Focus </td>
+            }
+        </tr>
+
+
+
+
+
+    </tbody>
+</table>

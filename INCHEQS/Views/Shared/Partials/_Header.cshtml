@@ -1,0 +1,43 @@
+﻿@using INCHEQS.Resources
+
+<div Class="header row" style="margin:0">
+    <div>
+        <marquee class="messageMarquee hidden" scrolldelay="100" onMouseOver="this.stop();" onMouseOut="this.start();"></marquee>
+    </div>
+    <div Class="logo col-md-2">
+        <img src="@Url.Content("~/Content/Images/logo.jpg")" />
+    </div>
+    <div Class="system-title col-md-7">
+        <h3> INCHEQS SOLUTION (@System.Environment.MachineName)</h3>
+    </div>
+    @if (ViewBag.CurrentUser != null) { 
+    <div Class="status col-md-2 pull-right">
+        <ul>
+            <li>
+                <span Class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                @Locale.LoggedInAs @ViewBag.CurrentUser.UserAbbr
+            </li>
+            <li>
+                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                @Locale.UserOf @ViewBag.CurrentUser.BankDesc
+            </li>
+            <li>
+                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                @Locale.ICSSettlementDate : @ViewBag.CurrentUser.ClearingDate
+            </li>
+            @*<li>
+                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                @Locale.OCSSettlementDate : @ViewBag.CurrentUser.OCSClearingDate
+            </li>*@
+            <li>
+                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                <span class="currentDayAndTime"></span>
+                <input type="hidden" id="sessionPeriod" value="@ViewBag.CurrentUser.SessionTimeOut">
+            </li>
+        </ul>
+    </div>
+    }
+</div>
+
+
+

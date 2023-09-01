@@ -1,0 +1,58 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "RationalBranch", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+		<h4>@ViewBag.PageTitle</h4>
+        <hr />
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+					<th>@Locale.MergeBranch</th>
+					<td>
+						<select class="default" name="fldInternalBranchCode" maxlength="20">
+							@foreach (var item in @ViewBag.ActiveRationalBranch)
+							{
+								<option value="@item.fldCBranchId">@item.fldCBranchId, @item.fldIBranchId - @item.fldCBranchDesc</option>
+							}
+						</select>
+					</td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <div class="form-select">
+                            <div>
+                                <b>@Locale.RationalBranchAvailableList</b><br>
+                                <select multiple="multiple" class="form-multiple select-from">
+                                    @foreach (var item in @ViewBag.AvailableRationalBranch) {
+                                        <option value="@item.fldCBranchId">@item.fldCBranchId, @item.fldIBranchId - @item.fldCBranchDesc</option>
+                                    }
+                                </select>
+                            </div>
+							<div class="form-move">
+
+								<br /><br />
+								<p><input type="button" title="select" style='width:100px' class="btn btn-default btn-move addOne" value="Add"></p>
+								<p><input type="button" title="select all" style='width:100px' class="btn btn-default btn-move addAll" value="Add All"></p>
+								<p><input type="button" title="remove" style='width:100px' class="btn btn-default btn-move rmOne" value="Remove"></p>
+								<p><input type="button" title="remove all" style='width:100px' class="btn btn-default btn-move rmAll" value="Remove All"></p>
+							</div>
+                            <div>
+                                <b>@Locale.RationalBranchSelectedList</b><br>
+                                <select multiple="multiple" class="form-multiple select-to" name="selectedUser"></select>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.RationalBranch.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.RationalBranch.INDEX) ? "" : "hidden")">@Locale.Back</a>
+    </div>
+}
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/app.js"></script>

@@ -1,0 +1,156 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "SystemCutOffTime", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+  
+        <h4>@Locale.SystemCutOffTimeMaintenance</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <TBODY>
+                <TR>
+  
+                    <Th>@Locale.SystemCutOffTimeID</Th>
+
+                    <TD>
+                        @ViewBag.SystemCutOffTimes.Rows[0]["fldSystemCutOffId"]
+                    </TD>
+                </TR>
+                <tr>
+                    <th>@Locale.Description</th>
+                    <td>
+                        @ViewBag.SystemCutOffTimes.Rows[0]["fldDesc"]
+                        <input type="hidden" name="fldDesc" value="@ViewBag.SystemCutOffTimes.Rows[0]["fldDesc"]" autocomplete="off" />
+                    </td>
+                </tr>
+                <TR>
+                    <th>@Locale.TransactionType</th>
+                    <td>
+                        <select name="fldTransactionType" id="fldTransactionType">
+                            @foreach (var item in @ViewBag.TransactionTypes)
+                            {
+                                <option value="@item.fldTransactionType" @(ViewBag.SystemCutOffTimes.Rows[0]["fldTransactionType"] == item.fldTransactionType ? "selected" : "")>@item.fldTransactionDesc</option>
+                            }
+                        </select>
+                        <span class="red-star">*</span>
+                    </td>
+                </TR>
+
+                <tr></tr>
+                <tr>
+                    <th>@Locale.ScheduleType</th>
+                    <td><input type="radio" name="fldRecurring" id="Recurring" value="Y" @(ViewBag.SystemCutOffTimes.Rows[0]["fldRecurring"] == "Y" ? "checked" : "")/>&nbsp;@Locale.Recurring<span class="red-star">*</span></td>
+                    @*<td>
+                        <input type="radio" name="OneTime" id="OneTime" value="OneTime" />&nbsp;@Locale.OneTime  &nbsp;&nbsp;&nbsp;
+                        <input type="text" value="@ViewBag.Today" id="fldDate" name="fldDate" class="form-date" style="height:25px" />
+                    </td>*@
+                </tr>
+                <tr></tr>
+                @*<tr>
+                    <td></td>
+
+                </tr>*@
+                <tr></tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        &nbsp;&nbsp;&nbsp;<input type="radio" name="RecurringType" id="Week" value="Week" @(ViewBag.SystemCutOffTimes.Rows[0]["fldRecurring"] == "Y" ? "checked" : "") />&nbsp;@Locale.Weekly &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="fldDayMon" class="Days" value="Y" @(ViewBag.SystemCutOffTimes.Rows[0]["fldDayMon"] == "Y" ? "checked" : "") />&nbsp;@Locale.Monday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="fldDayTue" class="Days" value="Y" @(ViewBag.SystemCutOffTimes.Rows[0]["fldDayTue"] == "Y" ? "checked" : "") />&nbsp;@Locale.Tuesday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="fldDayWed" class="Days" value="Y" @(ViewBag.SystemCutOffTimes.Rows[0]["fldDayWed"] == "Y" ? "checked" : "") />&nbsp;@Locale.Wednesday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="fldDayThu" class="Days" value="Y" @(ViewBag.SystemCutOffTimes.Rows[0]["fldDayThu"] == "Y" ? "checked" : "") />&nbsp;@Locale.Thursday &nbsp;&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="fldDayFri" class="Days" value="Y" @(ViewBag.SystemCutOffTimes.Rows[0]["fldDayFri"] == "Y" ? "checked" : "") />&nbsp;@Locale.Friday &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="fldDaySat" class="Days" value="Y" @(ViewBag.SystemCutOffTimes.Rows[0]["fldDaySat"] == "Y" ? "checked" : "") />&nbsp;@Locale.Saturday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="fldDaySun" class="Days" value="Y" @(ViewBag.SystemCutOffTimes.Rows[0]["fldDaySun"] == "Y" ? "checked" : "") />&nbsp;@Locale.Sunday &nbsp;&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr>
+                    <td></td>
+                    @*<td id="MonthRadio">
+                        &nbsp;&nbsp;&nbsp;<input type="radio" name="RecurringType" id="Month" value="Month" />&nbsp;@Locale.Monthly &nbsp;&nbsp;&nbsp;
+                        <select class="dropdownWeek" id="dropdownWeek" name="dropdownWeek">
+                            <option value="1">1st</option>
+                            <option value="2">2nd</option>
+                            <option value="3">3rd</option>
+                            <option value="4">4th</option>
+                            <option value="5">5th</option>
+                        </select>&nbsp;
+                        of every &nbsp;
+                        <select class="dropdownWeek" id="dropdownDay" name="dropdownDay">
+                            <option value="1">Monday</option>
+                            <option value="2">Tuesday</option>
+                            <option value="3">Wednesday</option>
+                            <option value="4">Thursday</option>
+                            <option value="5">Friday</option>
+                        </select>
+                    </td>*@
+                </tr>
+                <tr></tr>
+                <tr>
+                    <td></td>
+                    @*<td>
+                        &nbsp;&nbsp;&nbsp;<input type="radio" name="RecurringType" id="Year" value="Year" />&nbsp; @Locale.Yearly  &nbsp;&nbsp;&nbsp;
+                        <input type="text" value="@ViewBag.Today" id="fldYearDate" name="fldYearDate" class="form-date" style="height:25px" />
+                    </td>*@
+                </tr>
+
+                <tr>
+                    <td>
+                        @Locale.StartTime (hh:mm)
+                    </td>
+                    <td>
+                        <select name="startHour" maxlength="20">
+                            @for (int hour = 0; hour < 24; hour++)
+                            {
+                                <option value="@hour.ToString("00")" @(hour.ToString("00") == ViewBag.StartTimeHour ? "selected" : "")>@hour.ToString("00")</option>
+                            }
+                        </select><span>:</span>
+                        <select name="startMin" maxlength="20">
+                            @for (int min = 0; min < 60; min++)
+                            {
+                                <option value="@min.ToString("00")" @(min.ToString("00") == ViewBag.StartTimeMin ? "selected" : "")>@min.ToString("00")</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        @Locale.EndTime &nbsp;(hh:mm)
+                    </td>
+                    <td>
+                        <select name="endHour" maxlength="20">
+                            @for (int hour = 0; hour < 24; hour++)
+                            {
+                                <option value="@hour.ToString("00")" @(hour.ToString("00") == ViewBag.EndTimeHour ? "selected" : "")>@hour.ToString("00")</option>
+                            }
+                        </select><span>:</span>
+                        <select name="endMin" maxlength="20">
+                            @for (int min = 0; min < 60; min++)
+                            {
+                                <option value="@min.ToString("00")" @(min.ToString("00") == ViewBag.EndTimeMin ? "selected" : "")>@min.ToString("00")</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+
+
+
+
+
+            </TBODY>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.HubUserProfile.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.HubUserProfile.INDEX) ? "" : "hidden")">@Locale.Back</a>
+    </div>
+}

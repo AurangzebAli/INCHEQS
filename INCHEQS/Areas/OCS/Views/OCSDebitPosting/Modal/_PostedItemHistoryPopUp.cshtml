@@ -1,0 +1,57 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+    ViewBag.Title = "PostedItemHistory";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_PostedItemHistory</title>
+</head>
+<body>
+    <div style="overflow-y: scroll; height:500px;">
+        <table class="table table-bordered">
+            <tr>Posted Item Details</tr>
+            <thead>
+                <tr>
+                    <th>UIC</th>
+                    <th>Check Digit</th>
+                    <th>Type</th>
+                    <th>Location</th>
+                    <th>Issuing Bank</th>
+                    <th>Issuing Branch</th>
+                    <th>Cheque Number</th>
+                    <th>Issuer Account Number</th>
+                    <th>Amount</th>
+                    @*<th>Creditor Account Number</th>*@
+                    <th>Posting Status</th>
+                    <th>Posting Fail Status</th>
+                    <th>Host Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in ViewBag.PostedHistory.Rows)
+                {
+                    <tr>
+                        <td>@row["fldUIC"]</td>
+                        <td>@row["fldCheckDigit"]</td>
+                        <td>@row["fldType"]</td>
+                        <td>@row["fldLocation"]</td>
+                        <td>@row["fldBankCode"]</td>
+                        <td>@row["fldBranchCode"]</td>
+                        <td>@row["fldSerial"]</td>
+                        <td>@row["fldPVAccNo"]</td>
+                        <td>@StringUtils.FormatCurrency((row["fldAmount"]).ToString())</td>
+                        @*<td>@row["fldDebitAccNo"]</td>*@
+                        <td>@row["fldPostingStatusDesc"]</td>
+                        <td>@row["fldPostingFailStatus"]</td>
+                        <td>@row["fldHostFailStatus"]</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

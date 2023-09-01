@@ -1,0 +1,35 @@
+﻿using INCHEQS.Security.Account;
+using INCHEQS.Models.SearchPageConfig;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace INCHEQS.Models.Verification {
+    public interface IVerificationDao {
+        void VerificationApproveAll(AccountModel currentUser);
+        void VerificationReturnAll(AccountModel currentUser);
+        void VerificationApprove(FormCollection col, AccountModel currentUser, string taskRole);
+        void VerificationApproveNew(FormCollection col, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction);
+        void VerificationReturn(FormCollection col, AccountModel currentUser, string taskRole);
+        void VerificationReturnNew(FormCollection col, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction);
+        void VerificationRoute(FormCollection col, AccountModel currentUser);
+        void VerificationRouteNew(FormCollection col, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction);
+        void VerificationPullOut(FormCollection col, AccountModel currentUser);
+        void VerificationRepair(FormCollection col, AccountModel currentUser);
+        void VerificationRepairNew(FormCollection col, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction);
+        void BranchApprove(FormCollection col, AccountModel currentUser, string taskRole);
+        void BranchApproveNew(FormCollection col, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction, Boolean VerificationLimit);
+        void BranchReturn(FormCollection col, AccountModel currentUser, string taskRole);
+        void BranchReturnNew(FormCollection col, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction, Boolean verificationlimit);
+        void BranchReferBack(FormCollection col, AccountModel currentUser);
+        void BranchConfirmation(FormCollection col, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction);
+        Boolean VerifyClassLimit(FormCollection col, AccountModel currentUser);
+        List<string> VerificationCondition(string Userid, string Taskid);
+        List<string> ValidateVerification(FormCollection col, AccountModel currentUser, string verifyAction);
+        List<string> ValidateBranch(FormCollection col, AccountModel currentUser, string verifyAction);
+        List<string> LockedCheck(FormCollection col, AccountModel currentUser);
+    }
+}

@@ -1,0 +1,35 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using (Html.BeginForm("SaveCreate", "TCCode", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+
+        <h4>@Locale.TCCodeMaintenance</h4>
+        <h4></h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <TBODY>
+                <TR>
+                    <Th>@Locale.TCCode</Th>
+                    <TD>
+                        <input type="text" name="tcCode" >
+                        <span class="red-star">*</span>
+                    </TD>
+                </TR>
+                <TR>
+                    <Th>@Locale.TCCodeDescription</Th>
+
+                    <TD>
+                        <input type="text" name="tcDesc">
+                        <span class="red-star">*</span>
+                    </TD>
+                </TR>
+            </TBODY>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.TCCode.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.TCCode.INDEX) ? "" : "disabled")">@Locale.btnClose</a>
+    </div>
+
+}

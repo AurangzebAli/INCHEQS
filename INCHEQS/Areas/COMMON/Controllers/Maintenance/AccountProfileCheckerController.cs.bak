@@ -1,0 +1,153 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using INCHEQS.Resources;
+using INCHEQS.Security;
+using System.Data;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using INCHEQS.Security.SystemProfile;
+using INCHEQS.Security.AuditTrail;
+using INCHEQS.Models.SearchPageConfig;
+using INCHEQS.Models.SearchPageConfig.Services;
+using INCHEQS.TaskAssignment;
+using INCHEQS.Areas.COMMON.Models.AccountProfile;
+
+namespace INCHEQS.Areas.COMMON.Controllers.Maintenance
+{
+    public class AccountProfileCheckerController : BaseController
+    {
+
+        private IAccountProfileDao accountProfileDao;
+        private readonly IAuditTrailDao auditTrailDao;
+        private IPageConfigDao pageConfigDao;
+        protected readonly ISearchPageService searchPageService;
+        protected readonly ISystemProfileDao systemProfileDao;
+
+        public AccountProfileCheckerController(IAccountProfileDao accountProfileDao, IAuditTrailDao auditTrailDao, IPageConfigDao pageConfigDao, ISearchPageService searchPageService, ISystemProfileDao systemProfileDao)
+        {
+            this.pageConfigDao = pageConfigDao;
+            this.accountProfileDao = accountProfileDao;
+            this.auditTrailDao = auditTrailDao;
+            this.searchPageService = searchPageService;
+            this.systemProfileDao = systemProfileDao;
+        }
+
+        [CustomAuthorize(TaskIds = TaskIdsOCS.AccountProfileChecker.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Index()
+        {
+            ViewBag.SearchPage = pageConfigDao.GetSearchFormModelFromConfig(CurrentUser.Account, new PageSqlConfig(TaskIdsOCS.AccountProfileChecker.INDEX));
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIdsOCS.AccountProfileChecker.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public virtual ActionResult SearchResultPage(FormCollection collection)
+        {
+            //ViewBag.SearchResult = pageConfigDao.getResultListFromDatabaseView(new PageSqlConfig(TaskIds.AccountProfileChecker.INDEX, "View_InternalBranch", "fldBankCode, fldBranchCode, fldlocationcode", "fldBankCode=@fldBankCode", new[] {
+            //    new SqlParameter("@fldBankCode",CurrentUser.Account.BankCode )
+            //}),
+            //collection); check also in branchChecker for this
+
+            ViewBag.SearchResult = pageConfigDao.getResultListFromDatabaseView(new PageSqlConfig(TaskIdsOCS.AccountProfileChecker.INDEX, "View_AccountProfileChecker", ""), collection);
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult VerifyA(FormCollection col)
+        {
+            try
+            {
+                //string formAction = col["formAction"];
+                List<string> arrResults = new List<string>();
+
+                if ((col["deleteBox"]) != null)
+                {
+                    arrResults = col["deleteBox"].Split(',').ToList();
+
+                    foreach (string arrResult in arrResults)
+                    {
+                        string action = arrResult.Substring(0, 1);
+                        string taskId = arrResult.Substring(1, 6);
+                        string id = arrResult.Remove(0, 7);
+
+                        if (action.Equals("A"))
+                        {
+                            accountProfileDao.MoveToAccountProfileFromTemp(id);
+                        }
+                        else if (action.Equals("D"))
+                        {
+                            AccountProfileModel objAccountProfile = accountProfileDao.GetAccountProfileDataById(id);
+                            accountProfileDao.DeleteAccountProfile(id);
+                            auditTrailDao.Log("Deleted Account Profile from Main => Account Number : " + objAccountProfile.accountNumber + " Account Name : " + objAccountProfile.accountName + " Account Type : " + objAccountProfile.accountType + " Account Status : " + objAccountProfile.accountStatus + " Internal Branch Code : " + objAccountProfile.internalBranchCode + " Contact No : " + objAccountProfile.contactNo + " Áddress 1 : " + objAccountProfile.address1 + " Áddress 2 : " + objAccountProfile.address2 + "  Áddress 3 : " + objAccountProfile.address3 + " PostCode : " + objAccountProfile.postCode + " City : " + objAccountProfile.city + " Country : " + objAccountProfile.countryDesc, CurrentUser.Account);
+                        }
+                        else if (action.Equals("U"))
+                        {
+                            AccountProfileModel before = accountProfileDao.GetAccountProfileDataById(id);
+                            auditTrailDao.Log("Deleted Account Profile Created Before => Account Number : " + before.accountNumber + " Account Name : " + before.accountName + " Account Type : " + before.accountType + " Account Status : " + before.accountStatus + " Internal Branch Code : " + before.internalBranchCode + " Contact No : " + before.contactNo + " Áddress 1 : " + before.address1 + " Áddress 2 : " + before.address2 + "  Áddress 3 : " + before.address3 + " PostCode : " + before.postCode + " City : " + before.city + " Country : " + before.countryDesc, CurrentUser.Account);
+
+                            accountProfileDao.UpdateAccountProfileById(id);
+
+                            AccountProfileModel after = accountProfileDao.GetAccountProfileDataById(id);
+                            auditTrailDao.Log("Deleted Account Profile After Create => Account Number : " + after.accountNumber + " Account Name : " + after.accountName + " Account Type : " + after.accountType + " Account Status : " + after.accountStatus + " Internal Branch Code : " + after.internalBranchCode + " Contact No : " + after.contactNo + " Áddress 1 : " + after.address1 + " Áddress 2 : " + after.address2 + "  Áddress 3 : " + after.address3 + " PostCode : " + after.postCode + " City : " + after.city + " Country : " + after.countryDesc, CurrentUser.Account);
+                        }
+
+                        accountProfileDao.DeleteAccountProfileTemp(id);
+                        auditTrailDao.Log("Approve Account Profile - Task Assigment :" + taskId + " Account Number : " + id, CurrentUser.Account);
+
+                    }
+                    TempData["Notice"] = Locale.RecordsSuccsesfullyVerified;
+                }
+                else
+                {
+                    TempData["Warning"] = Locale.PleaseSelectARecord;
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [CustomAuthorize(TaskIds = TaskIdsOCS.InternalBranchChecker.INDEX)]
+        [HttpPost]
+        public ActionResult VerifyR(FormCollection col)
+        {
+            try
+            {
+                //string formAction = col["formAction"];
+                List<string> arrResults = new List<string>();
+
+                if ((col["deleteBox"]) != null)
+                {
+                    arrResults = col["deleteBox"].Split(',').ToList();
+
+                    foreach (string arrResult in arrResults)
+                    {
+                        string action = arrResult.Substring(0, 1);
+                        string taskId = arrResult.Substring(1, 6);
+                        string id = arrResult.Remove(0, 7);
+
+                        accountProfileDao.DeleteAccountProfileTemp(id);
+                        auditTrailDao.Log("Account Profile Update, Delete or Created New - Task Assigment :" + taskId + "Account Number : " + id, CurrentUser.Account);
+
+                    }
+                    TempData["Notice"] = Locale.RecordsSuccsesfullyRejected;
+                }
+                else
+                {
+                    TempData["Warning"] = Locale.PleaseSelectARecord;
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
+}

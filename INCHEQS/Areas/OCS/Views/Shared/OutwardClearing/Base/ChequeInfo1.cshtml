@@ -1,0 +1,138 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@using INCHEQS.Common
+@{
+
+}
+@*<span class=" h5 bold">UIC : </span>
+    <div class="" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("flduic")</div>*@
+
+@*<span class=" h5 bold">Payee Account Number : </span>
+    <div class="" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldpvaccno")</div>*@
+
+@*<span class=" h5 bold">Amount : </span>
+    <div class="" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldamount")</div>*@
+
+@*<span class="h5 bold">TC Code : </span>
+    <div class="" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldtccode")</div>*@
+@*<span class="h5 bold">Paying Bank : </span>
+    <div class="" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldbankdesc")</div>*@
+
+@*<span class="h5 bold">Paying Branch : </span>
+    <div class="" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldpayingbranch")</div>
+    <span class="h5 bold">Capturing Branch : </span>
+    <div class="" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldcapturingbranch")</div>
+    <span class="h5 bold">Clearing Branch : </span>
+    <div class="" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldclearingbranch")</div>*@
+@*<span class="h5 bold">Issuer Account Number : </span>
+    <div class="" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldissueraccno")</div>*@
+@*<span class="h5 bold">Clearing Date : </span>
+    <div class="" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldcapturingdate")</div>
+    <span class="h5 bold">Presenting Bank : </span>
+    <div class="" style="word-wrap: break-word;"></div>
+    <span class="h5 bold">Presenting Bank Name : </span>
+    <div class="" style="word-wrap: break-word;"></div>
+    <span class="h5 bold">Presenting Branch : </span>
+    <div class="" style="word-wrap: break-word;"></div>
+    <span class="h5 bold">Scanner ID : </span>
+    <div class="" style="word-wrap: break-word;"></div>
+    <span class="h5 bold">Batch Number : </span>
+    <div class="" style="word-wrap: break-word;"></div>
+    <span class="h5 bold">Sequence Number : </span>
+    <div class="" style="word-wrap: break-word;"></div>
+    <span class="h5 bold">Issuing Bank : </span>
+    <div class="" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldbankcode")</div>
+    <span class="h5 bold">Issuing Bank Name : </span>
+    <div class="" style="word-wrap: break-word;"></div>
+    <span class="h5 bold">Issuing Branch : </span>
+    <div class="" style="word-wrap: break-word;">@ViewBag.OutwardItemViewModel.getField("fldbranchcode")</div>*@
+
+<table class="table form-table table-no-border">
+    <tr hidden>
+        <td class="bold">UIC </td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("flduic")</td>
+
+    </tr>
+    <tr>
+        <td class="bold">Capturing Date</td>
+        <td>:</td>
+        <td>@DateUtils.formatDateFromSql(ViewBag.OutwardItemViewModel.getField("fldcapturingdate"))</td>
+      
+    </tr>
+
+    <tr>
+        <td class="bold">Presenting Bank</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldcapturingbranch").Substring(1, 3)</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Presenting Bank Name</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldpresentingbankname")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Presenting Branch</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldcapturingbranch").Substring(4, 4)</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Scanner ID</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldscannerid")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Batch Number</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldbatchnumber")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Sequence Number</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldseqno")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Issuing Bank</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldbankcode")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Issuing Bank Name</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldbankdesc")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Issuing Branch</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldbranchcode")</td>
+
+    </tr>
+    <tr>
+        <td class="bold">Source</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("source")</td>
+
+    </tr>
+
+</table>
+<style>
+    .bold{
+        font-weight:bold;
+    }
+</style>

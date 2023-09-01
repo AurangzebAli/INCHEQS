@@ -1,0 +1,22 @@
+﻿@using INCHEQS.Resources
+@*<div id="chequeImageContainer">*@
+<div id="chequeImageContainer">
+    <div>
+        <button type="button" data-btnfor="reset" class="modify-cheque-btn btn-verification-border btn-verification btn-medium btn-action-verification">@Locale.Reset</button>
+        <button type="button" data-btnfor="rotate" class="modify-cheque-btn btn-verification-border btn-verification btn-medium btn-action-verification">@Locale.Rotate</button>
+        <button type="button" data-btnfor="invert" class="modify-cheque-btn btn-verification-border btn-verification btn-medium btn-action-verification">@Locale.Invert</button>
+        <button type="button" data-btnfor="large" class="modify-cheque-btn btn-verification-border btn-verification btn-medium btn-action-verification">@Locale.BigImage</button>
+
+        <button type="button" id="frontBtn" data-btnfor="front" class="disp modify-cheque-btn btn btn-default btn-medium">@Locale.Front</button>
+        <button type="button" id="backBtn" data-btnfor="back" class="disp modify-cheque-btn-back btn btn-default btn-medium">@Locale.Back</button> &nbsp; &nbsp; &nbsp;
+        <button type="button" data-btnfor="bw" id="btnbw" class="disp modify-cheque-btn btn btn-default btn-medium">Black White</button>
+        <button type="button" id="chequeUV" data-btnfor="uv" class="disp modify-cheque-btn-uv btn btn-default btn-medium">UV</button> &nbsp; &nbsp; &nbsp;
+        <button type="button" data-btnfor="greyscale" class="disp modify-cheque-btn btn btn-default btn-medium">Greyscale</button>
+    </div>
+</div>
+
+<style >
+    .disp {
+        display:none;
+    }
+</style>

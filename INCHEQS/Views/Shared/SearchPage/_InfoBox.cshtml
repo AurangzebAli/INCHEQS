@@ -1,0 +1,13 @@
+﻿    
+@if (ViewBag.InfoBox != null) {
+<div class="row mTop10">
+    @foreach (var col in ViewBag.InfoBox.Columns) {
+        <div class="col-sm-2 shortcut">
+            <div class="box">
+                <div class="info">@col.ColumnName</div>
+                <div class="number">@ViewBag.InfoBox.Rows[0][col]</div>
+            </div>
+        </div>
+    }
+</div>
+}

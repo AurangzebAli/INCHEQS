@@ -1,0 +1,76 @@
+﻿@using INCHEQS.Resources
+<div id="BalancinginfoSec">
+    <div class="row">
+        <div class="col-sm-12">
+            <input type="text" class="form-control hidden" id="hReasonCode" name="hReasonCode" value="" />
+            <input type="text" class="form-control hidden" id="hIntRejCode" name="hIntRejCode" value="" />
+            <input type="text" class="form-control hidden" id="hRemark" name="hRemark" value="" />
+            <input type="text" class="form-control hidden" id="htoUpdateBalancing" name="htoUpdateBalancing" value="" />
+            @if (ViewBag.BalancingHistory != null)
+            {
+                Int64 VAmount = 0;
+                Int64 CAmount = 0;
+
+                foreach (var Items in ViewBag.BalancingHistory)
+                {
+
+                    if (@Items.fldItemType == "C" || @Items.fldItemType == "c")
+                    {
+                        CAmount = Convert.ToInt64(CAmount) + Convert.ToInt64(Items.fldAmount);
+                    }
+                    else
+                    {
+                        VAmount = Convert.ToInt64(VAmount) + Convert.ToInt64(Items.fldAmount);
+
+                    }
+
+                }
+                <span class="col-sm-1 h5 bold" style="line-height:20px;">Maker</span>
+                <div class="col-sm-2" style="word-wrap: break-word;">
+                    <input readonly disabled type="text" id="txtIPCAmount" value="@Convert.ToDecimal(Convert.ToDecimal(CAmount)/100).ToString("#,##0.00")" class="cheque-input new_fldamount number-only " name="txtIPCAmount" maxlength="23" style="width: 150px; margin:auto; text-align:right;" />
+                </div>
+
+                <span class="col-sm-1 h5 bold" style="line-height:20px;">Checker</span>
+                <div class="col-sm-2" style="word-wrap: break-word;">
+                    <input readonly disabled type="text" id="txtCUSTAmount" value="@Convert.ToDecimal(Convert.ToDecimal(VAmount)/100).ToString("#,##0.00")" class="cheque-input new_fldamount number-only" name="txtCUSTAmount" maxlength="23" style="width: 150px; margin:auto; text-align:right;" />
+                </div>
+            }
+            <span class="col-sm-1 h5 bold" style="line-height:20px;">Difference</span>
+            <div class="col-sm-1" style="word-wrap: break-word;">
+                <input readonly disabled type="text" id="txtDiffAmount" class="cheque-input new_fldamount number-only" name="txtDiffAmount" maxlength="23" value="0.00" style="width: 150px; margin:auto; text-align:right; color:white;" />
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table table-bordered mTop10" id="tblBalHistory">
+    <thead>
+        <tr style='background-color:#dad8d8;'>
+            <th>ItemID</th>
+            <th>Maker/Checker</th>
+            <th>Type</th>
+            <th style="width: 200px;">UIC</th>
+            <th>Cheque Number</th>
+            <th style="width: 200px;">Creditor Account Number</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.BalancingHistory != null)
+        {
+            foreach (var row in ViewBag.BalancingHistory)
+            {
+                <tr data-ItemType="@row.fldItemType" id="BalHis_@row.fldItemID" class="BalanceHistory">
+                    <td align="left"><button type="button" class="btn btn-default btn-xs btnBalancingEditRecord">@row.fldItemID</button></td>
+                    <td align="left"><span>@row.CheckerMaker</span></td>
+                    <td align="left"><span>@row.fldItemType</span></td>
+                    <td align="left"><span>@row.flduic</span></td>
+                    <td align="left"><span>@row.fldSerial</span></td>
+                    <td align="left"><span>@row.fldPVaccNo</span></td>
+                    <td align="left" id="BalHisAmt_@row.fldItemID"><span>@Convert.ToDecimal(Convert.ToDecimal(row.fldAmount) / 100).ToString("#,##0.00")</span></td>
+                    <td align="left" style="display:none;" id="OrgAmount_@row.fldItemID"><span>@Convert.ToDecimal(Convert.ToDecimal(row.fldAmount) / 100).ToString("#,##0.00")</span></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<script src="~/Scripts/OCS/TransactionBalancing.js"></script>

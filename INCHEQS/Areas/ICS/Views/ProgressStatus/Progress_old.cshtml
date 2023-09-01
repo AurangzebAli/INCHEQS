@@ -1,0 +1,254 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment;
+
+<br />
+
+<style>
+    .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+        padding: 2px;
+    }
+</style>
+
+<div style="width:100%">
+    @if (ViewBag.ProgressStatus != null)
+    {
+
+        foreach (var items in ViewBag.ProgressStatus)
+        {
+            <table id="ProgressStatus" class="table table-bordered" style="font-size:12pt;font-family:Arial;font-weight:bold;">
+                <thead>
+                    <tr style="background-color:#add8e6;">
+                        <td>Description</td>
+                        <td colspan="2">Completed</td>
+                        <td colspan="8">In Progress</td>
+                        <td>Total</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="background-color:#add8e6;">Approved</td>
+                        <td style="background-color:#add8e6;">Rejected</td>
+                        <td colspan="2" style="background-color: #add8e6;">Reject Reentry</td>
+                        <td style="background-color: #add8e6; width: 10%;">Center 1st Level</td>
+                        <td style="background-color: #add8e6; width: 10%;">Center 2nd Level</td>
+                        <td style="background-color: #add8e6; width: 10%;">PPS 1st Level</td>
+                        <td style="background-color: #add8e6; width: 10%;">PPS 2nd Level</td>
+                        <td style="background-color: #add8e6; width: 10%;">Pull Out</td>
+                        <td style="background-color:#add8e6;width:10%;">Pending To Branch</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="background-color: #add8e6; width: 10%;">RR Maker</td>
+                        <td style="background-color: #add8e6; width: 10%;">RR Checker</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*<tr>
+                        <td>Reject Reentry</td>
+                        <td id="RRCompleted">@items.RRCompleted</td>
+                        <td id="RRCompleted">@items.RRCompleted</td>
+                        <td id="RR1stLevel">@items.RR1stLevel</td>
+                        <td id="RR2ndLevel">@items.RR2ndLevel</td>
+                        <td id="RRPendingBranch">0</td>
+                        <td id="RRTotal">@items.RRTotal</td>
+                    </tr>
+                    <tr>
+                        <td>Host Reject</td>
+                        <td id="HostRejectCompletedApproved">@items.HostRejectCompletedApproved</td>
+                        <td id="HostRejectCompletedRejected">@items.HostRejectCompletedRejected</td>
+                        <td id="HostReject1stLevel">@items.HostReject1stLevel</td>
+                        <td id="HostReject2ndLevel">@items.HostReject2ndLevel</td>
+                        <td id="HostRejectPendingBranch">0</td>
+                        <td id="HostRejectTotal">@items.HostRejectTotal</td>
+                    </tr>*@
+                    @*<tr>
+                        <td>PPS</td>
+                        <td id="PPSCompleted">@items.PPSCompleted</td>
+                        <td id="PPS1stLevel">@items.PPS1stLevel</td>
+                        <td id="PPS2ndLevel">@items.PPS2ndLevel</td>
+                        <td id="PPSTotal">@items.PPSTotal</td>
+                    </tr>*@
+                    <tr>
+                        <td>Normal - Band 1  &emsp;   0.00 < Amount <= 500.00</td>
+                        <td id="Band0CompletedApproved">@items.Band0CompletedApproved</td>
+                        <td id="Band0CompletedRejected">@items.Band0CompletedRejected</td>
+                        <td id="Band0RR">@items.Band0RR</td>
+                        <td id="Band0RRChecker">@items.Band0RRChecker</td>
+                        <td id="Band0_1stLevel">@items.Band0_1stLevel</td>
+                        <td id="Band0_2ndLevel">@items.Band0_2ndLevel</td>
+                        <td id="Band0PPS1stLevel">@items.Band0PPS1stLevel</td>
+                        <td id="Band0PPS2ndLevel">@items.Band0PPS2ndLevel</td>
+                        <td id="Band0_PullOut">@items.Band0PullOut</td>
+                        <td id="Band0_PendingBranch">@items.Band0_PendingBranch</td>
+                        <td id="Band0Total">@items.Band0Total</td>
+                    </tr>
+                    <tr>
+                        <td>Normal - Band 2  &emsp;   500.00 < Amount <= 5,000.00</td>
+                        <td id="Band1CompletedApproved">@items.Band1CompletedApproved</td>
+                        <td id="Band1CompletedRejected">@items.Band1CompletedRejected</td>
+                        <td id="Band1RR">@items.Band1RR</td>
+                        <td id="Band1RRChecker">@items.Band1RRChecker</td>
+                        <td id="Band1_1stLevel">@items.Band1_1stLevel</td>
+                        <td id="Band1_2ndLevel">@items.Band1_2ndLevel</td>
+                        <td id="Band1PPS1stLevel">@items.Band1PPS1stLevel</td>
+                        <td id="Band1PPS2ndLevel">@items.Band1PPS2ndLevel</td>
+                        <td id="Band1_PullOut">@items.Band1PullOut</td>
+                        <td id="Band1_PendingBranch">@items.Band1_PendingBranch</td>
+                        <td id="Band1Total">@items.Band1Total</td>
+                    </tr>
+                    <tr>
+                        <td>Normal - Band 3  &emsp;   5,000.00 < Amount <= 20,000.00 </td>
+                        <td id="Band2CompletedApproved">@items.Band2CompletedApproved</td>
+                        <td id="Band2CompletedRejected">@items.Band2CompletedRejected</td>
+                        <td id="Band2RR">@items.Band2RR</td>
+                        <td id="Band2RRChecker">@items.Band2RRChecker</td>
+                        <td id="Band2_1stLevel">@items.Band2_1stLevel</td>
+                        <td id="Band2_2ndLevel">@items.Band2_2ndLevel</td>
+                        <td id="Band2PPS1stLevel">@items.Band2PPS1stLevel</td>
+                        <td id="Band2PPS2ndLevel">@items.Band2PPS2ndLevel</td>
+                        <td id="Band2_PullOut">@items.Band2PullOut</td>
+                        <td id="Band2_PendingBranch">@items.Band2_PendingBranch</td>
+                        <td id="Band2Total">@items.Band2Total</td>
+                    </tr>
+                    <tr>
+                        <td>Normal - Band 4  &emsp;   20,000.00 < Amount <= 50,000.00</td>
+                        <td id="Band3CompletedApproved">@items.Band3CompletedApproved</td>
+                        <td id="Band3CompletedRejected">@items.Band3CompletedRejected</td>
+                        <td id="Band3RR">@items.Band3RR</td>
+                        <td id="Band3RRChecker">@items.Band3RRChecker</td>
+                        <td id="Band3_1stLevel">@items.Band3_1stLevel</td>
+                        <td id="Band3_2ndLevel">@items.Band3_2ndLevel</td>
+                        <td id="Band3PPS1stLevel">@items.Band3PPS1stLevel</td>
+                        <td id="Band3PPS2ndLevel">@items.Band3PPS2ndLevel</td>
+                        <td id="Band3_PullOut">@items.Band3PullOut</td>
+                        <td id="Band3_PendingBranch">@items.Band3_PendingBranch</td>
+                        <td id="Band3Total">@items.Band3Total</td>
+                    </tr>
+                    <tr>
+                        <td>Normal - Band 5  &emsp;   50,000.00 < Amount <= 100,000.00</td>
+                        <td id="Band4CompletedApproved">@items.Band4CompletedApproved</td>
+                        <td id="Band4CompletedRejected">@items.Band4CompletedRejected</td>
+                        <td id="Band4RR">@items.Band4RR</td>
+                        <td id="Band4RRChecker">@items.Band4RRChecker</td>
+                        <td id="Band4_1stLevel">@items.Band4_1stLevel</td>
+                        <td id="Band4_2ndLevel">@items.Band4_2ndLevel</td>
+                        <td id="Band4PPS1stLevel">@items.Band4PPS1stLevel</td>
+                        <td id="Band4PPS2ndLevel">@items.Band4PPS2ndLevel</td>
+                        <td id="Band4_PullOut">@items.Band4PullOut</td>
+                        <td id="Band4_PendingBranch">@items.Band4_PendingBranch</td>
+                        <td id="Band4Total">@items.Band4Total</td>
+                    </tr>
+                    <tr>
+                        <td>Normal - Band 6  &emsp;   100,000.00 < Amount <= 9,999,999,999,99.99</td>
+                        <td id="Band5CompletedApproved">@items.Band5CompletedApproved</td>
+                        <td id="Band5CompletedRejected">@items.Band5CompletedRejected</td>
+                        <td id="Band5RR">@items.Band5RR</td>
+                        <td id="Band5RRChecker">@items.Band5RRChecker</td>
+                        <td id="Band5_1stLevel">@items.Band5_1stLevel</td>
+                        <td id="Band5_2ndLevel">@items.Band5_2ndLevel</td>
+                        <td id="Band5PPS1stLevel">@items.Band5PPS1stLevel</td>
+                        <td id="Band5PPS2ndLevel">@items.Band5PPS2ndLevel</td>
+                        <td id="Band5_PullOut">@items.Band5PullOut</td>
+                        <td id="Band5_PendingBranch">@items.Band5_PendingBranch</td>
+                        <td id="Band5Total">@items.Band5Total</td>
+                    </tr>
+                </tbody>
+                <tfoot style="font-weight:bold">
+                    <tr style="background-color:#add8e6;">
+                        <td>Total</td>
+                        <td id="TotalCompletedApproved"></td>
+                        <td id="TotalCompletedRejected"></td>
+                        <td id="TotalRR"></td>
+                        <td id="TotalRRChecker"></td>
+                        <td id="Total1stLevel"></td>
+                        <td id="Total2ndLevel"></td>
+                        <td id="TotalPPS1stLevel"></td>
+                        <td id="TotalPPS2ndLevel"></td>
+                        <td id="TotalPullOut"></td>
+                        <td id="TotalPendingBranch"></td>
+                        <td id="TotalAll"></td>
+                    </tr>
+                    </tfoot>
+
+            </table>
+        }
+    }
+</div>
+
+<script type="text/javascript">
+
+    //alert($("#RR1stLevel").text());
+    var TotalCompleted = parseInt($("#Band0Completed").text()) + parseInt($("#Band1Completed").text()) +
+        parseInt($("#Band2Completed").text()) + parseInt($("#Band3Completed").text())
+        + parseInt($("#Band4Completed").text()) + parseInt($("#Band5Completed").text());
+    //alert(TotalCompleted);
+
+    var TotalRR = parseInt($("#Band5RR").text()) +
+        parseInt($("#Band4RR").text()) + parseInt($("#Band3RR").text()) +
+        parseInt($("#Band2RR").text()) + parseInt($("#Band1RR").text())
+        + parseInt($("#Band0RR").text());
+
+    var TotalRRChecker = parseInt($("#Band5RRChecker").text()) +
+        parseInt($("#Band4RRChecker").text()) + parseInt($("#Band3RRChecker").text()) +
+        parseInt($("#Band2RRChecker").text()) + parseInt($("#Band1RRChecker").text())
+        + parseInt($("#Band0RRChecker").text());
+
+    var TotalCompletedApproved = parseInt($("#Band0CompletedApproved").text()) + parseInt($("#Band1CompletedApproved").text()) +
+        parseInt($("#Band2CompletedApproved").text()) + parseInt($("#Band3CompletedApproved").text())
+        + parseInt($("#Band4CompletedApproved").text()) + parseInt($("#Band5CompletedApproved").text());
+
+    var TotalCompletedRejected = parseInt($("#Band0CompletedRejected").text()) + parseInt($("#Band1CompletedRejected").text()) +
+        parseInt($("#Band2CompletedRejected").text()) + parseInt($("#Band3CompletedRejected").text())
+        + parseInt($("#Band4CompletedRejected").text()) + parseInt($("#Band5CompletedRejected").text());
+
+    var Total1stLevel = parseInt($("#Band0_1stLevel").text()) + parseInt($("#Band1_1stLevel").text()) +
+        parseInt($("#Band2_1stLevel").text()) + parseInt($("#Band3_1stLevel").text())
+        + parseInt($("#Band4_1stLevel").text()) + parseInt($("#Band5_1stLevel").text());
+
+    var Total2ndLevel = parseInt($("#Band0_2ndLevel").text()) + parseInt($("#Band1_2ndLevel").text()) +
+        parseInt($("#Band2_2ndLevel").text()) + parseInt($("#Band3_2ndLevel").text())
+        + parseInt($("#Band4_2ndLevel").text()) + parseInt($("#Band5_2ndLevel").text());
+
+    var TotalPPS1stLevel = parseInt($("#Band0PPS1stLevel").text()) + parseInt($("#Band1PPS1stLevel").text()) +
+        parseInt($("#Band2PPS1stLevel").text()) + parseInt($("#Band3PPS1stLevel").text())
+        + parseInt($("#Band4PPS1stLevel").text()) + parseInt($("#Band5PPS1stLevel").text());
+
+    var TotalPPS2ndLevel = parseInt($("#Band0PPS2ndLevel").text()) + parseInt($("#Band1PPS2ndLevel").text()) +
+        parseInt($("#Band2PPS2ndLevel").text()) + parseInt($("#Band3PPS2ndLevel").text())
+        + parseInt($("#Band4PPS2ndLevel").text()) + parseInt($("#Band5PPS2ndLevel").text());
+
+    var TotalPendingBranch = parseInt($("#Band0_PendingBranch").text()) + parseInt($("#Band1_PendingBranch").text()) +
+        parseInt($("#Band2_PendingBranch").text()) + parseInt($("#Band3_PendingBranch").text())
+        + parseInt($("#Band4_PendingBranch").text()) + parseInt($("#Band5_PendingBranch").text());
+
+    var TotalAll = parseInt($("#Band0Total").text()) + parseInt($("#Band1Total").text()) +
+        parseInt($("#Band2Total").text()) + parseInt($("#Band3Total").text())
+        + parseInt($("#Band4Total").text()) + parseInt($("#Band5Total").text());
+
+    var TotalPullOut = parseInt($("#Band0_PullOut").text()) + parseInt($("#Band1_PullOut").text()) +
+        parseInt($("#Band2_PullOut").text()) + parseInt($("#Band3_PullOut").text())
+        + parseInt($("#Band5_PullOut").text()) + parseInt($("#Band4_PullOut").text());
+    
+    $("#TotalRRChecker").text(TotalRRChecker);
+    $("#TotalRR").text(TotalRR);
+    $("#TotalCompleted").text(TotalCompleted);
+    $("#TotalCompletedApproved").text(TotalCompletedApproved);
+    $("#TotalCompletedRejected").text(TotalCompletedRejected);
+    $("#Total1stLevel").text(Total1stLevel);
+    $("#Total2ndLevel").text(Total2ndLevel);
+    $("#TotalPPS1stLevel").text(TotalPPS1stLevel);
+    $("#TotalPPS2ndLevel").text(TotalPPS2ndLevel);
+    $("#TotalPendingBranch").text(TotalPendingBranch);
+    $("#TotalPullOut").text(TotalPullOut);
+    $("#TotalAll").text(TotalAll);
+
+</script>

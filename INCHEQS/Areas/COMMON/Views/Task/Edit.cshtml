@@ -1,0 +1,81 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.TaskAssignment;
+@using INCHEQS.Resources;
+
+@using (Html.BeginForm("Update", "Task", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @*<h4>@Locale.MaintenanceTaskAssignment</h4>*@
+        <h4>@ViewBag.PageTitle</h4>
+        <hr />
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.GroupID</th>
+                    <td>@ViewBag.Group.fldGroupId<input type="hidden" value="@ViewBag.Group.fldGroupId" name="fldGroupCode" /></td>
+                </tr>
+                <tr>
+                    <th>@Locale.GroupDescription</th>
+                    <td>@ViewBag.Group.fldGroupDesc<input type="hidden" value="@ViewBag.Group.fldGroupDesc" name="fldGroupDesc" /></td>
+                </tr>
+                <tr>
+                    <td><br /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form-select">
+                            <div>
+                                <b>@Locale.TaskAvailableList</b><br>
+                                <select multiple="multiple" class="form-multiple select-from">
+                                    @foreach (var item in ViewBag.AvailableTask) {
+                                        <option value="@item.fldTaskId">@item.fldTaskDesc</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-move">
+                                <br /><br /><br />
+                                <p><input type="button" title="select" style='width:100px' class="btn btn-default btn-move addOne" value="Add"></p>
+                                <p><input type="button" title="select all" style='width:100px' class="btn btn-default btn-move addAll" value="Add All"></p>
+                                <p><input type="button" title="remove" style='width:100px' class="btn btn-default btn-move rmOne" value="Remove"></p>
+                                <p><input type="button" title="remove all" style='width:100px' class="btn btn-default btn-move rmAll" value="Remove All"></p>
+                                <br />
+                            </div>
+                            <div>
+                                <b>@Locale.TaskSelectedList</b><br>
+                                <select multiple="multiple" class="form-multiple select-to" name="selectedTask">
+                                    @foreach (var item in ViewBag.SelectedTask) {
+                                        <option value="@item.fldTaskId">@item.fldTaskDesc</option>
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button type="submit" onclick="return Confirm()" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.Task.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("/Index")" Class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.Task.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+        @*<button type="submit" onclick="return Confirm()" Class="btn btn-default @(CurrentUser.HasTask(INCHEQS.TaskAssignment.TaskIds.Task.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>*@
+        @*<button type="submit" data-action="@Url.Action("/UPDATE")" Class="c @(CurrentUser.HasTask(INCHEQS.TaskAssignment.TaskIds.Task.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>*@
+        @*<a href="@Url.Action("/Index")" Class="btn btn-default secure-nav @(CurrentUser.HasTask(INCHEQS.TaskAssignment.TaskIds.Task.INDEX) ? "" : "hidden")">@Locale.btnClose</a>*@
+    </div>
+}
+<script type="text/javascript">
+    function Confirm() {
+        var input = $("<input />");
+        input.attr("type", "hidden").attr("name", "confirm_value");
+        if (confirm("Do you want to save data?")) {
+            input.val("Yes");
+            return true;
+        } else {
+            input.val("No");
+            return false;
+        }
+        $("form")[0].appendChild(input[0]);
+    }
+</script>
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/app.js"></script>

@@ -1,0 +1,38 @@
+﻿@using INCHEQS.Resources
+<div class="row">
+    <div class="col-sm-3">
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationApprove")) {
+            <button type="button" id="approveBtn" data-action="@Url.Action("VerificationApprove")" class="btn btn-default btn-xs normal-submit">@Locale.Approve</button>
+        }
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationReturn")) {
+            <button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn btn-default btn-xs normal-submit">@Locale.Return</button>
+        }
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationRoute")) {
+            <button type="button" id="routeBtn" data-action="@Url.Action("VerificationRoute")" class="btn btn-default btn-xs normal-submit">@Locale.Route</button>
+        }
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationPullOut")) {
+            <button type="button" id="pullOutBtn" data-action="@Url.Action("VerificationPullOut")" class="btn btn-default btn-xs normal-submit">@Locale.PullOut</button>
+        }
+        @*@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationRepair")) {
+            <button type="button" id="repairBtn" data-action="@Url.Action("VerificationRepair")" class="btn btn-default btn-xs normal-submit">@Locale.Repair</button>
+        }*@
+    </div>
+    <div class="col-sm-3">
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationRoute") ||
+                    ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationReturn")) {
+            <input type="text" style="width:30px;min-width:30px" id="rejectCodeText" name="new_textRejectCode" value="@ViewBag.InwardItemViewModel.getField("fldRejectCode").Trim()" />
+            <select class="textbox" id="rejectCodeSelectList" name="new_rejectCode" style="width:240px;min-width:240px">
+                <option value="">--- @Locale.SelectReturnRouteReason ---</option>
+            </select>
+        }
+    </div>
+
+    <div class="col-sm-4">
+        <textarea class="remarks" name="textAreaRemarks" placeholder="@Locale.Remarks" value="@ViewBag.InwardItemViewModel.getField("fldRemarks")"></textarea>
+        <input type="hidden" id="remarkField" name="remarkField" value="">
+    </div>
+
+    <div class="col-sm-2" hidden>
+        Service Charge <input type="text" name="fldCharges" style="width:40px;min-width:40px" id="serviceCharge" class="currency" value="@ViewBag.InwardItemViewModel.getField("fldCharges")" />
+    </div>
+</div>

@@ -1,0 +1,46 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@using System
+@{
+    ViewBag.Title = "PostedItemHistory";
+    var i = 0;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_PostedItemHistory</title>
+</head>
+<body>
+    <div style="overflow-y: scroll; height:500px;">
+        <table class="table table-bordered">
+            <tr>Posted Item Details</tr>
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>UIC</th>
+                    <th>Cheque Number</th>
+                    <th>Account Number</th>
+                    @*<th>Trans Code</th>*@
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in ViewBag.PostedHistory.Rows)
+                {
+
+                <tr>
+                    <td>@{i++;} @i</td>
+                    <td>@row["fldUIC"]</td>
+                    <td>@row["fldSerial"]</td>
+                    <td>@row["fldIssuerAccNo"]</td>
+                    @*<td>@row["fldTransCode"]</td>*@
+                    <td>@StringUtils.FormatCurrency((row["fldAmount"]).ToString())</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

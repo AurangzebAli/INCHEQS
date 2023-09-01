@@ -1,0 +1,23 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.TaskAssignment;
+@using INCHEQS.Resources;
+@using INCHEQS.Common;
+@using (Html.BeginForm("Update", "LargeAmount", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <h4>@Locale.LargeAmountMaintenance</h4>
+    <hr />
+    <div class="form-horizontal">
+        <br>
+        <table Class="table form-table table-no-border">
+            <tr>
+                <td>Large Amount</td>
+                <td>
+                    <input type="text" name="txtAmount" value="@StringUtils.FormatCurrency(ViewBag.BigAmount.Rows[0]["fldAmount"].ToString())" class="currency">
+                </td>
+
+            </tr>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.LargeAmount.INDEX) ? "" : "hidden")">@Locale.SaveBtn</button>
+    </div>
+
+}

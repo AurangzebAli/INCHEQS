@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
+
+namespace INCHEQS.Areas.COMMON.Models.Users
+{
+    public interface IUserDao
+    {
+        bool CreateUserMaster(string userAbb);
+        bool DeleteUserMasterTemp(string userAbb);
+        bool DeleteUserMaster(string userAbb);
+        bool UpdateUserMaster(FormCollection col, string updUser);
+        bool UpdateUserMasterFromTemp(string userAbb);
+        void CreateUserMasterTemp(FormCollection col, string bankcode, string crtUser, string Action);
+        UserModel CheckUserMasterByTempID(string UserAbb, string UserID, string SearchFor);
+        bool CheckUserMasterTempByID(string userId, string userAbb, string SearchFor);
+        bool CheckUserPasswordHistory(string encryptedPassword, string action);
+        UserModel CheckUserMasterByID(string UserAbb, string UserID , string SearchFor);
+        List<UserModel> ListBranch(string userId);
+        List<UserModel> ListVerificationClass(string userId);
+        List<string> ValidateUser(FormCollection col, string action, string userId);
+        void MoveToUserMasterFromTemp(string userAbb, string Action);
+        string UserAddTemplate(FormCollection Newobj, FormCollection OldObj, string TableHeader,string Action);
+        string UserEditTemplate(UserModel before, UserModel after, string TableHeader, FormCollection User);
+        string UserDeleteTemplate(UserModel before, UserModel after, string TableHeader, string Action, string User);
+
+        string ApproveAddTemplate(UserModel before, UserModel after, string TableHeader, string Action, string User);
+        string ApproveEditTemplate(UserModel before, UserModel after, string TableHeader, string User);
+        string ApproveDeleteTemplate(UserModel before, UserModel after, string TableHeader, string Action, string User);
+        string RejectAddTemplate(UserModel before, UserModel after, string TableHeader, string Action, string User);
+        string RejectEditTemplate(UserModel before, UserModel after, string TableHeader, string User);
+        string RejectDeleteTemplate(UserModel before, UserModel after, string TableHeader, string Action, string User);
+        
+    }
+}

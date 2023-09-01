@@ -1,0 +1,104 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+
+<html>
+
+<body>
+    @using (Html.BeginForm("ViewMatchingResult", "PositivePayMatching", FormMethod.Post, new { @Class = "form-inline secure-form" }))
+    {
+        <h3 class="bold">Matching Result</h3>
+        <table class="table form-table table-bordered" style="border:2px;width:60%">
+
+            <thead>
+                <tr>
+                    <td>
+                        Type
+                    </td>
+                    <td>
+                        Total Item
+                    </td>
+                    <td>
+                        Total Match Item
+                    </td>
+                    <td>
+                        Total Unmatch Item
+                    </td>
+                    <td>
+                        Percentage
+                    </td>
+                </tr>
+            </thead>
+            <TBODY>
+
+                <TR>
+                    <td>Payee</td>
+                    <td>
+                        @ViewBag.totalMatchResult.totalItem
+                    </td>
+                    <td>
+                        @ViewBag.totalMatchResult.totalPayeeMatch
+                    </td>
+                    <td>
+                        @ViewBag.totalMatchResult.totalPayeeUnmatch
+                    </td>
+                    <td>
+                        @ViewBag.totalMatchResult.PayeePercentage %
+                    </td>
+                </TR>
+                <TR>
+                    <td>MICR</td>
+                    <td>
+                        @ViewBag.totalMatchResult.totalItem
+                    </td>
+                    <td>
+                        @ViewBag.totalMatchResult.totalMICRMatch
+                    </td>
+                    <td>
+                        @ViewBag.totalMatchResult.totalMICRUnmatch
+                    </td>
+                    <td>
+                        @ViewBag.totalMatchResult.MICRPercentage %
+                    </td>
+                </TR>
+                <TR>
+                    <td>Issued Date</td>
+                    <td>
+                        @ViewBag.totalMatchResult.totalItem
+                    </td>
+                    <td>
+                        @ViewBag.totalMatchResult.totalDateMatch
+                    </td>
+                    <td>
+                        @ViewBag.totalMatchResult.totalDateUnmatch
+                    </td>
+                    <td>
+                        @ViewBag.totalMatchResult.DatePercentage %
+                    </td>
+                </TR>
+                <TR>
+                    <td>Amount In Figure</td>
+                    <td>
+                        @ViewBag.totalMatchResult.totalItem
+                    </td>
+                    <td>
+                        @ViewBag.totalMatchResult.totalAmountMatch
+                    </td>
+                    <td>
+                        @ViewBag.totalMatchResult.totalAmountUnmatch
+                    </td>
+                    <td>
+                        @ViewBag.totalMatchResult.AmountPercentage %
+                    </td>
+                </TR>
+                
+                
+            </TBODY>
+            
+        </table>
+
+    }
+
+
+</body>
+
+</html>

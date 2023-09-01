@@ -1,0 +1,47 @@
+﻿﻿@using INCHEQS.Resources
+@{
+	string urlAction = Url.Action("PrintCheque");
+	if (ViewBag.TaskRole == "ChequeRetriever")
+	{@Url.Action("ConfirmMICR")
+		urlAction = Url.Action("PrintChequeRetriever");
+	}
+}
+<input type="hidden" name="bankdesc" value="@ViewBag.CurrentUser.BankDesc">
+<input type="hidden" name="flduic2" value="@ViewBag.OutwardItemViewModel.getField("flduic")">
+@if (ViewBag.TaskRole == "ChequeAmountEntry")
+{
+    <button type="button" id="rejectBtn" class="normal-submit btn btn-default btn-xs" data-action="@Url.Action("ChequeAmountReject")">@Locale.RejectBtn</button>
+}
+@if (ViewBag.TaskRole == "ChequeAccountEntry")
+{
+    <button type="button" id="rejectBtn" class="normal-submit btn btn-default btn-xs" data-action="@Url.Action("ChequeAccountReject")">@Locale.RejectBtn</button>
+}
+&nbsp; &nbsp;
+@*<button type="button" class="modal-submit btn btn-default btn-xs" data-action="@Url.Action("ChequeHistory")">@Locale.AuditTrail</button>*@
+<button type="button" class="action-download btn btn-default btn-xs" data-action="@urlAction">@Locale.Print</button>
+<button type="button" id="closeBtn" class="btn btn-default btn-xs" data-action="@Url.Action("Close")">@Locale.btnClose</button>
+<hr />
+@if ((ViewBag.OutwardItemViewModel.getField("TotalRecord") != "1") && (ViewBag.ImgRetrieve != "Y"))
+{
+    if (ViewBag.taskid == "311113" || ViewBag.taskid == "311117")
+    {
+        <button type="button" id="BtnDataEntryReject" class="btn btn-default btn-xs">@Locale.RejectBtn</button>
+        <button type="button" id="previousBtn" class="normal-submit btn btn-default btn-xs" data-action="@Url.Action("PrevCheque")">@Locale.Previous</button>
+        <button type="button" id="nextBtn" class="normal-submit btn btn-default btn-xs" data-action="@Url.Action("NextCheque")">@Locale.Next</button>
+        
+    }
+    else
+    {
+        <button type="button" id="previousBtn" class="normal-submit btn btn-default btn-xs" data-action="@Url.Action("PrevCheque")">@Locale.Previous</button>
+        if (!ViewBag.OutwardItemViewModel.getField("rownumber").Equals(ViewBag.OutwardItemViewModel.getField("totalrecord")))
+        {
+            <button type="button" id="nextBtn" class="normal-submit btn btn-default btn-xs" data-action="@Url.Action("NextCheque")">@Locale.Next</button>   
+        }
+    }
+
+
+}
+
+@*<button type="button" id="nextBtn" class="normal-submit btn btn-default btn-xs" data-action="@Url.Action("NextCheque")">@Locale.Next</button>
+<button type="button" id="previousBtn" class="normal-submit btn btn-default btn-xs" data-action="@Url.Action("PrevCheque")">@Locale.Previous</button>*@
+

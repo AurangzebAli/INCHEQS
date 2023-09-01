@@ -1,0 +1,372 @@
+﻿@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Common;
+@using INCHEQS.TaskAssignment
+<style>
+    .button {
+        background: none !important;
+        border: none;
+        padding: 0 !important;
+        /*optional*/
+        font-family: arial, sans-serif;
+        /*input has OS specific font-family*/
+        color: #069;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+</style>
+<td class="row-result-params hidden">
+    @foreach (DataField dataField in Model)
+    {
+        if (string.Compare(dataField.isResultParameter, "Y") == 0)
+        {
+            <input name="row_@dataField.fieldId" value="@dataField.value" Type="hidden" />
+        }
+    }
+</td>
+@foreach (DataField dataField in Model)
+{
+    if (string.Compare(dataField.isResult, "Y") == 0)
+    {
+        if (string.Compare(dataField.fieldType, "Currency") == 0)
+        {
+            <td class="currency txtBlack">
+                @StringUtils.FormatCurrency(dataField.value.ToString())
+            </td>
+        }
+        else if (string.Compare(dataField.fieldType, "DeleteBox") == 0)
+        {
+            string groupid = CurrentUser.Account.GroupIds[0].ToString();
+            if (string.Compare(CurrentUser.Account.UserId.ToString().Trim(), dataField.value.ToString()) == 0)
+            {
+                <td>
+                    <input type="hidden" name="deleteBox2" value="@dataField.value.ToString()" @dataField.fieldDefaultValue.ToString() />
+                </td>
+            }
+            else if (string.Compare(CurrentUser.Account.UserAbbr.ToString().Trim(), dataField.value.ToString()) == 0)
+            {
+                <td>
+                    <input type="hidden" name="deleteBox2" @dataField.fieldDefaultValue.ToString() />
+                </td>
+            }
+            else if (string.Compare(groupid, dataField.value.ToString()) == 0)
+            {
+                <td>
+                    <input type="hidden" name="deleteBox" @dataField.fieldDefaultValue.ToString() />
+                </td>
+            }
+            else
+            {
+                <td class="delete-checkbox">
+                    <input type="checkbox" name="deleteBox" value="@dataField.value.ToString()" @dataField.fieldDefaultValue.ToString() />
+                </td>
+            }
+        }
+        else if (string.Compare(dataField.fieldType, "CheckBox") == 0)
+        {
+            <td class="input-checkbox">
+                <input type="checkbox" name="checkBox" value="@dataField.value.ToString()" @dataField.fieldDefaultValue.ToString() />
+            </td>
+        }
+        else if (string.Compare(dataField.fieldType, "RadioButton") == 0)
+        {
+            <td>
+                <input type="radio" name="radioButton" value="@dataField.value.ToString()" />
+            </td>
+        }
+        else if (string.Compare(dataField.fieldType, "HyperLink") == 0)
+        {
+            <td>
+                <span class="button">Security Profile</span>
+            </td>
+        }
+        else if (string.Compare(dataField.fieldType, "HTML") == 0 || string.Compare(dataField.fieldType, "html") == 0)
+        {
+            <td>
+                @Html.Raw(@dataField.value)
+            </td>
+        }
+        else if (string.Compare(dataField.fieldType, "Alert") == 0)
+        {
+            if (string.IsNullOrEmpty(dataField.value.Trim()))
+            {
+                <td class="txtBlack">
+                    @Html.Raw(@dataField.value)
+                </td>
+            }
+            else
+            {
+                <td class="red">
+                    @Html.Raw(@dataField.value)
+                </td>
+            }
+        }
+        else
+        {
+
+            if (dataField.fieldId.Trim() == "fldRejectCode")
+            {
+                if (dataField.taskId.Trim() == "306220" || dataField.taskId.Trim() == "306230" || dataField.taskId.Trim() == "306510" || dataField.taskId.Trim() == "306520" || dataField.taskId.Trim() == "306530" || dataField.taskId.Trim() == "306540" || dataField.taskId.Trim() == "306550" || dataField.taskId.Trim() == "309100")
+                {
+                    if (dataField.value.Trim() == "000")
+                    {
+                        <td style="color:green">
+                            @dataField.value
+                        </td>
+                    }
+                    else
+                    {
+                        <td style="color:red">
+                            @dataField.value
+                        </td>
+                    }
+                }
+                else
+                {
+                    <td class="txtBlack">
+                        @dataField.value
+                    </td>
+                }
+            }
+            else if (dataField.fieldId.Trim() == "fldAccountNumber")
+            {
+                if (dataField.taskId.Trim() == "306220" || dataField.taskId.Trim() == "306230" || dataField.taskId.Trim() == "306510" || dataField.taskId.Trim() == "306520" || dataField.taskId.Trim() == "306530" || dataField.taskId.Trim() == "306540" || dataField.taskId.Trim() == "306550" || dataField.taskId.Trim() == "309100"
+                    || dataField.taskId.Trim() == "318190" || dataField.taskId.Trim() == "318210" || dataField.taskId.Trim() == "318220" || dataField.taskId.Trim() == "318290" || dataField.taskId.Trim() == "318410")
+                {
+                    foreach (DataField dataField2 in Model)
+                    {
+                        if (dataField2.fieldId.Trim() == "fldModifiedFields")
+                        {
+                            if (dataField2.value.Trim().Length >= 5)
+                            {
+                                if (dataField2.value.Trim().Substring(0, 5) == "AccNo")
+                                {
+                                    <td class="red">
+                                        @dataField.value
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="txtBlack">
+                                        @dataField.value
+                                    </td>
+                                }
+                            }
+                            else
+                            {
+                                <td class="txtBlack">
+                                    @dataField.value
+                                </td>
+                            }
+
+
+                        }
+                    }
+                }
+                else
+                {
+                    <td class="txtBlack">
+                        @dataField.value
+                    </td>
+                }
+
+            }
+            else if (dataField.fieldId.Trim() == "fldChequeSerialNo")
+            {
+                if (dataField.taskId.Trim() == "306220" || dataField.taskId.Trim() == "306230" || dataField.taskId.Trim() == "306510" || dataField.taskId.Trim() == "306520" || dataField.taskId.Trim() == "306530" || dataField.taskId.Trim() == "306540" || dataField.taskId.Trim() == "306550" || dataField.taskId.Trim() == "309100"
+                    || dataField.taskId.Trim() == "318190" || dataField.taskId.Trim() == "318210" || dataField.taskId.Trim() == "318220" || dataField.taskId.Trim() == "318290" || dataField.taskId.Trim() == "318410")
+                {
+                    foreach (DataField dataField2 in Model)
+                    {
+                        if (dataField2.fieldId.Trim() == "fldModifiedFields")
+                        {
+                            if (dataField2.value.Trim().Length >= 8)
+                            {
+                                if (dataField2.value.Trim().Substring(dataField2.value.Length - 8) == "ChequeNo")
+                                {
+                                    <td class="red">
+                                        @dataField.value
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="txtBlack">
+                                        @dataField.value
+                                    </td>
+                                }
+                            }
+                            else
+                            {
+                                <td class="txtBlack">
+                                    @dataField.value
+                                </td>
+                            }
+
+
+                        }
+                    }
+                }
+                else
+                {
+                    <td class="txtBlack">
+                        @dataField.value
+                    </td>
+                }
+
+            }
+            else if (dataField.fieldId.Trim() == "fldModifiedFields")
+            {
+                if (dataField.taskId.Trim() != "306220" && dataField.taskId.Trim() != "306230" && dataField.taskId.Trim() != "306510" && dataField.taskId.Trim() != "306520" && dataField.taskId.Trim() != "306530" && dataField.taskId.Trim() != "306540" && dataField.taskId.Trim() != "306550" && dataField.taskId.Trim() != "309100"
+                     && dataField.taskId.Trim() != "318190" && dataField.taskId.Trim() != "318210" && dataField.taskId.Trim() != "318220" && dataField.taskId.Trim() != "318290" && dataField.taskId.Trim() != "318410")
+                {
+                    <td class="txtBlack">
+                        @dataField.value
+                    </td>
+                }
+            }
+            else if (dataField.fieldId.Trim() == "fldNonConformance")
+            {
+                if (dataField.taskId.Trim() == "306220" || dataField.taskId.Trim() == "306230" || dataField.taskId.Trim() == "306510" || dataField.taskId.Trim() == "306520" || dataField.taskId.Trim() == "306530" || dataField.taskId.Trim() == "306540" || dataField.taskId.Trim() == "306550"
+                     || dataField.taskId.Trim() == "318190" || dataField.taskId.Trim() == "318210" || dataField.taskId.Trim() == "318220" || dataField.taskId.Trim() == "318290" || dataField.taskId.Trim() == "318410")
+                {
+                    if (dataField.value.Trim() == "7")
+                    {
+                        <td style="color:red">
+                            @dataField.value
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="txtBlack">
+                            @dataField.value
+                        </td>
+                    }
+                }
+                else
+                {
+                    <td class="txtBlack">
+                        @dataField.value
+                    </td>
+                }
+            }
+            else if (dataField.fieldId.Trim() == "fldNonConformance")
+            {
+                if (dataField.taskId.Trim() == "306220" || dataField.taskId.Trim() == "306230" || dataField.taskId.Trim() == "306510" || dataField.taskId.Trim() == "306520" || dataField.taskId.Trim() == "306530" || dataField.taskId.Trim() == "306540" || dataField.taskId.Trim() == "306550"
+                     || dataField.taskId.Trim() == "318190" || dataField.taskId.Trim() == "318210" || dataField.taskId.Trim() == "318220" || dataField.taskId.Trim() == "318290" || dataField.taskId.Trim() == "318410")
+                {
+                    if (dataField.value.Trim() == "7")
+                    {
+                        <td style="color:red">
+                            @dataField.value
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="txtBlack">
+                            @dataField.value
+                        </td>
+                    }
+                }
+                else
+                {
+                    <td class="txtBlack">
+                        @dataField.value
+                    </td>
+                }
+            }
+            else if (dataField.fieldId.Trim() == "fldNonConformance2")
+            {
+                if (dataField.taskId.Trim() == "306220" || dataField.taskId.Trim() == "306230" || dataField.taskId.Trim() == "306510" || dataField.taskId.Trim() == "306520" || dataField.taskId.Trim() == "306530" || dataField.taskId.Trim() == "306540" || dataField.taskId.Trim() == "306550"
+                     || dataField.taskId.Trim() == "318190" || dataField.taskId.Trim() == "318210" || dataField.taskId.Trim() == "318220" || dataField.taskId.Trim() == "318290" || dataField.taskId.Trim() == "318410")
+                {
+                    if (dataField.value.Trim() == "7")
+                    {
+                        <td style="color:red">
+                            @dataField.value
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="txtBlack">
+                            @dataField.value
+                        </td>
+                    }
+                }
+                else
+                {
+                    <td class="txtBlack">
+                        @dataField.value
+                    </td>
+                }
+            }
+            else if (dataField.fieldId.Trim() == "fldStatus")
+            {
+                if (dataField.taskId.Trim() == "306280")
+                {
+                    if (dataField.value.ToString().Trim() == "Incomplete")
+                    {
+                        <td style="color:red;">
+                            @dataField.value
+                        </td>
+                    }
+                    else
+                    {
+                        <td style="color:green;">
+                            @dataField.value
+                        </td>
+                    }
+                }
+                else
+                {
+                    <td class="txtBlack">
+                        @dataField.value
+                    </td>
+                }
+            }
+            else if (dataField.fieldId.Trim() == "fldItemStatusPending")
+            {
+                if (dataField.taskId.Trim() == "308110" || dataField.taskId.Trim() == "308170" || dataField.taskId.Trim() == "308180" || dataField.taskId.Trim() == "308190" || dataField.taskId.Trim() == "308200")
+                {
+                    if (dataField.value.ToString().Trim() == "Rejected" || dataField.value.ToString().Trim() == "Reject")
+                    {
+                        <td style="color:red;">
+                            @dataField.value
+                        </td>
+                    }
+                    else if (dataField.value.ToString().Trim() == "Approved" || dataField.value.ToString().Trim() == "Approve")
+                    {
+                        <td style="color:green;">
+                            @dataField.value
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="txtBlack">
+                            @dataField.value
+                        </td>
+                    }
+                }
+                else
+                {
+                    <td class="txtBlack">
+                        @dataField.value
+                    </td>
+                }
+            }
+            else if (dataField.taskId.Trim() == "306280" && dataField.fieldId == "fldBranchCode")
+            {
+                <td style="font-weight:bold" class="txtBlack">@dataField.value</td>
+            }
+            else
+            {
+                <td class="txtBlack">
+                    @dataField.value
+                </td>
+            }
+
+
+
+        }
+    }
+
+
+}

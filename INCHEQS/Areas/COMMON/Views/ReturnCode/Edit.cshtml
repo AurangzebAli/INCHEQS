@@ -1,0 +1,71 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "ReturnCode", FormMethod.Post, new { @Class = "secure-form" })) {
+@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>@Locale.ReturnCodeEdit</h4>
+    
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <tbody>
+            <tr>
+                <th>@Locale.ReturnCode</th>
+
+                <td>
+                    <input type="text" value="@ViewBag.returncode.fldRejectCode" disabled />
+                    <input type="text" name="fldRejectCode" value="@ViewBag.returncode.fldRejectCode" hidden />
+                    <span class="red-star">*</span>
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.ReturnDescription</th>
+
+                <td>
+                    <input type="text" style="width:500px" name="fldRejectDesc" value="@ViewBag.returncode.fldRejectDesc" autocomplete="off" maxlength="250" />
+                    <span class="red-star">*</span>
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.ReturnType</th>
+
+                <td>
+                    <select name="fldRejectType" id="rejectType">
+                        <option value="">Please Select Return Type</option>
+                        @foreach (var item in @ViewBag.RejectType)
+                        {
+                            <option value="@item.fldRejectType" @(ViewBag.returncode.fldRejectType == item.fldRejectType ? "selected" : "")>@item.fldRejectTypeDesc</option>
+                        }
+                    </select>
+                    <span class="red-star">*</span>
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.ReturnCharges</th>
+
+                <td>
+                    <input type="text" name="fldCharges" id="fldCharges" value="@Convert.ToDouble(ViewBag.returncode.fldCharges == "" ? "0" : ViewBag.returncode.fldCharges).ToString("0.00")" class="number-only" onchange="setTwoNumberDecimal" pattern="^(?=.*\d)\d*(?:\.\d\d)?$" autocomplete="off" maxlength="50" />
+                    <span class="red-star">*</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="submit" data-action="@Url.Action("/UPDATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIdsOCS.ReturnCode.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+    <button data-action="@Url.Action("/Edit")" Class="btn btn-default secure-nav normal-submit-without-search @(CurrentUser.HasTask(TaskIdsOCS.ReturnCode.EDIT) ? "" : "hidden")">@Locale.Reset</button>
+    <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.ReturnCode.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+</div>
+}
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#fldCharges').maskMoney({ allowZero: true });
+    })
+
+    function setTwoNumberDecimal(event) {
+        this.value = parseFloat(this.value).toFixed(2);
+    }
+</script>
+<script src="~/Scripts/App/app.js"></script>

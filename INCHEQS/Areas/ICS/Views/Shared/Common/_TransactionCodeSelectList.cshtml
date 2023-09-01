@@ -1,0 +1,19 @@
+﻿<select id="transCodeSelectList" data-selected="@Model" disabled></select>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var $selectList = $("#transCodeSelectList");
+        var selected = $($selectList).data("selected");
+        $.ajax({
+            type: "POST",
+            url: App.ContextPath + "CommonApi/TransactionCodeList",
+            success: function (data) {
+                $.each(data, function (key, value) {
+                    $selectList.append("<option value=" + key + ">" + key + " - " + value + " </option>");
+                })
+                $("#transCodeSelectList option[value='" + selected + "']").attr("selected", "selected");
+            }
+        })
+        
+    });
+</script>

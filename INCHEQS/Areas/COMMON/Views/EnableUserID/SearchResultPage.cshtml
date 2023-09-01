@@ -1,0 +1,61 @@
+﻿@using INCHEQS.Resources;
+@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.TaskAssignment;
+@*using (Html.BeginForm("Update", "EnableUserID", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()*@
+
+    @Html.Partial("SearchPage/_InfoBox")
+    <table id="search-result-table" class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                @Html.Partial("SearchPage/_TableHeaderColumns")
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+            {
+                <tr>
+                    @Html.Partial("SearchPage/_TableBodyColumns", row)
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            @Html.Partial("SearchPage/_TablePaginationFooter")
+        </tfoot>
+    </table>
+
+    @*<input type="hidden" name="formAction" id="formAction" />*@
+    <button type="submit" data-action="@Url.Action("/UPDATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIds.EnableUserID.UPDATE) ? "" : "hidden")">@Locale.Enable</button>
+@*}*@
+
+<script type='text/javascript'>
+    $(document).ready(function () {
+        // Check or Uncheck All checkboxes
+        $("#chkDeleteAll").change(function () {
+            var checked = $(this).is(':checked');
+            if (checked) {
+                $("input[name=deleteBox]").each(function () {
+                    $(this).prop("checked", true);
+                });
+            } else {
+                $("input[name=deleteBox]").each(function () {
+                    $(this).prop("checked", false);
+                });
+            }
+        });
+
+        // Changing state of CheckAll checkbox
+        $(".CheckBox").click(function () {
+
+            if ($("input[name=deleteBox]").length == $("input[name=deleteBox]:checked").length) {
+                $("#chkDeleteAll").prop("checked", true);
+            } else {
+                $("#chkDeleteAll").removeAttr("checked");
+            }
+
+        });
+    });
+</script>
+
+@Scripts.Render("~/bundles/SearchResultPage")

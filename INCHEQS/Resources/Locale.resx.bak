@@ -1,0 +1,2486 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountExpiredInterval" xml:space="preserve">
+    <value>Account Expired Interval</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Approve" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="ApproveBtn" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="ArchivedAuditLogFiles" xml:space="preserve">
+    <value>Archived Audit Log Files</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="BackBtn" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="BankDescription" xml:space="preserve">
+    <value>Bank Description</value>
+  </data>
+  <data name="BankAbbreviation" xml:space="preserve">
+    <value>Bank Abbreviation</value>
+  </data>
+  <data name="Branch" xml:space="preserve">
+    <value>Branch</value>
+  </data>
+  <data name="Verifier1" xml:space="preserve">
+    <value>Verifier</value>
+  </data>
+  <data name="VerifierOfficer" xml:space="preserve">
+    <value>Officer</value>
+  </data>
+  <data name="BranchCode" xml:space="preserve">
+    <value>Branch Code</value>
+  </data>
+  <data name="SelectUserOfficer" xml:space="preserve">
+    <value>Select Officer</value>
+  </data>
+  <data name="btnClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="CCU" xml:space="preserve">
+    <value>HQ</value>
+  </data>
+  <data name="character" xml:space="preserve">
+    <value> character</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="ClearUserSession" xml:space="preserve">
+    <value>Clear User Session</value>
+  </data>
+  <data name="ConcurrentConnection" xml:space="preserve">
+    <value>Concurrent Connection</value>
+  </data>
+  <data name="CreateTimeStamp" xml:space="preserve">
+    <value>Create TimeStamp</value>
+  </data>
+  <data name="DateCreated" xml:space="preserve">
+    <value>Date Created</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteBtn" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="Disableuser" xml:space="preserve">
+    <value>Disable user</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailAccount" xml:space="preserve">
+    <value>Email Account</value>
+  </data>
+  <data name="FailedLoginDate" xml:space="preserve">
+    <value>Failed Login Date</value>
+  </data>
+  <data name="Forceusertochangepassword" xml:space="preserve">
+    <value>Force user to change password</value>
+  </data>
+  <data name="GroupDescription" xml:space="preserve">
+    <value>Group Description</value>
+  </data>
+  <data name="GroupID" xml:space="preserve">
+    <value>Group Code</value>
+  </data>
+  <data name="GroupNameAlreadyTaken" xml:space="preserve">
+    <value>Group Code Already Taken</value>
+  </data>
+  <data name="ICCSAuditLog" xml:space="preserve">
+    <value>ICCS Audit Log</value>
+  </data>
+  <data name="IDSuspendStartat" xml:space="preserve">
+    <value>ID Suspend Start at</value>
+  </data>
+  <data name="Incorrectemailformat" xml:space="preserve">
+    <value>Incorrect email format</value>
+  </data>
+  <data name="LastActiveDatetime" xml:space="preserve">
+    <value>Last Active Datetime</value>
+  </data>
+  <data name="LoggedInAs" xml:space="preserve">
+    <value>Logged In As</value>
+  </data>
+  <data name="LogInBtn" xml:space="preserve">
+    <value>Log In</value>
+  </data>
+  <data name="LoginWarning" xml:space="preserve">
+    <value>* Warning: The system must only be accessed by authorized users. Unauthorized system usage or abuse is subject to criminal prosecution and system usage will be monitored and logged.</value>
+  </data>
+  <data name="MaintenanceApproveUser" xml:space="preserve">
+    <value>Maintenance - Approve User Profile</value>
+  </data>
+  <data name="MaintenanceGroupProfile" xml:space="preserve">
+    <value>Maintenance - Group Profile</value>
+  </data>
+  <data name="MaintenanceReturnCode" xml:space="preserve">
+    <value>Maintenance - Return Code</value>
+  </data>
+  <data name="MaintenanceTaskAssignment" xml:space="preserve">
+    <value>Maintenance - Task Assignment</value>
+  </data>
+  <data name="MaintenanceUserProfile" xml:space="preserve">
+    <value>Maintenance - User Profile</value>
+  </data>
+  <data name="AdministratorUserProfileAdd" xml:space="preserve">
+    <value>Administrator - User Profile (Add)</value>
+  </data>
+  <data name="AdministratorUserProfileEdit" xml:space="preserve">
+    <value>Administrator - User Profile (Edit)</value>
+  </data>
+  <data name="MaintenanceHolidayAdd" xml:space="preserve">
+    <value>Maintenance - Holiday Calendar (Add)</value>
+  </data>
+  <data name="MaintenanceHolidayedit" xml:space="preserve">
+    <value>Maintenance - Holiday Calendar (Edit)</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  <data name="MaximumLoginAttempt" xml:space="preserve">
+    <value>Maximum Login Attempt</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Minutes</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="MSReturnCodeMaintenanceAdd" xml:space="preserve">
+    <value>Maintenance - Return Code (Add)</value>
+  </data>
+  <data name="MSReturnCodeMaintenanceEdit" xml:space="preserve">
+    <value>Maintenance - Return Code (Edit)</value>
+  </data>
+  <data name="NewBtn" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="NO" xml:space="preserve">
+    <value>NO</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Notice</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Passwordcannotbeblank" xml:space="preserve">
+    <value>Password cannot be blank</value>
+  </data>
+  <data name="Passwordcannotbelessthan" xml:space="preserve">
+    <value>Password cannot be less than </value>
+  </data>
+  <data name="Passwordcannotbemorethan" xml:space="preserve">
+    <value>Password cannot be more than </value>
+  </data>
+  <data name="PasswordcannotbesameasUserAbbreviation" xml:space="preserve">
+    <value>Password cannot be same as User Abbreviation</value>
+  </data>
+  <data name="PasswordcannotbesameasUserDescription" xml:space="preserve">
+    <value>Password cannot be same as User Description</value>
+  </data>
+  <data name="PasswordExpiryDate" xml:space="preserve">
+    <value>Password Expiry Date</value>
+  </data>
+  <data name="PasswordExpiryInterval" xml:space="preserve">
+    <value>Password Expiry Interval</value>
+  </data>
+  <data name="PasswordHistoryReusableafter" xml:space="preserve">
+    <value>Password History Reusable after</value>
+  </data>
+  <data name="Passwordmustbealphanumeric" xml:space="preserve">
+    <value>Password must be alphanumeric. Contains at least  one lower case letter and one digit</value>
+  </data>
+  <data name="PasswordNotificationInterval" xml:space="preserve">
+    <value>Password  Notification Interval</value>
+  </data>
+  <data name="PleaseKeyInYour" xml:space="preserve">
+    <value>Please key-in your user ID and password to enter.</value>
+  </data>
+  <data name="Pleaseselectabranch" xml:space="preserve">
+    <value>Please select a branch</value>
+  </data>
+  <data name="Pleaseselectacity" xml:space="preserve">
+    <value>Please select a city</value>
+  </data>
+  <data name="PleaseSelectARecord" xml:space="preserve">
+    <value>Please Select A Record</value>
+  </data>
+  <data name="RecordsSuccsesfullyVerified" xml:space="preserve">
+    <value>Record(s) successfully approved</value>
+  </data>
+  <data name="RecordsSuccsesfullyRejected" xml:space="preserve">
+    <value>Record(s) successfully rejected</value>
+  </data>
+  <data name="RejectBtn" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Required Field</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="ReturnCode" xml:space="preserve">
+    <value>Return Code</value>
+  </data>
+  <data name="ReturnCodeMaintenance" xml:space="preserve">
+    <value>Return Code Maintenance</value>
+  </data>
+  <data name="ReturnDescription" xml:space="preserve">
+    <value>Return Description</value>
+  </data>
+  <data name="ReturnType" xml:space="preserve">
+    <value>Return Type</value>
+  </data>
+  <data name="SaveBtn" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SecurityProfile" xml:space="preserve">
+    <value>Security Profile</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="SuccessfullyCreated" xml:space="preserve">
+    <value>Successfully Created</value>
+  </data>
+  <data name="SuccessfullyDeleted" xml:space="preserve">
+    <value>Successfully Deleted</value>
+  </data>
+  <data name="SuccessfullyUpdated" xml:space="preserve">
+    <value>Successfully Updated</value>
+  </data>
+  <data name="TaskAvailableList" xml:space="preserve">
+    <value>Task Available List</value>
+  </data>
+  <data name="TaskSelectedList" xml:space="preserve">
+    <value>Task Selected List</value>
+  </data>
+  <data name="ThefirstcharacterofnewpasswordmustbeaCapitalLetter" xml:space="preserve">
+    <value>The first character of new password must be a Capital Letter</value>
+  </data>
+  <data name="ThefollowingErrorencounterduringsave" xml:space="preserve">
+    <value>The following Error encounter during save</value>
+  </data>
+  <data name="ThisSystemAllowsYou" xml:space="preserve">
+    <value>This system allows you to retrieve and view cheque images and cheque information.</value>
+  </data>
+  <data name="UnpostedEntry" xml:space="preserve">
+    <value>Unposted Entry</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="UseLocalAccount" xml:space="preserve">
+    <value>Use a local account to log in.</value>
+  </data>
+  <data name="UserAbbr" xml:space="preserve">
+    <value>User Abbr</value>
+  </data>
+  <data name="UserAbbreviation" xml:space="preserve">
+    <value>User Abbreviation</value>
+  </data>
+  <data name="UserAbbreviationalreadytaken" xml:space="preserve">
+    <value>User Abbreviation already taken</value>
+  </data>
+  <data name="UserAbbreviationcannotbeblank" xml:space="preserve">
+    <value>User Abbreviation cannot be blank</value>
+  </data>
+  <data name="UserAbbreviationcannotbelessthan" xml:space="preserve">
+    <value>User Abbreviation cannot be less than </value>
+  </data>
+  <data name="UserAbbreviationcannotbemorethan" xml:space="preserve">
+    <value>User Abbreviation cannot be more than </value>
+  </data>
+  <data name="UserAbbreviationmustbealphanumeric" xml:space="preserve">
+    <value>User Abbreviation must be alphanumeric.</value>
+  </data>
+  <data name="UserAvailableList" xml:space="preserve">
+    <value>User Available List</value>
+  </data>
+  <data name="UserDesc" xml:space="preserve">
+    <value>User Desc</value>
+  </data>
+  <data name="UserDescription" xml:space="preserve">
+    <value>User Description</value>
+  </data>
+  <data name="UserDescriptioncannotbeblank" xml:space="preserve">
+    <value>User Description cannot be blank</value>
+  </data>
+  <data name="UserId" xml:space="preserve">
+    <value>User ID</value>
+  </data>
+  <data name="UserLoginId" xml:space="preserve">
+    <value>User Login ID</value>
+  </data>
+  <data name="UserIDLength" xml:space="preserve">
+    <value>User ID Length</value>
+  </data>
+  <data name="UserList" xml:space="preserve">
+    <value>User List</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="UserPasswordLength" xml:space="preserve">
+    <value>User Password Length</value>
+  </data>
+  <data name="UserSelectedList" xml:space="preserve">
+    <value>User Selected List</value>
+  </data>
+  <data name="UserSessionTimeout" xml:space="preserve">
+    <value>User Session Timeout</value>
+  </data>
+  <data name="UserSuccessfullyAddedtoApproved" xml:space="preserve">
+    <value>Record successfully added to User Profile (Checker) and will not be deleted until it has been verified</value>
+  </data>
+  <data name="UserSuccessfullyCreated" xml:space="preserve">
+    <value>Record successfully added to User Profile (Checker) and will not be inserted until it has been verified</value>
+  </data>
+  <data name="UserSuccessfullyUpdated" xml:space="preserve">
+    <value>User Successfully Updated</value>
+  </data>
+  <data name="UserType" xml:space="preserve">
+    <value>User Type</value>
+  </data>
+  <data name="UserTypeCCD" xml:space="preserve">
+    <value>User Type CCD</value>
+  </data>
+  <data name="NewSystemUserAlreadyExist" xml:space="preserve">
+    <value>New System User Id is Not Allowed to be Created.</value>
+  </data>
+  <data name="UserProfileAlreadyExiststoDeleteorUpdate" xml:space="preserve">
+    <value>Selected User Already Pending for Checker Approval. Record will not be inserted again until the old Record has been verified</value>
+  </data>
+  <data name="UtilitiesClearUserSession" xml:space="preserve">
+    <value>Utilities - Clear User Session</value>
+  </data>
+  <data name="UtilitiesDataHouseKeepingRetentionPeriod" xml:space="preserve">
+    <value>Utilities - Data HouseKeeping - Retention Period</value>
+  </data>
+  <data name="UtilitiesSecurityProfile" xml:space="preserve">
+    <value>Utilities - Security Profile</value>
+  </data>
+  <data name="VerificationLimit" xml:space="preserve">
+    <value>Verification Limit</value>
+  </data>
+  <data name="Verificationlimitmustbeinteger" xml:space="preserve">
+    <value>Verification limit must be integer</value>
+  </data>
+  <data name="VerificationLimitmustbemorethan0" xml:space="preserve">
+    <value>Verification Limit must be more than 0</value>
+  </data>
+  <data name="Waive" xml:space="preserve">
+    <value>Waive</value>
+  </data>
+  <data name="WaiveCharges" xml:space="preserve">
+    <value>Waive Charges</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="WhenPasswordExpired" xml:space="preserve">
+    <value>When Password Expired</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="YES" xml:space="preserve">
+    <value>YES</value>
+  </data>
+  <data name="SettlementDate" xml:space="preserve">
+    <value>Settlement Date</value>
+  </data>
+  <data name="UserOf" xml:space="preserve">
+    <value>User Of</value>
+  </data>
+  <data name="VerificationClass" xml:space="preserve">
+    <value>Verification Class</value>
+  </data>
+  <data name="ClearDate" xml:space="preserve">
+    <value>Clear Date</value>
+  </data>
+  <data name="EndTime" xml:space="preserve">
+    <value>End Time</value>
+  </data>
+  <data name="ProcessName" xml:space="preserve">
+    <value>Process Name</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Start Time</value>
+  </data>
+  <data name="UpdateUser" xml:space="preserve">
+    <value>Update User</value>
+  </data>
+  <data name="UtilitiesClearDataProcess" xml:space="preserve">
+    <value>Utilities - Clear Data Process</value>
+  </data>
+  <data name="ConfirmNewPassword" xml:space="preserve">
+    <value>Confirm New Password</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="OldPassword" xml:space="preserve">
+    <value>Old Password</value>
+  </data>
+  <data name="UtilitiesChangePassword" xml:space="preserve">
+    <value>Utilities - Change Password</value>
+  </data>
+  <data name="AccountExpiredIntervalcannotbezero" xml:space="preserve">
+    <value>Account Expired Interval cannot be zero(0)</value>
+  </data>
+  <data name="AccountExpiredIntervalmustbenumeric" xml:space="preserve">
+    <value>Account Expired Interval must be numeric</value>
+  </data>
+  <data name="ArchiveAuditLogtofile" xml:space="preserve">
+    <value>Archive Audit Log to file</value>
+  </data>
+  <data name="ArchiveChequeHistorytofile" xml:space="preserve">
+    <value>Archive Cheque History to file</value>
+  </data>
+  <data name="ArchiveChequeInfotofile" xml:space="preserve">
+    <value>Archive Cheque Info to file</value>
+  </data>
+  <data name="ArchivedAuditLogFilescannotbezero" xml:space="preserve">
+    <value>Archived Audit Log Files cannot be zero(0)</value>
+  </data>
+  <data name="ArchivedAuditLogFilesmustbenumeric" xml:space="preserve">
+    <value>Archived Audit Log Files must be numeric</value>
+  </data>
+  <data name="ConfirmnewPasswordmustcontainatleast" xml:space="preserve">
+    <value>Confirm new Password must contain at least</value>
+  </data>
+  <data name="ConfirmnewPasswordshouldnotexceed" xml:space="preserve">
+    <value>Confirm new Password should not exceed</value>
+  </data>
+  <data name="ICCSAuditLogcannotbezero" xml:space="preserve">
+    <value>ICCS Audit Log cannot be zero(0)</value>
+  </data>
+  <data name="ICCSAuditLogmustbenumeric" xml:space="preserve">
+    <value>ICCS Audit Log must be numeric</value>
+  </data>
+  <data name="IDmaximumlengthcannotbezero" xml:space="preserve">
+    <value>ID maximum length cannot be zero(0)</value>
+  </data>
+  <data name="IDminimumlengthcannotbemorethanIDmaximumlength" xml:space="preserve">
+    <value>ID minimum length cannot be more than ID maximum length</value>
+  </data>
+  <data name="IDminimumlengthcannotbezero" xml:space="preserve">
+    <value>ID minimum length cannot be zero(0)</value>
+  </data>
+  <data name="LoginAttemptmustbenumeric" xml:space="preserve">
+    <value>Login Attempt must be numeric</value>
+  </data>
+  <data name="MaximumIDLengthmustbenumeric" xml:space="preserve">
+    <value>Maximum ID Length must be numeric</value>
+  </data>
+  <data name="MaximumLoginAttemptcannotbezero" xml:space="preserve">
+    <value>Maximum Login Attempt cannot be zero(0)</value>
+  </data>
+  <data name="MaximumPasswordLengthmustbenumeric" xml:space="preserve">
+    <value>Maximum Password Length must be numeric</value>
+  </data>
+  <data name="MinimumIDLengthmustbenumeric" xml:space="preserve">
+    <value>Minimum ID Length must be numeric</value>
+  </data>
+  <data name="MinimumPasswordLengthmustbenumeric" xml:space="preserve">
+    <value>Minimum Password Length must be numeric</value>
+  </data>
+  <data name="NewpasswordAndConfirmPasswordDoNotmatchPleasereenterNewpassword" xml:space="preserve">
+    <value>New password And Confirm Password Do Not match. Please re-enter New password</value>
+  </data>
+  <data name="Newpasswordcannotbesameasprevious" xml:space="preserve">
+    <value>New password cannot be same as previous</value>
+  </data>
+  <data name="NewPasswordmustbedifferentfromoldpassword" xml:space="preserve">
+    <value>New Password must be different from old password</value>
+  </data>
+  <data name="NewPasswordmustcontainatleast" xml:space="preserve">
+    <value>New Password must contain at least </value>
+  </data>
+  <data name="NewPasswordshouldnotexceed" xml:space="preserve">
+    <value>New Password should not exceed</value>
+  </data>
+  <data name="Nodatawasselected" xml:space="preserve">
+    <value>No data was selected..</value>
+  </data>
+  <data name="Norecordselected" xml:space="preserve">
+    <value>No record(s) selected</value>
+  </data>
+  <data name="Norecordsselected" xml:space="preserve">
+    <value>No records selected</value>
+  </data>
+  <data name="OldPasswordshouldnotexceed" xml:space="preserve">
+    <value>Old Password should not exceed</value>
+  </data>
+  <data name="PasswordChangesuccessfully" xml:space="preserve">
+    <value>Password Change successfully!</value>
+  </data>
+  <data name="PasswordExpiryIntervalcannotbezero" xml:space="preserve">
+    <value>Password Expiry Interval cannot be zero(0)</value>
+  </data>
+  <data name="PasswordExpiryIntervalmustbenumeric" xml:space="preserve">
+    <value>Password Expiry Interval must be numeric</value>
+  </data>
+  <data name="PasswordExpiryIntervalmustbelargerthanPasswordNotificationInterval" xml:space="preserve">
+    <value>Password Expiry Interval must be larger than Password Notification Interval</value>
+  </data>
+  <data name="PasswordHistoryReusableAftercannotbezero" xml:space="preserve">
+    <value>Password History Reusable After cannot be zero(0)</value>
+  </data>
+  <data name="PasswordHistoryReusableaftermustbenumeric" xml:space="preserve">
+    <value>Password History Reusable after must be numeric</value>
+  </data>
+  <data name="Passwordmaximumlengthcannotbezero" xml:space="preserve">
+    <value>Password maximum length cannot be zero(0)</value>
+  </data>
+  <data name="PasswordminimumlengthcannotbemorethanPasswordmaximumlength" xml:space="preserve">
+    <value>Password minimum length cannot be more than Password maximum length</value>
+  </data>
+  <data name="Passwordminimumlengthcannotbezero" xml:space="preserve">
+    <value>Password minimum length cannot be zero(0)</value>
+  </data>
+  <data name="PasswordNotificationIntervalcannotbezero" xml:space="preserve">
+    <value>Password Notification Interval cannot be zero(0)</value>
+  </data>
+  <data name="PasswordnotificationIntervalmustbenumeric" xml:space="preserve">
+    <value>Password notification Interval must be numeric</value>
+  </data>
+  <data name="passwordsinhistory" xml:space="preserve">
+    <value>passwords in history.</value>
+  </data>
+  <data name="PleaseenterConfirmNewPassword" xml:space="preserve">
+    <value>Please enter Confirm New Password</value>
+  </data>
+  <data name="PleaseenterNewPassword" xml:space="preserve">
+    <value>Please enter New Password</value>
+  </data>
+  <data name="PleaseenterOldPassword" xml:space="preserve">
+    <value>Please enter Old Password</value>
+  </data>
+  <data name="Pleasefillinallthemandatoryfield" xml:space="preserve">
+    <value>Please fill in all the mandatory field</value>
+  </data>
+  <data name="PurgeArchivedLogFilesbasedonretentionperiod" xml:space="preserve">
+    <value>Purge Archived Log Files based on retention period</value>
+  </data>
+  <data name="PurgeAuditLogFilesbasedonretentionperiod" xml:space="preserve">
+    <value>Purge Audit Log Files based on retention period</value>
+  </data>
+  <data name="Recordsavesuccessfully" xml:space="preserve">
+    <value>Record save successfully</value>
+  </data>
+  <data name="Recordsdeleted" xml:space="preserve">
+    <value>Record(s) deleted</value>
+  </data>
+  <data name="RejectCodealreadyexist" xml:space="preserve">
+    <value>Reject Code already exist</value>
+  </data>
+  <data name="Rejectcodemustbenumbers" xml:space="preserve">
+    <value>Reject code must be numbers</value>
+  </data>
+  <data name="ReturnCodesDeleted" xml:space="preserve">
+    <value>Return Code(s) Deleted</value>
+  </data>
+  <data name="ReturnCodeUpdated" xml:space="preserve">
+    <value>Return Code Updated</value>
+  </data>
+  <data name="ReturnReasonCodeSuccessfullyCreated" xml:space="preserve">
+    <value>Return Reason Code Successfully Created</value>
+  </data>
+  <data name="Updaterecordsuccessfully" xml:space="preserve">
+    <value>Update record successfully!</value>
+  </data>
+  <data name="RecordsuccesfullyCreated" xml:space="preserve">
+    <value>Record successfully created</value>
+  </data>
+  <data name="RecordsuccesfullyUpdated" xml:space="preserve">
+    <value>Record successfully updated</value>
+  </data>
+  <data name="RecordsuccesfullyDeleted" xml:space="preserve">
+    <value>Record(s) successfully deleted</value>
+  </data>
+  <data name="UsersSessionTimeoutcannotbezero" xml:space="preserve">
+    <value>User's Session Time out cannot be zero(0)</value>
+  </data>
+  <data name="UsersSessionTimeoutmustbenumeric" xml:space="preserve">
+    <value>User's Session Time out must be numeric</value>
+  </data>
+  <data name="UtilitiesDayEndProcess" xml:space="preserve">
+    <value>Utilities - Day End Process</value>
+  </data>
+  <data name="WrongOldPassword" xml:space="preserve">
+    <value>Wrong Old Password!</value>
+  </data>
+  <data name="ÓldPasswordmustcontainatleast" xml:space="preserve">
+    <value>Óld Password must contain at least</value>
+  </data>
+  <data name="btnOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Day(s)</value>
+  </data>
+  <data name="Months" xml:space="preserve">
+    <value>Month(s)</value>
+  </data>
+  <data name="Pleasecheckallthemandatoryfield" xml:space="preserve">
+    <value>Please check all the mandatory field</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="InProcess" xml:space="preserve">
+    <value>In Process</value>
+  </data>
+  <data name="AccountExpiredIntervalcannotbeblank" xml:space="preserve">
+    <value>Account Expired Interval cannot be blank</value>
+  </data>
+  <data name="IDmaximumlengthcannotbeblank" xml:space="preserve">
+    <value>ID maximum length cannot be blank</value>
+  </data>
+  <data name="IDminimumlengthcannotbeblank" xml:space="preserve">
+    <value>ID minimum length cannot be blank</value>
+  </data>
+  <data name="MaximumLoginAttemptcannotbeblank" xml:space="preserve">
+    <value>Maximum Login Attempt cannot be blank</value>
+  </data>
+  <data name="PasswordExpiryIntervalcannotbeblank" xml:space="preserve">
+    <value>Password Expiry Interval cannot be blank</value>
+  </data>
+  <data name="PasswordHistoryReusableAftercannotbeblank" xml:space="preserve">
+    <value>Password History Reusable After cannot be blank</value>
+  </data>
+  <data name="Passwordmaximumlengthcannotbeblank" xml:space="preserve">
+    <value>Password maximum length cannot be blank</value>
+  </data>
+  <data name="Passwordminimumlengthcannotbeblank" xml:space="preserve">
+    <value>Password minimum length cannot be blank</value>
+  </data>
+  <data name="PasswordNotificationIntervalcannotbeblank" xml:space="preserve">
+    <value>Password Notification Interval cannot be blank</value>
+  </data>
+  <data name="UsersSessionTimeoutcannotbeblank" xml:space="preserve">
+    <value>User Session Timeout cannot be blank</value>
+  </data>
+  <data name="RejectCodeDescriptioncannotbeempty" xml:space="preserve">
+    <value>Reject Code Description cannot be empty</value>
+  </data>
+  <data name="RejectCodecannotbeempty" xml:space="preserve">
+    <value>Return Code cannot be empty</value>
+  </data>
+  <data name="Clearingdatefilenotfound" xml:space="preserve">
+    <value>Clearing date file not found</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="BandLevel" xml:space="preserve">
+    <value>Band Level</value>
+  </data>
+  <data name="BandQueueSetting" xml:space="preserve">
+    <value>Band Queue Setting</value>
+  </data>
+  <data name="LowerBoundLimit" xml:space="preserve">
+    <value>Lower Bound Limit</value>
+  </data>
+  <data name="UpperBoundLimit" xml:space="preserve">
+    <value>UpperBoundLimit</value>
+  </data>
+  <data name="volPercentage" xml:space="preserve">
+    <value>Vol. Percentage(%)</value>
+  </data>
+  <data name="BatchLimitDescription" xml:space="preserve">
+    <value>Batch Limit Description</value>
+  </data>
+  <data name="Class" xml:space="preserve">
+    <value>Verification Class</value>
+  </data>
+  <data name="ClassVerifier" xml:space="preserve">
+    <value>Class Verifier</value>
+  </data>
+  <data name="LimitDescription" xml:space="preserve">
+    <value>Limit Description</value>
+  </data>
+  <data name="MaintenanceVerificationLimit" xml:space="preserve">
+    <value>Maintenance - Verification Limit</value>
+  </data>
+  <data name="VerificationBatchSizeLimitMaintenance" xml:space="preserve">
+    <value>Verification Batch Size Limit Maintenance</value>
+  </data>
+  <data name="ApproveThreshold" xml:space="preserve">
+    <value>Approve Threshold</value>
+  </data>
+  <data name="firstLevelAmount" xml:space="preserve">
+    <value>1st Level Amount (PKR)</value>
+  </data>
+  <data name="RejectThreshold" xml:space="preserve">
+    <value>Reject Threshold</value>
+  </data>
+  <data name="SecondLevelAmount" xml:space="preserve">
+    <value>2nd Level Amount (PKR)</value>
+  </data>
+  <data name="MaintenanceThresholdSetting" xml:space="preserve">
+    <value>Maintenance - Threshold Setting</value>
+  </data>
+  <data name="Addressline1" xml:space="preserve">
+    <value>Addressline 1</value>
+  </data>
+  <data name="Addressline2" xml:space="preserve">
+    <value>Address line 2</value>
+  </data>
+  <data name="Addressline3" xml:space="preserve">
+    <value>Address line 3</value>
+  </data>
+  <data name="BranchAbbreviationName" xml:space="preserve">
+    <value>Branch Abbreviation Name</value>
+  </data>
+  <data name="BranchDescription" xml:space="preserve">
+    <value>Branch Description</value>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Email Address</value>
+  </data>
+  <data name="EmailName" xml:space="preserve">
+    <value>Email Name</value>
+  </data>
+  <data name="MaintenanceInternalBranchCode" xml:space="preserve">
+    <value>Maintenance - Internal Branch Code</value>
+  </data>
+  <data name="InternalBranchCode" xml:space="preserve">
+    <value>Internal Branch Code</value>
+  </data>
+  <data name="InternalBranchMaintenance" xml:space="preserve">
+    <value>Internal Branch Maintenance</value>
+  </data>
+  <data name="BranchCodecannotbeblank" xml:space="preserve">
+    <value>Branch Code cannot be blank</value>
+  </data>
+  <data name="BranchCodecannotlessthan4characters" xml:space="preserve">
+    <value>Branch Code cannot less than 4 characters</value>
+  </data>
+  <data name="Descriptioncannotbeblank" xml:space="preserve">
+    <value>Description cannot be blank</value>
+  </data>
+  <data name="InternalBranchCodecannotbeblank" xml:space="preserve">
+    <value>Internal Branch Code cannot be blank</value>
+  </data>
+  <data name="InternalBranchCodecannotlessthan5characters" xml:space="preserve">
+    <value>Internal Branch Code cannot less than 5 characters</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="SendingMethod" xml:space="preserve">
+    <value>SendingMethod</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="UtilitiesSendEmail" xml:space="preserve">
+    <value>Utilities - Send Email</value>
+  </data>
+  <data name="HQCenterProfileMaintenance" xml:space="preserve">
+    <value>HQ Center Profile Maintenance</value>
+  </data>
+  <data name="HQUserProfileMaintenance" xml:space="preserve">
+    <value>HQ User Profile Maintenance</value>
+  </data>
+  <data name="HubDescription" xml:space="preserve">
+    <value>Hub Description</value>
+  </data>
+  <data name="HubId" xml:space="preserve">
+    <value>Hub ID</value>
+  </data>
+  <data name="MaintenanceHubBranchProfile" xml:space="preserve">
+    <value>Administrator - Hub Branch Profile</value>
+  </data>
+  <data name="MaintenanceHubUserProfile" xml:space="preserve">
+    <value>Administrator - Hub User Profile</value>
+  </data>
+  <data name="HubDescriptioncannotbeblank" xml:space="preserve">
+    <value>Hub Description cannot be blank</value>
+  </data>
+  <data name="HubIDcannotbeblank" xml:space="preserve">
+    <value>Hub ID cannot be blank</value>
+  </data>
+  <data name="IdAlreadyExist" xml:space="preserve">
+    <value>Id Already Exist</value>
+  </data>
+  <data name="InternalBranchCodeAlreadyExist" xml:space="preserve">
+    <value>Branch ID already exists</value>
+  </data>
+  <data name="BankCode" xml:space="preserve">
+    <value>Bank Code</value>
+  </data>
+  <data name="BankCodealreadyexist" xml:space="preserve">
+    <value>Bank Code already exist</value>
+  </data>
+  <data name="BankCodecannotbeempty" xml:space="preserve">
+    <value>Bank Code cannot be empty</value>
+  </data>
+  <data name="BankCodeMaintenance" xml:space="preserve">
+    <value>Maintenance - Bank Profile (Add)</value>
+  </data>
+  <data name="BankCodeMaintenanceEdit" xml:space="preserve">
+    <value>Maintenance - Bank Profile (Edit)</value>
+  </data>
+  <data name="BankDescriptioncannotbeempty" xml:space="preserve">
+    <value>Bank Description cannot be empty</value>
+  </data>
+  <data name="BankAbbcannotbeempty" xml:space="preserve">
+    <value>Bank Abbreviation cannot be empty</value>
+  </data>
+  <data name="BankIndicator" xml:space="preserve">
+    <value>Bank Indicator</value>
+  </data>
+  <data name="BranchAvailableList" xml:space="preserve">
+    <value>Branch Available List</value>
+  </data>
+  <data name="BranchCodeMaintenance" xml:space="preserve">
+    <value>Branch Code Maintenance</value>
+  </data>
+  <data name="BranchSelectedList" xml:space="preserve">
+    <value>Branch Selected List</value>
+  </data>
+  <data name="Classalreadyexist" xml:space="preserve">
+    <value>Class already exist.</value>
+  </data>
+  <data name="Concatenate" xml:space="preserve">
+    <value>Concatenate</value>
+  </data>
+  <data name="DateandTime" xml:space="preserve">
+    <value>Date and Time</value>
+  </data>
+  <data name="InternalRemarks" xml:space="preserve">
+    <value>Internal Remarks</value>
+  </data>
+  <data name="ExternalRemarks" xml:space="preserve">
+    <value>External Remarks</value>
+  </data>
+  <data name="Endofdayprocesshasbeenstarted" xml:space="preserve">
+    <value>End of day process has been started</value>
+  </data>
+  <data name="equalto" xml:space="preserve">
+    <value>equal to</value>
+  </data>
+  <data name="Failtosendemail" xml:space="preserve">
+    <value>Fail to send email</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>File Name</value>
+  </data>
+  <data name="firstAmount" xml:space="preserve">
+    <value>1st Amount</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="lessthan" xml:space="preserve">
+    <value>less than</value>
+  </data>
+  <data name="lessthanandequal" xml:space="preserve">
+    <value>less than and equal</value>
+  </data>
+  <data name="MaintenanceBankCode" xml:space="preserve">
+    <value>Maintenance - Bank Code</value>
+  </data>
+  <data name="MaintenanceBranchCode" xml:space="preserve">
+    <value>Maintenance - Branch Code</value>
+  </data>
+  <data name="MaintenancePullOutReason" xml:space="preserve">
+    <value>Maintenance - Pull Out Reason</value>
+  </data>
+  <data name="Messagecannotbeblank" xml:space="preserve">
+    <value>Message cannot be blank</value>
+  </data>
+  <data name="morethan" xml:space="preserve">
+    <value>more than</value>
+  </data>
+  <data name="morethanandequalto" xml:space="preserve">
+    <value>more than and equal to</value>
+  </data>
+  <data name="PleasefillinPullOutDescription" xml:space="preserve">
+    <value>Please fill in Pull Out Description</value>
+  </data>
+  <data name="Pulloutid" xml:space="preserve">
+    <value>Pull Out Id</value>
+  </data>
+  <data name="Pulloutreason" xml:space="preserve">
+    <value>Pull Out Reason</value>
+  </data>
+  <data name="PullOutReasonMaintenance" xml:space="preserve">
+    <value>Pull Out Reason Maintenance</value>
+  </data>
+  <data name="RejectCodeCannotEmpty" xml:space="preserve">
+    <value>Reject Code Cannot Empty</value>
+  </data>
+  <data name="secondAmount" xml:space="preserve">
+    <value>2nd Amount</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="StateCode" xml:space="preserve">
+    <value>State Code</value>
+  </data>
+  <data name="Subjectcannotbeblank" xml:space="preserve">
+    <value>Subject cannot be blank</value>
+  </data>
+  <data name="Successfull" xml:space="preserve">
+    <value>Successfull</value>
+  </data>
+  <data name="Thisrecordhasbeendeletedorupdatedbyanotheruser" xml:space="preserve">
+    <value>This record has been deleted or updated by another user</value>
+  </data>
+  <data name="Thresholdsettingmustbenumeric" xml:space="preserve">
+    <value>Threshold setting must be numeric</value>
+  </data>
+  <data name="AccessDenied" xml:space="preserve">
+    <value>Access Denied</value>
+  </data>
+  <data name="AccountNumber" xml:space="preserve">
+    <value>Account Number</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="AlertNotificationOnly" xml:space="preserve">
+    <value>Alert Notification Only</value>
+  </data>
+  <data name="ALL" xml:space="preserve">
+    <value>ALL</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="Anerroroccurredwhileprocessingyourrequest" xml:space="preserve">
+    <value>An error occurred while processing your request</value>
+  </data>
+  <data name="AuditTrail" xml:space="preserve">
+    <value>Audit Trail</value>
+  </data>
+  <data name="Bank" xml:space="preserve">
+    <value>Bank</value>
+  </data>
+  <data name="BigImage" xml:space="preserve">
+    <value>Big Image</value>
+  </data>
+  <data name="BothAlertNotificationandEmail" xml:space="preserve">
+    <value>Both - Alert Notification and Email</value>
+  </data>
+  <data name="btnConfirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="capsWARNING" xml:space="preserve">
+    <value>WARNING</value>
+  </data>
+  <data name="ChequeClearingDate" xml:space="preserve">
+    <value>Cheque Clearing Date</value>
+  </data>
+  <data name="ChequeNumber" xml:space="preserve">
+    <value>Cheque Number</value>
+  </data>
+  <data name="ClearRemark" xml:space="preserve">
+    <value>Clear Remark</value>
+  </data>
+  <data name="CurrentlyRunningPleaseWaitAMoment" xml:space="preserve">
+    <value>Currently Running. Please Wait A Moment</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="EmailOnly" xml:space="preserve">
+    <value>Email Only</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="FileListing" xml:space="preserve">
+    <value>File Listing</value>
+  </data>
+  <data name="Front" xml:space="preserve">
+    <value>Front</value>
+  </data>
+  <data name="GenerateDebitFile" xml:space="preserve">
+    <value>Generate Debit File</value>
+  </data>
+  <data name="GeneratingData" xml:space="preserve">
+    <value>Generating Data</value>
+  </data>
+  <data name="Grayscale" xml:space="preserve">
+    <value>Grayscale</value>
+  </data>
+  <data name="InputofAccountNumbermustbenumericonly" xml:space="preserve">
+    <value>Input of Account Number must be numeric only</value>
+  </data>
+  <data name="InvalidAccountNumber0000000000000000oremptyisnotallowed" xml:space="preserve">
+    <value>Invalid Account Number. 0000000000000000 or empty is not allowed</value>
+  </data>
+  <data name="InvalidAccountNumberItshouldbestarted00" xml:space="preserve">
+    <value>Invalid Account Number. It should be started '00' !</value>
+  </data>
+  <data name="InvalidChequeNumberInvalidlengthofChequeNumber" xml:space="preserve">
+    <value>Invalid Cheque Number. Invalid length of Cheque Number!</value>
+  </data>
+  <data name="Invert" xml:space="preserve">
+    <value>Invert</value>
+  </data>
+  <data name="LastLogin" xml:space="preserve">
+    <value>Last Login</value>
+  </data>
+  <data name="LoadHostFile" xml:space="preserve">
+    <value>Load Host File</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Nochequeavailable" xml:space="preserve">
+    <value>No cheque available</value>
+  </data>
+  <data name="NoDateInFileName" xml:space="preserve">
+    <value>No Date In File Name</value>
+  </data>
+  <data name="NoNextChequeAvailable" xml:space="preserve">
+    <value>No Next Cheque Available</value>
+  </data>
+  <data name="NoPreviousChequeAvailable" xml:space="preserve">
+    <value>No Previous Cheque Available</value>
+  </data>
+  <data name="NoRecord" xml:space="preserve">
+    <value>No Record</value>
+  </data>
+  <data name="NormalInwardCheque" xml:space="preserve">
+    <value>Normal Inward Cheque</value>
+  </data>
+  <data name="OnlyPOSTMethodAllowed" xml:space="preserve">
+    <value>Only POST Method Allowed</value>
+  </data>
+  <data name="PasswordExpireDate" xml:space="preserve">
+    <value>Password Expire Date</value>
+  </data>
+  <data name="PayingBank" xml:space="preserve">
+    <value>Paying Bank</value>
+  </data>
+  <data name="PerformDownloadandImport" xml:space="preserve">
+    <value>Perform Download and Import</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Print" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="RejectReentry" xml:space="preserve">
+    <value>RejectReentry</value>
+  </data>
+  <data name="RemarkCleared" xml:space="preserve">
+    <value>Remark Cleared</value>
+  </data>
+  <data name="Remarks" xml:space="preserve">
+    <value>Remarks</value>
+  </data>
+  <data name="Repair" xml:space="preserve">
+    <value>Repair</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>Return</value>
+  </data>
+  <data name="ReturnReason" xml:space="preserve">
+    <value>Return Reason</value>
+  </data>
+  <data name="Rotate" xml:space="preserve">
+    <value>Rotate</value>
+  </data>
+  <data name="Route" xml:space="preserve">
+    <value>Route</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SelectReturnReason" xml:space="preserve">
+    <value>Select Return Reason</value>
+  </data>
+  <data name="SelectReturnRouteReason" xml:space="preserve">
+    <value>Select Return Reason</value>
+  </data>
+  <data name="Signaturenotfound" xml:space="preserve">
+    <value>(Signature not found)</value>
+  </data>
+  <data name="TextRemarks" xml:space="preserve">
+    <value>Text Remarks</value>
+  </data>
+  <data name="ThesystemmustonlybeaccessedbyauthorizedusersUnauthorizedsystemusageorabuseissubjecttocriminalprosecutionandsystemusagewillbemonitoredandlogged" xml:space="preserve">
+    <value>The system must only be accessed by authorized users. Unauthorized system usage or abuse is subject to criminal prosecution and system usage will be monitored and logged.</value>
+  </data>
+  <data name="Transcode" xml:space="preserve">
+    <value>Transcode</value>
+  </data>
+  <data name="UIN" xml:space="preserve">
+    <value>UIN</value>
+  </data>
+  <data name="Verification" xml:space="preserve">
+    <value>Verification</value>
+  </data>
+  <data name="WelcomeToINCHEQS" xml:space="preserve">
+    <value>Welcome To INCHEQS</value>
+  </data>
+  <data name="Chinese" xml:space="preserve">
+    <value>Chinese</value>
+  </data>
+  <data name="DearDeveloperspleaseextendBaseControllerinthiscontroller" xml:space="preserve">
+    <value>Dear Developers, please extend BaseController in this controller</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="First" xml:space="preserve">
+    <value>First</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="INCHEQSisatrademarkforINSITEMYSYSTEMSDNBHD" xml:space="preserve">
+    <value>INCHEQS is a trademark for INSITE MY SYSTEM SDN BHD</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LoginError" xml:space="preserve">
+    <value>Login Error</value>
+  </data>
+  <data name="LoginErrorPleasetryagain" xml:space="preserve">
+    <value>Login Error : Please try again.</value>
+  </data>
+  <data name="Malay" xml:space="preserve">
+    <value>Malay</value>
+  </data>
+  <data name="ModalHeader" xml:space="preserve">
+    <value>Modal Header</value>
+  </data>
+  <data name="NoTaskIDspecifiedInControllerDanger" xml:space="preserve">
+    <value>No Task ID specified In Controller - Danger</value>
+  </data>
+  <data name="Outstanding" xml:space="preserve">
+    <value>Outstanding</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Page</value>
+  </data>
+  <data name="Passwordissuccessfullyupdated" xml:space="preserve">
+    <value>Password is successfully updated</value>
+  </data>
+  <data name="PleaseInsertAllFields" xml:space="preserve">
+    <value>Please Insert All Fields</value>
+  </data>
+  <data name="PleasekeyinUserIDandPassword" xml:space="preserve">
+    <value>Please key in User ID and Password</value>
+  </data>
+  <data name="Prev" xml:space="preserve">
+    <value>Prev</value>
+  </data>
+  <data name="Record" xml:space="preserve">
+    <value>Record(s)</value>
+  </data>
+  <data name="ReportType" xml:space="preserve">
+    <value>Report Type</value>
+  </data>
+  <data name="Thereisanerrorinexecutingsql" xml:space="preserve">
+    <value>There is an error in executing sql</value>
+  </data>
+  <data name="TotalAmount" xml:space="preserve">
+    <value>Total Amount</value>
+  </data>
+  <data name="TotalRecord" xml:space="preserve">
+    <value>Total Record(s)</value>
+  </data>
+  <data name="UpdatePassword" xml:space="preserve">
+    <value>Update Password</value>
+  </data>
+  <data name="UserSessionCleared" xml:space="preserve">
+    <value>User Session Cleared</value>
+  </data>
+  <data name="Youhavebeensuccessfullyloggedin" xml:space="preserve">
+    <value>You have been successfully logged in</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm Password</value>
+  </data>
+  <data name="Youhavebeensuccessfullyloggedout" xml:space="preserve">
+    <value>You have been successfully logged out</value>
+  </data>
+  <data name="MaintenanceStateCode" xml:space="preserve">
+    <value>Maintenance State Code</value>
+  </data>
+  <data name="StateCodeMaintenance" xml:space="preserve">
+    <value>State Code Maintenance</value>
+  </data>
+  <data name="StateDescription" xml:space="preserve">
+    <value>State Description</value>
+  </data>
+  <data name="Go" xml:space="preserve">
+    <value>GO</value>
+  </data>
+  <data name="PullOut" xml:space="preserve">
+    <value>Pull Out</value>
+  </data>
+  <data name="TotalItem" xml:space="preserve">
+    <value>Total Item</value>
+  </data>
+  <data name="ActionDescription" xml:space="preserve">
+    <value>Action Description</value>
+  </data>
+  <data name="ReferBack" xml:space="preserve">
+    <value>Refer Back</value>
+  </data>
+  <data name="Activate" xml:space="preserve">
+    <value>Activate</value>
+  </data>
+  <data name="BranchVerification" xml:space="preserve">
+    <value>Branch Verification</value>
+  </data>
+  <data name="CCUVerification" xml:space="preserve">
+    <value>CCU Verification</value>
+  </data>
+  <data name="ClearingTypes" xml:space="preserve">
+    <value>Clearing Types</value>
+  </data>
+  <data name="CutOffActivation" xml:space="preserve">
+    <value>Cut-Off Activation</value>
+  </data>
+  <data name="Deactivate" xml:space="preserve">
+    <value>Deactivate</value>
+  </data>
+  <data name="NormalClearing" xml:space="preserve">
+    <value>Normal Clearing</value>
+  </data>
+  <data name="PrintAll" xml:space="preserve">
+    <value>Print All</value>
+  </data>
+  <data name="AddToList" xml:space="preserve">
+    <value>Add To List</value>
+  </data>
+  <data name="AddNewPullOutReason" xml:space="preserve">
+    <value>Add New Pull Out Reason</value>
+  </data>
+  <data name="AutoReject" xml:space="preserve">
+    <value>Auto Reject</value>
+  </data>
+  <data name="AutoRoutetoBranch" xml:space="preserve">
+    <value>Auto Route to Branch</value>
+  </data>
+  <data name="ChequeSerialNo" xml:space="preserve">
+    <value>Cheque Serial No</value>
+  </data>
+  <data name="HostReturnStatusMaintenance" xml:space="preserve">
+    <value>Host Return Status Maintenance</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Last Modified</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="ManualUpload" xml:space="preserve">
+    <value>Manual Upload</value>
+  </data>
+  <data name="RemoveList" xml:space="preserve">
+    <value>Remove List</value>
+  </data>
+  <data name="StatusDescription" xml:space="preserve">
+    <value>Status Description</value>
+  </data>
+  <data name="StatusId" xml:space="preserve">
+    <value>Status Id</value>
+  </data>
+  <data name="UploadFile" xml:space="preserve">
+    <value>Upload File(s)</value>
+  </data>
+  <data name="AccountalreadyexpiredUsercannotlogin" xml:space="preserve">
+    <value>Account already expired. User cannot log in.</value>
+  </data>
+  <data name="ConcurrentConnectionDenied" xml:space="preserve">
+    <value>Concurrent Connection Denied</value>
+  </data>
+  <data name="FirsttimeloginPleasechangeyourpassword" xml:space="preserve">
+    <value>First time login. Please change your password.</value>
+  </data>
+  <data name="Invalidpassword" xml:space="preserve">
+    <value>Invalid password</value>
+  </data>
+  <data name="Last" xml:space="preserve">
+    <value>Last</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>No Data Available</value>
+  </data>
+  <data name="Notallowconcurrentconnection" xml:space="preserve">
+    <value>Not allow concurrent connection</value>
+  </data>
+  <data name="PasswordhasbeenexpiredPleasechangeyourpassword" xml:space="preserve">
+    <value>Password has been expired. Please change your password</value>
+  </data>
+  <data name="SessionTimeout" xml:space="preserve">
+    <value>Session Timeout</value>
+  </data>
+  <data name="SessionTimeoutOrAnonymousAccessDenied" xml:space="preserve">
+    <value>Session Timeout Or Anonymous Access Denied</value>
+  </data>
+  <data name="Userdoesnotexist" xml:space="preserve">
+    <value>User does not exist.</value>
+  </data>
+  <data name="Youhavenoanyprivilegestoenterthesystem" xml:space="preserve">
+    <value>You have no any privileges to enter the system.</value>
+  </data>
+  <data name="YourIDhadbeendisabled" xml:space="preserve">
+    <value>Your ID had been disabled</value>
+  </data>
+  <data name="YourIDhadbeendisabledPleasecheckwiththeAdministrator" xml:space="preserve">
+    <value>Your ID had been disabled.Please check with the Administrator.</value>
+  </data>
+  <data name="YourIDhadbeenlocked" xml:space="preserve">
+    <value>Your ID had been locked</value>
+  </data>
+  <data name="InvalidLogonCredential" xml:space="preserve">
+    <value>Invalid Logon Credential.</value>
+  </data>
+  <data name="InvalidLogonSession" xml:space="preserve">
+    <value>Invalid Logon Session.</value>
+  </data>
+  <data name="PleaseSelectCCDType" xml:space="preserve">
+    <value>Please select User Type CCD</value>
+  </data>
+  <data name="Module" xml:space="preserve">
+    <value>Module</value>
+  </data>
+  <data name="ThresholdId" xml:space="preserve">
+    <value>Threshold Id</value>
+  </data>
+  <data name="ThresholdType" xml:space="preserve">
+    <value>Threshold Type</value>
+  </data>
+  <data name="FileNotFound" xml:space="preserve">
+    <value>File Not Found</value>
+  </data>
+  <data name="EverydayOn" xml:space="preserve">
+    <value>Everyday On</value>
+  </data>
+  <data name="LastRunDateTime" xml:space="preserve">
+    <value>Last Run Date/Time</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="RunDateTime" xml:space="preserve">
+    <value>Run Date/Time</value>
+  </data>
+  <data name="ScheduledTime" xml:space="preserve">
+    <value>Scheduled Time</value>
+  </data>
+  <data name="SetScheduledTask" xml:space="preserve">
+    <value>Set Scheduled Task</value>
+  </data>
+  <data name="SuccessfullycreatenewScheduledTask" xml:space="preserve">
+    <value>Successfully create new Scheduled Task</value>
+  </data>
+  <data name="UtilitiesScheduledTask" xml:space="preserve">
+    <value>Utilities - Scheduled Task</value>
+  </data>
+  <data name="ViewHistory" xml:space="preserve">
+    <value>View History</value>
+  </data>
+  <data name="BankCodeCreateVerify" xml:space="preserve">
+    <value>Record successfully added to Bank Profile (Checker) and will not be inserted until it has been verified</value>
+  </data>
+  <data name="BankCodeUpdateVerify" xml:space="preserve">
+    <value>Record successfully added to Bank Profile (Checker) and will not be edited until it has been verified</value>
+  </data>
+ <data name="BankCodeDeleteVerify" xml:space="preserve">
+    <value>Record successfully added to Bank Profile (Checker) and will not be deleted until it has been verified</value>
+  </data>
+  <data name="BranchCodeDeleteVerify" xml:space="preserve">
+    <value>Branch Code Successfully Added to Approve (Checker). Record will not be deleted until it has been verified</value>
+  </data>
+  <data name="HostReturnReasonCreateVerify" xml:space="preserve">
+    <value>Host Return Reason Successfully Added to Approve (Checker). Record will not be inserted until it has been verified</value>
+  </data>
+  <data name="BankHostMasterCreateVerify" xml:space="preserve">
+    <value>Bank Host Status Master Successfully Added to Approve (Checker). Record will not be inserted until it has been verified</value>
+  </data>
+  <data name="BankHostMasterDeleteVerify" xml:space="preserve">
+    <value>Bank Host Status Master Successfully Added to Approve (Checker). Record will not be deleted until it has been verified</value>
+  </data>
+  <data name="BankHostMasterKBZCreateVerify" xml:space="preserve">
+    <value>Bank Host Status KBZ Master Successfully Added to Approve (Checker). Record will not be inserted until it has been verified</value>
+  </data>
+  <data name="BankHostMasterKBZDeleteVerify" xml:space="preserve">
+    <value>Bank Host Status KBZ Master Successfully Added to Approve (Checker). Record will not be deleted until it has been verified</value>
+  </data>
+  <data name="HostReturnReasonDeleteVerify" xml:space="preserve">
+    <value>Host Return Reason Successfully Added to Approve Checker. Record will not be deleted until it has been verified</value>
+  </data>
+  <data name="InternalBranchCreateVerify" xml:space="preserve">
+    <value>Record successfully added to Internal Branch Profile (Checker) and will not be inserted until it has been verified</value>
+  </data>
+  <data name="InternalBranchDeleteVerify" xml:space="preserve">
+    <value>Record successfully added to Internal Branch Profile (Checker) and will not be deleted until it has been verified</value>
+  </data>
+  <data name="PullOutReasonCreateVerify" xml:space="preserve">
+    <value>Pull Out Reason successfully added to Approve Checker. Record will not be inserted until it has been verified</value>
+  </data>
+  <data name="PullOutReasonDeleteVerify" xml:space="preserve">
+    <value>Pull Out Reason successfully added to Approve Checker to Delete. Record will not be deleted until it has been verified</value>
+  </data>
+  <data name="ReturnReasonCodeCreateVerify" xml:space="preserve">
+    <value>Return Reason successfully added to Approve Checker. Record will not be inserted until it has been verified</value>
+  </data>
+  <data name="ReturnReasonCodeVerifyDelete" xml:space="preserve">
+    <value>Return Reason successfully added to Approve (Checker) to Delete. Record will not be deleted until it has been verified</value>
+  </data>
+  <data name="StateCodeCreateVerify" xml:space="preserve">
+    <value>State Code Successfully Added to Approve Checker. Record will not be inserted until it has been verified</value>
+  </data>
+  <data name="StateCodeDeleteVerify" xml:space="preserve">
+    <value>State Code Successfully Added to Approve Checker. Record will not be deleted until it has been verified</value>
+  </data>
+  <data name="VerificationLimitCreateVerify" xml:space="preserve">
+    <value>Record successfully added to Verification Limit (Checker) and will not be inserted until it has been verified.</value>
+  </data>
+  <data name="VerificationLimitDeleteVerify" xml:space="preserve">
+    <value>Record successfully added to Verification Limit (Checker) and will not be deleted until it has been verified.</value>
+  </data>
+  <data name="StatusDescCannotEmpty" xml:space="preserve">
+    <value>Status Description Cannot be Empty</value>
+  </data>
+  <data name="StatusIdCannotEmpty" xml:space="preserve">
+    <value>Status Id Cannot be Empty</value>
+  </data>
+  <data name="CutOffTimeActivatedBranchVerificationnotAllowed" xml:space="preserve">
+    <value>Cut Off Time Activated. Branch Verification is not Allowed</value>
+  </data>
+  <data name="PleaseKeyInMessage" xml:space="preserve">
+    <value>Please insert message or select from the selection</value>
+  </data>
+  <data name="PleaseSubmitOneMessage" xml:space="preserve">
+    <value>Please submit one message at a time</value>
+  </data>
+  <data name="UserClassNotAuthorizetoVerify" xml:space="preserve">
+    <value>User Class Has No Authorize To Verify This Amount</value>
+  </data>
+  <data name="VerificationNotAllowed" xml:space="preserve">
+    <value>The Verification is Not Allowed</value>
+  </data>
+  <data name="PleaseSelectProcess" xml:space="preserve">
+    <value>Please select a process</value>
+  </data>
+  <data name="LargeAmount" xml:space="preserve">
+    <value>Large Amount</value>
+  </data>
+  <data name="LargeAmountCannotBlank" xml:space="preserve">
+    <value>Large Amount cannot be empty</value>
+  </data>
+  <data name="LargeAmountMaintenance" xml:space="preserve">
+    <value>Large Amount Maintenance</value>
+  </data>
+  <data name="AccountMaintenanceCreateVerify" xml:space="preserve">
+    <value>Account Maintenance Successfully Added to Approve (Checker). Record will not be inserted until it has been verified</value>
+  </data>
+  <data name="AccountMaintenanceDeleteVerify" xml:space="preserve">
+    <value>Account Maintenance Successfully Added to Approve (Checker). Record will not be deleted until it has been verified</value>
+  </data>
+  <data name="AccountNumberCannotEmpty" xml:space="preserve">
+    <value>Account Number cannot be empty</value>
+  </data>
+  <data name="AccountNumberMustBeNumeric" xml:space="preserve">
+    <value>Account number must be numeric</value>
+  </data>
+  <data name="IdCannotEmpty" xml:space="preserve">
+    <value>Id cannot be empty</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AccountHolderNameCannotEmpty" xml:space="preserve">
+    <value>Account Holder Name cannot  be empty!</value>
+  </data>
+  <data name="AccountNumberAlreadyExist" xml:space="preserve">
+    <value>Account Number already exist</value>
+  </data>
+  <data name="HighRiskAccountAlreadyExist" xml:space="preserve">
+    <value>High Risk Account already exist</value>
+  </data>
+  <data name="HighRiskAccountCannotBeEmpty" xml:space="preserve">
+    <value>High Risk Account cannot be empty</value>
+  </data>
+  <data name="BankCodealreadyCreatedinApproveChecker" xml:space="preserve">
+    <value>Bank Code already created in Approve Checker</value>
+  </data>
+  <data name="GLAccountNumberAlreadyExist" xml:space="preserve">
+    <value>GL Account Number already exist</value>
+  </data>
+  <data name="GLAccountNumberCannotEmpty" xml:space="preserve">
+    <value>GL Account Number cannot be empty</value>
+  </data>
+  <data name="InternalBranchCodeAlreadyCreatedtoVerify" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval </value>
+  </data>
+  <data name="ReturnCodeAlreadyCreatedToBeVerify" xml:space="preserve">
+    <value>The Return Code is already created in Approve Checker to be verified</value>
+  </data>
+  <data name="ReturnCodeAlreadyExist" xml:space="preserve">
+    <value>Return Code already exist !</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="Monthly" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
+  <data name="OneTime" xml:space="preserve">
+    <value>One Time</value>
+  </data>
+  <data name="Recurring" xml:space="preserve">
+    <value>Recurring</value>
+  </data>
+  <data name="ScheduleType" xml:space="preserve">
+    <value>Schedule Type</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Wednesday</value>
+  </data>
+  <data name="Weekly" xml:space="preserve">
+    <value>Weekly</value>
+  </data>
+  <data name="Yearly" xml:space="preserve">
+    <value>Yearly</value>
+  </data>
+  <data name="HolidayDescriptionCannotBlank" xml:space="preserve">
+    <value>Description cannot be empty.</value>
+  </data>
+  <data name="VerifierSupervisor" xml:space="preserve">
+    <value>Supervisor</value>
+  </data>
+  <data name="GroupIdLength" xml:space="preserve">
+    <value>Group Id must less than 15 characters</value>
+  </data>
+  <data name="Pleaseselectofficer" xml:space="preserve">
+    <value>Please select Officer from Officer List</value>
+  </data>
+  <data name="BranchCodeCreateVerify" xml:space="preserve">
+    <value>Record successfully added to Branch Profile (Checker) and will not be inserted until it has been verified</value>
+  </data>
+  <data name="HolidayCreateVerify" xml:space="preserve">
+    <value>Record successfully added to Holiday Calendar (Checker) and will not be inserted until it has been verified.</value>
+  </data>
+  <data name="HolidayDeleteVerify" xml:space="preserve">
+    <value>Record successfully added to Holiday Calendar (Checker) and will not be deleted until it has been verified</value>
+  </data>
+  <data name="HolidayUpdateVerify" xml:space="preserve">
+    <value>Record successfully added to Holiday Calendar (Checker) and will not be edited until it has been verified</value>
+  </data>
+  <data name="HolidayAlreadyExiststoDeleteorUpdate" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="BranchCodeAlreadyExist" xml:space="preserve">
+    <value>Branch Code already exist</value>
+  </data>
+  <data name="BranchCodealreadyCreatedinApproveChecker" xml:space="preserve">
+    <value>Branch Code already created in Approve Checker</value>
+  </data>
+  <data name="RejectCodealreadyCreatedinApproveChecker" xml:space="preserve">
+    <value>Reject Code already created in Approve Checker</value>
+  </data>
+  <data name="GroupMasterCreateVerify" xml:space="preserve">
+    <value>Record successfully added to Group Profile (Checker) and will not be inserted until it has been verified.</value>
+  </data>
+  <data name="ThresholdSettingCreateVerify" xml:space="preserve">
+    <value>Record successfully added to Threshold Setting (Checker) and will not be inserted until it has been verified.</value>
+  </data>
+  <data name="ThresholdSettingDeleteVerify" xml:space="preserve">
+    <value>Record successfully added to Threshold Setting (Checker) and will not be deleted until it has been verified.</value>
+  </data>
+  <data name="GroupSuccessfullyAddedtoApproved" xml:space="preserve">
+    <value>Group Successfully Added to Approved Group profile to Delete. Group will not be deleted until its has been verified</value>
+  </data>
+  <data name="TaskSuccessfullyUpdated" xml:space="preserve">
+    <value>Task Successfully Updated</value>
+  </data>
+  <data name="TaskSuccessfullyUpdatedApproval" xml:space="preserve">
+    <value>Record successfully added to Task Assignment (Checker) and will not be edited until it has been verified.</value>
+  </data>
+  <data name="RejectCodeAlphaNumeric" xml:space="preserve">
+    <value>Reject code must be alpha numeric</value>
+  </data>
+  <data name="RejectCodeLength" xml:space="preserve">
+    <value>Reject code must be three characters only</value>
+  </data>
+  <data name="BranchCodeNumber" xml:space="preserve">
+    <value>Branch code be must numbers</value>
+  </data>
+  <data name="InternalBranchNumber" xml:space="preserve">
+    <value>Internal Branch code be must numbers</value>
+  </data>
+  <data name="OutwardReturnRegenerate" xml:space="preserve">
+    <value>Regenerate Outward</value>
+  </data>
+  <data name="OutOfRentionPeriod" xml:space="preserve">
+    <value>Selected Processing date was out of retention preriod, kindly select a correct date</value>
+  </data>
+  <data name="NotAllowedForGenerate" xml:space="preserve">
+    <value>Previous processing date was not allow to generate. Please select a processing date.</value>
+  </data>
+  <data name="TaskCurrentlyRunnig" xml:space="preserve">
+    <value>Import Currently Running. Please wait.</value>
+  </data>
+  <data name="ATVDashboard" xml:space="preserve">
+    <value>ATV-Dashboard</value>
+  </data>
+  <data name="ATVDataCorrection" xml:space="preserve">
+    <value>ATV-DataCorrection</value>
+  </data>
+  <data name="DataCorrection" xml:space="preserve">
+    <value>ATV - Data Correction</value>
+  </data>
+  <data name="TCCodeSuccessfullyUpdated" xml:space="preserve">
+    <value>TC Code Successfully Updated</value>
+  </data>
+  <data name="TCCodeAddedToTempForUpdate" xml:space="preserve">
+    <value>TC Code Successfully Added to Approve Checker. Record will not be updated until it has been verified.</value>
+  </data>
+  <data name="TCCodeSuccessfullyCreated" xml:space="preserve">
+    <value>TC Code Successfully Created</value>
+  </data>
+  <data name="TCCodeAddedToTempForCreate" xml:space="preserve">
+    <value>TC Code Successfully Added to Approve Checker. Record will not be inserted until it has been verified.</value>
+  </data>
+  <data name="TCCodeAddedToTempForDelete" xml:space="preserve">
+    <value>TC Code Successfully Added to Approve Checker. Record will not be deleted until it has been verified.</value>
+  </data>
+  <data name="TCCodePendingApproval" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="TCCodeMaintenance" xml:space="preserve">
+    <value>Maintenance - TC Code</value>
+  </data>
+  <data name="TCCode" xml:space="preserve">
+    <value>TC Code</value>
+  </data>
+  <data name="TCCodeDescription" xml:space="preserve">
+    <value>TC Description</value>
+  </data>
+  <data name="TCCodeCannotBeEmpty" xml:space="preserve">
+    <value>TC Code cannot be empty</value>
+  </data>
+  <data name="TCCodeAlreadyExists" xml:space="preserve">
+    <value>TC Code already exists</value>
+  </data>
+  <data name="TCCodeDescriptionCannotBeEmpty" xml:space="preserve">
+    <value>TC Description cannot be empty</value>
+  </data>
+  <data name="TransactionTypeSuccessfullyUpdated" xml:space="preserve">
+    <value>Transaction Type Successfully Updated</value>
+  </data>
+  <data name="TransactionTypeAddedToTempForUpdate" xml:space="preserve">
+    <value>Transaction Type Successfully Added to Approve Checker. Record will not be updated until it has been verified.</value>
+  </data>
+  <data name="TransactionTypeSuccessfullyCreated" xml:space="preserve">
+    <value>Transaction Type Successfully Created</value>
+  </data>
+  <data name="TransactionTypeAddedToTempForCreate" xml:space="preserve">
+    <value>Transaction Type Successfully Added to Approve Checker. Record will not be inserted until it has been verified.</value>
+  </data>
+  <data name="TransactionTypeAddedToTempForDelete" xml:space="preserve">
+    <value>Transaction Type Successfully Added to Approve Checker. Record will not be deleted until it has been verified.</value>
+  </data>
+  <data name="TransactionTypePendingApproval" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="TransactionTypeMaintenance" xml:space="preserve">
+    <value>Maintenance - Transaction Type</value>
+  </data>
+  <data name="TransactionType" xml:space="preserve">
+    <value>Transaction Type</value>
+  </data>
+  <data name="TransactionTypeDescription" xml:space="preserve">
+    <value>Transaction Description</value>
+  </data>
+  <data name="TransactionTypeCannotBeEmpty" xml:space="preserve">
+    <value>Transaction Type cannot be empty</value>
+  </data>
+  <data name="TransactionTypeAlreadyExists" xml:space="preserve">
+    <value>Transaction Type already exists</value>
+  </data>
+  <data name="TransactionTypeDescriptionCannotBeEmpty" xml:space="preserve">
+    <value>Transaction Description cannot be empty</value>
+  </data>
+  <data name="TransactionCodeSuccessfullyUpdated" xml:space="preserve">
+    <value>Transaction Code Successfully Updated</value>
+  </data>
+  <data name="TransactionCodeAddedToTempForUpdate" xml:space="preserve">
+    <value>Transaction Code Successfully Added to Approve (Checker). Record will not be updated until it has been verified.</value>
+  </data>
+  <data name="TransactionCodeSuccessfullyCreated" xml:space="preserve">
+    <value>Transaction Code Successfully Created</value>
+  </data>
+  <data name="TransactionCodeAddedToTempForCreate" xml:space="preserve">
+    <value>Transaction Code Successfully Added to Approve (Checker). Record will not be inserted until it has been verified.</value>
+  </data>
+  <data name="TransactionCodeAddedToTempForDelete" xml:space="preserve">
+    <value>Transaction Code Successfully Added to Approve (Checker). Record will not be deleted until it has been verified.</value>
+  </data>
+  <data name="TransactionCodePendingApproval" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="TransactionCodeMaintenance" xml:space="preserve">
+    <value>Maintenance - Transaction Code</value>
+  </data>
+  <data name="TransactionCode" xml:space="preserve">
+    <value>Transaction Code</value>
+  </data>
+  <data name="TransactionCodeDescription" xml:space="preserve">
+    <value>Transaction Description</value>
+  </data>
+  <data name="TransactionCodeCannotBeEmpty" xml:space="preserve">
+    <value>Transaction Code cannot be empty</value>
+  </data>
+  <data name="TransactionCodeAlreadyExists" xml:space="preserve">
+    <value>Transaction Code already exists</value>
+  </data>
+  <data name="TransactionCodeDescriptionCannotBeEmpty" xml:space="preserve">
+    <value>Transaction Description cannot be empty</value>
+  </data>
+  <data name="WorkstationScannerSuccefullyAdded" xml:space="preserve">
+    <value>Workstation Scanner Successfully Added.</value>
+  </data>
+  <data name="WorkstationScannerSuccefullyDeleted" xml:space="preserve">
+    <value>Workstation Scanner(s) Deleted</value>
+  </data>
+  <data name="WorkstationScannerSuccefullyUpdated" xml:space="preserve">
+    <value>Workstation Scanner Successfully Updated.</value>
+  </data>
+  <data name="WorkstationScannerMacAddressCannotBeEmpty" xml:space="preserve">
+    <value>MAC Address cannot be empty</value>
+  </data>
+  <data name="WorkstationScannerMacAddressFormatWrongly" xml:space="preserve">
+    <value>MAC Address Format Wrongly</value>
+  </data>
+  <data name="WorkstationScannerMaintenance" xml:space="preserve">
+    <value>Maintenance - Workstation Scanner</value>
+  </data>
+  <data name="WorkstationScannerName" xml:space="preserve">
+    <value>Scanner Type</value>
+  </data>
+  <data name="WorkstationScannerBranch" xml:space="preserve">
+    <value>Scanner Bank Branch</value>
+  </data>
+  <data name="WorkstationScannerMacAddress1" xml:space="preserve">
+    <value>MAC Address 1</value>
+  </data>
+  <data name="WorkstationScannerMacAddress2" xml:space="preserve">
+    <value>MAC Address 2</value>
+  </data>
+  <data name="WorkstationScannerMacAddress3" xml:space="preserve">
+    <value>MAC Address 3</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="SystemCutOffTimeID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="SystemCutOffTimeSuccessfullyUpdated" xml:space="preserve">
+    <value>System Cut Off Time Successfully Updated</value>
+  </data>
+  <data name="SystemCutOffTimeAddedToTempForUpdate" xml:space="preserve">
+    <value>System Cut Off Time Successfully Added to Approve (Checker). Record will not be updated until it has been verified.</value>
+  </data>
+  <data name="SystemCutOffTimeSuccessfullyCreated" xml:space="preserve">
+    <value>System Cut Off Time Successfully Created</value>
+  </data>
+  <data name="SystemCutOffTimeAddedToTempForCreate" xml:space="preserve">
+    <value>System Cut Off Time Successfully Added to Approve (Checker). Record will not be inserted until it has been verified.</value>
+  </data>
+  <data name="SystemCutOffTimeAddedToTempForDelete" xml:space="preserve">
+    <value>System Cut Off Time Successfully Added to Approve (Checker). Record will not be deleted until it has been verified.</value>
+  </data>
+  <data name="SystemCutOffTimePendingApproval" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="SystemCutOffTimeMaintenance" xml:space="preserve">
+    <value>Maintenance - System Cut Off Time</value>
+  </data>
+  <data name="SystemCutOffTime" xml:space="preserve">
+    <value>System Cut Off Time</value>
+  </data>
+  <data name="SystemCutOffTimeDescriptionCannotBeEmpty" xml:space="preserve">
+    <value>Description cannot be empty</value>
+  </data>
+  <data name="SystemCutOffTimeAlreadyExists" xml:space="preserve">
+    <value>System Cut Off already has a record with that Description</value>
+  </data>
+  <data name="SystemCutOffTimeSelectTransactionType" xml:space="preserve">
+    <value>Please select Transaction Type</value>
+  </data>
+  <data name="SystemCutOffTimeSelectScheduleType" xml:space="preserve">
+    <value>Please select Schedule Type</value>
+  </data>
+  <data name="SystemCutOffTimeSelectRecurringType" xml:space="preserve">
+    <value>Please select Recurring Type</value>
+  </data>
+  <data name="SystemCutOffTimeSelectDay" xml:space="preserve">
+    <value>Please select Day</value>
+  </data>
+  <data name="HubSuccessfullyUpdated" xml:space="preserve">
+    <value>Hub Successfully Updated</value>
+  </data>
+  <data name="HubAddedToTempForUpdate" xml:space="preserve">
+    <value>Record successfully added to Hub User Profile (Checker) and will not be edited until it has been verified.</value>
+  </data>
+  <data name="HubSuccessfullyCreated" xml:space="preserve">
+    <value>Hub Successfully Created</value>
+  </data>
+  <data name="HubAddedToTempForCreate" xml:space="preserve">
+    <value>Record successfully added to Hub User Profile (Checker) and will not be inserted until it has been verified.</value>
+  </data>
+  <data name="HubAddedToTempForDelete" xml:space="preserve">
+    <value>Record successfully added to Hub User Profile (Checker) and will not be deleted until it has been verified.</value>
+  </data>
+  <data name="HubPendingApproval" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="HubIdCannotBeEmpty" xml:space="preserve">
+    <value>Hub ID cannot be blank</value>
+  </data>
+  <data name="HubAlreadyExists" xml:space="preserve">
+    <value>Hub ID already exists</value>
+  </data>
+  <data name="HubDescriptionCannotBeEmpty" xml:space="preserve">
+    <value>Hub Description cannot be blank</value>
+  </data>
+  <data name="HudIdAtLeastChars" xml:space="preserve">
+    <value>Hub Id must have at least 11 chars</value>
+  </data>
+  <data name="HubBranchPendingApproval" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="HubBranchSuccessfullyUpdated" xml:space="preserve">
+    <value>Hub Branch Successfully Updated</value>
+  </data>
+  <data name="HubBranchAddedToTempForUpdate" xml:space="preserve">
+    <value>Record successfully added to Hub Branch Profile (Checker) and will not be edited until it has been verified.</value>
+  </data>
+  <data name="ChequeAmountEntry" xml:space="preserve">
+    <value>Cheque Amount Entry</value>
+  </data>
+  <data name="BalancingQueueUpdateAmountBtn" xml:space="preserve">
+    <value>Update Amount (Enter)</value>
+  </data>
+  <data name="BalancingQueueAmtEntryTB" xml:space="preserve">
+    <value>Enter Amount :</value>
+  </data>
+  <data name="ChequeDataEntry" xml:space="preserve">
+    <value>Processing - Data Entry</value>
+  </data>
+  <data name="BalancingQueue" xml:space="preserve">
+    <value>Processing - Balancning Amount Entry</value>
+  </data>
+  <data name="BatchNo" xml:space="preserve">
+    <value>Batch No</value>
+  </data>
+  <data name="BranchOCS" xml:space="preserve">
+    <value>Branch OCS</value>
+  </data>
+  <data name="CapturingDate" xml:space="preserve">
+    <value>Capturing Date</value>
+  </data>
+  <data name="ChequeType" xml:space="preserve">
+    <value>Cheque Type</value>
+  </data>
+  <data name="ItemID" xml:space="preserve">
+    <value>Item ID</value>
+  </data>
+  <data name="NCF" xml:space="preserve">
+    <value>NCF</value>
+  </data>
+  <data name="RejectReason" xml:space="preserve">
+    <value>Reject Reason</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="TCNo" xml:space="preserve">
+    <value>TC No</value>
+  </data>
+  <data name="NextOCS" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="PreviousOCS" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="ChequeHasRejected" xml:space="preserve">
+    <value>Cheque Has Been Rejected</value>
+  </data>
+  <data name="FolderName" xml:space="preserve">
+    <value>FolderName</value>
+  </data>
+  <data name="GatewayFileListing" xml:space="preserve">
+    <value>Gateway File Listing</value>
+  </data>
+  <data name="MatchListing" xml:space="preserve">
+    <value>Match Listing</value>
+  </data>
+  <data name="UnmatchListing" xml:space="preserve">
+    <value>Unmatch Listing</value>
+  </data>
+  <data name="TransNo" xml:space="preserve">
+    <value>Trans No</value>
+  </data>
+  <data name="AIFDaily" xml:space="preserve">
+    <value>Daily</value>
+  </data>
+  <data name="AIFMonthly" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
+  <data name="SystemUserIdNotAllowedtoDelete" xml:space="preserve">
+    <value>System User Id is Not Allowed to be deleted.</value>
+  </data>
+  <data name="WorkstationScannerId" xml:space="preserve">
+    <value>Scanner ID</value>
+  </data>
+  <data name="ScannerWorkStationAlreadyExiststoDeleteorUpdate" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval</value>
+  </data>
+  <data name="ScannerWorkStationDeleteVerify" xml:space="preserve">
+    <value>Record successfully added to Terminal Scanner (Checker) and will not be deleted until it has been verified</value>
+  </data>
+  <data name="ScannerWorkStationUpdateVerify" xml:space="preserve">
+    <value>Record successfully added to Terminal Scanner (Checker) and will not be edited until it has been verified</value>
+  </data>
+  <data name="BankCodeAlreadyExiststoDeleteorUpdate" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval.</value>
+  </data>
+
+  <data name="BankHostCodeAlreadyExiststoDeleteorUpdate" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval.</value>
+  </data>
+  
+  <data name="BankCodeUpdateVerify" xml:space="preserve">
+    <value>Record successfully added to Bank Profile (Checker) and will not be edited until it has been verified.</value>
+  </data>
+  <data name="ScannerWorkStationCreateVerify" xml:space="preserve">
+    <value>Record successfully added to Terminal Scanner (Checker) and will not be inserted until it has been verified</value>
+  </data>
+  <data name="WorkstationScannerLocation" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="WorkstationScannerBank" xml:space="preserve">
+    <value>Bank Code</value>
+  </data>
+  <data name="WorkstationScannerBranchCode" xml:space="preserve">
+    <value>Branch Code</value>
+  </data>
+  <data name="ScannerWorkStation" xml:space="preserve">
+    <value>Maintenance - Terminal Scanner (Add)</value>
+  </data>
+  <data name="ScannerWorkStationEdit" xml:space="preserve">
+    <value>Maintenance - Terminal Scanner (Edit) </value>
+  </data>
+  <data name="ReturnCodeAlreadyExiststoDeleteorUpdate" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval</value>
+  </data>
+  <data name="ReturnCodeUpdateVerify" xml:space="preserve">
+    <value>Record successfully added to Return Code (Checker) and will not be edited until it has been verified</value>
+  </data>
+  <data name="ReturnCodeVerifyDelete" xml:space="preserve">
+    <value>Record successfully added to Return Code (Checker) and will not be deleted until it has been verified</value>
+  </data>
+  <data name="ReturnCodeCreateVerify" xml:space="preserve">
+    <value>Record successfully added to Return Code (Checker) and will not be inserted until it has been verified</value>
+  </data>
+  <data name="ReturnCodeSuccessfullyCreated" xml:space="preserve">
+    <value>Return Code Successfully Created</value>
+  </data>
+  <data name="RecordsSuccsesfullyRejected" xml:space="preserve">
+    <value>Record(s) successfully rejected</value>
+  </data>
+  <data name="BranchID" xml:space="preserve">
+    <value>Branch ID</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="BranchType" xml:space="preserve">
+    <value>Is HQ</value>
+  </data>
+  <data name="BranchCodeAlreadyExiststoDeleteorUpdate" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval</value>
+  </data>
+  <data name="BranchCodeVerifyDelete" xml:space="preserve">
+    <value>Record successfully added to Branch Profile (Checker) and will not be deleted until it has been verified</value>
+  </data>
+  <data name="BranchCodeMaintenanceAdd" xml:space="preserve">
+    <value>Maintenance - Branch Profile (Add)</value>
+  </data>
+  <data name="BranchCodeMaintenanceEdit" xml:space="preserve">
+    <value>Maintenance - Branch Profile (Edit)</value>
+  </data>
+  <data name="InternalBranchalreadyCreatedinApproveChecker" xml:space="preserve">
+    <value>Branch Code already created in Approve Checker</value>
+  </data>
+  <data name="NoChanges" xml:space="preserve">
+    <value>There is no changes in data.</value>
+  </data>
+    <data name="TaskPendingApproval" xml:space="preserve">
+    <value>Cannot Proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="InternalBranchAlreadyExiststoDeleteorUpdate" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval</value>
+  </data>
+  <data name="InternalBranchUpdateVerify" xml:space="preserve">
+    <value>Record successfully added to Internal Branch Profile (Checker) and will not be edited until it has been verified</value>
+  </data>
+  <data name="InternalBranchMaintenanceAdd" xml:space="preserve">
+    <value>Maintenance - Internal Branch Profile (Add)</value>
+  </data>
+  <data name="InternalBranchMaintenanceEdit" xml:space="preserve">
+    <value>Maintenance - Internal Branch Profile (Edit)</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Address1" xml:space="preserve">
+    <value>Address 1</value>
+  </data>
+  <data name="Address2" xml:space="preserve">
+    <value>Address 2</value>
+  </data>
+  <data name="Address3" xml:space="preserve">
+    <value>Address 3</value>
+  </data>
+  <data name="ClearingBranchID" xml:space="preserve">
+    <value>Clearing Branch ID</value>
+  </data>
+  <data name="InternalBranchVerifyDelete" xml:space="preserve">
+    <value>Record successfully added to Internal Branch Profile (Checker) and will not be deleted until it has been verified</value>
+  </data>
+  <data name="BranchCodeUpdateVerify" xml:space="preserve">
+    <value>Record successfully added to Branch Profile (Checker) and will not be edited until it has been verified</value>
+  </data>
+    <data name="AccountProfileAlreadyExist" xml:space="preserve">
+    <value>Account Number already exist</value>
+  </data>
+  <data name="AccountProfileAlreadyCreatedinApproveChecker" xml:space="preserve">
+    <value>Account Profile already created in Approve Checker</value>
+  </data>
+  <data name="AccountProfileCreateVerify" xml:space="preserve">
+    <value>Record successfully added to Account Profile (Checker) and will not be inserted until it has been verified</value>
+  </data>
+  <data name="AccountProfileAlreadyExiststoDeleteorUpdate" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval</value>
+  </data>
+  <data name="AccountProfileUpdateVerify" xml:space="preserve">
+    <value>Record successfully added to Account Profile (Checker) and will not be edited until it has been verified</value>
+  </data>
+    <data name="AccountProfileVerifyDelete" xml:space="preserve">
+    <value>Record successfully added to Account Profile (Checker) and will not be deleted until it has been verified</value>
+  </data>
+  <data name="AccountProfileMaintenanceAdd" xml:space="preserve">
+    <value>Maintenance - Account Profile (Add)</value>
+  </data>
+  <data name="AccountProfileMaintenanceEdit" xml:space="preserve">
+    <value>Maintenance - Account Profile (Edit)</value>
+  </data>
+  <data name="AccountName" xml:space="preserve">
+    <value>Account Name</value>
+  </data>
+  <data name="AccountType" xml:space="preserve">
+    <value>Account Type</value>
+  </data>
+  <data name="AccountStatus" xml:space="preserve">
+    <value>Account Status</value>
+  </data>
+  <data name="ContactNo" xml:space="preserve">
+    <value>Contact No</value>
+  </data>
+  <data name="Postcode" xml:space="preserve">
+    <value>Postcode</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="GroupMasterPendingVerify" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="AdministratorGroupChecker" xml:space="preserve">
+    <value>Administrator - Group Profile Checker Conformation</value>
+  </data>
+  <data name="GroupUserEmpty" xml:space="preserve">
+    <value>No available user.</value>
+  </data>
+  <data name="GroupMasterUpdateVerify" xml:space="preserve">
+    <value>Record successfully added to Group Profile (Checker) and will not be edited until it has been verified.</value>
+  </data>
+  <data name="GroupMasterDeleteVerify" xml:space="preserve">
+    <value>Record successfully added to Group Profile (Checker) and will not be deleted until it has been verified.</value>
+  </data>
+  <data name="AdministratorGroupChecker" xml:space="preserve">
+    <value>Administrator - Group Profile Checker Conformation</value>
+  </data>
+  <data name="GroupUserStillPendingforApproval" xml:space="preserve">
+    <value>Cannot proceed. User is still pending for approval.</value>
+  </data>
+  <data name="GroupDescCannotBeEmpty" xml:space="preserve">
+    <value>Group Description cannot be empty.</value>
+  </data>
+  <data name="GroupIDCannotBeEmpty" xml:space="preserve">
+    <value>Group Code cannot be empty.</value>
+  </data>
+  <data name="LargeAmountPendingforApproval" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="LargeAmountUpdateVerify" xml:space="preserve">
+    <value>Record successfully added to Large Amount Limit (Checker) and will not be edited until it has been verified</value>
+  </data>
+  <data name="VerificationLimitUpdateVerify" xml:space="preserve">
+    <value>Record successfully added to Verification Limit (Checker) and will not be edited until it has been verified.</value>
+  </data>
+  <data name="VerificationLimitPendingApproval" xml:space="preserve">
+    <value>Cannot Proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="ThresholdSettingSuccessVerify" xml:space="preserve">
+    <value>Record successfully added to Threshold Setting (Checker) and will not be edited until it has been verified.</value>
+  </data>
+  <data name="InvalidUserLoginIdorPassword" xml:space="preserve">
+    <value>Invalid User Login ID or Password</value>
+  </data>
+  <data name="Center" xml:space="preserve">
+    <value>Center</value>
+  </data>
+  <data name="PasswordcannotbesameasUserLogin" xml:space="preserve">
+    <value>Password cannot be same as User Login ID.</value>
+  </data>
+  <data name="PasswordcannotbesameasUserName" xml:space="preserve">
+    <value>Password cannot be same as User Name.</value>
+  </data>
+  <data name="UserLoginAlreadyTaken" xml:space="preserve">
+    <value>User Login ID already taken</value>
+  </data>
+  <data name="UserLoginCannotbeblank" xml:space="preserve">
+    <value>User Login ID cannot be blank</value>
+  </data>
+  <data name="UserLoginCannotBeLessthan" xml:space="preserve">
+    <value>User Login ID cannot be less than</value>
+  </data>
+  <data name="UserLoginCannotBeMorethan" xml:space="preserve">
+    <value>User Login ID cannot be more than.</value>
+  </data>
+  <data name="UserLoginmustbealphanumeric" xml:space="preserve">
+    <value>User Login ID must be alphanumeric.</value>
+  </data>
+  <data name="UserNamecannotbeblank" xml:space="preserve">
+    <value>User Name cannot be blank.</value>
+  </data>
+  <data name="UserSuccessfullyAddedtoApprovedUpdate" xml:space="preserve">
+    <value>Record successfully added to User Profile (Checker) and will not be edited until it has been verified.</value>
+  </data>
+  <data name="VerificationClassCannotBeBlank" xml:space="preserve">
+    <value>Verification Class cannot be blank.</value>
+  </data>
+  <data name="VerificationLimitCannotBeBlank" xml:space="preserve">
+    <value>Verification Limit cannot be blank.</value>
+  </data>
+  <data name="SecurityProfileSucessfullyAddedToUpdate" xml:space="preserve">
+    <value>Record successfully added to Security Profile (Checker) and will not be edited until it has been verified.</value>
+  </data>
+  <data name="SecurityProfileRecordPendingforApproval" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="TaskPendingApproval" xml:space="preserve">
+    <value>Cannot Proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="UsesrPendingApproval" xml:space="preserve">
+    <value>Cannot poceed. Record is still pending for approval.</value>
+  </data>
+  <data name="RecordsRejectSuccess" xml:space="preserve">
+    <value>Record(s) Successfully Rejected</value>
+  </data>
+  <data name="UserPendingApproval" xml:space="preserve">
+    <value>Cannot proceed. Record is still pending for approval.</value>
+  </data>
+  <data name="BankZoneAdd" xml:space="preserve">
+    <value>Maintenance - Bank Zone (Add)</value>
+  </data>
+  <data name="BankZoneAlreadyExiststoDeleteorUpdate" xml:space="preserve">
+    <value>Bank Zone already exists to Delete or Update!</value>
+  </data>
+  <data name="BankZoneCode" xml:space="preserve">
+    <value>Bank Zone Code:</value>
+  </data>
+  <data name="BankZoneCodecannotbeblank" xml:space="preserve">
+    <value>Bank Zone code cannot be blank!</value>
+  </data>
+  <data name="BankZoneCodeExist" xml:space="preserve">
+    <value>Bank Zone code already exist!</value>
+  </data>
+  <data name="BankZoneDesc" xml:space="preserve">
+    <value>Bank Zone Description:</value>
+  </data>
+  <data name="BankZoneDesccannotbeblank" xml:space="preserve">
+    <value>Bank Zone description cannot be blank!</value>
+  </data>
+  <data name="BankZoneEdit" xml:space="preserve">
+    <value>Maintenance - Bank Zone (Edit)</value>
+  </data>
+  <data name="BankZoneList" xml:space="preserve">
+    <value>Maintenance - Bank Zone Listing</value>
+  </data>
+  <data name="BankZoneSetting" xml:space="preserve">
+    <value>Maintenance - Bank Zone</value>
+  </data>
+  <data name="BankZoneSuccessfullyAddedtoApprovedCreate" xml:space="preserve">
+    <value>Record successfully added to Bank Zone (Checker) and will not be created until it has been verified</value>
+  </data>
+  <data name="BankZoneSuccessfullyAddedtoApprovedUpdate" xml:space="preserve">
+    <value>Record successfully added to Bank Zone (Checker) and will not be updated until it has been verified</value>
+  </data>
+  <data name="BankZoneSuccessfullyCreated" xml:space="preserve">
+    <value>Bank Zone Successfully Created!</value>
+  </data>
+  <data name="BankZoneSuccessfullyUpdated" xml:space="preserve">
+    <value>Bank Zone Successfully Updated</value>
+  </data>
+  <data name="BankZoneVerifyDelete" xml:space="preserve">
+    <value>Record successfully added to Bank Zone (Checker) and will not be deleted until it has been verified</value>
+  </data>
+  <data name="BankChargesType" xml:space="preserve">
+    <value>Bank Charges Type:</value>
+  </data>
+  <data name="BankChargesTypeAdd" xml:space="preserve">
+    <value>Maintenance - Bank Charges Type (Add)</value>
+  </data>
+  <data name="BankChargesTypeAlreadyExiststoDeleteorUpdate" xml:space="preserve">
+    <value>Bank Charges Type already exists to Delete or Update!</value>
+  </data>
+  <data name="BankChargesTypecannotbeblank" xml:space="preserve">
+    <value>Bank Charges Type cannot be blank!</value>
+  </data>
+  <data name="BankChargesTypeChecker" xml:space="preserve">
+    <value>Maintenance - Bank Charges Type(Checker)</value>
+  </data>
+  <data name="BankChargesTypeDesc" xml:space="preserve">
+    <value>Bank Charges Type Description:</value>
+  </data>
+  <data name="BankChargesTypeDesccannotbeblank" xml:space="preserve">
+    <value>Bank Charges Type Description cannot be blank!</value>
+  </data>
+  <data name="BankChargesTypeDescNotUpdated" xml:space="preserve">
+    <value>Bank Charges Type Description Not Updated!</value>
+  </data>
+  <data name="BankChargesTypeEdit" xml:space="preserve">
+    <value>Maintenance - Bank Charges Type (Edit)</value>
+  </data>
+  <data name="BankChargesTypeExist" xml:space="preserve">
+    <value>Bank Charges Type Already Exist!</value>
+  </data>
+  <data name="BankChargesTypeList" xml:space="preserve">
+    <value>Maintenance - Bank Charges Type Listing</value>
+  </data>
+  <data name="BankChargesTypeSuccessfullyAddedtoApprovedCreate" xml:space="preserve">
+    <value>Record successfully added to Bank Charges Type (Checker) and will not be added until it has been verified</value>
+  </data>
+  <data name="BankChargesTypeSuccessfullyAddedtoApprovedUpdate" xml:space="preserve">
+    <value>Record successfully added to Bank Charges Type (Checker) and will not be updated until it has been verified</value>
+  </data>
+  <data name="BankChargesTypeSuccessfullyCreated" xml:space="preserve">
+    <value>Bank Charges Type Successfully Created!</value>
+  </data>
+  <data name="BankChargesTypeSuccessfullyUpdated" xml:space="preserve">
+    <value>Bank Charges Type Successfully Updated!</value>
+  </data>
+  <data name="BankChargesTypeVerifyDelete" xml:space="preserve">
+    <value>Record successfully added to Bank Charges Type (Checker) and will not be deleted until it has been verified</value>
+  </data>
+ <data name="ClosingDate" xml:space="preserve">
+    <value>Closing Date</value>
+  </data>
+  <data name="ContactNumber" xml:space="preserve">
+    <value>Contact Number</value>
+  </data>
+  <data name="CustomerNumber" xml:space="preserve">
+    <value>Customer Number</value>
+  </data>
+  <data name="OpeningDate" xml:space="preserve">
+    <value>Opening Date</value>
+  </data>
+  <data name="AccountProfileCheckerChanges" xml:space="preserve">
+    <value>Maintenance - Account Profile</value>
+  </data>
+</root>

@@ -1,0 +1,40 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("Update", "TransCode", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+<div class="form-horizontal">
+    <h4>@Locale.TransactionCodeMaintenanceEdit</h4>
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <TBODY>
+            @if (ViewBag.transCode != null)
+            {
+                <TR>
+                    <Th>@Locale.TransactionCode </Th>
+
+                    <td>
+                        <input type="hidden" name="TransCode" maxlength="2" value="@ViewBag.transCode[0].fldTransCode" />
+                        @ViewBag.transCode[0].fldTransCode
+                    </td>
+
+                </TR>
+                <TR>
+                    <Th>@Locale.TransactionCodeDescription </Th>
+                    <td>
+                        <textarea type="text" name="TransCodeDesc" style="width:350px">@ViewBag.transCode[0].fldTransCodeDesc</textarea>
+                        <span class="red">*</span>
+                    </td>
+                </TR>
+
+            }
+        </TBODY>
+    </table>
+    <button type="submit" data-action="@Url.Action("/UPDATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIds.TransCode.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+    <a href="@Url.Action("Edit", new {transCodeParam = @ViewBag.transCode[0].fldTransCode})" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.TransCode.INDEX) ? "" : "hidden")">@Locale.btnReset</a>
+    <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.TransCode.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+
+</div>
+}

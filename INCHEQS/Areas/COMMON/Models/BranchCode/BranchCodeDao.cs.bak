@@ -1,0 +1,655 @@
+using INCHEQS.Common;
+using INCHEQS.DataAccessLayer;
+using INCHEQS.PCHC.Resouce;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using INCHEQS.Security;
+using INCHEQS.Common.Resources;
+
+
+namespace INCHEQS.Areas.COMMON.Models.BranchCode
+{
+    public class BranchCodeDao : IBranchCodeDao
+    {
+        private readonly ApplicationDbContext dbContext;
+
+        public SqlDbType branchId
+        {
+            get;
+            private set;
+        }
+
+        public BranchCodeDao(ApplicationDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
+        public void AddtoBranchMasterTempToDelete(string branchId)
+        {
+            string str = "Insert into tblBranchMasterTemp (fldBranchId,fldBranchCode,fldBranchDesc, fldCreateUserId, fldCreateTimeStamp, fldUpdateUserId, fldUpdateTimeStamp)  Select fldBranchId,fldBranchCode,fldBranchDesc, fldCreateUserId, fldCreateTimeStamp, fldUpdateUserId, fldUpdateTimeStamp from tblBranchMaster WHERE fldBranchId=@fldBranchId  Update tblBranchMasterTemp SET fldApproveStatus=@fldApproveStatus WHERE fldBranchId=@fldBranchId ";
+            this.dbContext.ExecuteNonQuery(str, new SqlParameter[] { new SqlParameter("@fldBranchId", branchId), new SqlParameter("@fldApproveStatus", "D") });
+        }
+
+        //public bool CheckBranchCodeExist(FormCollection col)
+        //{
+        //	string str = col["txtBranchCode1"].Substring(0, 2);
+        //	string str1 = " SELECT * FROM tblBranchMaster WHERE fldBranchCode=@branchcode and fldBankCode=@fldBankCode and fldStateCode=@fldStateCode";
+        //	return this.dbContext.CheckExist(str1, new SqlParameter[] { new SqlParameter("@branchcode", col["branchCode"]), new SqlParameter("@fldBankCode", col["SelectBank"]), new SqlParameter("@fldStateCode", str) });
+        //}
+
+        public bool CheckBranchCodeExist(FormCollection col)
+        {
+            string branchCode = col["branchCode"];
+            string bankCode = col["fldBankCode"];
+
+            //string stateCode = branchCode.Substring(0, 2);
+            string stmt = " SELECT * FROM tblBranchMaster WHERE fldBranchCode=@branchcode and fldBankCode=@bankCode";
+            return dbContext.CheckExist(stmt, new[] {
+                new SqlParameter("@branchcode", col["branchCode"]),
+                new SqlParameter("@bankCode", col["fldbankCode"]),
+
+            });
+
+        }
+
+        //      public bool CheckBranchCodeExistInTemp(FormCollection col)
+        //{
+        //	string str = col["txtBranchCode1"].Substring(0, 2);
+        //	string str1 = " SELECT * FROM tblBranchMasterTemp WHERE fldBranchCode=@branchcode and fldBankCode=@fldBankCode and fldStateCode=@fldStateCode";
+        //	return this.dbContext.CheckExist(str1, new SqlParameter[] { new SqlParameter("@branchcode", col["branchCode"]), new SqlParameter("@fldBankCode", col["SelectBank"]), new SqlParameter("@fldStateCode", str) });
+        //}
+
+        public bool CheckBranchCodeExistInTemp(FormCollection col)
+        {
+            string branchCode = col["branchCode"];
+            string bankCode = col["fldBankCode"];
+
+            //string stateCode = branchCode.Substring(0, 2);
+            string stmt = " SELECT * FROM tblBranchMasterTemp WHERE fldBranchCode=@branchcode and fldBankCode=@bankCode";
+            return dbContext.CheckExist(stmt, new[] {
+                new SqlParameter("@branchcode", col["branchCode"]),
+                new SqlParameter("@bankCode", col["fldBankCode"]),
+                //new NpgsqlParameter("@fldStateCode", stateCode)
+            });
+        }
+
+        public string condition()
+        {
+            return "len(fldBranchCode)<5";
+        }
+
+        public void CreateBranchMasterTemp(FormCollection col, string userId)
+        {
+            string str = "";
+            string str1 = col["txtBranchCode1"].Substring(0, 2);
+            str = (col["fldDisable"] != "Y" ? "N" : "Y");
+            DataTable dataTable = new DataTable();
+            if (this.dbContext.GetRecordsAsDataTable("Select * from tblBranchMasterTemp", null).Rows.Count != 0)
+            {
+                string str2 = "Insert into tblBranchMasterTemp (fldBranchId, fldStateCode, fldBranchCode, fldBranchDesc, fldDisable,fldCreateTimeStamp, fldCreateUserId, fldBankCode, fldApproveStatus) values ((select top 1 fldBranchId+1 from tblBranchMasterTemp order by fldCreateTimeStamp desc), @fldStateCode, @fldBranchCode, @fldBranchDesc, @fldDisable,@fldCreateTimeStamp, @fldCreateUserId, @fldBankCode, @fldApproveStatus)";
+                this.dbContext.ExecuteNonQuery(str2, new SqlParameter[] { new SqlParameter("fldStateCode", str1), new SqlParameter("fldBranchCode", col["branchCode"]), new SqlParameter("fldBranchDesc", col["branchDesc"]), new SqlParameter("fldDisable", str), new SqlParameter("fldCreateTimeStamp", DateUtils.GetCurrentDatetime()), new SqlParameter("fldCreateUserId", userId), new SqlParameter("fldBankCode", col["SelectBank"]), new SqlParameter("fldApproveStatus", "A") });
+            }
+            else
+            {
+                string str3 = "Insert into tblBranchMasterTemp (fldBranchId, fldStateCode, fldBranchCode, fldBranchDesc, fldDisable,fldCreateTimeStamp, fldCreateUserId, fldBankCode, fldApproveStatus) values ((select top 1 fldBranchId+1 from tblBranchMaster order by fldCreateTimeStamp desc), @fldStateCode, @fldBranchCode, @fldBranchDesc, @fldDisable,@fldCreateTimeStamp, @fldCreateUserId, @fldBankCode, @fldApproveStatus)";
+                this.dbContext.ExecuteNonQuery(str3, new SqlParameter[] { new SqlParameter("fldStateCode", str1), new SqlParameter("fldBranchCode", col["branchCode"]), new SqlParameter("fldBranchDesc", col["branchDesc"]), new SqlParameter("fldDisable", str), new SqlParameter("fldCreateTimeStamp", DateUtils.GetCurrentDatetime()), new SqlParameter("fldCreateUserId", userId), new SqlParameter("fldBankCode", col["SelectBank"]), new SqlParameter("fldApproveStatus", "A") });
+            }
+        }
+
+        public void CreateInBranchMaster(string branchId)
+        {
+            string str = "Insert into tblBranchMaster(fldStateCode,fldBranchCode,fldBranchDesc,fldDisable,fldCreateTimeStamp,fldCreateUserId,fldBankCode) (Select fldStateCode,fldBranchCode,fldBranchDesc,fldDisable,fldCreateTimeStamp,fldCreateUserId,fldBankCode from tblBranchMasterTemp tblBankMasterTemp WHERE fldBranchCode = @fldBranchId) ";
+            this.dbContext.ExecuteNonQuery(str, new SqlParameter[] { new SqlParameter("@fldBranchId", branchId) });
+        }
+
+        public void DeleteInBranchMasters(string branchId)
+        {
+            string str = "delete from tblBranchMaster where fldBranchId=@fldBranchId";
+            this.dbContext.ExecuteNonQuery(str, new SqlParameter[] { new SqlParameter("@fldBranchId", branchId) });
+        }
+
+        public void DeleteInBranchMasterTemp(string branchId)
+        {
+            string str = "delete from tblBranchMasterTemp where fldBranchCode=@fldBranchId";
+            this.dbContext.ExecuteNonQuery(str, new SqlParameter[] { new SqlParameter("@fldBranchId", branchId) });
+        }
+
+        public List<BranchCodeModel> getBank()
+        {
+            DataTable dataTable = new DataTable();
+            List<BranchCodeModel> branchCodeModels = new List<BranchCodeModel>();
+            dataTable = this.dbContext.GetRecordsAsDataTable("select * from tblBankMaster", null);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                BranchCodeModel branchCodeModel = new BranchCodeModel()
+                {
+                    bankCode = row["fldBankCode"].ToString(),
+                    bankDesc = row["fldBankDesc"].ToString()
+                };
+                branchCodeModels.Add(branchCodeModel);
+            }
+            return branchCodeModels;
+        }
+
+        public DataTable getBranchCode(string branchId)
+        {
+            DataTable dataTable = new DataTable();
+            string str = "select * from tblbranchmaster WHERE fldbranchID=@branchid";
+            return this.dbContext.GetRecordsAsDataTable(str, new SqlParameter[] { new SqlParameter("@branchid", branchId) });
+        }
+
+        public DataTable ListAllBranchCode()
+        {
+            DataTable dataTable = new DataTable();
+            return this.dbContext.GetRecordsAsDataTable("select * from tblbranchmaster WHERE 1=1 order by fldStateCode, fldBranchCode", null);
+        }
+
+        public void UpdateBranchMaster(FormCollection col, string userId)
+        {
+            string str = "";
+            str = (col["fldDisable"] != "Y" ? "N" : "Y");
+            string str1 = "update tblBranchMaster set fldBranchDesc=@fldBranchDesc, fldDisable=@fldDisable, fldUpdateUserId=@fldUpdateUserId, fldUpdateTimeStamp=@fldUpdateTimeStamp where fldBranchId=@fldBranchId";
+            this.dbContext.ExecuteNonQuery(str1, new SqlParameter[] { new SqlParameter("fldBranchId", col["fldBranchId"]), new SqlParameter("fldBranchDesc", col["branchDesc"]), new SqlParameter("fldDisable", str), new SqlParameter("fldUpdateUserId", userId), new SqlParameter("fldUpdateTimeStamp", DateUtils.GetCurrentDatetime()) });
+        }
+
+        //public List<string> ValidateCreate(FormCollection collection)
+        //{
+        //    List<string> strs = new List<string>();
+        //    if (this.CheckBranchCodeExist(collection))
+        //    {
+        //        strs.Add(Locale.BranchCodeAlreadyExist);
+        //    }
+
+        //    bool IsBranchMasterTempExist = branchcodedao.CheckBranchCodeTempById(collection["branchId"]);
+        //    if (IsBranchMasterTempExist == true)
+        //    {
+        //       strs.Add(Locale.BranchCodealreadyCreatedinApproveChecker);
+        //    }
+        //    if (!(new Regex("^[0-9]+$")).IsMatch(collection["branchCode"]))
+        //    {
+        //        strs.Add("Branch code must be numbers");
+        //    }
+        //    if (collection["BranchCode"].Length != 4)
+        //    {
+        //        strs.Add("Code must be equal to 4");
+        //    }
+        //    return strs;
+        //}
+
+        public async Task<List<string>> ValidateCreateAsync(FormCollection col)
+        {
+            List<string> strs = await Task.Run<List<string>>(() => this.ValidateCreate(col));
+            return strs;
+        }
+
+        public bool CreateBranchMaster(FormCollection col)
+        {
+            string activ = "N";
+            string isHQ = "2";
+
+            if (col["chkActive"] != null)
+            {
+                activ = "Y";
+            }
+
+            if (col["chkHQ"] != null)
+            {
+                isHQ = "1";
+            }
+
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", col["BranchId"]));
+            sqlParameterNext.Add(new SqlParameter("@fldlocationcode", col["locationcode"]));
+            sqlParameterNext.Add(new SqlParameter("@fldBankCode", col["fldBankCode"].Substring(0, 3)));
+            sqlParameterNext.Add(new SqlParameter("@fldBranchCode", col["BranchCode"]));
+            sqlParameterNext.Add(new SqlParameter("@fldBranchDesc", col["BranchDesc"]));
+            sqlParameterNext.Add(new SqlParameter("@fldActive", activ));
+            sqlParameterNext.Add(new SqlParameter("@fldbranchtype", isHQ));
+
+            sqlParameterNext.Add(new SqlParameter("@fldCreateUserId", CurrentUser.Account.UserId));
+            sqlParameterNext.Add(new SqlParameter("@fldCreateTimeStamp", DateTime.Now));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", DateTime.Now));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", CurrentUser.Account.UserId));
+
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciBranchMaster", sqlParameterNext.ToArray());
+
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+
+            return blnResult;
+        }
+
+        public List<String> ValidateUpdate(FormCollection col)
+        {
+            List<String> err = new List<String>();
+
+            if (col["branchDesc"].Equals(""))
+            {
+                err.Add("Branch Description cannot be empty");
+            }
+
+            return err;
+        }
+
+        public BranchCodeModel GetBranchCodeDataById(string id)
+        {
+            BranchCodeModel branchCode = new BranchCodeModel();
+            DataTable resultTable = new DataTable();
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", id));
+
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgBranchMasterDataById", sqlParameterNext.ToArray());
+
+            if (resultTable.Rows.Count > 0)
+            {
+                DataRow row = resultTable.Rows[0];
+
+                branchCode.branchId = row["fldBranchId"].ToString();
+                branchCode.locationCode = row["fldLocationCode"].ToString();
+
+                branchCode.bankCode = row["fldBankCode"].ToString();
+                branchCode.branchCode = row["fldBranchCode"].ToString();
+                branchCode.branchDesc = row["fldBranchDesc"].ToString();
+
+                branchCode.active = row["fldActive"].ToString();
+                branchCode.branchType = row["fldBranchType"].ToString();
+
+                branchCode.createUserId = row["fldCreateUserId"].ToString();
+                branchCode.createTimeStamp = DateUtils.formatDateFromSql(row["fldCreateTimeStamp"].ToString());
+                branchCode.updateUserId = row["fldUpdateUserId"].ToString();
+                branchCode.updateTimeStamp = row["fldUpdateTimeStamp"].ToString();
+                branchCode.bankCodeIdForDelete = row["fldBranchIdForDelete"].ToString();
+                branchCode.reportTitle = row["ReportTitle"].ToString();
+
+
+            }
+
+            return branchCode;
+
+        }
+
+        public bool UpdateBranchCode(FormCollection col)
+        {
+            string activ = "N";
+            string isHQ = "2";
+
+            if (col["chkActive"] != null)
+            {
+                activ = "Y";
+            }
+
+            if (col["chkHQ"] != "2")
+            {
+                isHQ = "1";
+            }
+
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", col["BranchId"]));
+            sqlParameterNext.Add(new SqlParameter("@fldBranchDesc", col["BranchDesc"]));
+            sqlParameterNext.Add(new SqlParameter("@fldActive", activ));
+            sqlParameterNext.Add(new SqlParameter("@fldbranchtype", isHQ));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", DateTime.Now));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", CurrentUser.Account.UserId));
+
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcuBranchMaster", sqlParameterNext.ToArray());
+
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+
+            return blnResult;
+        }
+
+        public bool CheckBranchCodeTempById(string id)
+        {
+            bool Flag = false;
+            DataTable resultTable = new DataTable();
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", id));
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgBranchMasterTempById", sqlParameterNext.ToArray());
+
+            if (resultTable.Rows.Count > 0)
+            {
+                Flag = true;
+            }
+            return Flag;
+        }
+        public bool CreateBranchCodeTemp(FormCollection col,string action)
+        {
+            string activ = "N";
+            string isHQ = "2";
+
+            if (col["chkActive"] != null)
+            {
+                activ = "Y";
+            }
+
+            if (col["chkHQ"] != null)
+            {
+                isHQ = "1";
+            }
+
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", col["BranchId"]));
+            sqlParameterNext.Add(new SqlParameter("@fldBranchDesc", col["BranchDesc"]));
+            sqlParameterNext.Add(new SqlParameter("@fldActive", activ));
+            sqlParameterNext.Add(new SqlParameter("@fldbranchtype", isHQ));
+
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", DateTime.Now));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", CurrentUser.Account.UserId));
+
+            if (action.Equals("create"))
+            {
+                sqlParameterNext.Add(new SqlParameter("@fldLocationCode", col["locationCode"]));
+                //sqlParameterNext.Add(new SqlParameter("@fldBankCode", col["bankCode"]));
+                sqlParameterNext.Add(new SqlParameter("@fldBankCode", col["fldBankCode"].Substring(0, 3)));
+                sqlParameterNext.Add(new SqlParameter("@fldBranchCode", col["branchCode"]));
+
+                //sqlParameterNext.Add(new SqlParameter("@fldLocationCode", col["BranchId"].Substring(0, 1)));
+                //sqlParameterNext.Add(new SqlParameter("@fldBankCode", col["BranchId"].Substring(1, 3)));
+                //sqlParameterNext.Add(new SqlParameter("@fldBranchCode", col["BranchId"].Substring(4, 4)));
+
+                //sqlParameterNext.Add(new SqlParameter("@fldCreateUserId", col["createUserId"]));
+                //sqlParameterNext.Add(new SqlParameter("@fldCreateTimeStamp", DateTime.Parse(col["createTimeStamp"]).ToString()));
+                sqlParameterNext.Add(new SqlParameter("@fldCreateTimeStamp", DateTime.Now));
+                sqlParameterNext.Add(new SqlParameter("@fldCreateUserId", CurrentUser.Account.UserId));
+                sqlParameterNext.Add(new SqlParameter("@fldApproveStatus", "A"));
+
+            }
+
+            else if (action.Equals("update"))
+            {
+                sqlParameterNext.Add(new SqlParameter("@fldLocationCode", col["BranchId"].Substring(0, 1)));
+                sqlParameterNext.Add(new SqlParameter("@fldBankCode", col["BranchId"].Substring(1, 3)));
+                sqlParameterNext.Add(new SqlParameter("@fldBranchCode", col["BranchId"].Substring(4, 4)));
+
+                sqlParameterNext.Add(new SqlParameter("@fldCreateUserId", col["createUserId"]));
+                sqlParameterNext.Add(new SqlParameter("@fldCreateTimeStamp", DateTime.Parse(col["createTimeStamp"])));
+                sqlParameterNext.Add(new SqlParameter("@fldApproveStatus", "U"));
+
+            }
+
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciBranchMasterTemp", sqlParameterNext.ToArray());
+
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+
+            return blnResult;
+        }
+
+        public bool DeleteBranchCode(string id)
+        {
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", id));
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcdBranchMaster", sqlParameterNext.ToArray());
+
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+            return blnResult;
+        }
+
+        public bool CreateBranchCodeTempToDelete(String id)
+        {
+
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", id));
+
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciBranchMasterTempToDelete", sqlParameterNext.ToArray());
+
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+
+            return blnResult;
+        }
+
+        public bool MoveToBranchCodeFromTemp(String id)
+        {
+
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", id));
+
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciBranchMasterFromTemp", sqlParameterNext.ToArray());
+
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+
+            return blnResult;
+        }
+
+        public bool UpdateBranchCodeById(string id)
+        {
+            ReturnCodeModel bankCode = new ReturnCodeModel();
+            bool Flag = false;
+            DataTable resultTable = new DataTable();
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", id));
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcuBranchMasterById", sqlParameterNext.ToArray());
+
+            if (resultTable.Rows.Count > 0)
+            {
+                Flag = true;
+            }
+            return Flag;
+        }
+
+        public bool DeleteBranchCodeTemp(string id)
+        {
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", id));
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcdBranchMasterTemp", sqlParameterNext.ToArray());
+
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+            return blnResult;
+        }
+
+        public bool getHQ(FormCollection col)
+        {
+
+            bool Flag = false;
+            DataTable resultTable = new DataTable();
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldBankCode", col["branchId"].Substring(1,3)));
+            sqlParameterNext.Add(new SqlParameter("@fldBranchCode", col["branchId"].Substring(4, 4)));
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgHQ", sqlParameterNext.ToArray());
+
+            if (resultTable.Rows.Count > 0)
+            {
+                Flag = true;
+            }
+            return Flag;
+
+            //DataTable ds = new DataTable();
+            //List<BranchCodeModel> branch = new List<BranchCodeModel>();
+            //string stmt = "select fldbranchtype from tblbranchmaster where fldbankcode=@fldBankCode and fldbranchcode!=@fldBranchCode and fldbranchtype = '1'";
+            //ds = dbContext.GetRecordsAsDataTable(stmt, new[] {
+            //    new NpgsqlParameter("@fldBankCode", col["SelectBank"]) ,new NpgsqlParameter("@fldBranchCode", col["branchcode"])});
+
+
+            //if (col["chkHQ"] == "0")
+            //{
+            //    return false;
+            //}
+
+            //else
+            //{
+            //    if (((ds.Rows.Count > 0)))
+            //    {
+            //        return true;
+            //    }
+            //    else
+            //    {
+            //        return false;
+            //    }
+
+            //}
+        }
+
+        public List<String> ValidateCreate(FormCollection col)
+        {
+            List<String> err = new List<String>();
+            
+
+            if (col["branchId"].Equals(""))
+            {
+                err.Add("Branch ID cannot be empty");
+            }
+            else
+            {
+                bool bankHQ = getHQ(col);
+            bool IsBranchMasterExist = CheckBranchCodeById(col["branchId"]);
+                bool IsLocationMasterExist = CheckLocationCodeById(col["branchId"]);
+
+            if (IsBranchMasterExist == true)
+            {
+                err.Add(Locale.BranchCodeAlreadyExist);
+            }
+
+            bool IsBranchMasterTempExist = CheckBranchCodeTempById(col["branchId"]);
+            if (IsBranchMasterTempExist == true)
+            {
+                err.Add(Locale.BranchCodealreadyCreatedinApproveChecker);
+            }
+
+                if(col["chkHQ"] == "1")
+                {
+
+                    if (bankHQ == true)
+                    {
+                        err.Add("HQ for current bank already exist");
+                    }
+                }
+                if (IsLocationMasterExist == false)
+                {
+                    err.Add("Invalid Location code");
+                }
+            if (!(new Regex("^[0-9]+$")).IsMatch(col["branchCode"]))
+            {
+                err.Add("Branch code must be numbers");
+            }
+            if (col["fldBankCode"].Equals(""))
+            {
+                        err.Add("Invalid Bank code");
+            }
+            if (col["branchCode"].Length != 4)
+            {
+                err.Add("Branch Code must be equal to 4");
+            }
+            if (col["branchDesc"].Equals(""))
+            {
+                    err.Add("Branch Description cannot be empty");
+            }
+            }
+            
+        
+            return err;
+        }
+
+        public bool CheckBranchCodeById(string id)
+        {
+            bool Flag = false;
+            DataTable resultTable = new DataTable();
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", id));
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgBranchMasterById", sqlParameterNext.ToArray());
+
+            if (resultTable.Rows.Count > 0)
+            {
+                Flag = true;
+            }
+            return Flag;
+        }
+
+        public bool CheckLocationCodeById(string id)
+        {
+            bool Flag = false;
+            DataTable resultTable = new DataTable();
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", id));
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgLocationMasterById", sqlParameterNext.ToArray());
+
+            if (resultTable.Rows.Count > 0)
+            {
+                Flag = true;
+            }
+            return Flag;
+        }
+    }
+}

@@ -1,0 +1,42 @@
+﻿@using INCHEQS.Common
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @Class = "form-inline secure-form" }))
+{
+    @Html.AntiForgeryToken();
+    @*<input type="hidden" value="@Convert.ToDateTime(DateUtils.GetCurrentDate()).ToString("dd-MM-yyyy")" name="fldClearDate" />*@
+
+    <div>
+        <table class="table table-bordered" style="width:50%; font-weight: bold">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>PPS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td>@ViewBag.totalCount.minClearDate</td>
+                </tr>
+                <tr>
+                    <td>Unmatched Item(s)</td>
+                    <td>@ViewBag.totalCount.totalUnMatched</td>
+                </tr>
+                <tr>
+                    <td>Matched Item(s)</td>
+                    <td>@ViewBag.totalCount.totalMatched</td>
+                </tr>
+            </tbody>
+
+        </table>
+
+        
+
+    </div>
+    @*<div id="resultContainer"></div>*@
+}
+
+@*<div id="dataProcessContainer" data-processname="@ViewBag.ProcessName"></div>
+<input id="dataProcessType" value="Other" type="hidden">
+
+@Scripts.Render("~/bundles/DataProcessRealTime")*@

@@ -1,0 +1,78 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "InternalBranch", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Locale.InternalBranchMaintenance</h4>
+        <hr />
+
+        <table class="table form-table table-no-border">
+
+            <tbody>
+                <tr>
+                    <th>@Locale.BankDescription</th>
+                    <td>
+                        <input type="hidden" value="@CurrentUser.Account.BankCode" name="bankDesc" />
+                        @CurrentUser.Account.BankCode - @CurrentUser.Account.BankDesc
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BranchCode</th>
+                    <td>
+                        <input type="hidden" value="@ViewBag.InternalBranch.fldConBranchCode" name="txtBranchCode2" maxlength="4" />@ViewBag.InternalBranch.fldBranchCode
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.InternalBranchCode</th>
+                    <td>
+                        <input type="hidden" name="txtBranchCode" />@ViewBag.InternalBranch.fldConBranchCode
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BranchDescription</th>
+                    <td>
+                        <input type="text" value="@ViewBag.InternalBranch.fldBranchDesc" name="txtBranchDesc"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BranchAbbreviationName</th>
+                    <td>
+                        <input type="text" value="@ViewBag.InternalBranch.fldBranchAbb" name="txtBranchAbb" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.EmailAddress</th>
+                    <td>
+                        <input type="text" value="@ViewBag.InternalBranch.fldEmailAddress" name="txtEmailAddress" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.Addressline1</th>
+                    <td>
+                        <input type="text" value="@ViewBag.InternalBranch.Address1" name="txtAddress1" />
+                    </td>
+
+                </tr>
+                <tr>
+                    <th>@Locale.Addressline2</th>
+                    <td>
+                        <input type="text" value="@ViewBag.InternalBranch.Address2" name="txtAddress2" />
+                    </td>
+
+                </tr>
+                <tr>
+                    <th>@Locale.Addressline3</th>
+                    <td>
+                        <input type="text" value="@ViewBag.InternalBranch.Address3" name="txtAddress3" />
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.InternalBranch.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default  secure-nav @(CurrentUser.HasTask(TaskIds.InternalBranch.INDEX) ? "" : "hidden")">@Locale.BackBtn</a>
+     </div>
+}

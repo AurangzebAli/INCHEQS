@@ -1,0 +1,60 @@
+﻿
+@using INCHEQS.Resources
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
+    <title>INCHEQS - @ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/appConfig")
+
+
+</head>
+<body class="white-bg">
+    <div class="container body-content login-content">
+
+
+        <div class="row">
+            <div class="login col-md-10 col-md-offset-1">
+                <div class="login-left col-md-6">
+                    <h2>INCHEQS-ICS</h2>
+                    <br />
+                    <p><h5>@Locale.ThisSystemAllowsYou</h5></p>
+                    <p><h5>@Locale.PleaseKeyInYour</h5></p>
+                    <p><h5>@Locale.UseLocalAccount</h5></p>
+                    <br />
+                    <!-- <p><h5>@System.Configuration.ConfigurationManager.AppSettings["Version"]</h5></p>-->
+                    <p><h5>@ViewBag.SystemVersion</h5></p>
+                    <p><h4><strong class="error-message">@ViewBag.error</strong></h4></p>
+                </div>
+
+                <div class="login-right col-md-6">
+
+                    <img src="@Url.Content("~/Content/Images/logo.jpg")" class="img-responsive" height="50%" width="50%" />
+                    <!-- Notice Begin Here -->
+                    @Html.Partial("Partials/_Notice")
+
+                    @RenderBody()
+
+                </div>
+                <hr />
+                <span>@*@System.Security.Principal.WindowsIdentity.GetCurrent().Name*@</span>
+            </div>
+        </div>
+        <div class="footer-login col-md-8 col-md-offset-2">
+            <p class="text-center">
+                @Locale.LoginWarning
+                <br />
+                &copy; @DateTime.Now.Year - INSITE MY SYSTEMS SDN BHD
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>
+

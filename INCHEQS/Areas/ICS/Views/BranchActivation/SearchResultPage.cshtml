@@ -1,0 +1,451 @@
+﻿@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+<div id="" class="" style="vertical-align:top;">
+    <!--table from tblCutOfftime-->
+    <table class="" style="width:50%;">
+        <tr>
+            <td>CCU Verification:</td>
+            <td>
+                
+                    <input type="radio" name="ccuActivate" value="1" @(ViewBag.ChequeActivation.Rows.Count != 0 ? (ViewBag.ChequeActivation.Rows[0]["fldKLActivation"].Trim() == "1" ? "checked" : "") : "")> @Locale.Activate
+            </td>
+            <td>
+                <input type="radio" name="ccuActivate" value="0" @(ViewBag.ChequeActivation.Rows.Count != 0 ? (ViewBag.ChequeActivation.Rows[0]["fldKLActivation"].Trim() == "0" ? "checked" : "") : "") @(ViewBag.ChequeActivation.Rows.Count != 0 ? (ViewBag.ChequeActivation.Rows[0]["fldKLActivation"] == null ? "checked" : ""):"checked")> @Locale.Deactivate
+
+                
+            </td>
+
+        </tr>
+
+
+
+        <tr>
+            <td>@Locale.BranchVerification:</td>
+            <td>
+                
+                <input type="radio" name="branchVerify" value="1" @(ViewBag.ChequeActivation.Rows.Count != 0 ? (ViewBag.ChequeActivation.Rows[0]["fldBPCKLActivation"].Trim() == "1" ? "checked" : "") : "")> @Locale.Activate
+
+
+            </td>
+            <td>
+
+                <input type="radio" name="branchVerify" value="0" @(ViewBag.ChequeActivation.Rows.Count != 0 ? (ViewBag.ChequeActivation.Rows[0]["fldBPCKLActivation"].Trim() == "0" ? "checked" : ""):"") @(ViewBag.ChequeActivation.Rows.Count != 0 ?(ViewBag.ChequeActivation.Rows[0]["fldBPCKLActivation"] == null ? "checked" : "") : "checked")> @Locale.Deactivate
+
+            </td>
+        </tr>
+        
+        <tr >
+            <td style="padding-top: 20px"> Clearing Types </td>
+            <td style="padding-top: 20px">Start Time(hh:mm)</td>
+            <td style="padding-top: 20px">End Time(hh:mm)</td>
+
+        </tr>
+
+        <tr>
+
+
+            <td style="padding-top:20px">InterCity Clearings</td>
+            <td style="width:20%;padding-top:20px">
+                <select name="startHourInterCityClearing" maxlength="20">
+                    @for (int hour = 0; hour < 24; hour++)
+                    {
+                        if (ViewBag.CutOfftime.Count!=0)
+                        {
+                            if (ViewBag.CutOfftime[0].cutOffTimeHour != null && ViewBag.CutOfftime[0].cutOffTimeHour != "")
+                            {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == ViewBag.CutOfftime[0].startCutOffTimeHour ? "selected" : "")>@hour.ToString("00")</option>
+                            }
+                        }
+                        else
+                        {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == "09" ? "selected" : "")>@hour.ToString("00")</option>
+                        }
+
+                    }
+                </select><span>:</span>
+                         <select name="startMinInterCityClearing" maxlength="20">
+
+                             @for (int min = 0; min < 60; min++)
+                             {
+                                 if (ViewBag.CutOfftime.Count != 0)
+                                 {
+                                     <option value="@min.ToString("00")" @(ViewBag.CutOfftime[0].startCutOffTimeMin == min.ToString("00") ? "selected" : "")>@min.ToString("00")</option>
+                                 }
+                                 else
+                                 {
+                                     <option value="@min.ToString("00")" >@min.ToString("00")</option>
+                                 }
+                             }
+                         </select>
+            </td>
+
+            <td style="padding-top:20px">
+                <select name="endHourInterCityClearing" maxlength="20">
+                    @for (int hour = 0; hour < 24; hour++)
+                    {
+                        if (ViewBag.CutOfftime.Count != 0)
+                        {
+                            if (ViewBag.CutOfftime[0].cutOffTimeHour != null && ViewBag.CutOfftime[0].cutOffTimeHour != "")
+                            {
+                                <option value="@hour.ToString("00")" @(hour.ToString("00") == ViewBag.CutOfftime[0].cutOffTimeHour ? "selected" : "")>@hour.ToString("00")</option>
+
+                            }
+                        }
+                        else
+                        {
+                                <option value="@hour.ToString("00")" @(hour.ToString("00") == "12" ? "selected" : "")>@hour.ToString("00")</option>
+
+                        }
+                    }
+                    </select><span>:</span>
+                <select name="endMinInterCityClearing" maxlength="20">
+                    @for (int min = 0; min < 60; min++)
+                    {
+                        if (ViewBag.CutOfftime.Count != 0)
+                        {
+
+                            if (ViewBag.CutOfftime[0].cutOffTimeMin != null && ViewBag.CutOfftime[0].cutOffTimeMin != "")
+                            {
+                            <option value="@min.ToString("00")" @(ViewBag.CutOfftime[0].cutOffTimeMin == min.ToString("00") ? "selected" : "")>@min.ToString("00")</option>
+
+                            }
+                        }
+                        else
+                        {
+                            <option value="@min.ToString("00")" @("45" == min.ToString("00") ? "selected" : "")>@min.ToString("00")</option>
+
+                        }
+                    }
+                </select>
+
+            </td>
+            <td>
+                
+                <input type="radio" name="cutOffActivateInterCityClearing" value="1" @(ViewBag.CutOfftime.Count != 0 ? ViewBag.CutOfftime[0].fldActivation == "1" ? "checked" : "":"")> @Locale.Activate
+
+            </td>
+            <td>
+                
+                    <input type="radio" name="cutOffActivateInterCityClearing" value="0"  @(ViewBag.CutOfftime.Count != 0 ? (ViewBag.CutOfftime[0].fldActivation == "0" ? "checked" : "") : "checked") @(ViewBag.CutOfftime.Count != 0 ?(ViewBag.CutOfftime[0].fldActivation == null ? "checked" : "") : "checked") > @Locale.Deactivate
+                
+            </td>
+
+        </tr>
+        <tr>
+
+
+            <td>Normal Clearings</td>
+            <td>
+                <select name="startHourNormalClearing" maxlength="20">
+                    @for (int hour = 0; hour < 24; hour++)
+                    {
+                        if (ViewBag.CutOfftime.Count > 1)
+                        {
+                            if (ViewBag.CutOfftime[1].cutOffTimeHour != null && ViewBag.CutOfftime[1].cutOffTimeHour != "")
+                            {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == ViewBag.CutOfftime[1].startCutOffTimeHour ? "selected" : "")>@hour.ToString("00")</option>
+                            }
+                        }
+                        else
+                        {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == "09" ? "selected" : "")>@hour.ToString("00")</option>
+                        }
+
+                    }
+                </select><span>:</span>
+                         <select name="startMinNormalClearing" maxlength="20">
+                             @for (int min = 0; min < 60; min++)
+                             {
+                                 if (ViewBag.CutOfftime.Count > 1)
+                                 {
+                                     <option value="@min.ToString("00")" @(ViewBag.CutOfftime[1].startCutOffTimeMin == min.ToString("00") ? "selected" : "")>@min.ToString("00")</option>
+                                 }
+                                 else
+                                 {
+                                     <option value="@min.ToString("00")" >@min.ToString("00")</option>
+                                 }
+                             }
+                         </select>
+            </td>
+
+            <td>
+                <select name="endHourNormalClearing" maxlength="20">
+                    @for (int hour = 0; hour < 24; hour++)
+                    {
+                        if (ViewBag.CutOfftime.Count > 1)
+                        {
+                            if (ViewBag.CutOfftime[1].cutOffTimeHour != null && ViewBag.CutOfftime[1].cutOffTimeHour != "")
+                            {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == ViewBag.CutOfftime[1].cutOffTimeHour ? "selected" : "")>@hour.ToString("00")</option>
+
+                            }
+                        }
+                        else
+                        {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == "12" ? "selected" : "")>@hour.ToString("00")</option>
+                        }
+                    }
+                </select><span>:</span>
+                <select name="endMinNormalClearing" maxlength="20">
+                    @for (int min = 0; min < 60; min++)
+                    {
+                        if (ViewBag.CutOfftime.Count > 1)
+                        {
+                            if (ViewBag.CutOfftime[1].cutOffTimeMin != null && ViewBag.CutOfftime[1].cutOffTimeMin != "")
+                            {
+                            <option value="@min.ToString("00")" @(ViewBag.CutOfftime[1].cutOffTimeMin == min.ToString("00") ? "selected" : "")>@min.ToString("00")</option>
+
+                            }
+                        }
+                        else
+                        {
+                            <option value="@min.ToString("00")" @("45" == min.ToString("00") ? "selected" : "")>@min.ToString("00")</option>
+
+                        }
+                    }
+                </select>
+
+            </td>
+
+            <td>
+                
+                    <input type="radio" name="cutOffActivateNormalClearing" value="1" @(ViewBag.CutOfftime.Count > 1 ? (ViewBag.CutOfftime[1].fldActivation == "1" ? "checked" : ""):"")> @Locale.Activate
+                
+            </td>
+            <td>
+
+                
+                <input type="radio" name="cutOffActivateNormalClearing" value="0" @(ViewBag.CutOfftime.Count > 1 ?  (ViewBag.CutOfftime[1].fldActivation == "0" ? "checked" : ""):"checked") @(ViewBag.CutOfftime.Count >1 ? (ViewBag.CutOfftime[1].fldActivation == null ? "checked" : ""):"checked")> @Locale.Deactivate
+                
+            </td>
+
+        </tr>
+        <tr>
+
+
+            <td>Same Day Clearings</td>
+            <td>
+                <select name="startHourSameDayClearing" maxlength="20">
+                    @for (int hour = 0; hour < 24; hour++)
+                    {
+                        if (ViewBag.CutOfftime.Count > 2)
+                        {
+                            if (ViewBag.CutOfftime[2].cutOffTimeHour != null && ViewBag.CutOfftime[2].cutOffTimeHour != "")
+                            {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == ViewBag.CutOfftime[2].startCutOffTimeHour ? "selected" : "")>@hour.ToString("00")</option>
+                            }
+                        }
+                        else
+                        {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == "09" ? "selected" : "")>@hour.ToString("00")</option>
+                        }
+
+                    }
+                </select><span>:</span>
+                         <select name="startMinSameDayClearing" maxlength="20">
+                             @for (int min = 0; min < 60; min++)
+                             {
+                                 if (ViewBag.CutOfftime.Count > 2)
+                                 {
+                                     <option value="@min.ToString("00")" @(ViewBag.CutOfftime[2].startCutOffTimeMin == min.ToString("00") ? "selected" : "")>@min.ToString("00")</option>
+                                 }
+                                 else
+                                 {
+                                     <option value="@min.ToString("00")" >@min.ToString("00")</option>
+
+                                 }
+                             }
+                         </select>
+            </td>
+
+            <td>
+                <select name="endHourSameDayClearing" maxlength="20">
+                    @for (int hour = 0; hour < 24; hour++)
+                    {
+                        if (ViewBag.CutOfftime.Count > 2)
+                        {
+                            if (ViewBag.CutOfftime[2].cutOffTimeHour != null && ViewBag.CutOfftime[2].cutOffTimeHour != "")
+                            {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == ViewBag.CutOfftime[2].cutOffTimeHour ? "selected" : "")>@hour.ToString("00")</option>
+
+                            }
+                        }
+                        else
+                        {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == "12" ? "selected" : "")>@hour.ToString("00")</option>
+                        }
+                    }
+                </select><span>:</span>
+                <select name="endMinSameDayClearing" maxlength="20">
+                    @for (int min = 0; min < 60; min++)
+                    {
+                        if (ViewBag.CutOfftime.Count >2 )
+                        {
+                            if (ViewBag.CutOfftime[2].cutOffTimeMin != null && ViewBag.CutOfftime[2].cutOffTimeMin != "")
+                            {
+                            <option value="@min.ToString("00")" @(ViewBag.CutOfftime[2].cutOffTimeMin == min.ToString("00") ? "selected" : "")>@min.ToString("00")</option>
+
+                            }
+                        }
+                        else
+                        {
+                            <option value="@min.ToString("00")" @("45" == min.ToString("00") ? "selected" : "")>@min.ToString("00")</option>
+
+                        }
+                    }
+                </select>
+
+            </td>
+
+            <td>
+                <input type="radio" name="cutOffActivateSameDay" value="1" @(ViewBag.CutOfftime.Count > 2 ? (ViewBag.CutOfftime[2].fldActivation == "1" ? "checked" : ""):"")> @Locale.Activate
+
+
+            </td>
+            <td>
+
+                
+                <input type="radio" name="cutOffActivateSameDay" value="0" @(ViewBag.CutOfftime.Count > 2 ? (ViewBag.CutOfftime[2].fldActivation == "0" ? "checked" : ""):"checked") @(ViewBag.CutOfftime.Count > 2 ? (ViewBag.CutOfftime[2].fldActivation == null ? "checked" : ""): "checked")> @Locale.Deactivate
+
+            </td>
+
+        </tr>
+        <tr>
+
+
+            <td>Dollar Clearings</td>
+            <td>
+                <select name="startHourDollarClearing" maxlength="20">
+                    @for (int hour = 0; hour < 24; hour++)
+                    {
+                        if (ViewBag.CutOfftime.Count > 3)
+                        {
+                            if (ViewBag.CutOfftime[3].cutOffTimeHour != null && ViewBag.CutOfftime[3].cutOffTimeHour != "")
+                            {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == ViewBag.CutOfftime[3].startCutOffTimeHour ? "selected" : "")>@hour.ToString("00")</option>
+                            }
+                        }
+                        else
+                        {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == "09" ? "selected" : "")>@hour.ToString("00")</option>
+                        }
+
+                    }
+                </select><span>:</span>
+                         <select name="startMinDollarClearing" maxlength="20">
+                             @for (int min = 0; min < 60; min++)
+                             {
+                                 if (ViewBag.CutOfftime.Count >3 )
+                                 {
+                                     <option value="@min.ToString("00")" @(ViewBag.CutOfftime[3].startCutOffTimeMin == min.ToString("00") ? "selected" : "")>@min.ToString("00")</option>
+                                 }
+                                 else
+                                 {
+                                     <option value="@min.ToString("00")" >@min.ToString("00")</option>
+                                 }
+                             }
+                         </select>
+            </td>
+
+            <td>
+                <select name="endHourDollarClearing" maxlength="20">
+                    @for (int hour = 0; hour < 24; hour++)
+                    {
+                        if (ViewBag.CutOfftime.Count >3 )
+                        {
+                            if (ViewBag.CutOfftime[3].cutOffTimeHour != null && ViewBag.CutOfftime[3].cutOffTimeHour != "")
+                            {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == ViewBag.CutOfftime[3].cutOffTimeHour ? "selected" : "")>@hour.ToString("00")</option>
+
+                            }
+                        }
+                        else
+                        {
+                            <option value="@hour.ToString("00")" @(hour.ToString("00") == "12" ? "selected" : "")>@hour.ToString("00")</option>
+                        }
+                    }
+                </select><span>:</span>
+                <select name="endMinDollarClearing" maxlength="20">
+                    @for (int min = 0; min < 60; min++)
+                    {
+                        if (ViewBag.CutOfftime.Count >3)
+                        {
+                            if (ViewBag.CutOfftime[3].cutOffTimeMin != null && ViewBag.CutOfftime[3].cutOffTimeMin != "")
+                            {
+                            <option value="@min.ToString("00")" @(ViewBag.CutOfftime[3].cutOffTimeMin == min.ToString("00") ? "selected" : "")>@min.ToString("00")</option>
+
+                            }
+                        }
+                        else
+                        {
+                            <option value="@min.ToString("00")" @("45" == min.ToString("00") ? "selected" : "")>@min.ToString("00")</option>
+
+                        }
+                    }
+                </select>
+
+            </td>
+
+            <td>
+                
+                <input type="radio" name="cutOffActivateDollarClearing" value="1" @(ViewBag.CutOfftime.Count >3  ? (ViewBag.CutOfftime[3].fldActivation == "1" ? "checked" : ""):"")> @Locale.Activate
+
+            </td>
+            <td>
+
+                
+                <input type="radio" name="cutOffActivateDollarClearing" value="0" @(ViewBag.CutOfftime.Count > 3 ? (ViewBag.CutOfftime[3].fldActivation == "0" ? "checked" : ""): "checked") @(ViewBag.CutOfftime.Count > 3 ? (ViewBag.CutOfftime[3].fldActivation == null ? "checked" : ""):"checked")> @Locale.Deactivate
+
+
+            </td>
+
+        </tr>
+
+        @*<tr>
+            <td>CPC Review Mine:</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="radio" name="reviewMineActivation" value="1" @(ViewBag.ChequeActivation.fldRVWKLActivation == "1" ? "checked" : "")> @Locale.Activate
+                <input type="radio" name="reviewMineActivation" value="0" @(ViewBag.ChequeActivation.fldRVWKLActivation == "0" ? "checked" : "") @(ViewBag.ChequeActivation.fldRVWKLActivation == null ? "checked" : "")> @Locale.Deactivate
+            </td>
+        </tr>*@
+        <input type="hidden" name="reviewMineActivation" value="1">
+    </table>
+    <br>
+    <!--table from tblChequeActivation-->
+    <button type="submit" data-action="@Url.Action("Update")" Class="btn btn-default normal-submit-without-search @(CurrentUser.HasTask(TaskIds.BranchActivation.INDEX) ? "" : "hidden")">@Locale.btnOK</button>
+</div>
+@*<hr />
+<div>
+<table>
+    <tr>
+        <td class="TextBox">Please key in your message</td>
+    </tr>
+    <tr>
+        <td>
+            <textarea maxlength="512" name="txtMessage" id="txtMessage" value=""></textarea>
+        </td>
+    </tr>
+    <tr>
+        <td class="TextBox">or select one message</td>
+    </tr>
+    <tr>
+        <td>
+            <select name="MessageOption" id="MessageOption" style="width:100% ">
+                <option value="">--Select--</option>
+                @foreach (var row in ViewBag.Message.Rows)
+                {
+                    <option value="@row["fldBroadcastMessage"]">@row["fldBroadcastMessage"]</option>
+                }
+            </select>
+
+        </td>
+    </tr>
+</table>
+</div>
+<br>*@
+@*<button type="submit" class="btn btn-default normal-submit-without-search @(CurrentUser.HasTask(TaskIds.BranchActivation.INDEX) ? "" : "hidden")" data-action="@Url.Action("SaveMessage")">@Locale.btnOK</button>*@
+
+
+@*@Scripts.Render("~/bundles/dashboard")*@

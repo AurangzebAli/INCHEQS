@@ -1,0 +1,287 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+    DateTime currentdate = DateTime.Now;
+    DateTime sDate = currentdate.AddMonths(-6);
+    string staleDate = sDate.ToString("dd-MM-yyyy");
+    string bankType = "";
+    //if (ViewBag.InwardItemViewModel.getField("fldIssueBankCode").ToString().Trim() == "32")
+    //{
+    //    bankType = "Conv";
+    //}
+    //else
+    //{
+    //    bankType = "Islamic";
+    //}
+
+}
+
+<table style="line-height: 23px; margin-top: 5px; margin-bottom: 2px; color: black">
+    <tr>
+        <th style="background-color:#E8E8E8">Cheque Clearing Date</th>
+        <td><span class="bold">@DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))</span></td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">UIC</th>
+        
+        <td><span class="bold">@ViewBag.InwardItemViewModel.getField("fldUIC")</span></td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Account Number</th>
+        
+        <td><span class="txtBlue h4 bold">@ViewBag.InwardItemViewModel.getField("fldAccountNumber")</span></td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Cheque Number</th>
+        
+        <td><span class="txtBlue h4 bold">@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo")</span></td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Issuing Bank Branch</th>
+        
+        <td>
+            <span class="txtBlue h4 bold">@ViewBag.InwardItemViewModel.getField("fldIssueBankBranch") - @ViewBag.InwardItemViewModel.getField("fldBranchDesc")</span>
+            <input type="hidden" value="@ViewBag.InwardItemViewModel.getField("fldIssueBankBranch")" name="fldIssueBankBranch" />
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Presenting Bank Branch</th>
+        
+        <td><span class="txtBlue h4 bold">@ViewBag.InwardItemViewModel.getField("fldPreBankBranch") - @ViewBag.InwardItemViewModel.getField("fldPreBankDesc")</span></td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Amount</th>
+        
+        <td><span class="txtBlue h4 bold">@StringUtils.FormatCurrency(ViewBag.InwardItemViewModel.getField("fldAmount"))</span></td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Transaction Type</th>
+        
+        <td><span>@ViewBag.InwardItemViewModel.getField("fldTransDesc")</span></td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Host Reject</th>
+        
+        <td>
+            <span class="txtRed bold h4">
+                @*@(ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() == "" ? "NIL" : @ViewBag.HostStatus)*@
+                @if (ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() == "" &&
+                     ViewBag.InwardItemViewModel.getField("fldRejectStatus2").ToString().Trim() == "" &&
+                     ViewBag.InwardItemViewModel.getField("fldRejectStatus3").ToString().Trim() == "" &&
+                     ViewBag.InwardItemViewModel.getField("fldRejectStatus4").ToString().Trim() == "")
+                {
+                    <text>NIL</text>
+                }
+                else
+                {
+                    if (ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() != "")
+                    {
+                        @ViewBag.HostStatus
+                    }
+                    if (ViewBag.InwardItemViewModel.getField("fldRejectStatus2").ToString().Trim() != "" && ViewBag.InwardItemViewModel.getField("fldRejectStatus2").ToString().Trim() != null)
+                    {
+                        <text>, </text>
+                        @ViewBag.HostStatus2
+                    }
+                    if (ViewBag.InwardItemViewModel.getField("fldRejectStatus3").ToString().Trim() != "" && ViewBag.InwardItemViewModel.getField("fldRejectStatus3").ToString().Trim() != null)
+                    {
+                        if (ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() != "")
+                        {
+                            <text>, </text>
+                        }
+                        @ViewBag.HostStatus3
+                    }
+                    if (ViewBag.InwardItemViewModel.getField("fldRejectStatus4").ToString().Trim() != "" && ViewBag.InwardItemViewModel.getField("fldRejectStatus4").ToString().Trim() != null)
+                    {
+                        <text>, </text>@ViewBag.HostStatus4
+                    }
+                }
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">NC Flag 1</th>
+        
+        <td>
+            @if (ViewBag.InwardItemViewModel.getField("fldNonConformance").ToString().Trim() == "0")
+            {
+                <span class="txtRed h4 bold"> @(ViewBag.InwardItemViewModel.getField("fldNonConformance") + " - " + @ViewBag.NCFDesc) </span>
+            }
+            else if (ViewBag.InwardItemViewModel.getField("fldNonConformance").ToString().Trim() == "")
+            {
+                <span> NIL </span>
+            }
+            else if (ViewBag.InwardItemViewModel.getField("fldNonConformance").ToString().Trim() == "6" || ViewBag.InwardItemViewModel.getField("fldNonConformance").ToString().Trim() == "7")
+            {
+                <span class="txtRed h4 bold blink"> @(ViewBag.InwardItemViewModel.getField("fldNonConformance") + " - " + @ViewBag.NCFDesc)</span>
+            }
+            else
+            {
+                <span class="txtRed h4 bold"> @(ViewBag.InwardItemViewModel.getField("fldNonConformance") + " - " + @ViewBag.NCFDesc)</span>
+            }
+        </td>
+    </tr>
+    @if (ViewBag.InwardItemViewModel.getField("fldNonConformance2").ToString().Trim() != "")
+    {
+    <tr>
+        <th style="background-color:#E8E8E8">NC Flag 2</th>
+        
+        <td>
+            @if (ViewBag.InwardItemViewModel.getField("fldNonConformance2").ToString().Trim() == "6" || ViewBag.InwardItemViewModel.getField("fldNonConformance2").ToString().Trim() == "7")
+            {
+                <span class="txtRed h4 bold blink"> @(ViewBag.InwardItemViewModel.getField("fldNonConformance2") + " - " + @ViewBag.NCFDesc2)</span>
+            }
+            else
+            {
+                <span class="txtRed h4 bold"> @(ViewBag.InwardItemViewModel.getField("fldNonConformance2") + " - " + @ViewBag.NCFDesc2)</span>
+            }
+        </td>
+    </tr>
+    }
+    <tr>
+        <th style="background-color:#E8E8E8">IQA Flag</th>
+        
+        <td>
+            <span>@ViewBag.IQA-@ViewBag.IQADesc</span>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Doc to Follow Up</th>
+        
+        <td>
+            <span>@ViewBag.DocToFollow</span>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Reject Reason</th>
+       
+            
+            <td>
+                <span>
+                    <input type="text" style="width:34px;min-width:30px" id="rejectCodeTextBranch" name="new_textRejectCode" value="@ViewBag.InwardItemViewModel.getField("fldRejectCodePending").Trim()" @(ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturnMaker") ? "" : "disabled") />
+                    <input type="text" name="new_textRejectCode" value="@ViewBag.InwardItemViewModel.getField("fldRejectCodePending").Trim()" @(ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturnMaker") ? "hidden disabled" : "hidden")  />
+                    <select class="textbox" id="rejectCodeSelectListBranch" name="new_rejectCode" style="width:500px" @(ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturnMaker") ? "" : "disabled")>
+                        <option value="">--- @Locale.SelectReturnRouteReason ---</option>
+                    </select>
+                </span>
+                <input type="text" name="fldCharges" value="@ViewBag.InwardItemViewModel.getField("fldChargesPending").Trim()" hidden />
+            </td>
+        @*}*@
+        @*else if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturnChecker"))
+        {
+            
+            <td>
+                <span>*@
+                    @*<input type="text" style="width:34px;min-width:30px" id="rejectCodeTextBranch" value="@ViewBag.InwardItemViewModel.getField("fldRejectCodePending").Trim()"*@ @*(ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturnChecker") ? "" : "disabled") disabled />
+                    @*<input type="text" name="new_textRejectCode" value="@ViewBag.InwardItemViewModel.getField("fldRejectCodePending").Trim()" hidden />*@
+                    @*<select class="textbox" id="rejectCodeSelectListBranch" name="new_rejectCode" style="width:500px"*@ @*(ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturnChecker") ? "" : "disabled")*@ @*disabled>
+                        <option value="">--- @Locale.SelectReturnRouteReason ---</option>
+                    </select>
+                </span>
+                <input type="text" name="fldCharges" value="@ViewBag.InwardItemViewModel.getField("fldChargesPending").Trim()" hidden />
+            </td>
+        }*@
+        @*else
+        {
+            if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchApproveChecker"))
+            {
+                
+                <td>
+                    <span>
+
+                        <input type="text" style="width:34px;min-width:30px" id="rejectCodeTextBranch" name="new_textRejectCode" value="@ViewBag.InwardItemViewModel.getField("fldRejectCodePending").Trim()" disabled />
+
+                        <select class="textbox" id="rejectCodeSelectListBranch" name="new_rejectCode" style="width:500px"  disabled>
+                            <option value="">--- @Locale.SelectReturnRouteReason ---</option>
+                        </select>
+                    </span>
+                    <input type="text" name="fldCharges" value="@ViewBag.InwardItemViewModel.getField("fldChargesPending").Trim()" hidden />
+                </td>
+            }
+            else
+            {
+                
+                <td>
+                    <span>
+
+                        <input type="text" style="width:34px;min-width:30px" id="rejectCodeTextBranch" name="new_textRejectCode" value="@ViewBag.InwardItemViewModel.getField("fldRejectCodePending").Trim()" @(ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturn") ? "" : "disabled") />
+
+                        <select class="textbox" id="rejectCodeSelectListBranch" name="new_rejectCode" style="width:500px" @(ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturn") ? "" : "disabled")>
+                            <option value="">--- @Locale.SelectReturnRouteReason ---</option>
+                        </select>
+                    </span>
+                    <input type="text" name="fldCharges" value="@ViewBag.InwardItemViewModel.getField("fldChargesPending").Trim()" hidden />
+                </td>
+            }
+
+        }*@
+
+
+
+    </tr>
+    @*<tr>
+            <th>Charges</th>
+            <td>: <span><input class="number-only currency"  type="text" value="@ViewBag.InwardItemViewModel.getField("fldChargesPending").Trim()" disabled/></span>
+
+            </td>
+
+        </tr>*@
+    <tr>
+        <th style="background-color:#E8E8E8">Remarks</th>
+        
+        <td><span><input name="fldRemarksPending" type="text" style="height: 50px; width:500px" maxlength="140" value="@ViewBag.InwardItemViewModel.getField("fldRemarksPending").Trim()" /></span></td>
+    </tr>
+
+    @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchApproveChecker"))
+    {
+    <tr>
+        <th style="background-color:#E8E8E8">To Review Status</th>
+        
+        <td>
+            <input type="checkbox" class="normal-submit-Verification" value="1" name="fldReviewStatus" data-action="@Url.Action("BranchApprove")">
+            @if (!string.IsNullOrEmpty(ViewBag.InwardItemViewModel.getField("fldAlertReason").Trim()))
+            {
+                <span>Review Reason <input name="fldReviewReason" type="text" style="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.InwardItemViewModel.getField("fldAlertReason").Trim()" /></span>
+            }
+            else
+            {
+                <span>Review Reason <input name="fldReviewReason" type="text" value="@ViewBag.InwardItemViewModel.getField("fldAlertReason").Trim()" /></span>
+            }
+        </td>
+    </tr>
+    }
+
+    @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturnChecker"))
+    {
+    <tr>
+        <th style="background-color:#E8E8E8">To Review Status</th>
+        
+        <td>
+            <input type="checkbox" class="normal-submit-Verification" value="1" name="fldReviewStatus" data-action="@Url.Action("BranchReturn")">
+            @if (!string.IsNullOrEmpty(ViewBag.InwardItemViewModel.getField("fldAlertReason").Trim()))
+            {
+                <span>Review Reason <input name="fldReviewReason" type="text" style="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.InwardItemViewModel.getField("fldAlertReason").Trim()" /></span>
+            }
+            else
+            {
+                <span>Review Reason <input name="fldReviewReason" type="text" value="@ViewBag.InwardItemViewModel.getField("fldAlertReason").Trim()" /></span>
+            }
+        </td>
+    </tr>
+    }
+
+    @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchApprove") && ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturn"))
+    {
+        if (!string.IsNullOrEmpty(ViewBag.InwardItemViewModel.getField("fldAlertReason").Trim()))
+        {
+    <tr>
+        <th style="background-color:#E8E8E8">To Review Reason</th>
+        
+        <td><input type="text" style="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.InwardItemViewModel.getField("fldAlertReason").Trim()" disabled></td>
+    </tr>
+        }
+    }
+
+
+
+</table>

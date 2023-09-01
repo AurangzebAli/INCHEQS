@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="RHB_DEMO_ICSDataSet" targetNamespace="http://tempuri.org/RHB_DEMO_ICSDataSet.xsd" xmlns:mstns="http://tempuri.org/RHB_DEMO_ICSDataSet.xsd" xmlns="http://tempuri.org/RHB_DEMO_ICSDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="default" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="default (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.default.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="view_ReturnMemoTableAdapter" GeneratorDataComponentClassName="view_ReturnMemoTableAdapter" Name="view_ReturnMemo" UserDataComponentName="view_ReturnMemoTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="default (Web.config)" DbObjectName="RHB_DEMO_ICS.dbo.view_ReturnMemo" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="false">
+                    <CommandText>SELECT fldRejectCode, fldRejectCode2, fldRejectCode3, fldClearDate, fldInwardItemId, fldChequeSerialNo, fldAccountNumber, fldAmount, fldUIC, fldCharges, fldRejectStatus1, fldRejectStatus2, fldRejectStatus3, fldRejectStatus4, fldIssueBankCode, fldIssueStateCode, fldIssueBranchCode, fldPreBankCode, fldPreStateCode, fldPreBranchCode, fldRejectDesc, fldRejectDesc2, fldRejectDesc3, fldRejectDesc4, fldRejectDesc5, fldRejectDesc6, ChequeTimeStamp, PayBranchDesc, PayBranchAdd, fldBankDesc, Address1, Address2, Address3, fldRemarks FROM dbo.view_ReturnMemo</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="fldRejectCode" DataSetColumn="fldRejectCode" />
+              <Mapping SourceColumn="fldRejectCode2" DataSetColumn="fldRejectCode2" />
+              <Mapping SourceColumn="fldRejectCode3" DataSetColumn="fldRejectCode3" />
+              <Mapping SourceColumn="fldClearDate" DataSetColumn="fldClearDate" />
+              <Mapping SourceColumn="fldInwardItemId" DataSetColumn="fldInwardItemId" />
+              <Mapping SourceColumn="fldChequeSerialNo" DataSetColumn="fldChequeSerialNo" />
+              <Mapping SourceColumn="fldAccountNumber" DataSetColumn="fldAccountNumber" />
+              <Mapping SourceColumn="fldAmount" DataSetColumn="fldAmount" />
+              <Mapping SourceColumn="fldUIC" DataSetColumn="fldUIC" />
+              <Mapping SourceColumn="fldCharges" DataSetColumn="fldCharges" />
+              <Mapping SourceColumn="fldRejectStatus1" DataSetColumn="fldRejectStatus1" />
+              <Mapping SourceColumn="fldRejectStatus2" DataSetColumn="fldRejectStatus2" />
+              <Mapping SourceColumn="fldRejectStatus3" DataSetColumn="fldRejectStatus3" />
+              <Mapping SourceColumn="fldRejectStatus4" DataSetColumn="fldRejectStatus4" />
+              <Mapping SourceColumn="fldIssueBankCode" DataSetColumn="fldIssueBankCode" />
+              <Mapping SourceColumn="fldIssueStateCode" DataSetColumn="fldIssueStateCode" />
+              <Mapping SourceColumn="fldIssueBranchCode" DataSetColumn="fldIssueBranchCode" />
+              <Mapping SourceColumn="fldPreBankCode" DataSetColumn="fldPreBankCode" />
+              <Mapping SourceColumn="fldPreStateCode" DataSetColumn="fldPreStateCode" />
+              <Mapping SourceColumn="fldPreBranchCode" DataSetColumn="fldPreBranchCode" />
+              <Mapping SourceColumn="fldRejectDesc" DataSetColumn="fldRejectDesc" />
+              <Mapping SourceColumn="fldRejectDesc2" DataSetColumn="fldRejectDesc2" />
+              <Mapping SourceColumn="fldRejectDesc3" DataSetColumn="fldRejectDesc3" />
+              <Mapping SourceColumn="fldRejectDesc4" DataSetColumn="fldRejectDesc4" />
+              <Mapping SourceColumn="fldRejectDesc5" DataSetColumn="fldRejectDesc5" />
+              <Mapping SourceColumn="fldRejectDesc6" DataSetColumn="fldRejectDesc6" />
+              <Mapping SourceColumn="ChequeTimeStamp" DataSetColumn="ChequeTimeStamp" />
+              <Mapping SourceColumn="PayBranchDesc" DataSetColumn="PayBranchDesc" />
+              <Mapping SourceColumn="PayBranchAdd" DataSetColumn="PayBranchAdd" />
+              <Mapping SourceColumn="fldBankDesc" DataSetColumn="fldBankDesc" />
+              <Mapping SourceColumn="Address1" DataSetColumn="Address1" />
+              <Mapping SourceColumn="Address2" DataSetColumn="Address2" />
+              <Mapping SourceColumn="Address3" DataSetColumn="Address3" />
+              <Mapping SourceColumn="fldRemarks" DataSetColumn="fldRemarks" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="RHB_DEMO_ICSDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_UserDSName="RHB_DEMO_ICSDataSet" msprop:Generator_DataSetName="RHB_DEMO_ICSDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="view_ReturnMemo" msprop:Generator_RowEvHandlerName="view_ReturnMemoRowChangeEventHandler" msprop:Generator_RowDeletedName="view_ReturnMemoRowDeleted" msprop:Generator_RowDeletingName="view_ReturnMemoRowDeleting" msprop:Generator_RowEvArgName="view_ReturnMemoRowChangeEvent" msprop:Generator_TablePropName="view_ReturnMemo" msprop:Generator_RowChangedName="view_ReturnMemoRowChanged" msprop:Generator_RowChangingName="view_ReturnMemoRowChanging" msprop:Generator_TableClassName="view_ReturnMemoDataTable" msprop:Generator_RowClassName="view_ReturnMemoRow" msprop:Generator_TableVarName="tableview_ReturnMemo" msprop:Generator_UserTableName="view_ReturnMemo">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="fldRejectCode" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRejectCode" msprop:Generator_ColumnPropNameInTable="fldRejectCodeColumn" msprop:Generator_ColumnVarNameInTable="columnfldRejectCode" msprop:Generator_UserColumnName="fldRejectCode" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="3" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldRejectCode2" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRejectCode2" msprop:Generator_ColumnPropNameInTable="fldRejectCode2Column" msprop:Generator_ColumnVarNameInTable="columnfldRejectCode2" msprop:Generator_UserColumnName="fldRejectCode2" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="3" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldRejectCode3" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRejectCode3" msprop:Generator_ColumnPropNameInTable="fldRejectCode3Column" msprop:Generator_ColumnVarNameInTable="columnfldRejectCode3" msprop:Generator_UserColumnName="fldRejectCode3" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="3" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldClearDate" msprop:Generator_ColumnPropNameInRow="fldClearDate" msprop:Generator_ColumnPropNameInTable="fldClearDateColumn" msprop:Generator_ColumnVarNameInTable="columnfldClearDate" msprop:Generator_UserColumnName="fldClearDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="fldInwardItemId" msprop:Generator_ColumnPropNameInRow="fldInwardItemId" msprop:Generator_ColumnPropNameInTable="fldInwardItemIdColumn" msprop:Generator_ColumnVarNameInTable="columnfldInwardItemId" msprop:Generator_UserColumnName="fldInwardItemId" type="xs:int" minOccurs="0" />
+              <xs:element name="fldChequeSerialNo" msprop:Generator_ColumnPropNameInRow="fldChequeSerialNo" msprop:Generator_ColumnPropNameInTable="fldChequeSerialNoColumn" msprop:Generator_ColumnVarNameInTable="columnfldChequeSerialNo" msprop:Generator_UserColumnName="fldChequeSerialNo" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="8" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldAccountNumber" msprop:Generator_ColumnPropNameInRow="fldAccountNumber" msprop:Generator_ColumnPropNameInTable="fldAccountNumberColumn" msprop:Generator_ColumnVarNameInTable="columnfldAccountNumber" msprop:Generator_UserColumnName="fldAccountNumber" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldAmount" msprop:Generator_ColumnPropNameInRow="fldAmount" msprop:Generator_ColumnPropNameInTable="fldAmountColumn" msprop:Generator_ColumnVarNameInTable="columnfldAmount" msprop:Generator_UserColumnName="fldAmount" type="xs:double" minOccurs="0" />
+              <xs:element name="fldUIC" msprop:Generator_ColumnPropNameInRow="fldUIC" msprop:Generator_ColumnPropNameInTable="fldUICColumn" msprop:Generator_ColumnVarNameInTable="columnfldUIC" msprop:Generator_UserColumnName="fldUIC" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldCharges" msprop:Generator_ColumnPropNameInRow="fldCharges" msprop:Generator_ColumnPropNameInTable="fldChargesColumn" msprop:Generator_ColumnVarNameInTable="columnfldCharges" msprop:Generator_UserColumnName="fldCharges" type="xs:double" minOccurs="0" />
+              <xs:element name="fldRejectStatus1" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRejectStatus1" msprop:Generator_ColumnPropNameInTable="fldRejectStatus1Column" msprop:Generator_ColumnVarNameInTable="columnfldRejectStatus1" msprop:Generator_UserColumnName="fldRejectStatus1" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="3" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldRejectStatus2" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRejectStatus2" msprop:Generator_ColumnPropNameInTable="fldRejectStatus2Column" msprop:Generator_ColumnVarNameInTable="columnfldRejectStatus2" msprop:Generator_UserColumnName="fldRejectStatus2" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="3" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldRejectStatus3" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRejectStatus3" msprop:Generator_ColumnPropNameInTable="fldRejectStatus3Column" msprop:Generator_ColumnVarNameInTable="columnfldRejectStatus3" msprop:Generator_UserColumnName="fldRejectStatus3" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="3" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldRejectStatus4" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRejectStatus4" msprop:Generator_ColumnPropNameInTable="fldRejectStatus4Column" msprop:Generator_ColumnVarNameInTable="columnfldRejectStatus4" msprop:Generator_UserColumnName="fldRejectStatus4" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="3" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldIssueBankCode" msprop:Generator_ColumnPropNameInRow="fldIssueBankCode" msprop:Generator_ColumnPropNameInTable="fldIssueBankCodeColumn" msprop:Generator_ColumnVarNameInTable="columnfldIssueBankCode" msprop:Generator_UserColumnName="fldIssueBankCode" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="3" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldIssueStateCode" msprop:Generator_ColumnPropNameInRow="fldIssueStateCode" msprop:Generator_ColumnPropNameInTable="fldIssueStateCodeColumn" msprop:Generator_ColumnVarNameInTable="columnfldIssueStateCode" msprop:Generator_UserColumnName="fldIssueStateCode" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldIssueBranchCode" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldIssueBranchCode" msprop:Generator_ColumnPropNameInTable="fldIssueBranchCodeColumn" msprop:Generator_ColumnVarNameInTable="columnfldIssueBranchCode" msprop:Generator_UserColumnName="fldIssueBranchCode" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="7" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldPreBankCode" msprop:Generator_ColumnPropNameInRow="fldPreBankCode" msprop:Generator_ColumnPropNameInTable="fldPreBankCodeColumn" msprop:Generator_ColumnVarNameInTable="columnfldPreBankCode" msprop:Generator_UserColumnName="fldPreBankCode" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="3" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldPreStateCode" msprop:Generator_ColumnPropNameInRow="fldPreStateCode" msprop:Generator_ColumnPropNameInTable="fldPreStateCodeColumn" msprop:Generator_ColumnVarNameInTable="columnfldPreStateCode" msprop:Generator_UserColumnName="fldPreStateCode" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldPreBranchCode" msprop:Generator_ColumnPropNameInRow="fldPreBranchCode" msprop:Generator_ColumnPropNameInTable="fldPreBranchCodeColumn" msprop:Generator_ColumnVarNameInTable="columnfldPreBranchCode" msprop:Generator_UserColumnName="fldPreBranchCode" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="5" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldRejectDesc" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRejectDesc" msprop:Generator_ColumnPropNameInTable="fldRejectDescColumn" msprop:Generator_ColumnVarNameInTable="columnfldRejectDesc" msprop:Generator_UserColumnName="fldRejectDesc" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="150" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldRejectDesc2" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRejectDesc2" msprop:Generator_ColumnPropNameInTable="fldRejectDesc2Column" msprop:Generator_ColumnVarNameInTable="columnfldRejectDesc2" msprop:Generator_UserColumnName="fldRejectDesc2" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="150" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldRejectDesc3" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRejectDesc3" msprop:Generator_ColumnPropNameInTable="fldRejectDesc3Column" msprop:Generator_ColumnVarNameInTable="columnfldRejectDesc3" msprop:Generator_UserColumnName="fldRejectDesc3" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="150" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldRejectDesc4" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRejectDesc4" msprop:Generator_ColumnPropNameInTable="fldRejectDesc4Column" msprop:Generator_ColumnVarNameInTable="columnfldRejectDesc4" msprop:Generator_UserColumnName="fldRejectDesc4" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="150" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldRejectDesc5" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRejectDesc5" msprop:Generator_ColumnPropNameInTable="fldRejectDesc5Column" msprop:Generator_ColumnVarNameInTable="columnfldRejectDesc5" msprop:Generator_UserColumnName="fldRejectDesc5" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="150" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldRejectDesc6" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRejectDesc6" msprop:Generator_ColumnPropNameInTable="fldRejectDesc6Column" msprop:Generator_ColumnVarNameInTable="columnfldRejectDesc6" msprop:Generator_UserColumnName="fldRejectDesc6" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="150" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ChequeTimeStamp" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="ChequeTimeStamp" msprop:Generator_ColumnPropNameInTable="ChequeTimeStampColumn" msprop:Generator_ColumnVarNameInTable="columnChequeTimeStamp" msprop:Generator_UserColumnName="ChequeTimeStamp" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="11" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="PayBranchDesc" msprop:Generator_ColumnPropNameInRow="PayBranchDesc" msprop:Generator_ColumnPropNameInTable="PayBranchDescColumn" msprop:Generator_ColumnVarNameInTable="columnPayBranchDesc" msprop:Generator_UserColumnName="PayBranchDesc" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="150" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="PayBranchAdd" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="PayBranchAdd" msprop:Generator_ColumnPropNameInTable="PayBranchAddColumn" msprop:Generator_ColumnVarNameInTable="columnPayBranchAdd" msprop:Generator_UserColumnName="PayBranchAdd" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="1" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldBankDesc" msprop:Generator_ColumnPropNameInRow="fldBankDesc" msprop:Generator_ColumnPropNameInTable="fldBankDescColumn" msprop:Generator_ColumnVarNameInTable="columnfldBankDesc" msprop:Generator_UserColumnName="fldBankDesc" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="150" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Address1" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="Address1" msprop:Generator_ColumnPropNameInTable="Address1Column" msprop:Generator_ColumnVarNameInTable="columnAddress1" msprop:Generator_UserColumnName="Address1" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="1" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Address2" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="Address2" msprop:Generator_ColumnPropNameInTable="Address2Column" msprop:Generator_ColumnVarNameInTable="columnAddress2" msprop:Generator_UserColumnName="Address2" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="1" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Address3" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="Address3" msprop:Generator_ColumnPropNameInTable="Address3Column" msprop:Generator_ColumnVarNameInTable="columnAddress3" msprop:Generator_UserColumnName="Address3" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="1" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fldRemarks" msdata:ReadOnly="true" msprop:Generator_ColumnPropNameInRow="fldRemarks" msprop:Generator_ColumnPropNameInTable="fldRemarksColumn" msprop:Generator_ColumnVarNameInTable="columnfldRemarks" msprop:Generator_UserColumnName="fldRemarks" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="256" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1">
+      <xs:selector xpath=".//mstns:view_ReturnMemo" />
+      <xs:field xpath="mstns:fldInwardItemId" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

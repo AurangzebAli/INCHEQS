@@ -1,0 +1,904 @@
+﻿using INCHEQS.Models.SearchPageConfig;
+using System.Data;
+using System.Web.Mvc;
+using Microsoft.Reporting.WebForms;
+using System;
+using System.IO;
+using System.Data.SqlClient;
+using System.Collections.Generic;
+using INCHEQS.Helpers;
+using System.Threading.Tasks;
+using INCHEQS.Security;
+using System.Globalization;
+using INCHEQS.DataAccessLayer;
+using INCHEQS.Common;
+using INCHEQS.Security.SystemProfile;
+
+namespace INCHEQS.Models.Report
+{
+    public class ReportService : IReportService
+    {
+
+
+
+        private static string GetDeviceInfo(string orientation)
+        {
+            string deviceInfo = "";
+
+            if (orientation.ToLower().Equals("portrait"))
+            {
+                deviceInfo = "<DeviceInfo>" +
+                                  "  <OutputFormat>{0}</OutputFormat>" +
+                                  "  <PageWidth>21cm</PageWidth>" +
+                                  "  <PageHeight>29.7cm</PageHeight>" +
+                                  "  <MarginTop>1cm</MarginTop>" +
+                                  "  <MarginLeft>1cm</MarginLeft>" +
+                                  "  <MarginRight>1cm</MarginRight>" +
+                                  "  <MarginBottom>1cm</MarginBottom>" +
+                              "</DeviceInfo>";
+            }
+            else
+            {
+                deviceInfo = "<DeviceInfo>" +
+                                 "  <OutputFormat>{0}</OutputFormat>" +
+                                 "  <PageWidth>29.7cm</PageWidth>" +
+                                 "  <PageHeight>21cm</PageHeight>" +
+                                 "  <MarginTop>1cm</MarginTop>" +
+                                 "  <MarginLeft>1cm</MarginLeft>" +
+                                 "  <MarginRight>1cm</MarginRight>" +
+                                 "  <MarginBottom>1cm</MarginBottom>" +
+                             "</DeviceInfo>";
+            }
+            return deviceInfo;
+        }
+
+        private readonly IPageConfigDao pageDao;
+        private readonly ApplicationDbContext dbContext;
+        private readonly ImageHelper imageHelper;
+        private readonly ISystemProfileDao systemProfileDao;
+
+        public ReportService(IPageConfigDao pageConfigDao, ApplicationDbContext dbContext, ImageHelper imageHelper, ISystemProfileDao systemProfileDao)
+        {
+            pageDao = pageConfigDao;
+            this.dbContext = dbContext;
+            this.imageHelper = imageHelper;
+            this.systemProfileDao = systemProfileDao;
+        }
+
+
+        public async Task<ReportModel> GetReportConfigAsync(PageSqlConfig pageSqlConfig)
+        {
+            return await Task.Run(() => GetReportConfig(pageSqlConfig));
+        }
+
+
+        public async Task<ReportModel> GetReportConfigByTaskIdAsync(string taskId)
+        {
+            PageSqlConfig temp = new PageSqlConfig();
+            temp.SetTaskId(taskId);
+            return await Task.Run(() => GetReportConfig(temp));
+        }
+
+        public async Task<DataTable> getReportBasedOnPageConfigAsync(PageSqlConfig pageSqlConfig, FormCollection collection)
+        {
+            return await Task.Run(() => getReportBasedOnPageConfig(pageSqlConfig, collection));
+        }
+
+        public ReportModel GetReportConfig(PageSqlConfig pageSqlConfig)
+        {
+            ReportModel reportModel = new ReportModel();
+            List<PageSqlConfig> tableAndViewNames = new List<PageSqlConfig>();
+            List<SqlParameter> sqlParams = new List<SqlParameter>();
+
+            string sql = "";
+
+            if (string.IsNullOrEmpty(pageSqlConfig.PrintReportParam))
+            {
+
+                string strPostingMode = systemProfileDao.GetValueFromSystemProfileWithoutCurrentUser("PostingMode").Trim();
+
+                if (strPostingMode == "API" && pageSqlConfig.TaskId == "305995")
+                {
+                    sql = "SELECT * FROM [tblReportPageConfig] WHERE taskId = @taskId and DatabaseViewId=@databaseviewid";
+                    sqlParams.Add(new SqlParameter("@taskId", pageSqlConfig.TaskId));
+                    sqlParams.Add(new SqlParameter("@databaseviewid", "View_DailyOCSCreditPostingReport_API"));
+                }
+                else if (strPostingMode == "FILE" && pageSqlConfig.TaskId == "305995")
+                {
+                    sql = "SELECT * FROM [tblReportPageConfig] WHERE taskId = @taskId and DatabaseViewId=@databaseviewid";
+                    sqlParams.Add(new SqlParameter("@taskId", pageSqlConfig.TaskId));
+                    sqlParams.Add(new SqlParameter("@databaseviewid", "View_DailyOCSCreditPostingReport"));
+                }
+                else if (strPostingMode == "API" && pageSqlConfig.TaskId == "305994")
+                {
+                    sql = "SELECT * FROM [tblReportPageConfig] WHERE taskId = @taskId and DatabaseViewId=@databaseviewid";
+                    sqlParams.Add(new SqlParameter("@taskId", pageSqlConfig.TaskId));
+                    sqlParams.Add(new SqlParameter("@databaseviewid", "View_DailyICSCreditPostingReport_API"));
+                }
+                else if (strPostingMode == "FILE" && pageSqlConfig.TaskId == "305994")
+                {
+                    sql = "SELECT * FROM [tblReportPageConfig] WHERE taskId = @taskId and DatabaseViewId=@databaseviewid";
+                    sqlParams.Add(new SqlParameter("@taskId", pageSqlConfig.TaskId));
+                    sqlParams.Add(new SqlParameter("@databaseviewid", "View_DailyICSCreditPostingReport"));
+                }
+                else if (strPostingMode == "API" && pageSqlConfig.TaskId == "305993")
+                {
+                    sql = "SELECT * FROM [tblReportPageConfig] WHERE taskId = @taskId and DatabaseViewId=@databaseviewid";
+                    sqlParams.Add(new SqlParameter("@taskId", pageSqlConfig.TaskId));
+                    sqlParams.Add(new SqlParameter("@databaseviewid", "View_DailyICSDebitPostingReport_API"));
+                }
+                else if (strPostingMode == "FILE" && pageSqlConfig.TaskId == "305993")
+                {
+                    sql = "SELECT * FROM [tblReportPageConfig] WHERE taskId = @taskId and DatabaseViewId=@databaseviewid";
+                    sqlParams.Add(new SqlParameter("@taskId", pageSqlConfig.TaskId));
+                    sqlParams.Add(new SqlParameter("@databaseviewid", "View_DailyICSDebitPostingReport"));
+                }
+                else
+                {
+                sql = "SELECT * FROM [tblReportPageConfig] where TaskId = @taskId ";
+                sqlParams.Add(new SqlParameter("@taskId", pageSqlConfig.TaskId));
+            }
+            }
+            else
+            {
+                sql = "SELECT * FROM [tblReportPageConfig] WHERE taskId = @taskId AND PrintReportParam=@PrintReportParam ";
+                sqlParams.Add(new SqlParameter("@taskId", pageSqlConfig.TaskId));
+                sqlParams.Add(new SqlParameter("@PrintReportParam", pageSqlConfig.PrintReportParam));
+            }
+            
+            DataTable dt = dbContext.GetRecordsAsDataTable(sql, sqlParams.ToArray());
+
+
+            foreach (DataRow row in dt.Rows)
+            { 
+                reportModel.reportId = row["ReportId"].ToString();
+                reportModel.reportPath = row["ReportPath"].ToString();
+                reportModel.reportTitle = row["reportTitle"].ToString();
+                reportModel.taskId = row["TaskId"].ToString();
+                reportModel.viewId = row["DatabaseViewId"].ToString();
+                reportModel.extentionFilename = row["exportFileName"].ToString();
+                reportModel.dataSetName = row["DataSetName"].ToString();
+                reportModel.orientation = row["Orientation"].ToString();
+                tableAndViewNames.Add(new PageSqlConfig(row["TaskId"].ToString(), row["DatabaseViewId"].ToString()));
+            }
+
+            reportModel.sqlConfigForDataSet = tableAndViewNames;
+
+            return reportModel;
+        }
+
+        public DataTable getReportBasedOnPageConfig(PageSqlConfig pageSqlConfig, FormCollection collection)
+        {
+
+            ConfigTable configTable = pageDao.GetConfigTable(pageSqlConfig.TaskId);
+            SearchPageHelper.SqlDetails sql = SearchPageHelper.ConstructSqlFromConfigTableSql(pageSqlConfig, configTable, collection);            
+            return dbContext.GetRecordsAsDataTable(sql.sql, sql.sqlParams.ToArray());
+
+        }
+
+        //Jimuel - 20170721
+        public string CHistory(ReportModel reportModel, ConfigTable configTable, FormCollection collection,string bankcode)
+        {
+
+            if (reportModel.taskId == "62010")
+            {
+                string fldcleardate = DateUtils.formatDateToSql(collection["fldcleardate"]);
+                DataTable ds = new DataTable();
+                string tableOrViewName = reportModel.viewId;
+                string stmt = string.Format("SELECT top 1 fldClearDate FROM  {0}", configTable.ViewOrTableName);
+                stmt = stmt + " WHERE fldcleardate=@fldClearDate and fldBankCode =  @fldBankCode";
+
+                ds = dbContext.GetRecordsAsDataTable(stmt, new[] {
+                new SqlParameter("@tableOrViewName", configTable.ViewOrTableName),
+                new SqlParameter("@fldClearDate",fldcleardate),
+                new SqlParameter("@fldBankCode", bankcode)
+            });
+
+                if (ds.Rows.Count == 0)
+                {
+                    reportModel.extentionFilename = "[" + fldcleardate + "]" + reportModel.extentionFilename;
+                    return reportModel.viewId + "h";
+
+                }
+                else
+                {
+                    reportModel.extentionFilename = "[" + fldcleardate + "]" + reportModel.extentionFilename;
+                    return reportModel.viewId;
+                }
+            }
+            else
+            {
+                string fldcleardate = DateUtils.formatDateToSql(collection["fldcleardate"]);
+            DataTable ds = new DataTable();
+            string tableOrViewName = reportModel.viewId;
+                string stmt = string.Format("SELECT top 1 fldClearDate FROM  {0} ", configTable.ViewOrTableName);
+            stmt = stmt + " WHERE fldcleardate=@fldClearDate and fldBankCode =  @fldBankCode";
+
+            ds = dbContext.GetRecordsAsDataTable(stmt, new[] {
+                new SqlParameter("@tableOrViewName", configTable.ViewOrTableName),
+                new SqlParameter("@fldClearDate",fldcleardate),
+                new SqlParameter("@fldBankCode", bankcode)
+            });
+
+            if (ds.Rows.Count == 0)
+            {
+                reportModel.extentionFilename = "[" + fldcleardate + "]" + reportModel.extentionFilename;
+                return reportModel.viewId + "h";
+
+            }
+            else
+            {
+                reportModel.extentionFilename = "[" + fldcleardate + "]" + reportModel.extentionFilename;
+                return reportModel.viewId;
+            }
+
+        }
+        }
+
+        public byte[] renderReportBasedOnConfig(ReportModel reportModel, FormCollection collection, string path , 
+            string reportType, out string mimeType) {
+
+            string date = DateUtils.formatDateToReportDate(collection["fldstartDate"]);
+            string date2 = DateUtils.formatDateToReportDate(collection["fldendDate"]);
+            string bcode = collection["txtBankBranch"];
+            string accnum = collection["txtIssuingAccNum"];
+            string cheqstatus = collection["txtChequeStatus"];
+            string returnReason = collection["txtReturnReason"];
+            string ddd = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+            //DateTime temp = DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            //string str = temp.ToString("yyyy-MM-dd");
+            LocalReport localReport = new LocalReport();
+            localReport.ReportPath = path;
+            localReport.EnableExternalImages = true;
+            ReportParameterInfoCollection availableReportParams = localReport.GetParameters();
+            collection.Add("ReportLogo", new Uri(CurrentUser.Account.LogoPath).AbsoluteUri);
+            collection.Add("BankName", CurrentUser.Account.BankDesc);
+            collection.Add("UserAbb", CurrentUser.Account.UserAbbr);
+            //DateTime dt1 = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            //DateTime dt2 = DateTime.ParseExact(date2, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            collection.Add("StartDate", date);
+            collection.Add("EndDate", date2);
+            collection.Add("CurrentDateTime", ddd);
+            localReport.SetParameters(convertFormCollectionToReportParams(availableReportParams, collection));
+
+            ConfigTable configTable = pageDao.GetConfigTable(reportModel.taskId);
+
+            if (reportType == "Excel")
+            {
+                reportType = "Excelopenxml";
+            }
+            else if (reportType == "CSV")
+            {
+                reportType = "Excelopenxml";
+            }
+
+            if (configTable.ViewOrTableName.Equals(""))
+            {
+                configTable.ViewOrTableName = reportModel.viewId;
+            }
+
+            if (reportModel.taskId == "999910")
+            {
+                //do nothing
+            }
+
+            else if (reportModel.taskId != "107030" && reportModel.taskId != "107020"  && reportModel.taskId != "106010" && reportModel.taskId != "102150" && reportModel.taskId != "102110" && reportModel.taskId != "102130" && reportModel.taskId != "102340" && reportModel.taskId != "102380" && reportModel.taskId != "102160" && reportModel.taskId != "102220" && reportModel.taskId != "102230" && reportModel.taskId != "102520" && reportModel.taskId != "102680" && reportModel.taskId != "102570" && reportModel.taskId != "102690" && reportModel.taskId!="102670")
+            {
+                //configTable.ViewOrTableName = CHistory(reportModel, configTable, collection, CurrentUser.Account.BankCode);
+            }
+            //Heavy load of Datasets load
+            foreach (PageSqlConfig config in reportModel.sqlConfigForDataSet) {
+                if (reportModel.taskId != "107060" && reportModel.taskId != "102150" && reportModel.taskId != "102110" && reportModel.taskId != "102130" && reportModel.taskId != "102340" && reportModel.taskId != "102380" && reportModel.taskId != "102570" && reportModel.taskId != "102670")
+                {
+                    if (/*(config.TaskId == "308110") ||*/ (config.TaskId == "308130"))
+                    {
+                        config.AddSqlExtraCondition("fldBankCode=" + CurrentUser.Account.BankCode + " and fldBranchCode=" + CurrentUser.Account.BranchCodes[0]);
+                    }
+                    else if (/*(config.TaskId == "308120") ||*/ (config.TaskId == "308140"))
+                    {
+                        config.AddSqlExtraCondition("fldBankCode=" + CurrentUser.Account.BankCode + " and fldBranchCode=" + CurrentUser.Account.BranchCodes[0]);
+                    }
+
+                    //else if ((config.TaskId == "306220") || (config.TaskId == "306910"))
+                    //{
+                    //    config.AddSqlExtraCondition("  fldBRSTN in ( Select fldBranchId from tblDedicatedBranch where flduserid = '" + CurrentUser.Account.UserAbbr + "')");
+                    //}
+                    //else if ((config.TaskId == "306230") || (config.TaskId == "306920"))
+                    //{
+                    //    config.AddSqlExtraCondition("  fldBRSTN in ( Select fldBranchId from tblDedicatedBranch where fldofficerid = '" + CurrentUser.Account.UserAbbr + "')");
+                    //}
+                    else if ((config.TaskId == "306240") || (config.TaskId == "306930"))
+                    {
+                        config.AddSqlExtraCondition("  fldBRSTN not in ( Select fldBranchId from tblDedicatedBranch where fldofficerid = '" + CurrentUser.Account.UserAbbr + "')");
+                    }
+                    else if (config.TaskId == "306510" || config.TaskId == "308210")
+                    {
+                        config.AddSqlExtraCondition("fldIssueBankCode= '" + CurrentUser.Account.BankCode + "' and fldInvolvedUserName = '" + CurrentUser.Account.UserAbbr + "'");
+                    }
+                    else if (config.TaskId == "304640" || config.TaskId == "304650" || config.TaskId == "304660" || config.TaskId == "304670" || config.TaskId == "304680")
+                    {
+                        config.AddSqlExtraCondition("fldBankCode=" + CurrentUser.Account.BankCode + " and fldBRSTN=" + CurrentUser.Account.BranchCodes[0]);
+                    }
+                    else if (config.TaskId == "305999" || config.TaskId == "305998" || config.TaskId == "305997" ||config.TaskId == "305996" || config.TaskId == "305995")
+                    {
+                        //config.AddSqlExtraCondition("flduserabb='" + CurrentUser.Account.UserAbbr + "'");
+                        //do nothing
+                        //config.AddSqlExtraCondition("fldbankcode='" + CurrentUser.Account.BankCode + "'");;
+
+                        config.AddSqlExtraCondition("fldCapturingDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113)");
+
+                    }
+                    else if (config.TaskId == "305994" || config.TaskId == "305993")
+                    {
+                        //config.AddSqlExtraCondition("flduserabb='" + CurrentUser.Account.UserAbbr + "'");
+                        //do nothing
+                        //config.AddSqlExtraCondition("fldbankcode='" + CurrentUser.Account.BankCode + "'");;
+
+                        config.AddSqlExtraCondition("fldchequeclearingdate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113)");
+
+                    }
+                    else if (config.TaskId == "304791" || config.TaskId == "304601")
+                    {
+                        if (bcode.Equals("All"))
+                        {
+                            config.AddSqlExtraCondition("fldclearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113)");
+                        }
+                        else
+                        {
+
+                            config.AddSqlExtraCondition("fldclearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldIssuingBankBranchId = '" + bcode + "'");
+                        }
+                    }
+                    else if (config.TaskId == "304512")
+                    {
+                        if (bcode.Equals("All") && accnum.Equals("") && cheqstatus.Equals("All"))
+                        {
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113)");
+                        }
+                        else if (!bcode.Equals("All") && !accnum.Equals("") && !cheqstatus.Equals("All"))
+                        {
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldIssuingBankBranchId = '" + bcode + "' and fldAccountNumber = '" + accnum + "' and fldChequeStatus = '" + cheqstatus + "'");
+                        }
+                        else if (!bcode.Equals("All") && accnum.Equals("") && cheqstatus.Equals("All"))
+                        {
+
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldIssuingBankBranchId = '" + bcode + "'");
+                        }
+                        else if (bcode.Equals("All") && !accnum.Equals("") && cheqstatus.Equals("All"))
+                        {
+
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldAccountNumber = '" + accnum + "'");
+                        }
+                        else if (bcode.Equals("All") && accnum.Equals("") && !cheqstatus.Equals("All"))
+                        {
+
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldChequeStatus = '" + cheqstatus + "'");
+                        }
+                        //
+                        else if (!bcode.Equals("All") && !accnum.Equals("") && cheqstatus.Equals("All"))
+                        {
+
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldIssuingBankBranchId = '" + bcode + "' and fldAccountNumber = '" + accnum +  "'");
+                        }
+                        else if (!bcode.Equals("All") && accnum.Equals("") && !cheqstatus.Equals("All"))
+                        {
+
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldIssuingBankBranchId = '" + bcode + "' and fldChequeStatus = '" + cheqstatus + "'");
+                        }
+                        else if (bcode.Equals("All") && !accnum.Equals("") && !cheqstatus.Equals("All"))
+                        {
+
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldChequeStatus = '" + cheqstatus + "' and fldAccountNumber = '" + accnum + "'");
+                        }
+
+
+                    }
+                    else if (config.TaskId == "304602")
+                    {
+                        if (bcode.Equals("All") && accnum.Equals("") && returnReason.Equals("All"))
+                        {
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113)");
+                        }
+                        else if (!bcode.Equals("All") && !accnum.Equals("") && !returnReason.Equals("All"))
+                        {
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldIssuingBankBranchId = '" + bcode + "' and fldAccountNumber = '" + accnum + "' and fldRejectCode = '" + returnReason + "'");
+                        }
+                        else if (!bcode.Equals("All") && accnum.Equals("") && returnReason.Equals("All"))
+                        {
+
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldIssuingBankBranchId = '" + bcode + "'");
+                        }
+                        else if (bcode.Equals("All") && !accnum.Equals("") && returnReason.Equals("All"))
+                        {
+
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldAccountNumber = '" + accnum + "'");
+                        }
+                        else if (bcode.Equals("All") && accnum.Equals("") && !returnReason.Equals("All"))
+                        {
+
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldRejectCode = '" + returnReason + "'");
+                        }
+                        //
+                        else if (!bcode.Equals("All") && !accnum.Equals("") && returnReason.Equals("All"))
+                        {
+
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldIssuingBankBranchId = '" + bcode + "' and fldAccountNumber = '" + accnum + "'");
+                        }
+                        else if (!bcode.Equals("All") && accnum.Equals("") && !returnReason.Equals("All"))
+                        {
+
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldIssuingBankBranchId = '" + bcode + "' and fldRejectCode = '" + returnReason + "'");
+                        }
+                        else if (bcode.Equals("All") && !accnum.Equals("") && !returnReason.Equals("All"))
+                        {
+
+                            config.AddSqlExtraCondition("fldClearDate between CONVERT(nvarchar(30),'" + date + "',113) and CONVERT(nvarchar(30), '" + date2 + "',113) and fldRejectCode = '" + returnReason + "' and fldAccountNumber = '" + accnum + "'");
+                        }
+                    }
+                    else if (config.TaskId == "102690")
+                    {
+                        //for certain report that does not require for any filter condition
+                    }
+                    else
+                    {
+                        config.AddSqlExtraCondition("fldBankCode='" + CurrentUser.Account.BankCode + "'");
+                    }
+                }
+                SearchPageHelper.SqlDetails sql = SearchPageHelper.ConstructSqlFromConfigTableSql(config, configTable, collection);
+                //20200227: BEGIN: LENDER: PRINT ALL SELECT QUERY.
+                DataTable dt;
+                string fldcleardate = "";
+                //string HolidayDate = "";
+                string mainCondition = !string.IsNullOrEmpty(sql.conditionAsSqlString) ? " AND " + sql.conditionAsSqlString : "";
+                string lockCondition = !string.IsNullOrEmpty(config.SqlLockCondition) ? " AND (" + config.SqlLockCondition + ")" : "";
+                string filtersSql = mainCondition + lockCondition;
+                if (config.TaskId == "107020" || config.TaskId == "107030" || config.TaskId == "102220" || config.TaskId == "102230" || config.TaskId == "306220" || config.TaskId == "106010")
+                {
+                    if (sql.sqlParams.Count != 0)
+                    {
+                        foreach (var sqlParam in sql.sqlParams)
+                        {
+                            string a = sqlParam.Value.ToString();
+                            string b = sqlParam.ParameterName.ToString();
+                            //filtersSql=filtersSql.Replace(b,a);
+                            if (b == "@fldClearDate")
+                            {
+                                fldcleardate = a;
+                                a = "'" + a + "'";
+                            }
+                            if (b == "@fldBankCode")
+                            {
+                                a = "'" + a + "'";
+                            }
+                            //if (b == "@HolidayDate")
+                            //{
+                            //    HolidayDate = a;
+                            //    a = "'" + a + "'";
+                            //}
+                            filtersSql = filtersSql.Replace(b, a);
+                        }
+
+                        filtersSql = filtersSql.Replace("%' + ", "%");
+                        filtersSql = filtersSql.Replace(" + '%", "%");
+
+                    }
+
+                    List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+                    sqlParameterNext.Add(new SqlParameter("@TaskId", config.TaskId));
+                    sqlParameterNext.Add(new SqlParameter("@fldBankCode", CurrentUser.Account.BankCode));
+                    sqlParameterNext.Add(new SqlParameter("@fldClearDate", fldcleardate));
+                    //sqlParameterNext.Add(new SqlParameter("@HolidayDate", HolidayDate));
+                    sqlParameterNext.Add(new SqlParameter("@fldUserId", CurrentUser.Account.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@condition", filtersSql));
+
+                    dt = dbContext.GetRecordsAsDataTableSP("spcgReportListPage", sqlParameterNext.ToArray());
+                    localReport.DataSources.Add(new ReportDataSource(reportModel.dataSetName, dt));
+                }
+                //20200227: BEGIN: LENDER: PRINT ALL SELECT QUERY.
+
+                //if (config.TaskId == "107020")
+                //{
+                //    query = "SELECT hm.fldHubCode, hm.fldHubDesc, um.fldUserAbb FROM tblUserMaster AS um FULL OUTER JOIN tblHubUser AS hu ON um.fldUserId = hu.fldUserId FULL OUTER JOIN tblHubMaster AS hm ON hm.fldHubCode = hu.fldHubCode WHERE hm.fldBankCode= " + CurrentUser.Account.BankCode + " ORDER BY hm.fldHubCode ";
+                //}
+                //else if (config.TaskId == "107030")
+                //{
+                //    query = "SELECT hm.fldHubCode, hm.fldHubDesc, bm.fldBranchDesc  FROM tblInternalBranchMaster AS bm FULL OUTER JOIN tblHubBranch AS hb ON bm.fldBranchCode = hb.fldBranchId FULL OUTER JOIN tblHubMaster AS hm ON hm.fldHubCode = hb.fldHubCode WHERE hm.fldBankCode= " + CurrentUser.Account.BankCode + " ORDER BY hm.fldHubCode ";
+                //}
+                //else
+                //{
+                //     query = "SELECT " + sql.queriesAsSqlString + " FROM " + sql.tableName + " WHERE fldBankCode=" + CurrentUser.Account.BankCode;
+                //}
+
+                dt = dbContext.GetRecordsAsDataTable(sql.sql, sql.sqlParams.ToArray());
+                localReport.DataSources.Add(new ReportDataSource(reportModel.dataSetName, dt));
+                //20200227: END: LENDER:
+            }
+
+            string deviceInfo = string.Format(GetDeviceInfo(reportModel.orientation), reportType);
+            string encoding; string fileNameExtension; Warning[] warnings; string[] streams;
+            return localReport.Render(reportType, deviceInfo, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);            
+        }
+
+
+
+        public byte[] renderReportBasedOnConfigForPage(ReportModel reportModel, FormCollection collection, string path,
+            string reportType, out string mimeType)
+        {
+
+            LocalReport localReport = new LocalReport();
+            localReport.ReportPath = path;
+            localReport.EnableExternalImages = true;
+            ReportParameterInfoCollection availableReportParams = localReport.GetParameters();
+            collection.Add("ReportLogo", new Uri(CurrentUser.Account.LogoPath).AbsoluteUri);
+            collection.Add("BankName", CurrentUser.Account.BankDesc);
+            localReport.SetParameters(convertFormCollectionToReportParams(availableReportParams, collection));
+
+            if (reportType == "Excel")
+            {
+                reportType = "Excelopenxml";
+            }
+
+            ConfigTable configTable = pageDao.GetConfigTable(reportModel.taskId);
+
+            if (configTable.ViewOrTableName.Equals(""))
+            {
+                configTable.ViewOrTableName = reportModel.viewId;
+            }
+            //Heavy load of Datasets load
+            foreach (PageSqlConfig config in reportModel.sqlConfigForDataSet)
+            {
+                if (reportModel.taskId == "102160" || reportModel.taskId == "102220" || reportModel.taskId == "102230" || reportModel.taskId == "102520" || reportModel.taskId == "102680" || reportModel.taskId == "106010" || reportModel.taskId == "102670")
+                {
+                    config.AddSqlExtraCondition("fldBankCode='" + CurrentUser.Account.BankCode + "'");
+                }
+               
+                SearchPageHelper.SqlDetails sql = SearchPageHelper.ConstructPaginatedResultQueryWithFilter(config, configTable, collection);
+                //20200227: BEGIN: LENDER: PRINT ALL SELECT QUERY.
+                DataTable dt;
+                string page = DatabaseUtils.SanitizeString(collection["page"]);
+                page = page == null ? "0" : page;
+                if (config.TaskId == "107020" || config.TaskId == "107030" || config.TaskId == "102220" || config.TaskId == "102230" )
+                {
+
+                    List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+                    string ParameterName = "";
+
+
+
+                    if (sql.sqlParams.Count == 0)
+                    {
+                        ParameterName = "";
+                    }
+                    else
+                    {
+                        foreach (var print in sql.sqlParams)
+                        {
+                            ParameterName = print.ParameterName;
+                        }
+
+                    }
+                    if (config.TaskId == "107020" || config.TaskId == "107030")
+                    {
+                        sqlParameterNext.Add(new SqlParameter("@fldHubCode", collection["fldHubCode"]));
+                        sqlParameterNext.Add(new SqlParameter("@fldHubDesc", collection["fldHubDesc"]));
+                        sqlParameterNext.Add(new SqlParameter("@fldGroupId", ""));
+                        sqlParameterNext.Add(new SqlParameter("@fldGroupDesc", ""));
+                    }
+                    else if (config.TaskId == "102220" || config.TaskId == "102230")
+                    {
+                        sqlParameterNext.Add(new SqlParameter("@fldHubCode", ""));
+                        sqlParameterNext.Add(new SqlParameter("@fldHubDesc", ""));
+                        sqlParameterNext.Add(new SqlParameter("@fldGroupId", collection["fldGroupCode"]));
+                        sqlParameterNext.Add(new SqlParameter("@fldGroupDesc", collection["fldGroupDesc"]));
+                    }
+                    sqlParameterNext.Add(new SqlParameter("@PageNumber", page));
+                    sqlParameterNext.Add(new SqlParameter("@Parameter", ParameterName));
+                    sqlParameterNext.Add(new SqlParameter("@ParameterCount", sql.sqlParams.Count));
+                    sqlParameterNext.Add(new SqlParameter("@TaskId", config.TaskId));
+                    sqlParameterNext.Add(new SqlParameter("@fldBankCode", CurrentUser.Account.BankCode));
+
+                     dt = dbContext.GetRecordsAsDataTableSP("spcgReportList", sqlParameterNext.ToArray());
+                    localReport.DataSources.Add(new ReportDataSource(reportModel.dataSetName, dt));
+                }
+                    dt = dbContext.GetRecordsAsDataTable(sql.sql, sql.sqlParams.ToArray());
+                localReport.DataSources.Add(new ReportDataSource(reportModel.dataSetName, dt));
+                //if (config.TaskId == "107020")
+                //{
+                //    switch (sql.sqlParams.Count)
+                //    {
+                //        case 1:
+                //            {
+                //                foreach (var print in sql.sqlParams)
+                //                {
+                //                    if (print.ParameterName.Equals("@fldHubId"))
+                //                    {
+                //                        sql.sql = "SELECT hm.fldHubId, hm.fldHubDesc, um.fldUserAbb FROM tblUserMaster AS um FULL OUTER JOIN tblHubUser AS hu ON um.fldUserId = hu.fldUserId FULL OUTER JOIN tblHubMaster AS hm ON hm.fldHubId = hu.fldHubId WHERE hm.fldBankCode= " + CurrentUser.Account.BankCode + " AND hm.fldHubId LIKE '%'+@fldHubId+'%' ORDER BY hm.fldHubId";
+
+                //                    }
+                //                    else
+                //                    {
+                //                        sql.sql = "SELECT hm.fldHubId, hm.fldHubDesc, um.fldUserAbb FROM tblUserMaster AS um FULL OUTER JOIN tblHubUser AS hu ON um.fldUserId = hu.fldUserId FULL OUTER JOIN tblHubMaster AS hm ON hm.fldHubId = hu.fldHubId WHERE hm.fldBankCode= " + CurrentUser.Account.BankCode + " AND hm.fldHubDesc LIKE '%'+@fldHubDesc+'%' ORDER BY hm.fldHubId";
+
+                //                    }
+                //                }
+
+                //                break;
+                //            }
+                //        case 2:
+                //            {
+                //                sql.sql = "SELECT hm.fldHubId, hm.fldHubDesc, um.fldUserAbb FROM tblUserMaster AS um FULL OUTER JOIN tblHubUser AS hu ON um.fldUserId = hu.fldUserId FULL OUTER JOIN tblHubMaster AS hm ON hm.fldHubId = hu.fldHubId WHERE hm.fldBankCode= " + CurrentUser.Account.BankCode + " AND hm.fldHubId LIKE '%'+@fldHubId+'%' AND hm.fldHubDesc LIKE '%'+@fldHubDesc+'%' ORDER BY hm.fldHubId";
+                //                break;
+                //            }
+                //        default:
+                //            {
+                //                sql.sql = "SELECT hm.fldHubId, hm.fldHubDesc, um.fldUserAbb FROM tblUserMaster AS um FULL OUTER JOIN tblHubUser AS hu ON um.fldUserId = hu.fldUserId FULL OUTER JOIN tblHubMaster AS hm ON hm.fldHubId = hu.fldHubId WHERE hm.fldBankCode= " + CurrentUser.Account.BankCode + "  ORDER BY hm.fldHubId";
+
+                //                break;
+                //            }
+                //    }
+
+                //}
+                //else if (config.TaskId == "107030")
+                //{
+                //    switch (sql.sqlParams.Count)
+                //    {
+                //        case 1:
+                //            {
+                //                foreach (var print in sql.sqlParams)
+                //                {
+                //                    if (print.ParameterName.Equals("@fldHubId"))
+                //                    {
+                //                        sql.sql = "SELECT hm.fldHubId, hm.fldHubDesc, bm.fldBranchDesc FROM tblInternalBranchMaster AS bm FULL OUTER JOIN tblHubBranch AS hb ON bm.fldBranchCode = hb.fldBranchId FULL OUTER JOIN tblHubMaster AS hm ON hm.fldHubId = hb.fldHubId WHERE hm.fldBankCode= " + CurrentUser.Account.BankCode + " AND hm.fldHubId LIKE '%'+@fldHubId+'%' ORDER BY hm.fldHubId";
+
+                //                    }
+                //                    else
+                //                    {
+                //                        sql.sql = "SELECT hm.fldHubId, hm.fldHubDesc, bm.fldBranchDesc FROM tblInternalBranchMaster AS bm FULL OUTER JOIN tblHubBranch AS hb ON bm.fldBranchCode = hb.fldBranchId FULL OUTER JOIN tblHubMaster AS hm ON hm.fldHubId = hb.fldHubId WHERE hm.fldBankCode= " + CurrentUser.Account.BankCode + " AND hm.fldHubDesc LIKE '%'+@fldHubDesc+'%' ORDER BY hm.fldHubId";
+
+                //                    }
+                //                }
+
+                //                break;
+                //            }
+                //        case 2:
+                //            {
+                //                sql.sql = "SELECT hm.fldHubId, hm.fldHubDesc, bm.fldBranchDesc FROM tblInternalBranchMaster AS bm FULL OUTER JOIN tblHubBranch AS hb ON bm.fldBranchCode = hb.fldBranchId FULL OUTER JOIN tblHubMaster AS hm ON hm.fldHubId = hb.fldHubId WHERE hm.fldBankCode= " + CurrentUser.Account.BankCode + " AND hm.fldHubId LIKE '%'+@fldHubId+'%' AND hm.fldHubDesc LIKE '%'+@fldHubDesc+'%' ORDER BY hm.fldHubId";
+                //                break;
+                //            }
+                //        default:
+                //            {
+                //                sql.sql = "SELECT hm.fldHubId, hm.fldHubDesc, bm.fldBranchDesc FROM tblInternalBranchMaster AS bm FULL OUTER JOIN tblHubBranch AS hb ON bm.fldBranchCode = hb.fldBranchId FULL OUTER JOIN tblHubMaster AS hm ON hm.fldHubId = hb.fldHubId WHERE hm.fldBankCode= " + CurrentUser.Account.BankCode + " ORDER BY hm.fldHubId";
+
+                //                break;
+                //            }
+                //    }
+
+
+                //}
+
+
+
+            }
+
+            string deviceInfo = string.Format(GetDeviceInfo(reportModel.orientation), reportType);
+            string encoding; string fileNameExtension; Warning[] warnings; string[] streams;
+            return localReport.Render(reportType, deviceInfo, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+        }
+
+        public byte[] renderChequeReportWithImageBasedOnConfig(ReportModel reportModel, FormCollection collection,
+            string path, string reportType, out string mimeType)
+        {
+
+            LocalReport localReport = new LocalReport();
+            localReport.ReportPath = path;
+            localReport.EnableExternalImages = true;
+            ReportParameterInfoCollection availableReportParams = localReport.GetParameters();
+            
+
+
+            //Add Cheque Image to report as parameter
+            string imageFolder = collection["imageFolder"];
+            string imageId = collection["imageId"];
+            string frontImagePath = getImagePathForCheque(imageFolder, imageId, new List<string> { "front", "bw" });
+            string backImagePath = getImagePathForCheque(imageFolder, imageId, new List<string> { "back", "bw" });
+            string grayscaleImagePath = getImagePathForCheque(imageFolder, imageId, new List<string> { "grayscale" });
+
+            collection.Add("FrontChequeImage", frontImagePath);
+            collection.Add("BackChequeImage", backImagePath);
+            collection.Add("GrayscaleChequeImage", grayscaleImagePath);            
+
+            List<ReportParameter> reportParamters = convertFormCollectionToReportParams(availableReportParams, collection);
+            localReport.SetParameters(reportParamters);
+
+            ConfigTable configTable = pageDao.GetConfigTable(reportModel.taskId);
+            configTable.ViewOrTableName = CHistory(reportModel, configTable, collection, CurrentUser.Account.BankCode);
+            foreach (PageSqlConfig config in reportModel.sqlConfigForDataSet)
+            {
+                DataTable dt;
+                SearchPageHelper.SqlDetails sql = SearchPageHelper.ConstructSqlFromConfigTableSql(config, configTable, collection);
+                if (reportModel.taskId == "62010")
+                {
+                    dt = dbContext.GetRecordsAsDataTable(sql.ToSqlSelectTop1All(), sql.sqlParams.ToArray());
+                }
+                else
+                {
+                    dt = dbContext.GetRecordsAsDataTable(sql.ToSqlSelectAll(), sql.sqlParams.ToArray());
+                }
+                
+                
+                localReport.DataSources.Add(new ReportDataSource(reportModel.dataSetName, dt));
+            }
+
+            string encoding; string fileNameExtension; Warning[] warnings; string[] streams;
+
+            return localReport.Render(reportType, string.Format(GetDeviceInfo(reportModel.orientation), reportType), out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+        }
+
+        public byte[] PrintChequeConfig(ReportModel reportModel, FormCollection collection,
+                                        string path, string reportType, out string mimeType)
+        {
+
+            LocalReport localReport = new LocalReport();
+            localReport.ReportPath = path;
+            localReport.EnableExternalImages = true;
+            ReportParameterInfoCollection availableReportParams = localReport.GetParameters();
+
+            List<SqlParameter> sqlParams = new List<SqlParameter>();
+
+            string sqlQuery = "";
+            string itemId = "";
+            //string itemId = collection["imageItemId"]; //Commented by Michelle 20200604
+            if (collection["hTaskId"] == "311113")
+            {
+                itemId = collection["current_fldInwardItemID"];
+            }
+            else
+            {
+                itemId = collection["fldInwardItemID"];
+            }
+            string uic = collection["current_flduic"].Trim();
+            string frontImagePath = "";
+            string backImagePath = "";
+            string grayfrontImagePath = "";
+            //string graybackImagePath = "";
+
+            //sqlQuery = "select frontimg,backimg,gfrontimg,gbackimg from view_printcheque_ocs where flditemid = @flditemid::bigint";
+            sqlQuery = "select fldGFrontIMGCode as fldgfrontimgbt, fldGBackIMGCode as fldgbackimgbt, fldFrontIMGCode as fldfrontimgbt, fldBackIMGCode as fldbackimgbt,fldUVIMGCode as flduvimgbt  from tblICSMICRImage where fldUIC = @flduic";
+            sqlParams.Add(new SqlParameter("@flduic", uic));
+
+            DataTable dtable = dbContext.GetRecordsAsDataTable(sqlQuery, sqlParams.ToArray());
+
+            foreach (DataRow row in dtable.Rows)
+            {
+                frontImagePath = Convert.ToBase64String((byte[])row["fldfrontimgbt"]);
+                backImagePath = Convert.ToBase64String((byte[])row["fldbackimgbt"]);
+                grayfrontImagePath = Convert.ToBase64String((byte[])row["fldgfrontimgbt"]);
+                //graybackImagePath = Convert.ToBase64String((byte[])row["fldgbackimgbt"]);
+            }
+
+
+            //FormCollection collection = new FormCollection();
+
+            collection.Add("FrontChequeImage", frontImagePath);
+            collection.Add("BackChequeImage", backImagePath);
+            collection.Add("GrayFrontChequeImage", grayfrontImagePath);
+            //collection.Add("GrayBackChequeImage", graybackImagePath);
+            collection["fldInwardItemID"] = itemId;
+
+            List<ReportParameter> reportParamters = convertFormCollectionToReportParams(availableReportParams, collection);
+            localReport.SetParameters(reportParamters);
+
+            ConfigTable configTable = pageDao.GetConfigTable(reportModel.taskId);
+            //configTable.ViewOrTableName = CHistory(reportModel, configTable, collection, CurrentUser.Account.BankCode);
+            foreach (PageSqlConfig config in reportModel.sqlConfigForDataSet)
+            {
+                DataTable dt;
+                SearchPageHelper.SqlDetails sql = SearchPageHelper.ConstructSqlFromConfigTableSql(config, configTable, collection);
+                dt = dbContext.GetRecordsAsDataTable(sql.ToSqlSelectAll(), sql.sqlParams.ToArray());
+
+                localReport.DataSources.Add(new ReportDataSource(reportModel.dataSetName, dt));
+            }
+
+            string encoding; string fileNameExtension; Warning[] warnings; string[] streams;
+
+            sqlParams.Clear();
+
+            return localReport.Render(reportType, string.Format(GetDeviceInfo(reportModel.orientation), reportType), out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+        }
+
+        public byte[] renderSignatureCIFReport(ReportModel reportModel, FormCollection collection,
+            string path, string reportType, out string mimeType, string imageValue)
+        {
+
+            LocalReport localReport = new LocalReport();
+            localReport.ReportPath = path;
+            ReportParameterInfoCollection availableReportParams = localReport.GetParameters();
+
+            collection.Add("Image", imageValue);
+
+            List<ReportParameter> reportParamters = convertFormCollectionToReportParams(availableReportParams, collection);
+            localReport.SetParameters(reportParamters);
+
+            ConfigTable configTable = pageDao.GetConfigTable(reportModel.taskId);
+            foreach (PageSqlConfig config in reportModel.sqlConfigForDataSet)
+            {
+                DataTable dt;
+                SearchPageHelper.SqlDetails sql = SearchPageHelper.ConstructSqlFromConfigTableSql(config, configTable, collection);
+
+                dt = dbContext.GetRecordsAsDataTable(sql.ToSqlSelectAll(), sql.sqlParams.ToArray());
+
+
+                localReport.DataSources.Add(new ReportDataSource(reportModel.dataSetName, dt));
+            }
+
+            string encoding; string fileNameExtension; Warning[] warnings; string[] streams;
+
+            return localReport.Render(reportType, string.Format(GetDeviceInfo(reportModel.orientation), reportType), out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+        }
+
+
+        private string getImagePathForCheque(string imageFolder, string imageId, List<string> states)
+        {
+            
+            ImageHelper.ImageInfo imageInfo = imageHelper.constructFileNameBasedOnParameters(imageFolder, imageId, states, CurrentUser.Account.UserAbbr);
+                        
+            if (!System.IO.File.Exists(imageInfo.sourcePath))
+            {
+                return null;
+            }
+            if (!System.IO.File.Exists(imageInfo.destinationPath))
+            {
+                try
+                {
+                    imageHelper.convertImageFromTiff(imageInfo.sourcePath, imageInfo.destinationPath, 1, imageInfo.sizeScale, imageInfo.angle, imageInfo.filter);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+
+
+            return imageInfo.destinationPath.Replace("\\", "/");
+        }
+
+
+        private List<ReportParameter> convertFormCollectionToReportParams(ReportParameterInfoCollection availableReportParams, FormCollection collection)
+        {
+            List<ReportParameter> result = new List<ReportParameter>();
+            foreach (ReportParameterInfo prm in availableReportParams)
+            {
+                if (!string.IsNullOrEmpty(collection[prm.Name]))
+                {
+                    result.Add(new ReportParameter(prm.Name, collection[prm.Name]));
+                }
+            }            
+            return result;
+
+        }
+
+        private Boolean HasData(string view, string todate, string fromdate)
+        {
+            DataTable ds = new DataTable();
+            string strQuery;
+            string resultTo = DateTime.ParseExact(todate, "dd-MM-yyyy", CultureInfo.InvariantCulture).ToString("yyyyMMdd");
+            string resultFrom = DateTime.ParseExact(fromdate, "dd-MM-yyyy", CultureInfo.InvariantCulture).ToString("yyyyMMdd");
+            List<SqlParameter> sqlParams = new List<SqlParameter>();
+            strQuery = "Select count(1) from " + view + " where datediff(d,fldcleardate,@todate)>=0 and datediff(d,fldcleardate,@fromdate)<=0";
+            ds = dbContext.GetRecordsAsDataTable(strQuery, new[]
+            {
+            new SqlParameter("@todate", resultTo ) ,
+            new SqlParameter("@fromdate", resultFrom )
+               });
+            if (ds.Rows.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}

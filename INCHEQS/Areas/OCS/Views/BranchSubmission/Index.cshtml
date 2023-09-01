@@ -1,0 +1,165 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Security
+@using (Html.BeginForm("Redirect", "BranchSubmission", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div id="BranchSubmissionDetailModal" class="modal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Detail</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12" id="BranchSubmissionDetailModal_body">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@Locale.btnClose</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="form-horizontal">
+        <h4>Outward Clearing - Branch Submission</h4>
+        <div class="row">
+            <div class="col-sm-12" style="border-top: 2px solid gray;">
+                <div id="divTitleBar3" class="titleBar">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="width :73%; height: 22px;" class="cssPageTitleBar">
+                                Item Ready for Submission
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-bordered mTop10" id="tblBranchSubmissionItemListing">
+                    <thead>
+                        <tr>
+                            <th>BranchID</th>
+                            <th>BranchName</th>
+                            <th>CapturingDate</th>
+                            <th>ScannerID</th>
+                            <th>BatchNumber</th>
+                            <th>CapturingMode</th>
+                            <th>TotalItem</th>
+                            <th>TotalAmount</th>
+                            <th>Action</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if (ViewBag.ItemsForSubmission != null)
+                            {
+                                foreach (var row in ViewBag.ItemsForSubmission)
+                                {
+                                    <tr id="row_@row.fldCapturingBranch">
+                                        <td align="left"><span>@row.fldCapturingBranch</span></td>
+                                        <td align="left"><span>@row.fldBranchDesc</span></td>
+                                        <td align="left"><span>@row.CapturingDate</span></td>
+                                        <td align="left"><span>@row.fldscannerid</span></td>
+                                        <td align="left"><span>@row.fldBatchNumber</span></td>
+                                        <td align="left"><span>@row.fldCapturingMode</span></td>
+                                        <td align="left"><span>@row.TotalItem</span></td>
+                                        <td align="left"><span>@Convert.ToDecimal(Convert.ToDecimal(row.TotalAmount) / 100).ToString("#,##0.00")</span></td>
+                                        <td align="left">
+                                            <button type="button" id="BtnSubmitBatch" class="btn btn-default btn-xs BtnSubmitBatch">Submit Batch</button>
+                                        </td>
+                                        <td align="left"><button type="button" id="BtnDetailBatch" class="btn btn-default btn-xs BtnDetailBatch">Details</button></td>
+                                    </tr>
+                                }
+                            }
+                    </tbody>
+                </table>
+                <table id="tblBranchSubmissionTotalItemsNamount" align="center">
+                    <tr>
+                        <td><b><span>Total Items : </span></b></td>
+                        <td><b><span id="BSReadyTotalIem"></span></b></td>
+                    </tr>
+                    <tr>
+                        <td><b><span>Total Amount : </span></b></td>
+                        <td><b><span id="BSReadyTotalAmount"></span></b></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-sm-12" style="border-top: 2px solid gray;">
+                <div id="divTitleBar3" class="titleBar">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="width :99%; height: 22px;" class="cssPageTitleBar">
+                                Submitted Items
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-bordered mTop10" id="tblBranchSubmittedListing">
+                    <thead>
+                        <tr>
+                            <th>BranchID</th>
+                            <th>BranchName</th>
+                            <th>CapturingDate</th>
+                            <th>ScannerID</th>
+                            <th>BatchNumber</th>
+                            <th>CapturingMode</th>
+                            <th>TotalItem</th>
+                            <th>TotalAmount</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.ItemsForSubmitted != null)
+                        {
+                            foreach (var row in ViewBag.ItemsForSubmitted)
+                            {
+                                <tr id="row_@row.fldCapturingBranch">
+                                    <td align="left"><span>@row.fldCapturingBranch</span></td>
+                                    <td align="left"><span>@row.fldBranchDesc</span></td>
+                                    <td align="left"><span>@row.CapturingDate</span></td>
+                                    <td align="left"><span>@row.fldscannerid</span></td>
+                                    <td align="left"><span>@row.fldBatchNumber</span></td>
+                                    <td align="left"><span>@row.fldCapturingMode</span></td>
+                                    <td align="left"><span>@row.TotalItem</span></td>
+                                    <td align="left"><span>@Convert.ToDecimal(Convert.ToDecimal(row.TotalAmount) / 100).ToString("#,##0.00")</span></td>
+                                    <td align="left"><button type="button" id="BtnSubmittedDetailBatch" class="btn btn-default btn-xs BtnSubmittedDetailBatch">Details</button></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <table id="tblBranchSubmittedTotalItemsNamount" align="center">
+                    <tr>
+                        <td><b><span>Total Items : </span></b></td>
+                        <td><b><span id="BSSubmittedTotalIem">0</span></b></td>
+                    </tr>
+                    <tr>
+                        <td><b><span>Total Amount : </span></b></td>
+                        <td><b><span id="BSSubmittedTotalAmount">0</span></b></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+<script src="~/Scripts/OCS/BranchSubmission.js"></script>

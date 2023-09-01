@@ -1,0 +1,107 @@
+﻿@using INCHEQS.Resources
+
+<style>
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        grid-template-rows: 80px 200px;
+        grid-gap: 10px;
+        padding: 25px;
+    }
+
+    .table-history {
+        table-layout: fixed;
+        width: 100%;
+        white-space: nowrap;
+        border: 1px solid #dddddd;
+        background-color: #f9f9f9;
+        border-bottom-width: 2px;
+    }
+
+    .row-Remarks {
+        width: 20%;
+        background-color: #f9f9f9;
+    }
+
+    .row-RemarksR {
+        width: 25%;
+        word-break: break-all;
+    }
+</style>
+
+<table class="table table-bordered mTop10">
+	<thead>
+		<tr>
+            <th>Type</th>
+            <th>Location</th>
+            @*<th>@Locale.BankCode</th>*@
+            @*<th>@Locale.BranchCode</th>
+        <th>@Locale.ChequeSerialNo</th>*@
+            <th>Issuing Bank</th>
+            <th>Issuing Branch</th>
+            <th>Cheque Number</th>
+            <th>Issuer Account Number</th>
+            <th>@Locale.Amount</th>
+            <th>Creditor Account Number</th>
+            <th class="row-Remarks">@Locale.Remarks</th>
+            <th>Registration Status</th>
+            <th>Updated By</th>
+            <th>Updated Timestamp</th>
+            @*<th>@Locale.StateCode</th>
+        <th>@Locale.Transcode</th>*@
+            @*<th>TimeStamp</th>*@
+        </tr>
+	</thead>
+	<tbody>
+        @*<tr>
+            <td><span>@ViewBag.ChequeHistory.getField("fldcheckdigit")</span></td>
+            <td><span>@ViewBag.ChequeHistory.getField("fldserial")</span></td>
+            <td><span>@ViewBag.ChequeHistory.getField("fldbankcode")</span></td>
+            <td><span>@ViewBag.ChequeHistory.getField("fldbranchcode")</span></td>
+            <td><span>@ViewBag.ChequeHistory.getField("fldstatecode")</span></td>
+            <td><span>@ViewBag.ChequeHistory.getField("fldissueraccno")</span></td>
+            <td><span>@ViewBag.ChequeHistory.getField("fldtccode")</span></td>
+            <td><span>@ViewBag.ChequeHistory.getField("fldamount")</span></td>
+            <td><span>@ViewBag.ChequeHistory.getField("fldremark")</span></td>
+        </tr>*@
+        @if (ViewBag.ChequeRepair != null) //NUll check for Model
+    {
+            foreach (var row in ViewBag.ChequeRepair)
+            {
+        <tr>
+            @*<td><span>@row.fldCheckDigit</span></td>
+
+        <td><span>@row.fldBankCode</span></td>
+
+        <td><span>@row.fldStateCode</span></td>
+        <td><span>@row.fldIssuerAccNo</span></td>
+        <td><span>@row.fldTCCode</span></td>
+        <td td align="right"><span>@row.fldAmount</span></td>
+        <td><span>@row.fldRemark</span></td>*@
+
+
+            <td td align="left"><span>@row.fldType</span></td>
+                <td td align="left"><span>@row.fldStateCode</span></td>
+            <td td align="left"><span>@row.fldBankCode</span></td>
+            <td td align="left"><span>@row.fldBranchCode</span></td>
+            <td td align="left"><span>@row.fldSerial</span></td>
+            <td td align="left"><span>@row.fldIssuerAccNo</span></td>
+                <td td align="right"><span>@Html.Raw(String.Format("{0:N}", Convert.ToDecimal(row.fldAmount)))</span></td>
+            <td td align="left"><span>@row.fldPayeeAccNo</span></td>
+                <td td align="left" class="row-RemarksR"><span>@row.fldRemark</span></td>
+                <td td align="left"><span>@row.fldClearingStatus</span></td>
+            <td td align="left"><span>@row.fldUpdateUser</span></td>
+            <td td align="left"><span>@row.fldCreateTimeStamp</span></td>
+
+            @*<td><span>@row.fldCreateTimeStamp</span></td>*@
+        </tr>
+            }
+            //string.Format("{0:#.00}",Convert.ToDecimal(row.fldAmount).ToString("C2"))
+            //String.Format("{0:C}", row.fldAmount)
+            //Convert.ToDecimal(row.fldAmount).ToString("C2")
+            //string.Format("{0:#.00}", Convert.ToDecimal(row.fldAmount).ToString("C2"))
+            //@Html.Raw(String.Format("{0:N}",Convert.ToDouble(@ViewBag.OutwardItemViewModel.getField("fldamount")))) 
+    }
+	</tbody>
+</table>

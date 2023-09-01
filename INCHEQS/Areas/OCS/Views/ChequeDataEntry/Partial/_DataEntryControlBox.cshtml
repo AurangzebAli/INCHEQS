@@ -1,0 +1,221 @@
+﻿@using INCHEQS.Resources
+
+<div class="ChequDataEntry">
+    <div id="BoxTransparentdiv" class="BoxChequeAmountEntry">
+        <!--Include a header DIV with the same name as the draggable DIV, followed by "header":-->
+
+        <div id="BoxChequeAmountEntryheaderDataEntry" class="titlebar">
+            <span class="title">@Locale.ChequeDataEntry</span>
+        </div>
+        <div hidden>
+
+        </div>
+        <div class="BoxChequeAmountEntry">
+            <div style="margin-bottom:50px;"></div>
+            <div>
+                <table cellspacing="0">
+                    <tr>
+                        <td><span style="color: black; font-size: 25px;">Acc No:</span></td>
+                        <td>
+                            @if (@ViewBag.OutwardItemViewModel.getField("fldpvaccno") == "")
+                            {
+                                <input id="txtChequeAccountNumber" class="form-control number-only" name="txtChequeAccountNumber" style="font-size:medium;text-align:right;background-color: yellow; border: 1px; height:30px;" type="text" value="" />
+                            }
+                            else
+                            {
+                                <input id="txtChequeAccountNumber" class="form-control number-only" name="txtChequeAccountNumber" style="font-size:medium;text-align:right;background-color: yellow; border: 1px; height:30px;" type="text" value="@ViewBag.OutwardItemViewModel.getField("fldpvaccno")" />
+                          }
+                        </td>
+                        <td><button type="button" id="AddAmountNAccount" class="btn btn-default btn-lg">@Locale.Add</button></td>
+                    </tr>
+                    <tr>
+                        <td><span style="color: black; font-size: 25px;">Chq Amt:</span></td>
+                        <td>
+                            <input type="text" class="form-control hidden" id="hReasonCode" name="hReasonCode" value="" />
+                            <input type="text" class="form-control hidden" id="hIntRejCode" name="hIntRejCode" value="" />
+                            <input type="text" class="form-control hidden" id="hRemark" name="hRemark"  value="" />
+                            @if (@ViewBag.OutwardItemViewModel.getField("fldamount") == "0" || @ViewBag.OutwardItemViewModel.getField("fldamount") == "0.00")
+                            {
+                                <input id="txtChequeAmount" class="form-control " name="txtChequeAmount" style="font-size:medium;text-align:right;background-color: yellow; border: 1px; height:30px;" type="text" value="" />
+                            }
+                            else
+                            {
+                                <input id="txtChequeAmount" class="form-control cheque-input" name="txtChequeAmount" style="font-size:medium;text-align:right;background-color: yellow; border: 1px; height:30px;" type="text" value="@ViewBag.OutwardItemViewModel.getField("fldamount")" />
+                            }
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+        <script>
+            $(function () {
+                $("#hIntRejCode").val("");
+                $("#hRemark").val("");
+                $("#txtChequeAccountNumber").focus();
+                $("#AddAmountNAccount").click(function () {
+
+                    if ($("#txtChequeAccountNumber").val() != 'undefined' && $("#txtChequeAccountNumber").val() != null && $("#txtChequeAccountNumber").val() != "") {
+                        var AccNumber = $("#txtChequeAccountNumber").val();
+                        jsGetPayeeName(AccNumber);
+                        $("#txtChequeAmount").focus();
+                    }
+                    else {
+                        alert("Please Add Account Number.");
+                        $("#txtChequeAccountNumber").focus();
+                        return;
+                    }
+                });
+                $("#txtChequeAccountNumber").keydown(function (event) {
+                    var keycode = event.keyCode || event.which;
+                    if (keycode == 13) {
+                        if ($("#txtChequeAccountNumber").val() === 'undefined' || $("#txtChequeAccountNumber").val() === null || $("#txtChequeAccountNumber").val() === "") {
+                            alert("Please Add Account Number.");
+                            $("#txtChequeAccountNumber").focus();
+                            return;
+                        }
+                        else {
+                            var AccNumber = $("#txtChequeAccountNumber").val();
+                            jsGetPayeeName(AccNumber);
+                            $("#txtChequeAmount").focus();
+                        }
+                    }
+                });
+                $("#txtChequeAmount").keydown(function (event) {
+                    var keycode = event.keyCode || event.which;
+                    if (keycode == 13) {
+                        if ($("#txtChequeAccountNumber").val() === 'undefined' || $("#txtChequeAccountNumber").val() === null || $("#txtChequeAccountNumber").val() === "") {
+                            alert("Please Add Account Number.");
+                            $("#txtChequeAccountNumber").focus();
+                            return;
+                        }
+                        else {
+                            //Code here
+                            var ChequeAmountinfoSec = $("#txtChequeAmount").val();
+                            var ChequeAccountNumberPartial = $("#txtChequeAccountNumber").val();
+                            $("#txtChequeAmountinfoSec").val(ChequeAmountinfoSec);
+                            $("#txtChequeAmountpartial").val(ChequeAmountinfoSec);
+                            $("#txtChequeAccountNumberPartial").val(ChequeAccountNumberPartial);
+                        }
+                    }
+                });
+
+                $("#btnDataEntryEditRecord").click(function () {
+                    var ChequeAmountpartial = $("#txtChequeAmountpartial").val();
+                    var ChequeAccountNumberPartial = $("#txtChequeAccountNumberPartial").val();
+                    $("#txtChequeAmount").val(ChequeAmountpartial);
+                    $("#txtChequeAmountinfoSec").val(ChequeAmountpartial);
+                    $("#txtChequeAccountNumber").val(ChequeAccountNumberPartial);
+
+                });
+
+
+                var input = ""; //holds current input as a string
+                $("#txtChequeAmount").keydown(function (e) {
+                    //handle backspace key
+                    if (e.keyCode == 8 && input.length > 0) {
+                        input = input.slice(0, input.length - 1); //remove last digit
+                        $(this).val(formatNumber(input));
+                    }
+                    else {
+                        var key = getKeyValue(e.keyCode);
+                        if (key) {
+                            input += key; //add actual digit to the input string
+                            $(this).val(formatNumber(input)); //format input string and set the input box value to it
+                        }
+                    }
+                    return false;
+                });
+                function getKeyValue(keyCode) {
+                    if (keyCode > 57) { //also check for numpad keys
+                        keyCode -= 48;
+                    }
+                    if (keyCode >= 48 && keyCode <= 57) {
+                        return String.fromCharCode(keyCode);
+                    }
+                }
+                function formatNumber(input) {
+                    if (isNaN(parseFloat(input))) {
+                        return "0.00"; //if the input is invalid just set the value to 0.00
+                    }
+                    var num = parseFloat(input);
+                    return (num / 100).toFixed(2); //move the decimal up to places return a X.00 format
+                }
+                function jsGetPayeeName(AccNumber) {
+                    $.ajax({
+                        cache: false,
+                        url: App.ContextPath + "CommonApi/MatchAIFMaster",
+                        method: "POST",
+                        data: "intAccNumber=" + AccNumber,
+                        success: function (data) {
+                            if (data.length > 0) {
+                                $.each(data, function (i, item) {
+                                    $('#PVSec').css('background-color', 'Green');
+                                    $("#PayeeName").html("Payee Name : " + item.fldAccountName);
+                                });
+                            }
+                            else {
+                                $('#PVSec').css('background-color', 'Red');
+                                $("#PayeeName").html("Payee Name Not found.");
+                            }
+                        }
+                    });
+                }
+
+            });
+            $("#BtnDataEntryReject").click(function () {
+                var eTable = "<table id='DataEntryRejectReasons'><thead><tr><th>ReturnCode</th><th></th><th></th><th>ReturnDesc</th></tr></thead><tbody>"
+                $.ajax({
+                    cache: false,
+                    url: App.ContextPath + "CommonApi/ReasonCodeInternalList",
+                    method: "POST",
+                    success: function (data) {
+                        $.each(data, function (i, item) {
+                            eTable += "<tr style='cursor: pointer;'>";
+                            eTable += "<td class='fldReturnCode'>" + item.fldReturnCode + "</td>";
+                            eTable += "<td></td>";
+                            eTable += "<td></td>";
+                            eTable += "<td class='fldReturnDesc'>" + item.fldReturnDesc + "</td>";
+                            eTable += "</tr>";
+                        });
+                        eTable += "</tbody></table>";
+                        $("#DataEntryReturnReasonModal .modal-title").html("Return Reason List")
+                        $("#Reasons").html(eTable)
+                        $("#DataEntryReturnReasonModal_txtRejectCode").val("");
+                        $("#DataEntryReturnReasonModal_Detail").val("");
+                        $("input#DataEntryReturnReasonModal_Remarks").val("");
+                        $("input#DataEntryReturnReasonModal_Remarks").prop('disabled', true);
+                        $("#hIntRejCode").val("");
+                        $("#hRemark").val("");
+                        $("#DataEntryReturnReasonModal").modal();
+                    }
+                }); 
+            });
+            $(document).on("click", "#DataEntryRejectReasons tbody tr", function () {
+                var tblReason = $(this).closest('tr');
+                var col1 = tblReason.find("td:eq(0)").text();
+                var col2 = tblReason.find("td:eq(3)").text();
+                if (col1 == "80" || col2 == "Others") {
+                    $("#DataEntryReturnReasonModal_txtRejectCode").val(col1);
+                    $("#DataEntryReturnReasonModal_Detail").val(col2);
+                    $("input#DataEntryReturnReasonModal_Remarks").prop('disabled', false);
+                }
+                else {
+                    $("#DataEntryReturnReasonModal_txtRejectCode").val(col1);
+                    $("#DataEntryReturnReasonModal_Detail").val(col2);
+                    $("input#DataEntryReturnReasonModal_Remarks").prop('disabled', true);
+                }
+                //txtReasonDesc
+            });
+            $("#DismissDataEntryModal").click(function () {
+                var RetCod = $("#DataEntryReturnReasonModal_txtRejectCode").val() + '-' + $("#DataEntryReturnReasonModal_Detail").val();
+                $("#txtReasonDesc").html(RetCod);
+                $("#hIntRejCode").val($("#DataEntryReturnReasonModal_txtRejectCode").val());
+                $("#hRemark").val($("#DataEntryReturnReasonModal_Detail").val() + '-' + $("input#DataEntryReturnReasonModal_Remarks").val());
+                //alert($("#hIntRejCode").val() + "-" + $("#hRemark").val());
+                $('#DataEntryReturnReasonModal').modal('hide');
+                //txtReasonDesc
+            });
+        </script>
+    </div>
+</div>

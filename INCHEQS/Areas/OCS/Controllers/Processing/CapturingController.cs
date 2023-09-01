@@ -1,0 +1,346 @@
+﻿using INCHEQS.Security.AuditTrail;
+using INCHEQS.TaskAssignment;
+using INCHEQS.Resources;
+using INCHEQS.Security;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
+using INCHEQS.Areas.OCS.Models.Capturing;
+using System.Data;
+using INCHEQS.Security.SystemProfile;
+using System.Linq;
+using INCHEQS.Security.Account;
+
+namespace INCHEQS.Areas.OCS.Controllers.Processing
+{
+
+    public class CapturingController : BaseController
+    {
+        private readonly ICapturingDao capturingDao;
+        private readonly IAuditTrailDao auditTrailDao;
+        private readonly ISystemProfileDao systemProfileDao;
+        public string JavascriptToRun { get; set; }
+
+        public CapturingController(ICapturingDao capturingDao, IAuditTrailDao auditTrailDao, ISystemProfileDao systemProfileDao)
+        {
+
+            this.capturingDao = capturingDao;
+            this.auditTrailDao = auditTrailDao;
+            this.systemProfileDao = systemProfileDao;
+        }
+
+        [CustomAuthorize(TaskIds = TaskIdsOCS.Capturing.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Index(AccountModel currentUser)
+        {
+
+            DataTable ds = capturingDao.GetCaptureDate();
+            DataTable dt = capturingDao.getCapturePageInfo(CurrentUser.Account);
+            ViewBag.ListMacAddress = CurrentUser.Account.macAddress;
+            if (dt.Rows.Count > 0)
+            {
+                ViewBag.captureDateInfo = ds;
+                ViewBag.capturePageInfo = dt;
+                ViewBag.captureBranchesInfo = capturingDao.GetCapturingBranchesInfo(CurrentUser.Account.UserId);
+            }
+            else
+            {
+                TempData["Warning"] = "Please ensure you have registered to use CTS Terminal Scanner";
+            }
+            auditTrailDao.SecurityLog("Access Cheque Capturing", "", TaskIdsOCS.Capturing.INDEX, CurrentUser.Account);
+
+            return View();
+        }
+
+
+
+        public ActionResult FUJI()
+        {
+            return View("FUJI");
+        }
+
+        public ActionResult DCC()
+        {
+            return View("DCC");
+        }
+
+        public ActionResult Close(FormCollection collection)
+        {
+            return PartialView("Capturing/Modal/_ClosePopup");
+        }
+
+        public ActionResult Redirect(FormCollection col, string CapturingMode = null, string ChequeType = null, string ChequeStatus = null 
+            , string PostingMode = null , string CapBranchId = null, string BranchCode =null, string UserBankDesc = null,string BranchDesc = null , string WorkstationBranchId  = null)
+        {
+
+            //string transtype = "OWNM";
+            //ViewBag.CurrentTiming = todayWindowDao.GetCurrentTiming(transtype);
+            // if (ViewBag.CurrentTiming == "")
+            //  {
+            //   TempData["ErrorMsg"] = "Current timing not sync to CBM Window Timing. Scanning is not allowed.";
+            //   return RedirectToAction("Index");
+            //  }
+            //else
+            //{
+            CapturingModel capturingModel = new CapturingModel();
+            string strMacAddress = string.Join(";", capturingDao.GetMacAddress(CurrentUser.Account).ToArray());
+            List<string> lstMacAddress = capturingDao.GetMacAddress(CurrentUser.Account);
+
+            List<String> errorMessages = capturingDao.ValidateMacAdress(lstMacAddress, col);
+            if ((errorMessages.Count > 0))
+            {
+                TempData["ErrorMsg"] = errorMessages;
+                return RedirectToAction("Index");
+            }
+
+            foreach (string macAdress in lstMacAddress)
+            {
+                capturingModel.WorkstationScannerDataTable = capturingDao.GetWorkstationScannerDataTable(macAdress, CurrentUser.Account.UserId);
+                if (capturingModel.WorkstationScannerDataTable.Rows.Count > 0)
+                {
+                    strMacAddress = macAdress;
+                    break;
+                }
+            }
+            if (capturingModel.WorkstationScannerDataTable.Rows.Count <= 0)
+            {
+                    TempData["ErrorMsg"] = "Mac Address is not Registered for Branch :  " + col["fldCapturingBranchCode"].ToString() + "";
+                    return RedirectToAction("Index");
+            }
+            if (!string.IsNullOrEmpty(CapturingMode) && !string.IsNullOrEmpty(ChequeType) && !string.IsNullOrEmpty(ChequeStatus) && !string.IsNullOrEmpty(PostingMode))
+            {
+                capturingModel.CapMode = CapturingMode;
+                capturingModel.ChqType = ChequeType;
+                capturingModel.ChequeStatus = ChequeStatus;
+                capturingModel.PostingMode = PostingMode;
+            }
+            else
+            {
+                capturingModel.CapMode = col["optCapturingMode"].ToString();
+                capturingModel.ChqType = col["optChequeType"].ToString();
+                capturingModel.ChequeStatus = col["radChequeStatus"].ToString();
+                capturingModel.PostingMode = col["optPostingMode"].ToString();
+            }
+
+            capturingModel.UserId = CurrentUser.Account.UserId;
+
+            capturingModel.IQA0 = systemProfileDao.GetValueFromSystemProfile("IQAValue0", CurrentUser.Account.BankCode);
+            capturingModel.IQA1 = systemProfileDao.GetValueFromSystemProfile("IQAValue1", CurrentUser.Account.BankCode);
+            capturingModel.IQA2 = systemProfileDao.GetValueFromSystemProfile("IQAValue2", CurrentUser.Account.BankCode);
+
+            capturingModel.ForceIQA = systemProfileDao.GetValueFromSystemProfile("HideForceIQAPassButton", CurrentUser.Account.BankCode);
+            capturingModel.AllowForceMICR = systemProfileDao.GetValueFromSystemProfile("AllowForceFailedMICR", CurrentUser.Account.BankCode);
+
+            capturingModel.CICSMode = "";
+            capturingModel.ScannerId = capturingModel.WorkstationScannerDataTable.Rows[0]["fldscannerid"].ToString();
+            //capturingModel.ScannerId = "2";
+            capturingModel.ScannerTypeId = capturingModel.WorkstationScannerDataTable.Rows[0]["fldscannertypeid"].ToString();
+
+
+
+            if (!string.IsNullOrEmpty(CapBranchId) && !string.IsNullOrEmpty(BranchCode) && !string.IsNullOrEmpty(UserBankDesc) && !string.IsNullOrEmpty(BranchDesc))
+            {
+                capturingModel.WorkstationBranchId  = WorkstationBranchId; 
+                capturingModel.CapBranchId = CapBranchId;
+                //capturingModel.ClrBranchId = CapBranchId;
+                capturingModel.ClrBranchId = BranchCode; 
+                capturingModel.BranchCode = BranchCode;
+                capturingModel.UserBankDesc = UserBankDesc;
+                capturingModel.BranchID = CapBranchId;
+                capturingModel.BranchDesc = BranchDesc;
+                capturingModel.PostingModeDesc = capturingDao.GetPostingModeDetailsDataTable(capturingModel.PostingMode).Rows[0]["flddescription"].ToString();
+
+            }
+            else
+            {
+                capturingModel.WorkstationBranchId = capturingModel.WorkstationScannerDataTable.Rows[0]["fldbranchid"].ToString();
+                capturingModel.CapBranchId = col["fldCapturingBranchCode"].Trim();//capturingModel.WorkstationScannerDataTable.Rows[0]["fldbranchid"].ToString();
+                capturingModel.ClrBranchId = col["fldClearingBranchCode"].Trim();//capturingModel.WorkstationScannerDataTable.Rows[0]["fldbranchid"].ToString();
+                capturingModel.BranchCode = col["fldClearingBranchCode"].ToString();
+                capturingModel.UserBankDesc = col["bankdesc"].Trim();
+                capturingModel.BranchID = col["fldCapturingBranchCode"].ToString();
+                capturingModel.BranchDesc = col["branchdesc"].ToString();
+                capturingModel.PostingModeDesc = capturingDao.GetPostingModeDetailsDataTable(col["optPostingMode"].ToString()).Rows[0]["flddescription"].ToString();
+
+            }
+        
+
+            capturingModel.CapModeDesc = capturingDao.GetCapturingModeDetailsDataTable(capturingModel.CapMode).Rows[0]["flddescription"].ToString();
+            capturingModel.ChqTypeId = capturingDao.GetCheckTypeDetailsDataTable(capturingModel.ChqType).Rows[0]["fldtypeid"].ToString();
+            capturingModel.ChqTypeDesc = capturingDao.GetCheckTypeDetailsDataTable(capturingModel.ChqType).Rows[0]["flddescription"].ToString();
+            capturingModel.SourceBranchId = "";
+            capturingModel.FloatDays = "";
+            capturingModel.NCFRequired = "";
+            //capturingModel.ImmediateEntry = capturingDao.GetCheckTypeDetailsDataTable(capturingModel.ChqType).Rows[0]["fldimmediateentry"].ToString();
+            //capturingModel.EntryMode = capturingDao.GetCapturingModeDetailsDataTable(capturingModel.CapMode).Rows[0]["fldentrymode"].ToString();
+            //capturingModel.Priority = capturingDao.GetCheckTypeDetailsDataTable(capturingModel.ChqType).Rows[0]["fldpriority"].ToString();
+            capturingModel.EndorseAllignment = "0";
+            capturingModel.TaskId = "";
+            capturingModel.BankType = "";
+            capturingModel.ZeroValue = "0";
+            //capturingModel.ScannerModel = capturingModel.WorkstationScannerDataTable.Rows[0]["fldscannermodel"].ToString();
+
+            capturingModel.ScannerOn = "0";
+            capturingModel.ServerBatchNo = capturingModel.WorkstationScannerDataTable.Rows[0]["fldbatchno"].ToString();
+            capturingModel.ServerSeqNo = Convert.ToInt32(capturingModel.WorkstationScannerDataTable.Rows[0]["fldseqno"]);
+            //-------------PROCESSING DATE
+            //string strProcessDate = capturingDao.GetProcessDate(CurrentUser.Account.BankCode);
+
+            string strProcessDate = capturingDao.GetProcessDate().Replace("-", "");
+            capturingModel.ProcessDateHidden = strProcessDate;
+
+            capturingModel.ProcessDate = capturingDao.FormatProcessDate(int.Parse(strProcessDate.Substring(0, 4)), int.Parse(strProcessDate.Substring(4, 2)), int.Parse(strProcessDate.Substring(6, 2))); //strProcessDate;
+                                                                                                                                                                                                          //capturingDao.FormatProcessDate(int.Parse(strProcessDate.Substring(0,4)), int.Parse(strProcessDate.Substring(4,2)), int.Parse(strProcessDate.Substring(6,2)));
+
+            //-------------CURRENCY
+
+            capturingModel.DefaultCaptureCurrency = systemProfileDao.GetValueFromSystemProfile("capturecurrency", CurrentUser.Account.BankCode);
+            capturingModel.CurrencyDataTable = capturingDao.GetCurrencyDataTable("0");
+
+            string strCaptureCurrency = "";
+            foreach (DataRow row in capturingModel.CurrencyDataTable.Rows)
+            {
+                if (strCaptureCurrency != "")
+                {
+                    strCaptureCurrency += ",";
+                }
+                strCaptureCurrency += row["fldcurrencyid"].ToString() + "#" + row["fldcurrencycode"].ToString();
+                if (row["fldcurrencyid"].ToString() == capturingModel.DefaultCaptureCurrency)
+                {
+                    strCaptureCurrency += "#" + "Y";
+                }
+            }
+            capturingModel.CaptureCurrency = strCaptureCurrency;
+
+            //-------------CAPTURING PATH
+            capturingModel.CompleteSeqNoDataTable = capturingDao.GetCompleteSeqNoDataTable(CurrentUser.Account.BankCode);
+            if (capturingModel.CompleteSeqNoDataTable.Rows.Count > 0)
+            {
+                int ctr = 0;
+                foreach (DataRow row in capturingModel.CompleteSeqNoDataTable.Rows)
+                {
+                    string strProfileCode = capturingModel.CompleteSeqNoDataTable.Rows[ctr]["fldsystemprofilecode"].ToString();
+                    switch (strProfileCode)
+                    {
+                        case "MaxItemPerBatch":
+                            capturingModel.CompletedSeqNo = capturingModel.CompleteSeqNoDataTable.Rows[ctr]["fldsystemprofilevalue"].ToString();
+                            capturingModel.MaxItemPerBatch = capturingModel.CompleteSeqNoDataTable.Rows[ctr]["fldsystemprofilevalue"].ToString();
+                            break;
+                        case "CapturingPath":
+                            capturingModel.CapturingPath = capturingModel.CompleteSeqNoDataTable.Rows[ctr]["fldsystemprofilevalue"].ToString();
+                            break;
+                        case "AutoCapture":
+                            capturingModel.AutoCapture = capturingModel.CompleteSeqNoDataTable.Rows[ctr]["fldsystemprofilevalue"].ToString();
+                            break;
+                        case "ShowCapturingItemType":
+                            capturingModel.ShowBIRBOC = capturingModel.CompleteSeqNoDataTable.Rows[ctr]["fldsystemprofilevalue"].ToString();
+                            break;
+                        case "CapturingScrollableUI":
+                            capturingModel.ScrollableUI = capturingModel.CompleteSeqNoDataTable.Rows[ctr]["fldsystemprofilevalue"].ToString();
+                            break;
+                        case "ShowTellerId":
+                            capturingModel.ShowTellerId = capturingModel.CompleteSeqNoDataTable.Rows[ctr]["fldsystemprofilevalue"].ToString();
+                            break;
+                        case "CapturingSingleSlip":
+                            capturingModel.SingleSlip = capturingModel.CompleteSeqNoDataTable.Rows[ctr]["fldsystemprofilevalue"].ToString();
+                            break;
+                        case "USDMode":
+                            capturingModel.USDMode = capturingModel.CompleteSeqNoDataTable.Rows[ctr]["fldsystemprofilevalue"].ToString();
+                            break;
+                    }
+                    ctr++;
+                }
+            }
+
+            //-------------BATCH NUMBER | SEQ NUMBER
+            //capturingModel.UICDataTable = capturingDao.GetUICInfoDataTable(capturingModel.ScannerId);
+            //if (capturingModel.UICDataTable.Rows.Count > 0)
+            //{
+            //    //capturingModel.ServerBatchNo = capturingModel.UICDataTable.Rows[0]["fldbatchno"].ToString();
+            //    capturingModel.ServerBatchNo = capturingModel.UICDataTable.Rows[0]["fldbatchno"].ToString().PadLeft(4,'0');
+            //    capturingModel.ServerSeqNo = Convert.ToInt32(capturingModel.UICDataTable.Rows[0]["fldseqno"]) + 1;
+            //}
+
+            //-------------LOCK BOX
+            capturingModel.LockBoxKey = "";
+            capturingModel.OCRRequire = "";
+            capturingModel.LockBoxAccNo = "";
+
+            //-------------SCANNER TUNING
+            capturingModel.ScannerTuningDataTable = capturingDao.GetScannerTuningDataTable(capturingModel.ScannerTypeId);
+
+            string strWriteXml = "<ScannerTuning>";
+            strWriteXml += "<ScannerTypeId>" + capturingModel.ScannerTypeId + "</ScannerTypeId>";
+            if (capturingModel.ScannerTuningDataTable.Rows.Count > 0)
+            {
+                for (int intCounter = 0; intCounter < capturingModel.ScannerTuningDataTable.Rows.Count; intCounter++)
+                {
+                    strWriteXml += "<ScannerTuningRecord>";
+                    strWriteXml += "<ScannerTuningId><![CDATA[" + capturingModel.ScannerTuningDataTable.Rows[intCounter]["fldscannertuningid"].ToString().Trim() + "]]></ScannerTuningId>";
+                    strWriteXml += "<ScannerTuningCode><![CDATA[" + capturingModel.ScannerTuningDataTable.Rows[intCounter]["fldscannertuningcode"].ToString().Trim() + "]]></ScannerTuningCode>";
+                    strWriteXml += "<ScannerTuningvalue><![CDATA[" + capturingModel.ScannerTuningDataTable.Rows[intCounter]["fldscannertuningvalue"].ToString().Trim() + "]]></ScannerTuningvalue>";
+                    strWriteXml += "</ScannerTuningRecord>";
+                }
+            }
+            strWriteXml += "</ScannerTuning>";
+            capturingModel.ScannerTuningXML = strWriteXml;
+
+            //-------------SCANNER ERROR
+            strWriteXml = "";
+            capturingModel.ScannerErrorDataTable = capturingDao.GetScannerErrorDataTable(capturingModel.ScannerTypeId);
+
+            if (capturingModel.ScannerErrorDataTable.Rows.Count > 0)
+            {
+                for (int intCounter = 0; intCounter < capturingModel.ScannerErrorDataTable.Rows.Count; intCounter++)
+                {
+                    strWriteXml += "<ScannerErrorRecord>";
+                    strWriteXml += "<ScannerErrorCode><![CDATA[" + capturingModel.ScannerErrorDataTable.Rows[intCounter]["fldscannererrorcode"].ToString().Trim() + "]]></ScannerErrorCode>";
+                    strWriteXml += "<ScannerErrorDesc><![CDATA[" + capturingModel.ScannerErrorDataTable.Rows[intCounter]["fldscannererrordesc"].ToString().Trim() + "]]></ScannerErrorDesc>";
+                    strWriteXml += "</ScannerErrorRecord>";
+                }
+            }
+            strWriteXml = "<ScannerError>" + strWriteXml + "</ScannerError>";
+            capturingModel.ScannerErrorXML = strWriteXml;
+
+            //-------------BANK CODE
+            capturingModel.UserBankCode = CurrentUser.Account.BankCode;
+
+
+            //-------------CHECKING
+            capturingModel.AllowCapTypAftCutOff = systemProfileDao.GetValueFromSystemProfile("AllowCapTypAftCutOff", CurrentUser.Account.BankCode);
+            if (capturingModel.AllowCapTypAftCutOff != "" && capturingModel.AllowCapTypAftCutOff.Split('|').ToList().Contains(capturingModel.ChqTypeId))
+            {
+                return RedirectToAction("Index");
+            }
+
+            capturingModel.EODDataTable = capturingDao.GetBranchEndOfDayDataTable(capturingModel.ProcessDate, capturingModel.ClrBranchId, CurrentUser.Account.BankCode);
+            if (capturingModel.EODDataTable.Rows.Count > 0)
+            {
+                TempData["ErrorMsg"] = "Branch end of day has been performed. Scanning is not allowed.";
+                return RedirectToAction("Index");
+            }
+
+            capturingModel.EODDataTable = capturingDao.GetCenterEndOfDayDataTable(capturingModel.ProcessDate, CurrentUser.Account.BankCode);
+            if (capturingModel.EODDataTable.Rows.Count > 0)
+            {
+                TempData["ErrorMsg"] = "Center end of day is already performed. Scanning is not allowed.";
+                return RedirectToAction("Index");
+            }
+            ViewBag.CapturingModel = capturingModel;
+            auditTrailDao.SecurityLog("Click Cheque Capturing Submit Button ", "", TaskIdsOCS.Capturing.INDEX, CurrentUser.Account);
+            switch (capturingModel.ScannerTypeId)
+            {
+                case "1":
+                    return View("DCC");
+                case "3":
+                    return View("FUJI");
+                default:
+                    return View();
+            }
+            // }
+
+
+
+        }
+    }
+}

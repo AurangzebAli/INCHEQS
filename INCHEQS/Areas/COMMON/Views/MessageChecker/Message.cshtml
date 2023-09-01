@@ -1,0 +1,61 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Message", "MessageChecker", FormMethod.Post, new { @Class = "secure-form" })) {
+
+    @Html.AntiForgeryToken();
+
+<div class="form-horizontal">
+    <h4>@Locale.MessageChecker</h4>
+    
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <tbody>
+            @if (@ViewBag.MessageMaster != null)
+            {
+            <tr>
+                <th>@Locale.MessageColumn</th>
+             
+                @if (@ViewBag.MessageMaster.fldBroadcastMessage != @ViewBag.MessageMasterTemp.fldBroadcastMessage)
+                {
+                <td>
+                    <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000; width:750px;" value="@ViewBag.MessageMasterTemp.fldBroadcastMessage" autocomplete="off" maxlength="50" disabled />
+                    <input type="text" name="fldBroadcastMessage" value="@ViewBag.MessageMasterTemp.fldBroadcastMessage" hidden />
+                    <input type="hidden" name="fldBroadcastMessageId" value="@ViewBag.MessageMasterTemp.fldBroadcastMessageId" hidden />
+                    <input type="text" name="Action" value="@ViewBag.MessageMasterTemp.fldApproveStatus" hidden />
+                    <span class="red-star">*</span>
+                </td>
+                }
+                else
+                {
+                <td>
+                    <input type="text" style="width:750px" value="@ViewBag.MessageMaster.fldBroadcastMessage" autocomplete="off" maxlength="50" disabled />
+                    <input type="text" name="fldBroadcastMessage" value="@ViewBag.MessageMaster.fldBroadcastMessage" hidden />
+                    <input type="hidden" name="fldBroadcastMessageId" value="@ViewBag.MessageMaster.fldBroadcastMessageId" hidden />
+                    <input type="text" name="Action" value="@ViewBag.MessageMasterTemp.fldApproveStatus" hidden />
+                </td>
+
+                }
+                
+            </tr>
+            }else {
+            <tr>
+                <th>@Locale.MessageColumn</th>
+                <td>
+                    <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000; width:750px;" value="@ViewBag.MessageMasterTemp.fldBroadcastMessage" autocomplete="off" maxlength="50" disabled />
+                    <input type="text" name="fldBroadcastMessage" value="@ViewBag.MessageMasterTemp.fldBroadcastMessage" hidden />
+                    <input type="hidden" name="fldBroadcastMessageId" value="@ViewBag.MessageMasterTemp.fldBroadcastMessageId" hidden />
+                    <input type="text" name="Action" value="@ViewBag.MessageMasterTemp.fldApproveStatus" hidden />
+                    <span class="red-star">*</span>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    <button data-action="@Url.Action("/VerifyA2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsOCS.MessageChecker.VERIFY) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+    <button data-action="@Url.Action("/VerifyR2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsOCS.MessageChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+    <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.BankZoneChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+</div>}
+
+<script src="~/Scripts/App/app.js"></script>

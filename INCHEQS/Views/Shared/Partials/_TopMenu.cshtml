@@ -1,0 +1,8 @@
+﻿<div id='cssmenu'>
+    <ul>
+        <li class="home-dashboard @if (@ViewBag.TaskIds == "all") { <text> active</text>}">@Html.ActionLink("Dashboard", "Index", "Main")</li>
+        <li class="pull-right">@Html.ActionLink("Logout", "Logout", "Login" , new { area = ""}, new {id = "logout" })</li>
+    </ul>
+</div>
+
+

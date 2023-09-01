@@ -1,0 +1,205 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Security
+@using (Html.BeginForm("Update", "SystemProfile", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <!--Pending of-->
+        <h4>System Profile</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+
+        <table class="table form-table table-no-border table-utility">
+
+
+            @*<tr>
+                    <th>
+                        <u>General</u>
+                    </th>
+                </tr>*@
+            <tr>
+                <th>
+                    Email Server
+                </th>
+                <td>
+                    <input type="text" id="EmailServer" name="EmailServer" value="@ViewBag.SystemProfile.EmailServer" maxLength=50>
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Email Address
+                </th>
+                <td>
+                    <input type="email" id="EmailAccount" name="EmailAccount" value="@ViewBag.SystemProfile.EmailAccount" maxLength=50>
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+
+            @*<tr>
+                    <th>
+                        <u>Capturing</u>
+                    </th>
+                </tr>*@
+
+            <tr>
+                <th>
+                    Maximum Number of Batch
+                </th>
+                <td>
+                    <input type="text" id="MaxBatchCount" name="MaxBatchCount" value="@ViewBag.SystemProfile.MaxBatchCount" maxLength=4 class="number-only">
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Maximum Item per Batch
+                </th>
+                <td>
+                    <input type="text" id="MaxItemPerBatch" name="MaxItemPerBatch" value="@ViewBag.SystemProfile.MaxItemPerBatch" maxLength=3 class="number-only">
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+
+            @*<tr>
+                    <th>
+                        <u>Clearing</u>
+                    </th>
+                </tr>*@
+
+            <tr>
+                <th>
+                    Maximum Item per Clearing Batch
+                </th>
+                <td>
+                    <input type="text" id="MaxItemPerClearingBatch" name="MaxItemPerClearingBatch" value="@ViewBag.SystemProfile.MaxItemPerClearingBatch" maxLength=3 class="number-only">
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Clearing Interval
+                </th>
+                <td>
+                    <input type="text" id="ClearingServerInterval" name="ClearingServerInterval" value="@ViewBag.SystemProfile.ClearingServerInterval" maxLength=2 class="number-only">
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+
+            @*<tr>
+                    <th>
+                        <u>Representment</u>
+                    </th>
+                </tr>*@
+
+            <tr>
+                <th>
+                    Maximum representment for each Item
+                </th>
+                <td>
+                    <input type="text" id="MaxRepresentCount" name="MaxRepresentCount" value="@ViewBag.SystemProfile.MaxRepresentCount" maxLength=1 class="number-only">
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+
+
+            @*<tr>
+                    <th>
+                        <u>Payee Validation</u>
+                    </th>
+                </tr>*@
+
+            <tr>
+                <th>
+                    Value Band of Payee Validation 1
+                </th>
+                <td>
+                    <input type="text" id="PV1Min" name="PV1Min" value="@ViewBag.SystemProfile.PV1Min" maxLength=13 class="number-only"> @Locale.Min<span class="red-star">*</span>
+                    <input type="text" id="PV1Max" name="PV1Max" value="@ViewBag.SystemProfile.PV1Max" maxLength=13 class="number-only"> @Locale.Max<span class="red-star">*</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Value Band of Payee Validation 2
+                </th>
+                <td>
+                    <input type="text" id="PV2Min" name="PV2Min" value="@ViewBag.SystemProfile.PV2Min" maxLength=13 class="number-only"> @Locale.Min<span class="red-star">*</span>
+                    <input type="text" id="PV2Max" name="PV2Max" value="@ViewBag.SystemProfile.PV2Max" maxLength=13 class="number-only"> @Locale.Max<span class="red-star">*</span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    Value Band of Payee Validation 3
+                </th>
+                <td>
+                    <input type="text" id="PV3Min" name="PV3Min" value="@ViewBag.SystemProfile.PV3Min" maxLength=13 class="number-only"> @Locale.Min<span class="red-star">*</span>
+                    <input type="text" id="PV3Max" name="PV3Max" value="@ViewBag.SystemProfile.PV3Max" maxLength=13 class="number-only"> @Locale.Max<span class="red-star">*</span>
+                </td>
+            </tr>
+
+            @*<tr>
+                    <th>
+                        <u>Others</u>
+                    </th>
+                </tr>*@
+
+            <tr>
+                <th>
+                    Batch Import Timer Elapsed
+                </th>
+                <td>
+                    <input type="text" id="ThreadTimerElapsed" name="ThreadTimerElapsed" value="@ViewBag.SystemProfile.ThreadTimerElapsed" maxLength=4 class="number-only">
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Alert Message Timer Elapsed
+                </th>
+                <td>
+                    <input type="text" id="AlertMessageTimerElapsed" name="AlertMessageTimerElapsed" value="@ViewBag.SystemProfile.AlertMessageTimerElapsed" maxLength=4 class="number-only">
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    Check Duplicate MICR
+                </th>
+                <td>
+                    <input type="radio" name="CheckDuplicateMICR" value="Y" @(ViewBag.SystemProfile.CheckDuplicateMICR == "Y" ? "checked" : "")> @Locale.YES
+                    <input type="radio" name="CheckDuplicateMICR" value="N" @(ViewBag.SystemProfile.CheckDuplicateMICR == "N" ? "checked" : "")> @Locale.NO
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+
+            @*<tr>
+                    <th>
+                        <u>EFTN</u>
+                    </th>
+                </tr>*@
+
+            <tr>
+                <th>
+                    BEFTN Centralized Submission
+                </th>
+                <td>
+                    <input type="radio" name="BEFTNCentralizedSubmission" value="1" @(ViewBag.SystemProfile.BEFTNCentralizedSubmission == 1 ? "checked" : "")> @Locale.YES
+                    <input type="radio" name="BEFTNCentralizedSubmission" value="0" @(ViewBag.SystemProfile.BEFTNCentralizedSubmission == 0 ? "checked" : "")> @Locale.NO
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id=btnsave alt=Save type="submit" value=Save name=btnSave class="btn btn-default ">@Locale.SaveBtn</button>
+                    <a href="@Url.Action("Index")" class="btn btn-default secure-nav ">@Locale.Reset</a>
+                </td>
+            </tr>
+
+
+
+        </table>
+    </div>
+}

@@ -1,0 +1,69 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "ReturnCode", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.ReturnCodeAdd</h4>
+        
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.ReturnCode</th>
+
+                    <td>
+                        <input type="text" pattern="[a-zA-Z0-9]*" name="fldRejectCode" autocomplete="off" maxlength="3" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.ReturnDescription</th>
+
+                    <td>
+                        <input type="text" style="width:500px" name="fldRejectDesc" autocomplete="off" maxlength="250" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.ReturnType</th>
+
+                    <td>
+                        <select name="fldRejectType" id="rejectType">
+                            <option value="">Please Select Return Type</option>
+                            @foreach (var item in @ViewBag.RejectType)
+                            {
+                                <option value="@item.fldRejectType">@item.fldRejectTypeDesc</option>
+                            }
+                        </select>
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.ReturnCharges</th>
+
+                    <td>
+                        <input type="text" class="number-only" pattern="^(?=.*\d)\d*(?:\.\d\d)?$" name="fldCharges" id="fldCharges" autocomplete="off" maxlength="50" onchange="setTwoNumberDecimal" value="0.00" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" data-action="@Url.Action("/SAVECREATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIdsOCS.ReturnCode.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <button data-action="@Url.Action("/Create")" Class="btn btn-default secure-nav normal-submit-without-search @(CurrentUser.HasTask(TaskIdsOCS.ReturnCode.CREATE) ? "" : "hidden")">@Locale.Reset</button>
+        <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.ReturnCode.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $('#fldCharges').maskMoney({ allowZero: true });
+    })
+
+    function setTwoNumberDecimal(event) {
+         this.value = parseFloat(this.value).toFixed(2);
+    }
+</script>
+<script src="~/Scripts/App/app.js"></script>

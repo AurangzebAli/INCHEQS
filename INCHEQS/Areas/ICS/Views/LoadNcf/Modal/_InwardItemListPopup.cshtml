@@ -1,0 +1,39 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+    ViewBag.Title = "InwardItemList";
+    var i = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Imported Item Details</title>
+</head>
+<body>
+	<div><h4>Imported Item Details</h4></div>
+	<div style="overflow-y: scroll; height:500px;">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>No.</th>
+					<th>UIC</th>
+					<th>Non Conformance Flag</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var row in ViewBag.NcfHistory.Rows)
+				{
+					<tr>
+						<td>@{i++;} @i</td>
+						<td>@row["fldUIC"]</td>
+						<td>@row["fldNonConformanceFlag"]</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

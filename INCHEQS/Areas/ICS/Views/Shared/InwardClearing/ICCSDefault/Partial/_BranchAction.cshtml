@@ -1,0 +1,60 @@
+﻿@using INCHEQS.Resources
+<div class="row" style="margin-left: -126px;">
+    <div style="margin-top: 10px;">
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchApprove"))
+        {
+            <button type="button" id="approveBtn" data-action="@Url.Action("BranchApprove")" class="btn btn-default btn-xs normal-submit-Verification">@Locale.Approve</button>
+        }
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturn"))
+        {
+            <button type="button" id="returnBtn" data-action="@Url.Action("BranchReturn")" class="btn btn-default btn-xs normal-submit-Verification">Reject</button>
+        }
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReferBack"))
+        {
+            <button type="button" id="referBackBtn" data-action="@Url.Action("BranchReferBack")" class="btn btn-default btn-xs normal-submit-Verification">@Locale.ReferBack</button>
+        }
+
+        &nbsp;&nbsp;&nbsp;&nbsp;
+
+
+        @*<input type="text" style="width:30px;min-width:30px" id="rejectCodeText" name="new_textRejectCode" value="@ViewBag.InwardItemViewModel.getField("fldRejectCode").Trim()" @(ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturn") ? "" : "readonly") />
+        <select class="textbox" id="rejectCodeSelectList" name="new_rejectCode" style="width:240px;min-width:240px" @(ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "BranchReturn") ? "" : "disabled")>
+            <option value="">--- @Locale.SelectReturnRouteReason ---</option>
+        </select>*@
+    </div>
+
+    <div style="margin-top: 10px;" class="col-sm-4">
+        <table>
+            <tr>
+                <td><b>Remarks</b></td>
+                @*<td class="col-sm-4"><b>External Remarks</b></td>*@
+            </tr>
+            <tr>
+                <td style="margin-top: 10px;">
+                    <textarea style="width: 250px; height:150px;" name="textAreaRemarks" placeholder="" maxlength="140" value="@ViewBag.InwardItemViewModel.getField("fldRemarks")">@ViewBag.InwardItemViewModel.getField("fldRemarks")</textarea>
+                    <input type="hidden" id="remarkField" name="remarkField" value="">
+                </td>
+                @*<td style="margin-top: 10px;" class="col-sm-4">
+                    <textarea style="width: 250px; height:150px;" name="textAreaExtRemarks" placeholder="" maxlength="20" value="@ViewBag.InwardItemViewModel.getField("fldExtRemarks")">@ViewBag.InwardItemViewModel.getField("fldExtRemarks")</textarea>
+                    <input type="hidden" id="ExtremarkField" name="ExtremarkField" value="">
+                </td>*@
+            </tr>
+        </table>
+
+
+    </div>
+
+    @*<div class="col-sm-4">
+        <textarea class="remarks" name="textAreaRemarks" placeholder="@Locale.Remarks" value="@ViewBag.InwardItemViewModel.getField("fldRemarks")"></textarea>
+        <input type="hidden" id="remarkField" name="remarkField" value="">
+        </div>*@
+
+    <div class="col-sm-2" hidden>
+        Service Charge <input type="text" name="fldCharges" style="width:40px;min-width:40px" id="serviceCharge" class="currency" value="@ViewBag.InwardItemViewModel.getField("fldCharges")" />
+    </div>
+
+    <div  hidden>
+        <input type="text" name="RejectStatus1" style="width:40px;min-width:40px" id="RejectStatus1" class="RejectStatus1" value="@ViewBag.InwardItemViewModel.getField("fldRejectStatus1")" />
+        <input type="text" name="RejectStatus2" style="width:40px;min-width:40px" id="RejectStatus2" class="RejectStatus2" value="@ViewBag.InwardItemViewModel.getField("fldRejectStatus2")" />
+    </div>
+

@@ -1,0 +1,76 @@
+﻿@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("Create", "ScheduledTask", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.UtilitiesScheduledTask</h4>
+        <hr>
+        <h5>@Locale.SetScheduledTask</h5>
+        <table class="table-condensed table-striped table-hover">
+            <tr>
+                <th>@Locale.ProcessName</th>
+                <th>Hours(HH)</th>
+                <th>Mins(mm)</th>
+            </tr>
+            <tr>
+                <td>
+                    <select name="processName">
+                        <option value="">--</option>
+                        @foreach (var item in ViewBag.ScheduledTask.Rows) {
+                            <option value="@item["fldScheduledTaskID"]">@item["fldScheduledTaskName"]</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <select name="hour">
+                        @for (int i = 0; i < 24; i++) {
+                            <option value="@i.ToString("00")">@i.ToString("00")</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <select name="min">
+                        @for (int i = 0; i < 60; i++) {
+                            <option value="@i.ToString("00")">@i.ToString("00")</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <button id=btnsave alt=Save type="submit" value=Save name=btnSave class="btn btn-default @(CurrentUser.HasTask(TaskIds.TaskScheduler.INDEX) ? "" : "hidden")">@Locale.Add</button>
+                </td>
+            </tr>
+        </table>
+
+
+        @foreach (var item in ViewBag.ScheduledTask.Rows) {
+            <hr>
+            <input type="hidden" name="scheduleName" value="@item["fldScheduledTaskName"]">@item["fldScheduledTaskName"]
+
+            <a data-action="@Url.Content("~/ICS/ScheduledTask/ScheduledHistory?historyId="+@item["fldScheduledTaskName"])" class="modal-submit btn-default btn-xs @(CurrentUser.HasTask(TaskIds.TaskScheduler.INDEX) ? "" : "hidden")" data-title="Scheduled Process Name : @item["fldScheduledTaskName"]">@Locale.ViewHistory</a>
+
+            <table class="table-condensed table-striped table-hover">
+                <tr>
+                    <th>@Locale.ScheduledTime</th>
+                    <th>@Locale.LastRunDateTime</th>
+                </tr>
+                @foreach (var row in ViewBag.ScheduledTimer.Rows) {
+                    if (row["fldScheduledTaskName"] == item["fldScheduledTaskName"]) {
+                        <tr>
+                            <td>
+                                @Locale.EverydayOn @row["fldScheduledHours"]:@row["fldScheduledMins"]
+                            </td>
+                            <td>
+                                @row["RunTime"]
+                            </td>
+                            <td>
+
+
+                                <a href="@Url.Action(null)/Delete?schedulId=@row["fldScheduledTimeID"]" class="secure-nav @(CurrentUser.HasTask(TaskIds.TaskScheduler.INDEX) ? "" : "disabled")">@Locale.Remove</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+        }
+    </div>
+}

@@ -1,0 +1,729 @@
+﻿using System.Data;
+using System.Data.SqlClient;
+using INCHEQS.Helpers;
+//using System.Data.Entity;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using INCHEQS.Security;
+using System.Collections.Generic;
+using INCHEQS.Security.Account;
+using System;
+using System.Text.RegularExpressions;
+using INCHEQS.Models;
+using INCHEQS.Common;
+using INCHEQS.DataAccessLayer;
+using INCHEQS.Resources;
+//using INCHEQS.TaskAssignment;
+
+
+
+namespace INCHEQS.Areas.OCS.Models.ScannerWorkStation
+{
+    public class ScannerWorkStationDao : IScannerWorkStationDao
+    {
+
+
+        private readonly ApplicationDbContext dbContext;
+
+        public ScannerWorkStationDao(ApplicationDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
+        public async Task<DataTable> ListAllAsync()
+        {
+            return await Task.Run(() => ListAll());
+        }
+
+        public async Task<DataTable> FindAsync(string Scanner, string Type, string BranchId)
+        {
+            return await Task.Run(() => Find(Scanner, Type, BranchId));
+        }
+
+        public async Task<DataTable> getScannerNameAsync()
+        {
+            return await Task.Run(() => getScannerName());
+        }
+
+        public async Task<DataTable> getBranchDetailsAsync(AccountModel currentUser)
+        {
+            return await Task.Run(() => getBranchDetails(currentUser));
+        }
+
+        public async Task<DataTable> getBankDetailsAsync()
+        {
+            return await Task.Run(() => getBankDetails());
+        }
+
+        public async Task<DataTable> getLocationDetailsAsync()
+        {
+            return await Task.Run(() => getLocationDetails());
+        }
+
+        public async Task<DataTable> getScannerBrandNameAsync(int ScannerTypeID)
+        {
+            return await Task.Run(() => getScannerBrandName(ScannerTypeID));
+        }
+
+        public async Task<ScannerWorkStationModel> getScannerAsync(string Scanner)
+        {
+            return await Task.Run(() => getScanner(Scanner));
+        }
+
+        public DataTable ListAll()
+        {
+            DataTable ds = new DataTable();
+            string stmt = "SELECT * FROM tblscannerworkstationtemp WHERE fldscannertypeid like '%' AND fldbranchid Like '%' AND fldmacaddress1 Like '%'  AND fldmacaddress2 Like '%'  AND fldmacaddress3 Like '%'  AND fldmacaddress1 Like '%' ORDER BY fldscannertypeid  ";
+            ds = dbContext.GetRecordsAsDataTable(stmt);
+
+            return ds;
+        }
+
+        public DataTable Find(string Scanner, string Type, string BranchId)
+        {
+            DataTable ds = new DataTable();
+            //string stmt = "SELECT bm.fldbankcode,lm.fldlocationcode,cm.fldbranchcode,(bm.fldbankcode||' - '||bm.fldbankdesc)as fldbankdesc,(cm.fldbranchcode||' - '||cm.fldbranchdesc)as fldbranchdesc, cm.fldbranchdesc::text AS fldDesc,(lm.fldlocationcode||' - '||lm.fldlocationabb)as fldlocationdesc,lpad(sw.fldscannerid::text, 3, '0'::text) as fldscannerid,sw.fldscannertypeid, sw.fldbranchid,sw.fldmacaddress1,sw.fldmacaddress2,sw.fldmacaddress3,sw.fldactive  " +
+            //"FROM tblscannerworkstationtemp sw inner join tblbankmaster bm on bm.fldbankcode = substring(sw.fldbranchid, 2, 3) inner join tbllocationmaster lm on substring(sw.fldbranchid,1,1)::integer = lm.fldlocationcode inner join tblbranchmaster cm on substring(sw.fldbranchid,2,3) = cm.fldbankcode " +
+            // "WHERE lpad(sw.fldscannerid::text, 3, '0'::text)::text = @scannerId and  sw.fldscannertypeid::text = @Type and  cm.fldbranchid::text = @BranchId Limit 1";
+
+            string stmt = "SELECT TOP 1 bm.fldbankcode,lm.fldlocationcode,cm.fldbranchcode,CONCAT(CONCAT(bm.fldbankcode, ' - '), bm.fldbankdesc),CONCAT(CONCAT(cm.fldbranchcode, ' - '), cm.fldbranchdesc) as fldbranchdesc,cm.fldbranchdesc AS fldDesc,CONCAT(CONCAT(lm.fldlocationcode, ' - '), lm.fldlocationdesc) as fldlocationdesc,RIGHT(REPLICATE('0', 3) + sw.fldscannerid, 10) as fldscannerid,sw.fldscannertypeid, sw.fldbranchid,sw.fldmacaddress1,sw.fldmacaddress2,sw.fldmacaddress3,sw.fldactive  " +
+                        "FROM tblscannerworkstation sw inner join tblbankmaster bm on bm.fldbankcode = substring(sw.fldbranchid, 2, 3) inner join tbllocationmaster lm on substring(cast (sw.fldbranchid as nvarchar), 1,1) = lm.fldlocationcode  inner join tblinternalbranchmaster cm on substring(sw.fldbranchid,2,3) = cm.fldbankcode  " +
+                        "WHERE RIGHT(REPLICATE('0', 3) +sw.fldscannerid,10) = @scannerId and sw.fldscannertypeid = @Type and cm.fldbranchid = @BranchId  ";
+
+            ds = dbContext.GetRecordsAsDataTable(stmt, new[] { new SqlParameter("@scannerId", Convert.ToInt32(Scanner)), new SqlParameter("@Type", Type), new SqlParameter("@BranchId", BranchId) });
+
+            return ds;
+        }
+
+        //public string getScannerId(AccountModel currentUser)
+        public string getScannerId()
+        {
+            DataTable ds = new DataTable();
+            string scannerid = "";
+            string stmt = "SELECT (MAX(fldscannerId) + 1) as fldscannerid FROM tblscannerworkstation ";
+            //where substring(fldbranchid,2,3)=@fldbankcode GROUP BY substring(fldbranchid,2,3)";
+            //string stmt = "SELECT (MAX(fldscannerId) + 1) as fldscannerid FROM tblscannerworkstationtemp";
+            ds = dbContext.GetRecordsAsDataTable(stmt, new[] { new SqlParameter("@fldbankcode", CurrentUser.Account.BankCode) });
+            //ds = dbContext.GetRecordsAsDataTable(stmt);
+
+            if (ds.Rows.Count == 0)
+            {
+                for (int i = 0; i == ds.Rows.Count; i++)
+                {
+                    scannerid = "1";
+                }
+            }
+            else
+            {
+                for (int i = 0; i < ds.Rows.Count; i++)
+                {
+                    scannerid = ds.Rows[i]["fldscannerid"].ToString();
+
+                }
+            }
+            return scannerid;
+        }
+
+        public string getScannerIdFromTemp()
+        {
+            DataTable ds = new DataTable();
+            string scannerid = "";
+            string stmt = "SELECT (MAX(fldscannerId) + 1) as fldscannerid FROM tblscannerworkstationTemp ";
+            //"where substring(fldbranchid,2,3)=@fldbankcode GROUP BY substring(fldbranchid,2,3)";
+            //string stmt = "SELECT (MAX(fldscannerId) + 1) as fldscannerid FROM tblscannerworkstationtemp";
+            ds = dbContext.GetRecordsAsDataTable(stmt, new[] { new SqlParameter("@fldbankcode", CurrentUser.Account.BankCode) });
+            //ds = dbContext.GetRecordsAsDataTable(stmt);
+
+            if (ds.Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Rows.Count; i++)
+                {
+                    scannerid = ds.Rows[i]["fldscannerid"].ToString();
+
+                }
+            }
+            return scannerid;
+        }
+        public string GetMaxScannerID()
+        {
+            string scannerid = "";
+            DataTable resultTable = new DataTable();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgMaxScannerid", sqlParameterNext.ToArray());
+            if (resultTable.Rows.Count > 0)
+            {
+                DataRow row = resultTable.Rows[0];
+                scannerid = row["fldscannerid"].ToString();
+            }
+            else
+            {
+                scannerid = "1";
+            }
+            return scannerid;
+
+        }
+        public DataTable getScannerName()
+        {
+            DataTable ds = new DataTable();
+            string stmt = "SELECT fldscannertypeid, fldscannertype FROM tblscannertype order by fldscannertypeid ";
+            ds = dbContext.GetRecordsAsDataTable(stmt);
+
+            return ds;
+        }
+
+        public DataTable getBranchDetails(AccountModel currentUser)
+        {
+            DataTable ds = new DataTable();
+            string stmt = "SELECT fldbranchcode,fldbranchdesc,fldbranchid FROM tblInternalBranchMaster where fldbankcode = @fldbankcode and fldactive='Y' order by fldbranchcode";
+            ds = dbContext.GetRecordsAsDataTable(stmt, new[] { new SqlParameter("@fldbankcode", currentUser.BankCode) });
+
+            return ds;
+        }
+
+        public DataTable getBankDetails()
+        {
+            DataTable ds = new DataTable();
+            string stmt = "SELECT fldbankcode,fldbankdesc FROM tblbankmaster order by fldbankcode";
+            ds = dbContext.GetRecordsAsDataTable(stmt);
+
+            return ds;
+        }
+
+        public DataTable getLocationDetails()
+        {
+            DataTable ds = new DataTable();
+            string stmt = "SELECT fldlocationcode,fldlocationdesc FROM tbllocationmaster order by fldlocationcode";
+            ds = dbContext.GetRecordsAsDataTable(stmt);
+
+            return ds;
+        }
+
+        public DataTable getScannerBrandName(int ScannerTypeID)
+        {
+            DataTable ds = new DataTable();
+            //string stmt = "SELECT fldscannertypeid ||' - '|| fldscannertype as fldscannertype FROM tblscannertype WHERE fldscannertypeid = @scannerTypeId order by tblscannertype";
+            string stmt = "SELECT CONCAT(CONCAT(fldscannertypeid,' - '), fldscannertype) as fldscannertype FROM tblscannertype WHERE fldscannertypeid = @scannerTypeId order by fldscannertype ";
+            ds = dbContext.GetRecordsAsDataTable(stmt, new[] { new SqlParameter("@scannerTypeId", ScannerTypeID) });
+
+            return ds;
+        }
+
+
+        public void CreateScannerWorkStation(FormCollection col, AccountModel currentUser)
+        {
+            Dictionary<string, dynamic> sqlScannerWorkStation = new Dictionary<string, dynamic>();
+            string activ = "N";
+            if (col["chkActive"] != null)
+            {
+                activ = "Y";
+            }
+            sqlScannerWorkStation.Add("fldScannerId", StringUtils.convertToInt(col["scannerId"]));
+            sqlScannerWorkStation.Add("fldScannerTypeId", StringUtils.convertToInt(col["scannerType"]));
+            sqlScannerWorkStation.Add("fldBranchId", col["branchId"].Trim());
+            sqlScannerWorkStation.Add("fldMACAddress1", col["macAdd1"]);
+            sqlScannerWorkStation.Add("fldMACAddress2", col["macAdd2"]);
+            sqlScannerWorkStation.Add("fldMACAddress3", col["macAdd3"]);
+            sqlScannerWorkStation.Add("fldactive", activ);
+            sqlScannerWorkStation.Add("fldbatchno", 1);
+            sqlScannerWorkStation.Add("fldseqno", 1);
+            sqlScannerWorkStation.Add("fldCreateUserId", StringUtils.convertToInt(currentUser.UserId));
+            sqlScannerWorkStation.Add("fldCreateTimeStamp", Convert.ToDateTime(DateUtils.GetCurrentDatetime()));
+            sqlScannerWorkStation.Add("fldUpdateUserId", StringUtils.convertToInt(currentUser.UserId));
+            sqlScannerWorkStation.Add("fldUpdateTimeStamp", Convert.ToDateTime(DateUtils.GetCurrentDatetime()));
+            //sqlScannerWorkStation.Add("fldApproveStatus", "A");
+
+            dbContext.ConstructAndExecuteInsertCommand("tblscannerworkstation", sqlScannerWorkStation);
+        }
+
+        public ScannerWorkStationModel getScanner(string Scanner)
+        {
+
+            //string stmt = "SELECT * FROM view_scannerworkstation WHERE fldscannerid::text=@scannerID";
+            string stmt = "SELECT * FROM view_scannerworkstation WHERE fldscannerid=@scannerID";
+
+            ScannerWorkStationModel scannerDetails = new ScannerWorkStationModel();
+            DataTable ds = new DataTable();
+            ds = dbContext.GetRecordsAsDataTable(stmt, new[] { new SqlParameter("@scannerID", Scanner) });
+
+            if (((ds.Rows.Count > 0)))
+            {
+                DataRow row = ds.Rows[0];
+                scannerDetails.ScannerId = row["fldScannerId"].ToString();
+                scannerDetails.ScannerTypeId = row["fldScannerTypeId"].ToString();
+                scannerDetails.ScannerBrandName = row["fldscannertype"].ToString();
+                scannerDetails.BranchId = row["fldBranchId"].ToString();
+                scannerDetails.MacAdd1 = row["fldMACAddress1"].ToString();
+                scannerDetails.MacAdd2 = row["fldMACAddress2"].ToString();
+                scannerDetails.MacAdd3 = row["fldMACAddress3"].ToString();
+
+            }
+            return scannerDetails;
+        }
+
+        public string getBetween(string strSource, string strStart, string strEnd)
+        {
+            int Start, End;
+            if (strSource.Contains(strStart) && strSource.Contains(strEnd))
+            {
+                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
+                End = strSource.IndexOf(strEnd, Start);
+                return strSource.Substring(Start, End - Start);
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        public List<String> Validate(FormCollection col, string action)
+        {
+            //Action : create, update
+            List<String> err = new List<String>();
+            string format = "^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$";
+            DataTable dt = new DataTable();
+            DataTable dt2 = new DataTable();
+
+            string stmtAll = "SELECT fldmacaddress1, fldmacaddress2, fldmacaddress3 FROM tblscannerworkstationtemp";
+            //+ " WHERE fldbankcode=@fldBankCode";
+            string stmtScanner = "SELECT fldmacaddress1, fldmacaddress2, fldmacaddress3 FROM tblscannerworkstationtemp WHERE fldscannerid=@scannerId";
+            dt = dbContext.GetRecordsAsDataTable(stmtAll);
+            dt2 = dbContext.GetRecordsAsDataTable(stmtScanner, new[] { new SqlParameter("@scannerId", StringUtils.convertToInt(col["scannerId"])) });
+            DataTable result = Find(col["scannerId"], col["scannerType"], col["branchId"]);
+
+            if (col["scannerId"].Equals(""))
+            {
+                err.Add("Workstation Scanner ID Cannot Be Empty");
+            }
+            else if (result.Rows.Count > 0 && action.Equals("create"))
+            {
+                err.Add("Workstation Scanner ID Already Exist");
+            }
+            if (col["scannerType"].Trim() == "")
+            {
+                err.Add("Please Select Scanner Type");
+            }
+            if (col["branchId"].Trim() == "")
+            {
+                err.Add("Please Select Scanner Branch");
+            }
+            if (col["macAdd1"].Equals(""))
+            {
+                err.Add("Mac Address 1 Cannot Be Empty");
+            }
+            //else if (col["macAdd1"].Equals("") && col["macAdd2"].Equals("") && col["macAdd3"].Equals(""))
+            //{
+            //    err.Add(Locale.WorkstationScannerMacAddressCannotBeEmpty);
+            //}
+            else if (col["macAdd1"].Equals("00:00:00:00:00:00"))
+            {
+                err.Add(Locale.WorkstationScannerMacAddressFormatWrongly);
+            }
+            else if (col["macAdd2"].Equals("00:00:00:00:00:00"))
+            {
+                err.Add(Locale.WorkstationScannerMacAddressFormatWrongly);
+            }
+            else if (col["macAdd3"].Equals("00:00:00:00:00:00"))
+            {
+                err.Add(Locale.WorkstationScannerMacAddressFormatWrongly);
+            }
+            else if (!(Regex.IsMatch(col["macAdd1"], format)) && !col["macAdd1"].Equals(""))
+            {
+                err.Add(Locale.WorkstationScannerMacAddressFormatWrongly);
+            }
+            else if (!(Regex.IsMatch(col["macAdd2"], format)) && !col["macAdd2"].Equals(""))
+            {
+                err.Add(Locale.WorkstationScannerMacAddressFormatWrongly);
+            }
+            else if (!(Regex.IsMatch(col["macAdd3"], format)) && !col["macAdd3"].Equals(""))
+            {
+                err.Add(Locale.WorkstationScannerMacAddressFormatWrongly);
+            }
+            //else if (col["macAdd1"].Equals(col["macAdd2"]) && !col["macAdd1"].Equals(""))
+            //{
+            //    err.Add("Mac address address cannot be duplicate with each other");
+            //}
+            //else if (col["macAdd1"].Equals(col["macAdd3"]) && !col["macAdd1"].Equals(""))
+            //{
+            //    err.Add("Mac address address cannot be duplicate with each other");
+            //}
+            //else if (col["macAdd2"].Equals(col["macAdd3"]) && !col["macAdd2"].Equals(""))
+            //{
+            //    err.Add("Mac address address cannot be duplicate with each other");
+            //}
+
+            if (action.Equals("create"))
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+
+
+
+
+
+
+
+
+
+
+                {
+                    //if (col["macAdd1"].Equals(dt.Rows[i]["fldmacaddress1"].ToString()) || col["macAdd1"].Equals(dt.Rows[i]["fldmacaddress2"].ToString()) || col["macAdd1"].Equals(dt.Rows[i]["fldmacaddress3"].ToString()))
+                    //{
+                    //    if (!col["macAdd1"].Equals(""))
+                    //    {
+                    //        err.Add("This MAC Address already exists in the system");
+                    //        break;
+                    //    }
+                    //}
+                    //else if (col["macAdd2"].Equals(dt.Rows[i]["fldmacaddress1"].ToString()) || col["macAdd2"].Equals(dt.Rows[i]["fldmacaddress2"].ToString()) || col["macAdd2"].Equals(dt.Rows[i]["fldmacaddress3"].ToString()))
+                    //{
+                    //    if (!col["macAdd2"].Equals(""))
+                    //    {
+                    //        err.Add("This MAC Address already exists in the system");
+                    //        break;
+                    //    }
+                    //}
+                    //else if (col["macAdd3"].Equals(dt.Rows[i]["fldmacaddress1"].ToString()) || col["macAdd3"].Equals(dt.Rows[i]["fldmacaddress2"].ToString()) || col["macAdd3"].Equals(dt.Rows[i]["fldmacaddress3"].ToString()))
+                    //{
+                    //    if (!col["macAdd3"].Equals(""))
+                    //    {
+                    //        err.Add("This MAC Address already exists in the system");
+                    //        break;
+                    //    }
+                    //}
+                }
+                if (action.Equals("update"))
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        //if (!col["macAdd1"].Equals(dt2.Rows[0]["fldmacaddress1"].ToString()) || col["macAdd1"].Equals(dt.Rows[i]["fldmacaddress2"].ToString()) || col["macAdd1"].Equals(dt.Rows[i]["fldmacaddress3"].ToString()))
+                        //{
+                        //    if (!col["macAdd2"].Equals("") && col["macAdd1"].Equals(""))
+                        //    {
+                        //        err.Add("This MAC Address already exists in the system");
+                        //        break;
+                        //    }
+                        //}
+                        //else if (col["macAdd2"].Equals(dt.Rows[i]["fldmacaddress1"].ToString()) || !col["macAdd2"].Equals(dt2.Rows[0]["fldmacaddress2"].ToString()) || col["macAdd2"].Equals(dt.Rows[i]["fldmacaddress3"].ToString()))
+                        //{
+                        //    if (!col["macAdd2"].Equals("") && col["macAdd1"].Equals(""))
+                        //    {
+                        //        err.Add("This MAC Address already exists in the system");
+                        //        break;
+                        //    }
+                        //}
+                        //else if (col["macAdd3"].Equals(dt.Rows[i]["fldmacaddress1"].ToString()) || col["macAdd3"].Equals(dt.Rows[i]["fldmacaddress2"].ToString()) || !col["macAdd3"].Equals(dt2.Rows[0]["fldmacaddress3"].ToString()))
+                        //{
+                        //    if (!col["macAdd3"].Equals("") && col["macAdd1"].Equals(""))
+                        //    {
+                        //        err.Add("This MAC Address already exists in the system");
+                        //        break;
+                        //    }
+                        //}
+                    }
+                }
+            }
+
+            return err;
+        }
+
+        public bool CreateScannerWorkStationinMain(string id)
+        {
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldScannerId", id));
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciScannerWorkStationinMain", sqlParameterNext.ToArray());
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+            return blnResult;
+        }
+
+        public ScannerWorkStationModel GetScannerWorkStationData(string id)
+        {
+            ScannerWorkStationModel scannerWorkStation = new ScannerWorkStationModel();
+            DataTable resultTable = new DataTable();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldScannerId", id));
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgScannerWorkStationDatabyId", sqlParameterNext.ToArray());
+
+            if (resultTable.Rows.Count > 0)
+            {
+                DataRow row = resultTable.Rows[0];
+                scannerWorkStation.ScannerId = row["fldScannerId"].ToString();
+                scannerWorkStation.ScannerTypeId = row["fldScannerTypeId"].ToString();
+                scannerWorkStation.ScannerType = row["fldScannerType"].ToString();
+                scannerWorkStation.BranchId = row["fldBranchId"].ToString();
+                scannerWorkStation.MacAdd1 = row["fldMacAddress1"].ToString();
+                scannerWorkStation.MacAdd2 = row["fldMacAddress2"].ToString();
+                scannerWorkStation.MacAdd3 = row["fldMacAddress3"].ToString();
+                scannerWorkStation.BatchNo = row["fldBatchNo"].ToString();
+                scannerWorkStation.SeqNo = row["fldSeqNo"].ToString();
+                scannerWorkStation.CreateUserId = row["fldCreateUserId"].ToString();
+                scannerWorkStation.CreateTimeStamp = DateUtils.formatDateFromSql(row["fldCreateTimeStamp"].ToString());
+                scannerWorkStation.UpdateUserId = row["fldUpdateUserId"].ToString();
+                scannerWorkStation.UpdateTimeStamp = row["fldUpdateTimeStamp"].ToString();
+                scannerWorkStation.ScannerIdForDelete = row["fldScannerIdForDelete"].ToString();
+                scannerWorkStation.ScannerTypeNumber = row["fldScannerTypeNumber"].ToString();
+                scannerWorkStation.ReportTitle = row["ReportTitle"].ToString();
+                scannerWorkStation.BankCode = row["fldBankCode"].ToString();
+                scannerWorkStation.BranchCode = row["fldBranchCode"].ToString();
+                scannerWorkStation.Active = row["fldActive"].ToString();
+
+            }
+
+            return scannerWorkStation;
+
+        }
+
+        public bool DeleteScannerWorkStation(string id)
+        {
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldScannerId", id));
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcdScannerWorkStation", sqlParameterNext.ToArray());
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+            return blnResult;
+        }
+
+        public bool UpdateScannerWorkStationToMain(string id)
+        {
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldScannerId", id));
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcuScannerWorkStationToMain", sqlParameterNext.ToArray());
+
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+            return blnResult;
+        }
+
+        public bool DeleteScannerWorkstationTemp(string id)
+        {
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldScannerId", id));
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcdScannerWorkstationTemp", sqlParameterNext.ToArray());
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+            return blnResult;
+
+        }
+
+
+        public bool CheckScannerWorkStationTempById(string id)
+        {
+            bool Flag = false;
+            DataTable resultTable = new DataTable();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldScannerId", id));
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgScannerWorkStationTempDatabyId", sqlParameterNext.ToArray());
+
+            if (resultTable.Rows.Count > 0)
+            {
+                Flag = true;
+            }
+            return Flag;
+        }
+
+        public bool CheckScannerWorkStationTempExistByApproveStatus()
+        {
+
+            DataTable resultTable = new DataTable();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgScannerWorkStationTempByApproveStatus", sqlParameterNext.ToArray());
+
+            if (resultTable.Rows.Count == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+
+
+            }
+        }
+
+        public bool CheckScannerWorkStation()
+        {
+
+            DataTable resultTable = new DataTable();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgScannerWorkStation", sqlParameterNext.ToArray());
+
+            if (resultTable.Rows.Count == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+
+
+            }
+        }
+
+        public bool UpdateScannerWorkStation(FormCollection col)
+        {
+            string activ = "N";
+            if (col["chkActive"] != null)
+            {
+                activ = "Y";
+            }
+
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldScannerId", col["scannerId"]));
+            sqlParameterNext.Add(new SqlParameter("@fldmacaddress1", col["macAdd1"]));
+            sqlParameterNext.Add(new SqlParameter("@fldmacaddress2", col["macAdd2"]));
+            sqlParameterNext.Add(new SqlParameter("@fldmacaddress3", col["macAdd3"]));
+            sqlParameterNext.Add(new SqlParameter("@fldActive", activ));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", DateTime.Now));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", CurrentUser.Account.UserId));
+
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcuScannerWorkStation", sqlParameterNext.ToArray());
+
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+
+            return blnResult;
+        }
+
+
+        public bool CreateScannerWorkStationinTemptoUpdate(FormCollection col)
+        {
+            string activ = "N";
+            if (col["chkActive"] != null)
+            {
+                activ = "Y";
+            }
+
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldScannerId", col["scannerId"]));
+            sqlParameterNext.Add(new SqlParameter("@fldmacaddress1", col["macAdd1"]));
+            sqlParameterNext.Add(new SqlParameter("@fldmacaddress2", col["macAdd2"]));
+            sqlParameterNext.Add(new SqlParameter("@fldmacaddress3", col["macAdd3"]));
+            sqlParameterNext.Add(new SqlParameter("@fldActive", activ));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", CurrentUser.Account.UserId));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", DateTime.Now));
+
+
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciScannerWorkStationinTemptoUpdate", sqlParameterNext.ToArray());
+
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+
+            return blnResult;
+        }
+
+        public bool CreateInScannerWorkStationTemp(FormCollection col)
+        {
+            Dictionary<string, dynamic> sqlScannerWorkStation = new Dictionary<string, dynamic>();
+            string activ = "N";
+            if (col["chkActive"] != null)
+            {
+                activ = "Y";
+            }
+
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldScannerId", col["scannerId"]));
+            sqlParameterNext.Add(new SqlParameter("@fldScannerTypeId", col["scannerType"]));
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", col["branchId"]));
+            sqlParameterNext.Add(new SqlParameter("@fldMACAddress1", col["macAdd1"]));
+            sqlParameterNext.Add(new SqlParameter("@fldMACAddress2", col["macAdd2"]));
+            sqlParameterNext.Add(new SqlParameter("@fldMACAddress3", col["macAdd3"]));
+            sqlParameterNext.Add(new SqlParameter("@fldactive", activ));
+            sqlParameterNext.Add(new SqlParameter("@fldbatchno", 1));
+            sqlParameterNext.Add(new SqlParameter("@fldseqno", 1));
+            sqlParameterNext.Add(new SqlParameter("@fldCreateUserId", CurrentUser.Account.UserId));
+            sqlParameterNext.Add(new SqlParameter("@fldCreateTimeStamp", DateTime.Now));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", CurrentUser.Account.UserId));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", DateTime.Now));
+            sqlParameterNext.Add(new SqlParameter("@fldApproveStatus", "A"));
+
+
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciScannerWorkStationTemp", sqlParameterNext.ToArray());
+
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+
+            return blnResult;
+        }
+
+        public bool CreateScannerWorkStationinTemptoDelete(String id)
+        {
+
+            int intRowAffected;
+            bool blnResult = false;
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldScannerId", id));
+
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciScannerWorkStationinTemptoDelete", sqlParameterNext.ToArray());
+
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+
+            return blnResult;
+        }
+    }
+}

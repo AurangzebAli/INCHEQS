@@ -1,0 +1,50 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "BandQueueSetting", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Maintenance - Band Queue Setting</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>Task Id</th>
+                    <td>
+                        <input type="text"  pattern="^[0-9]+$" name="fldTaskId" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Band Lower Limit</th>
+                    <td>
+                        <input type="text" pattern="^[0-9]+$" name="fldBandLBound" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Band Upper Limit</th>
+                    <td>
+                        <input type="text" pattern="^[0-9]+$" name="fldBandUBound" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Vol. Percent(%)</th>
+                    <td>
+                        <input type="text" pattern="^[0-9]+$" name="fldVolumnPercentage" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Active</th>
+                    <td>
+                        <input type="radio" value="Y" name="fldActive" />Yes
+                        <input type="radio" value="N" name="fldActive" checked/>No
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.BandQueueSetting.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.BandQueueSetting.INDEX) ? "" : "hidden")">@Locale.Back</a>
+    </div>
+}

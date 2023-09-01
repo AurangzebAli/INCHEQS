@@ -1,0 +1,68 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "Thresholdsetting", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Maintenance - Threshold Setting (Add)</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+
+                @*<tr>
+                    <th>@Locale.ThresholdId</th>
+                    <td>
+                        <input type="text" pattern="^[0-9]+$" name="fldId" />
+                    </td>
+                </tr>*@
+
+                <tr>
+                    <th>@Locale.ThresholdType</th>
+                    <td>
+                        <select name="fldType">
+                            <option value="" selected=""></option>
+                            <option value="A">Approve</option>
+                            <option value="R">Reject</option>
+                        </select>
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th><b>Threshold Level</b></th>
+                    <td>
+                        <select name="fldSequence">
+                            <option value="" selected=""></option>
+                            <option value="1">First Level Amount</option>
+                            <option value="2">Second Level Amount</option>
+                        </select>
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th><b>Threshold Amount</b></th>
+                    <td>
+                        <input type="text" name="fldAmount" value=".00"/>
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" onclick="return Confirm()" class="btn btn-default @(CurrentUser.HasTask(TaskIds.ThresholdSetting.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.ThresholdSetting.MAIN) ? "" : "disabled")">@Locale.btnClose</a>
+    </div>
+}
+<script type="text/javascript">
+    function Confirm() {
+        var input = $("<input />");
+        input.attr("type", "hidden").attr("name", "confirm_value");
+        if (confirm("Do you want to save data?")) {
+            input.val("Yes");
+            return true;
+        } else {
+            input.val("No");
+            return false;
+        }
+        $("form")[0].appendChild(input[0]);
+    }
+</script>

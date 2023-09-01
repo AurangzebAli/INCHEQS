@@ -1,0 +1,47 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using (Html.BeginForm("Update", "TransactionCode", FormMethod.Post, new { @Class = "secure-form" })) {
+@Html.AntiForgeryToken()
+<div class="form-horizontal">
+
+    <h4>@Locale.TransactionCodeMaintenance</h4>
+    <hr/>
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <TBODY>
+            <TR>
+                <Th>@Locale.TransactionCode</Th>
+               
+                    <TD>
+                        <input type="hidden" name="transCode" value="@ViewBag.TransactionCodes.Rows[0]["fldTransactionCode"]">
+                @ViewBag.TransactionCodes.Rows[0]["fldTransactionCode"] 
+                    </TD>
+            </TR>
+            <TR>
+                <Th>@Locale.TransactionCodeDescription</Th>
+               
+                    <TD>
+                        <input type="text" name="transDesc" value="@ViewBag.TransactionCodes.Rows[0]["fldTransactionDesc"]">
+                        <span class="red-star">*</span>
+                    </TD>
+            </TR>
+            <TR>
+                <th>@Locale.TransactionType</th>
+                <td>
+                    <select name="transType" id="transType">
+                        @foreach (var item in @ViewBag.TransactionTypes)
+                        {
+                            <option value="@item.fldTransactionType" @(ViewBag.TransactionCodes.Rows[0]["fldTransactionType"] == item.fldTransactionType ? "selected" : "")>@item.fldTransactionDesc</option>
+                        }
+                    </select>
+                    <span class="red-star">*</span>
+                </td>
+            </TR> 
+        </TBODY>
+    </table>
+    <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.TransactionCode.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+    <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.TransactionCode.INDEX) ? "" : "disabled")">@Locale.btnClose</a>
+</div>
+
+}

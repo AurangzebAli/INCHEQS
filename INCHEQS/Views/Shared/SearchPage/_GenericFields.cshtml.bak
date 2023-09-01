@@ -1,0 +1,77 @@
+﻿@using INCHEQS.Resources
+
+@foreach (var field in ViewBag.SearchPage.FormFields)
+{
+
+    if ("DateFromTo".Equals(field.fieldType))
+    {
+            <div class="row">
+                <div class="form-horizontal col-sm-1">
+                    <label for="@field.fieldId">Start Date </label>
+                </div>
+                <div class="form-horizontal col-sm-2">
+                    &nbsp;&nbsp;<input type="text" class="form-control @(field.isReadOnly == "Y" ? "" : "date-start")" name="from_@field.fieldId" value="@field.fieldDefaultValue" readonly />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-horizontal col-sm-1">
+                    <label for="@field.fieldId">End Date</label>
+                </div>
+                <div class="form-horizontal col-sm-2">
+                    &nbsp;&nbsp;<input type="text" class="form-control @(field.isReadOnly == "Y" ? "" : "date-end")" name="to_@field.fieldId" value="@field.fieldDefaultValue" readonly />
+                </div>
+            </div>
+
+
+    }
+    else
+    {
+        <div class="row">
+            <br />
+            <div class="form-horizontal col-sm-2">
+                <span style="font-size-adjust:initial"><label for="@field.fieldId">@field.fieldLabel</label></span>
+            </div>
+            <div class="form-horizontal col-sm-2">
+                    @if ("TextBox".Equals(field.fieldType))
+                    {
+                        <input type="text" class="form-control" maxlength="@field.length" name="@field.fieldId" value="@field.fieldDefaultValue" @(field.isReadOnly == "Y" ? "readonly" : "") />
+                    }
+                    @if ("NumberBox".Equals(field.fieldType) || "Currency".Equals(field.fieldType))
+                    {
+                        <input type="text" class="form-control number-only" maxlength="@field.length" name="@field.fieldId" value="@field.fieldDefaultValue" @(field.isReadOnly == "Y" ? "readonly" : "") />
+                    }
+
+                    @if ("SelectList".Equals(field.fieldType))
+                    {
+                        <select class="form-control" name="@field.fieldId">
+                            @if (field.keyValueFieldList != null)
+                        {
+                            foreach (var pair in field.keyValueFieldList)
+                            {
+                                    <option value="@pair.value.Trim()" @(field.fieldDefaultValue == pair.value ? "selected" : "")>@pair.text</option>
+                                }
+                            }
+                        </select>
+                    }
+                    @if ("SelectListWithAll".Equals(field.fieldType))
+                    {
+                        <select class="form-control" name="@field.fieldId">
+                            <option value="">@Locale.ALL</option>
+                            @if (field.keyValueFieldList != null)
+                        {
+                            foreach (var pair in field.keyValueFieldList)
+                            {
+                                    <option value="@pair.value.Trim()" @(field.fieldDefaultValue == pair.value ? "selected" : "")>@pair.text</option>
+                                }
+                            }
+                        </select>
+                    }
+                    @if ("Date".Equals(field.fieldType))
+                    {
+                        <input type="text" class="form-control @(field.isReadOnly == "Y"? "" : "form-date")" name="@field.fieldId" value="@field.fieldDefaultValue" readonly />
+                    }
+
+                </div>
+            </div>
+            }
+            }

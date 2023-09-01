@@ -1,0 +1,15 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    @Scripts.Render("~/bundles/app")
+</head>
+<body>
+    <div>
+        <!-- Notice Begin Here -->
+        @Html.Partial("Partials/_Notice")
+        @*@Html.Partial("Security/_TaskIdNotice")*@
+        @RenderBody()
+    </div>
+</body>
+</html>

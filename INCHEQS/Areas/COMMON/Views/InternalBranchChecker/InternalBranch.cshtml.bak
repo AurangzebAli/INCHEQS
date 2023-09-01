@@ -1,0 +1,517 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("InternalBranch", "InternalBranchChecker", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+<div class="form-horizontal">
+    <h4>@Locale.InternalBranchMaintenanceEdit</h4>
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <TBODY>
+            @if (ViewBag.InternalBranch != null)
+            {
+                <tr>
+                    <th>@Locale.BranchID</th>
+                    <td>
+                        <input type="text" value="@ViewBag.InternalBranchTemp["fldBranchId"]" disabled />
+                        <input type="text" id="branchId" name="branchId" value="@ViewBag.InternalBranchTemp["fldBranchId"]" hidden />
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.Location</th>
+                    <td>
+                        @*<input type="text" id="locationCode" name="locationCode" style="border: none" readonly />*@
+                        <input type="text" id="locationCode" name="locationCode" value="@ViewBag.InternalBranchTemp["fldlocationcode"]" style="border: none" readonly />
+                        @*<input type="hidden" id="locationCode" value="@ViewBag.BranchCode["fldlocationcode"]" readonly />*@
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BankCode</th>
+                    <td>
+                        @*<input type="text" id="bankCode" name="bankCode" style="border: none" readonly />*@
+                        <input type="text" id="fldBankCode" name="fldBankCode" value="@ViewBag.InternalBranchTemp["fldBankCode"]" style="border: none" readonly />
+                    </td>
+                </tr>
+
+                <TR>
+                    <Th>@Locale.BranchCode</Th>
+                    <td>
+                        <input type="text" id="branchCode" name="branchCode" value="@ViewBag.InternalBranchTemp["fldBranchCode"]" style="width:250px;border: none" readonly maxlength="100">
+                    </td>
+
+                </TR>
+
+                <TR>
+                    <Th>@Locale.BranchDescription</Th>
+                    @if (ViewBag.InternalBranchTemp["fldBranchDesc"] != ViewBag.InternalBranch["fldBranchDesc"])
+                    {
+                        <td>
+                            <input style="width:250px;color: #FFFFFF; background-color: #FF0000;" type="text" value="@ViewBag.InternalBranchTemp["fldBranchDesc"]" maxlength="100" disabled>
+                            <span class="red-star"> *</span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input style="width:250px;" type="text" name="branchDesc" value="@ViewBag.InternalBranchTemp["fldBranchDesc"]" maxlength="100" disabled>
+                            <span class="red-star"> *</span>
+                        </td>
+                    }
+                </TR>
+
+                <TR>
+                    <Th>@Locale.InternalBranchCode </Th>
+                    @*if (ViewBag.InternalBranchTemp["fldInternalBranchCode"] != null && ViewBag.InternalBranch["fldInternalBranchCode"] != null)
+                    {*@
+                        @if (ViewBag.InternalBranchTemp["fldInternalBranchCode"] != ViewBag.InternalBranch["fldInternalBranchCode"])
+                        {
+                            <td>
+                                <input style="width:250px;color: #FFFFFF; background-color: #FF0000;" id="internalBranchcode" name="internalBranchcode" maxlength="3" type="text" value="@ViewBag.InternalBranchTemp["fldInternalBranchCode"]" disabled>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input style="width:250px" id="internalBranchcode" name="internalBranchcode" maxlength="3" type="text" value="@ViewBag.InternalBranchTemp["fldInternalBranchCode"]" disabled>
+                            </td>
+                        }
+                    @*}
+                    else
+                    {
+
+                    }*@
+                </TR>
+                <TR>
+                    <Th>@Locale.ClearingBranchID</Th>
+                    <td>
+                        <input type="checkbox" name="chkSelfClearing" id="chkSelfClearing" onclick="myFunction()" @ViewBag.SelfClearingTemp disabled> Self Clearing
+                        @*<input type="text" name="clearingBranchId" id="clearingBranchId" value="test">*@
+
+                        @if (ViewBag.InternalBranchTemp["fldClearingBranchId"] != ViewBag.InternalBranch["fldClearingBranchId"])
+                        {
+                            <select style="width:200px;color: #FFFFFF; background-color: #FF0000;" name="clearingBranchId" id="clearingBranchId" disabled>
+                                <option value="" selected="selected">Please Select Clearing Branch Id</option>
+                                @foreach (var item in @ViewBag.ClearingBranchId)
+                                {
+                                    @*<option value="@item.branchId">@item.branchId - @item.branchDesc</option>*@
+                                    @*<option value="@item.branchId">@item.branchId</option>*@
+                                    <option value="@item.branchId" @(ViewBag.InternalBranchTemp["fldClearingBranchId"].Trim() == item.branchId.Trim() ? "selected" : "")>@item.branchId - @item.branchDesc </option>
+                                }
+                            </select>
+                        }
+                        else
+                        {
+                            <select style="width:200px" name="clearingBranchId" id="clearingBranchId" disabled>
+                                <option value="" selected="selected">Please Select Clearing Branch Id</option>
+                                @foreach (var item in @ViewBag.ClearingBranchId)
+                                {
+                                    @*<option value="@item.branchId">@item.branchId - @item.branchDesc</option>*@
+                                    @*<option value="@item.branchId">@item.branchId</option>*@
+                                    <option value="@item.branchId" @(ViewBag.InternalBranchTemp["fldClearingBranchId"].Trim() == item.branchId.Trim() ? "selected" : "")>@item.branchId - @item.branchDesc </option>
+                                }
+                            </select>
+                        }
+                        <span class="red-star"> *</span>
+                    </td>
+
+                </TR>
+                <TR>
+                    <Th>@Locale.BankZoneCodeLabel</Th>
+                    <td>
+                        @if (ViewBag.InternalBranchTemp["fldBankZoneCode"].ToString() != ViewBag.InternalBranch["fldBankZoneCode"].ToString())
+                        {
+                            <select style="color: #FFFFFF; background-color: #FF0000;" name="fldBankZoneCode" disabled>
+                                <option value="" selected="selected">Select Bank Zone Code</option>
+                                @foreach (var item in @ViewBag.BankZone)
+                                {
+                                    <option value="@item.BankZoneCode" @(ViewBag.InternalBranchTemp["fldBankZoneCode"].Trim() == item.BankZoneCode.Trim() ? "selected" : "")>@item.BankZoneCode</option>
+                                }
+                            </select>
+                        }
+                        else
+                        {
+                            <select name="fldBankZoneCode" disabled>
+                                <option value="" selected="selected">Select Bank Zone Code</option>
+                                @foreach (var item in @ViewBag.BankZone)
+                                {
+                                    <option value="@item.BankZoneCode" @(ViewBag.InternalBranchTemp["fldBankZoneCode"].Trim() == item.BankZoneCode.Trim() ? "selected" : "")>@item.BankZoneCode</option>
+                                }
+                            </select>
+                        }
+                        <span class="red-star"> *</span>
+                    </td>
+                    
+                </TR>
+                <TR>
+                    <Th>@Locale.SubCenter</Th>
+                    <td>
+                        <input type="checkbox" name="fldSubcenter" @ViewBag.SubcenterTemp disabled>@Locale.YES
+                    </td>
+
+                </TR>
+
+                <TR>
+                    <Th>@Locale.EmailAddress</Th>
+                   
+
+                    @if (ViewBag.InternalBranchTemp["fldEmailAddress"].ToString()!= ViewBag.InternalBranch["fldEmailAddress"].ToString())
+                    {
+                        <td>
+                            <input style="width:250px;color: #FFFFFF; background-color: #FF0000;" type="text" id="fldEmailAddress" name="fldEmailAddress" value="@ViewBag.InternalBranchTemp["fldEmailAddress"]" maxlength="100" disabled>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input style="width:250px;" type="text" id="fldEmailAddress" name="fldEmailAddress" value="@ViewBag.InternalBranchTemp["fldEmailAddress"]" maxlength="100" disabled>
+                        </td>
+                    }
+                </TR>
+
+                <TR>
+                    <Th>@Locale.Address1</Th>
+                    @if (ViewBag.InternalBranchTemp["fldAddress1"].ToString() != ViewBag.InternalBranch["fldAddress1"].ToString())
+                    {
+                        <td>
+                            <input style="width:250px;color: #FFFFFF; background-color: #FF0000;" type="text" name="address1" value="@ViewBag.InternalBranchTemp["fldAddress1"]" maxlength="100" disabled>
+                            <span class="red-star"> *</span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input style="width:250px;" type="text" name="address1" value="@ViewBag.InternalBranchTemp["fldAddress1"]" maxlength="100" disabled>
+                            <span class="red-star"> *</span>
+                        </td>
+                    }
+                </TR>
+                <TR>
+                    <Th>@Locale.Address2</Th>
+                    @if (ViewBag.InternalBranchTemp["fldAddress2"].ToString() != ViewBag.InternalBranch["fldAddress2"].ToString())
+                    {
+                        <td>
+                            <input style="width:250px;color: #FFFFFF; background-color: #FF0000;" type="text" name="address2" value="@ViewBag.InternalBranchTemp["fldAddress2"]" maxlength="100" disabled>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input style="width:250px;" type="text" name="address2" value="@ViewBag.InternalBranchTemp["fldAddress2"]" maxlength="100" disabled>
+                        </td>
+                    }
+                </TR>
+                <TR>
+                    <Th>@Locale.Address3</Th>
+                    @if (ViewBag.InternalBranchTemp["fldAddress3"].ToString() != ViewBag.InternalBranch["fldAddress3"].ToString())
+                    {
+                        <td>
+                            <input style="width:250px;color: #FFFFFF; background-color: #FF0000;" type="text" name="address3" value="@ViewBag.InternalBranchTemp["fldAddress3"]" maxlength="100" disabled>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input style="width:250px;" type="text" name="address3" value="@ViewBag.InternalBranchTemp["fldAddress3"]" maxlength="100" disabled>
+                        </td>
+                    }
+                </TR>
+                <TR>
+                    <Th>@Locale.Postcode</Th>
+                    @if (ViewBag.InternalBranchTemp["fldPostCode"].ToString() != ViewBag.InternalBranch["fldPostCode"].ToString())
+                    {
+                        <td>
+                            <input style="color: #FFFFFF; background-color: #FF0000;" type="text" id="fldPostCode" name="fldPostCode" value="@ViewBag.InternalBranchTemp["fldPostCode"]" maxlength="10" disabled>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input type="text" id="fldPostCode" name="fldPostCode" value="@ViewBag.InternalBranchTemp["fldPostCode"]" maxlength="10" disabled>
+                        </td>
+                    }
+                </TR>
+
+                <TR>
+                    <Th>@Locale.City</Th>
+                    @if (ViewBag.InternalBranchTemp["fldCity"].ToString() != ViewBag.InternalBranch["fldCity"].ToString())
+                    {
+                        <td>
+                            <input style="color: #FFFFFF; background-color: #FF0000;" type="text" id="fldCity" name="fldCity" value="@ViewBag.InternalBranchTemp["fldCity"]" maxlength="50" disabled>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input type="text" id="fldCity" name="fldCity" value="@ViewBag.InternalBranchTemp["fldCity"]" maxlength="50" disabled>
+                        </td>
+                    }
+                </TR>
+
+                <TR>
+                    <Th>@Locale.Country</Th>
+                    @if (ViewBag.InternalBranchTemp["fldCountry"].ToString() != ViewBag.InternalBranch["fldCountry"].ToString())
+                    {
+                        <td>
+                            <select name="fldCountry" style="color: #FFFFFF; background-color: #FF0000;" id="country" disabled>
+                                <option value="" selected="selected">Please Select Country</option>
+                                @foreach (var item in @ViewBag.Country)
+                                {
+                                    <option value="@item.countryCode" @(ViewBag.InternalBranchTemp["fldCountry"].Trim() == item.countryCode.Trim() ? "selected" : "")>@item.countryDesc</option>
+                                }
+                            </select>
+
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <select name="fldCountry" id="country" disabled>
+                                <option value="" selected="selected">Please Select Country</option>
+                                @foreach (var item in @ViewBag.Country)
+                                {
+                                    <option value="@item.countryCode" @(ViewBag.InternalBranchTemp["fldCountry"].Trim() == item.countryCode.Trim() ? "selected" : "")>@item.countryDesc</option>
+                                }
+                            </select>
+
+                        </td>
+                    }
+                </TR>
+
+                @*<TR>
+                        <Th>@Locale.ClearingBranchID</Th>
+                            <td>
+                            <input type="checkbox" name="chkSelfClearing" id="chkSelfClearing"> Self Clearing
+
+                            <input type="text" name="clearingBranchId" id="clearingBranchId" value="test">
+                            </td>
+
+                    </TR>*@
+
+
+
+                <TR>
+                    <Th>@Locale.Active</Th>
+
+                    <TD>
+                        <input type="checkbox" name="chkActive" id="chkActive" @ViewBag.Active disabled> @Locale.YES
+                    </TD>
+                </TR>
+
+            }
+            else
+            {
+                <tr>
+                    <th>@Locale.BranchID</th>
+                    <td>
+                        <input type="text" style="color: #FFFFFF; background-color: #FF0000;" value="@ViewBag.InternalBranchTemp["fldBranchId"]" disabled />
+                        <input type="text" id="branchId" name="branchId" svalue="@ViewBag.InternalBranchTemp["fldBranchId"]" hidden />
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.Location</th>
+                    <td>
+                        @*<input type="text" id="locationCode" name="locationCode" style="border: none" readonly />*@
+                        <input type="text" id="locationCode" name="locationCode" value="@ViewBag.InternalBranchTemp["fldlocationcode"]" style="border: none" readonly />
+                        @*<input type="hidden" id="locationCode" value="@ViewBag.BranchCode["fldlocationcode"]" readonly />*@
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BankCode</th>
+                    <td>
+                        @*<input type="text" id="bankCode" name="bankCode" style="border: none" readonly />*@
+                        <input type="text" id="fldBankCode" name="fldBankCode" value="@ViewBag.InternalBranchTemp["fldBankCode"]" style="border: none" readonly />
+                    </td>
+                </tr>
+
+                <TR>
+                    <Th>@Locale.BranchCode</Th>
+                    <td>
+                        <input type="text" id="branchCode" name="branchCode" value="@ViewBag.InternalBranchTemp["fldBranchCode"]" style="width:250px;border: none" readonly maxlength="100">
+                    </td>
+
+                </TR>
+
+                <TR>
+                    <Th>@Locale.BranchDescription</Th>
+                    <td>
+                        <input style="width:250px;color: #FFFFFF; background-color: #FF0000;" type="text" name="branchDesc" value="@ViewBag.InternalBranchTemp["fldBranchDesc"]" maxlength="100" disabled>
+                        <span class="red-star"> *</span>
+                    </td>
+
+                </TR>
+
+                <TR>
+                    <Th>@Locale.InternalBranchCode </Th>
+
+                    <td>
+                        <input style="width:250px;color: #FFFFFF; background-color: #FF0000;" maxlength="3" type="text" id="internalBranchcode" name="internalBranchcode" value="@ViewBag.InternalBranchTemp["fldInternalBranchCode"]" disabled>
+                    </td>
+                </TR>
+                <TR>
+                    <Th>@Locale.ClearingBranchID</Th>
+                    <td>
+                        <input type="checkbox" name="chkSelfClearing" id="chkSelfClearing" onclick="myFunction()" @ViewBag.SelfClearingTemp> Self Clearing
+                        @*<input type="text" name="clearingBranchId" id="clearingBranchId" value="test">*@
+
+                        <select style="width:200px;color: #FFFFFF; background-color: #FF0000;" name="clearingBranchId" id="clearingBranchId" disabled>
+                            <option value="" selected="selected">Please Select Clearing Branch Id</option>
+                            @foreach (var item in @ViewBag.ClearingBranchId)
+                            {
+                                @*<option value="@item.branchId">@item.branchId - @item.branchDesc</option>*@
+                                @*<option value="@item.branchId">@item.branchId</option>*@
+                                <option value="@item.branchId" @(ViewBag.InternalBranchTemp["fldClearingBranchId"].Trim() == item.branchId.Trim() ? "selected" : "")>@item.branchId - @item.branchDesc </option>
+                            }
+                        </select>
+                        <span class="red-star"> *</span>
+                    </td>
+
+                </TR>
+                <TR>
+                    <Th>@Locale.BankZoneCodeLabel</Th>
+                    <td>
+                        <select style="color: #FFFFFF; background-color: #FF0000;" name="fldBankZoneCode" disabled>
+                            <option value="" selected="selected">Select Bank Zone Code</option>
+                            @foreach (var item in @ViewBag.BankZone)
+                            {
+                                <option value="@item.BankZoneCode" @(ViewBag.InternalBranchTemp["fldBankZoneCode"].Trim() == item.BankZoneCode.Trim() ? "selected" : "")>@item.BankZoneCode</option>
+                            }
+                        </select>
+                        <span class="red-star"> *</span>
+
+                    </td>
+                </TR>
+                <TR>
+                    <Th>@Locale.SubCenter</Th>
+                    <td>
+                        <input type="checkbox" name="fldSubcenter" @ViewBag.SubcenterTemp disabled>@Locale.YES
+
+                    </td>
+
+                </TR>
+
+                <TR>
+                    <Th>@Locale.EmailAddress</Th>
+                    <td>
+                        <input style="width:250px;color: #FFFFFF; background-color: #FF0000;" type="text" id="fldEmailAddress" name="fldEmailAddress" value="@ViewBag.InternalBranchTemp["fldEmailAddress"]" maxlength="100" disabled>
+                    </td>
+
+                </TR>
+
+                <TR>
+                    <Th>@Locale.Address1</Th>
+                    <td>
+                        <input style="width:250px;color: #FFFFFF; background-color: #FF0000;" type="text" name="address1" value="@ViewBag.InternalBranchTemp["fldAddress1"]" maxlength="100" disabled>
+                        <span class="red-star"> *</span>
+                    </td>
+
+                </TR>
+                <TR>
+                    <Th>@Locale.Address2</Th>
+                    <td>
+                        <input style="width:250px;color: #FFFFFF; background-color: #FF0000;" type="text" name="address2" value="@ViewBag.InternalBranchTemp["fldAddress2"]" maxlength="100" disabled>
+                    </td>
+
+                </TR>
+                <TR>
+                    <Th>@Locale.Address3</Th>
+                    <td>
+                        <input style="width:250px;color: #FFFFFF; background-color: #FF0000;" type="text" name="address3" value="@ViewBag.InternalBranchTemp["fldAddress3"]" maxlength="100" disabled>
+                    </td>
+
+                </TR>
+                <TR>
+                    <Th>@Locale.Postcode</Th>
+                    <td>
+                        <input style="color: #FFFFFF; background-color: #FF0000;" type="text" id="fldPostCode" name="fldPostCode" value="@ViewBag.InternalBranchTemp["fldPostCode"]" maxlength="10" disabled>
+
+                    </td>
+                </TR>
+
+                <TR>
+                    <Th>@Locale.City</Th>
+                    <td>
+                        <input style="color: #FFFFFF; background-color: #FF0000;" type="text" id="fldCity" name="fldCity" value="@ViewBag.InternalBranchTemp["fldCity"]" maxlength="50" disabled>
+
+                    </td>
+                </TR>
+
+                <TR>
+                    <Th>@Locale.Country</Th>
+                    <td>
+                        <select style="color: #FFFFFF; background-color: #FF0000;" name="fldCountry" id="country" disabled>
+                            <option value="" selected="selected">Please Select Country</option>
+                            @foreach (var item in @ViewBag.Country)
+                            {
+                                <option value="@item.countryCode" @(ViewBag.InternalBranchTemp["fldCountry"].Trim() == item.countryCode.Trim() ? "selected" : "")>@item.countryDesc</option>
+                            }
+                        </select>
+
+                    </td>
+                </TR>
+
+                @*<TR>
+                        <Th>@Locale.ClearingBranchID</Th>
+                            <td>
+                            <input type="checkbox" name="chkSelfClearing" id="chkSelfClearing"> Self Clearing
+
+                            <input type="text" name="clearingBranchId" id="clearingBranchId" value="test">
+                            </td>
+
+                    </TR>*@
+
+
+
+                <TR>
+                    <Th>@Locale.Active</Th>
+
+                    <TD>
+                        <input type="checkbox" name="chkActive" id="chkActive" @ViewBag.Active disabled> @Locale.YES
+                    </TD>
+                </TR>
+            }
+        </TBODY>
+    </table>
+    <input type="text" name="action" value="@ViewBag.InternalBranchTemp["fldApproveStatus"]" hidden />
+    <button data-action="@Url.Action("/VerifyA2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsOCS.InternalBranchChecker.VERIFY) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+    <button data-action="@Url.Action("/VerifyR2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsOCS.InternalBranchChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+    <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.InternalBranchChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+
+</div>
+
+
+}
+
+<script type="text/javascript">
+    // when page is ready
+    //$(document).ready(function () {
+    //    // on form submit
+    //    $("#chkHQ").on('submit', function () {
+    //        // to each unchecked checkbox
+    //        $(this + 'input[type=checkbox]:not(:checked)').each(function () {
+    //            // set value 0 and check it
+    //            $(this).attr('checked', true).val(0);
+    //        });
+    //    })
+    //})
+
+    function myFunction() {
+
+        var checkBox = document.getElementById("chkSelfClearing");
+        var text = document.getElementById("clearingBranchId");
+        if (checkBox.checked == true) {
+
+            text.disabled = true;
+            document.getElementById("clearingBranchId").value = "";
+
+        } else {
+
+            text.disabled = false;
+        }
+    }
+
+
+</script>
+
+@Scripts.Render("~/bundles/BankBranchMaintDetails")

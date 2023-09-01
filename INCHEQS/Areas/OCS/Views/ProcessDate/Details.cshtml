@@ -1,0 +1,33 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using (Html.BeginForm("Update", "TransactionType", FormMethod.Post, new { @Class = "secure-form" })) {
+@Html.AntiForgeryToken()
+<div class="form-horizontal">
+
+    <h4>@Locale.TransactionTypeMaintenance</h4>
+    <hr/>
+    <table class="table form-table table-no-border">
+        <TBODY>
+            <TR>
+                <Th>@Locale.TransactionType</Th>
+               
+                    <TD>
+                        <input type="hidden" name="transType" value="@ViewBag.TransactionTypes.Rows[0]["fldTransactionType"] ">
+                @ViewBag.TransactionTypes.Rows[0]["fldTransactionType"] 
+                    </TD>
+            </TR>
+            <TR>
+                <Th>@Locale.TransactionTypeDescription</Th>
+               
+                    <TD>
+                        <input type="text" name="transDesc" value="@ViewBag.TransactionTypes.Rows[0]["fldTransactionDesc"]  ">
+                    </TD>
+            </TR>
+        </TBODY>
+    </table>
+    <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.TransactionType.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+    <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.TransactionType.INDEX) ? "" : "disabled")">@Locale.btnClose</a>
+</div>
+
+}

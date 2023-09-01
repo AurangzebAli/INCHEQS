@@ -1,0 +1,23 @@
+﻿@using INCHEQS.Resources
+<div id="chequeImageContainer">
+    <button type="button" data-btnfor="reset" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Reset</button>
+    <button type="button" id="frontBtn" data-btnfor="front" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Front</button>
+    <button type="button" data-btnfor="back" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Back</button> &nbsp; &nbsp; &nbsp; 
+    <button type="button" data-btnfor="bw" class="modify-cheque-btn btn btn-default btn-xs">Black White</button>
+    <button type="button" data-btnfor="greyscale" class="modify-cheque-btn btn btn-default btn-xs">Greyscale</button>
+    @if (Convert.ToDouble(ViewBag.InwardItemViewModel.getField("fldAmount")) >= ViewBag.LargeAmount) { 
+        <button type="button" data-btnfor="uv" class="modify-cheque-btn btn btn-default btn-xs">UV</button>
+    } &nbsp; &nbsp; &nbsp;
+    <button type="button" data-btnfor="rotate" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Rotate</button>
+    <button type="button" data-btnfor="invert" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Invert</button>
+    <button type="button" data-btnfor="large" class="modify-cheque-btn btn btn-default btn-xs">@Locale.BigImage</button>
+    <hr />
+    <div id="imageHolder" class="cheque-img rotated180">
+        <input type="hidden" id="itemId" name="imageItemId" value="@ViewBag.InwardItemViewModel.getField("fldInwardItemId")" />
+        <input type="hidden" id="imageFolder" name="imageFolder" value="@ViewBag.InwardItemViewModel.getFormatImageFolderPath()" />
+        <input type="hidden" id="imageId" name="imageId" value="@ViewBag.InwardItemViewModel.getField("fldImageFileName")" />
+        <input type="hidden" id="imageState" name="imageState" value="greyscale" />
+        <img id="chequeImage" class="chequeImage" />
+    </div>
+
+</div>

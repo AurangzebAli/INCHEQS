@@ -1,0 +1,44 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.TaskAssignment;
+@using INCHEQS.Resources;
+@using INCHEQS.Common;
+@using (Html.BeginForm("Update", "LargeAmount", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken();
+    <h4>@ViewBag.PageTitle</h4>
+    <hr />
+    <span class="red"   ><i>*@Locale.RequiredField</i></span>
+    <div class="form-horizontal">
+        <br>
+        <table Class="table form-table table-no-border">
+            <tr>
+                <td>Large Amount</td>
+                <td>
+                    @*<input type="text" name="txtAmount" value="@StringUtils.FormatCurrency(ViewBag.BigAmount.Rows[0]["fldLargeAmt"].ToString())" class="currency"> <span class="red-star"> *</span>*@
+                    <input type="text" name="txtAmount" value="@StringUtils.FormatCurrency(@ViewBag.BigAmount)" id="txtAmount" @*class="currency"*@> <span class="red-star"> *</span>
+                </td>
+
+            </tr>
+        </table>
+        <button type="submit" onclick="return Confirm()"  Class="btn btn-default @(CurrentUser.HasTask(TaskIdsICS.LargeAmount.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsICS.LargeAmount.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+
+}
+<script type="text/javascript">
+    $(function () {
+        $('#txtAmount').maskMoney({ allowZero: true });
+    })
+    function Confirm() {
+        var input = $("<input />");
+        input.attr("type", "hidden").attr("name", "confirm_value");
+        if (confirm("Do you want to save data?")) {
+            input.val("Yes");
+            return true;
+        } else {
+            input.val("No");
+            return false;
+        }
+        $("form")[0].appendChild(input[0]);
+    }
+</script>

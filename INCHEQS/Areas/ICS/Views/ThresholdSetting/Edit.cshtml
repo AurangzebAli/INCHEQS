@@ -1,0 +1,103 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "Thresholdsetting", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Maintenance - Threshold Setting (Edit)</h4>
+        <hr />
+        @*<span class="red"><i>*Locale.RequiredField</i></span>*@
+        <table class="table form-table table-no-border">
+            <tbody>
+
+                <tr>
+                    @*<th>@Locale.ThresholdId</th>*@
+                    <td>
+                        <input type="hidden" value="@ViewBag.GetThreshold["fldVerificationThresholdId"]" name="thresholdid_1" />@*@ViewBag.GetThreshold["fldId"]*@
+                    </td>
+                </tr>
+
+                @*<tr>
+                    <th>@Locale.ThresholdType</th>
+                    <td>
+                        <select name="fldType" disabled>
+                            <option value="A" @(ViewBag.GetThreshold["fldVerificationThresholdType"] =="A" ? "selected": "")>Approve</option>
+                            <option value="R" @(ViewBag.GetThreshold["fldVerificationThresholdType"] =="R" ? "selected": "")>Reject</option>
+                        </select>
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>*@
+                <TR>
+                    <Th>@Locale.ThresholdType</Th>
+                    @if (ViewBag.GetThreshold["fldVerificationThresholdType"] == "A")
+                    {
+                        <TD><input type="hidden" value="A" name="fldType" />Approve </TD>
+                    }
+                    else
+                    {
+                        <TD><input type="hidden" value="R" name="fldType" />Reject </TD>
+                    }
+                </TR>
+                @*<tr>
+                    <th><b>Level</b></th>
+                    <td>
+                        <select name="fldSequence" disabled>
+                            <option value="1"  @(ViewBag.GetThreshold["fldVerificationThresholdSeq"] == 1 ? "selected": "")>First Level Amount</option>
+                            <option value="2"  @(ViewBag.GetThreshold["fldVerificationThresholdSeq"] == 2 ? "selected": "")>Second Level Amount</option>
+                        </select>
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>*@
+            <TR>
+                <th><b>Threshold Level</b></th>
+                @if (ViewBag.GetThreshold["fldVerificationThresholdSeq"] == 1)
+                {
+                    <TD><input type="hidden" value="1" name="fldSequence" />First Level Amount </TD>
+                }
+                else if (ViewBag.GetThreshold["fldVerificationThresholdSeq"] == 2)
+                {
+                    <TD><input type="hidden" value="2" name="fldSequence" />Second Level Amount </TD>
+                }
+                else if (ViewBag.GetThreshold["fldVerificationThresholdSeq"] == 3)
+                {
+            <TD><input type="hidden" value="3" name="fldSequence" />Third Level Amount </TD>
+                }
+                else
+                {
+                    <TD><input type="hidden" value="4" name="fldSequence" />Four Level Amount </TD>
+                }
+            </TR>
+                <tr>
+                    <th><b>Threshold Amount</b></th>
+                    <td>
+                        <input type="hidden" name="fldOrgAmount" value="@ViewBag.GetThreshold["fldVerificationThresholdAmt"]" />
+                        
+                        <input type="text" class="currency" id="fldAmount" value="@String.Format("{0:n}", ViewBag.GetThreshold["fldVerificationThresholdAmt"])" name="fldAmount_1" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" onclick="return Confirm()" class="btn btn-default @(CurrentUser.HasTask(TaskIds.ThresholdSetting.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.ThresholdSetting.MAIN) ? "" : "disabled")">@Locale.btnClose</a>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $('#fldAmount').maskMoney({ allowZero: true });
+    })
+    function Confirm() {
+        var input = $("<input />");
+        input.attr("type", "hidden").attr("name", "confirm_value");
+        if (confirm("Do you want to save data?")) {
+            input.val("Yes");
+            var a = $("#fldAmount").val().replace(",", "");
+            $("#fldAmount").val(a);
+            return true;
+        } else {
+            input.val("No");
+            return false;
+        }
+        $("form")[0].appendChild(input[0]);
+    }
+</script>

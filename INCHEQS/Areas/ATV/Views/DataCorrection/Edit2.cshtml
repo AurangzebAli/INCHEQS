@@ -1,0 +1,68 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("Update", "DataCorrection", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <div class="row" data-id="1" id="1">
+            <h4>Invalid Payee</h4>
+            <div class="col-sm-8">
+                <img src="@ViewBag.ImageData">
+            </div>
+            <div></div>
+            <a class="btn btn-default secure-nav" id="btnClick">Previous</a>
+            <a href="@Url.Action("Index")" class="btn btn-default secure-nav" id="btnClick">Next</a>
+        </div>
+    </div>
+        <div>
+            <table>
+                <tr>
+                    <td>
+                        &#8195; <input type="text" id="day" @*name="StateCode"*@ maxlength="1" style="width : 30px" />
+                        <input type="text" id="day" @*name="StateCode"*@ maxlength="1" style="width : 30px" />
+                    </td>
+                    <td>
+                        &#8195; <input type="text" id="month" @*name="StateCode"*@ maxlength="1" style="width : 30px" />
+                        <input type="text" id="month" @*name="StateCode"*@ maxlength="1" style="width : 30px" />
+                    </td>
+                    <td>
+                        &#8195; <input type="text" id="year" @*name="StateCode"*@ maxlength="1" style="width : 30px" />
+                        <input type="text" id="year" @*name="StateCode"*@ maxlength="1" style="width : 30px" />
+                    </td>
+
+                    <td>
+                        &#8195; <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.DataCorrection.INDEX) ? "" : "hidden")">Confirm</a>
+                    </td>
+                </tr>
+            </table>
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            &#8195; D D <br>
+
+                        </td>
+                        <td>
+                            &#8195;  &#8195; &#8195; &#8195; M M <br>
+
+                        </td>
+                        <td>
+                            &#8195; &#8195; &#8195; Y Y <br>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <script>
+        var day, month, year;
+
+        day = $('.day').val();
+        month = $('.month').val();
+        year = $('.year').val();
+
+        $('.hidden-date-input').val([day, year, month].join('-'));
+        </script>
+}

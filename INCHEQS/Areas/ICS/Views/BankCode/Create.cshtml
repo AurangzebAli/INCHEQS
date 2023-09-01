@@ -1,0 +1,49 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "BankCode", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Locale.BankCodeMaintenance</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.BankCode</th>
+                    <td>
+                        <input type="text" value="" name="bankCode" maxlength="3"/><span class="red-star"> *</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BankDescription</th>
+                    <td>
+                        <input type="text" value="" name="bankDesc" maxlength="150"/><span class="red-star"> *</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BankIndicator</th>
+                    <td>
+                        <select class="default" name="bankIndicator" maxlength="20">
+                            @foreach (var row in ViewBag.BankType.Rows) {
+                                <option value="@row["fldBankType"]" >@row["fldBankTypeDesc"]
+                                </option>
+                            }
+                        </select>
+                </tr>
+                <TR>
+                    <Th>Active</Th>
+                    <td>
+                        <select class="default" name="active">
+                            <option value="Y">@Locale.YES</option>
+                            <option value="N"> @Locale.NO</option>
+                        </select>
+                    </td>
+                </TR>
+            </tbody>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.BankCode.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.BankCode.INDEX) ? "" : "hidden")">@Locale.Back</a>
+    </div>
+}

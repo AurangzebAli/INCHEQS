@@ -1,0 +1,47 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using (Html.BeginForm("Update", "ChangePassword", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.UtilitiesChangePassword</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tr>
+                <th>@Locale.UserId</th>
+                <td> <input name="txtUserID" id="txtUserID" value="@CurrentUser.Account.UserAbbr" readOnly style="border:0"></td>
+
+            </tr>
+
+            <tr>
+                <th>@Locale.OldPassword</th>
+                <td>
+                    <input name="txtOldPasswd" id="txtOldPasswd" type="password" maxLength="30"><span class="red-star"> *</span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>@Locale.NewPassword</th>
+                <td>
+                    <input name="txtNewPasswd" id="txNewPasswd" type="password" maxLength="30"><span class="red-star"> *</span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>@Locale.ConfirmNewPassword</th>
+                <td>
+                    <input name="txtConfPasswd" id="txtConfPasswd" type="password" maxLength="30"><span class="red-star"> *</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <br>
+                    <button type="submit" id="pwSave" value="Save" class="btn btn-default @(CurrentUser.HasTask(TaskIds.ChangePassword.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+}

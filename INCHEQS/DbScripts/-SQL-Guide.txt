@@ -1,0 +1,36 @@
+You can define Sql parameter in 'fldUserParamCondition'(example: "fldLastUpdateUserId=@currentUserId" for Review Mine). 
+These are the list of available parameterize query: 
+
+	1.	@currentUserId
+	2.	@currentUserAbbr
+	3.	@currentUserVerificationClass
+	4.	@currentUserVerificationLimit
+	5.	@currentUserTaskIds
+	6.	@currentUsergroupIds
+	7.	@currentUserBankCode
+	8.	@currentUserBranchCodes
+
+
+
+A- Configuration
+- Initial TableData
+	Table creation or altered used by this system
+- Directory Data
+	Table "tblSystemProfile" system profile value and code
+- Task Data
+	To purge task data and give admin access to assign task only
+- View
+	Default view in this system, consist of 
+		a. [View_ChequeHistory]
+		b. [View_InwardItem]
+		c. [View_PendingData]
+
+B- Maintenance and Utility
+	Menu in maintenance and utility setup
+	Common Step:
+		1. Create View (Data can be manipulate in this section)
+		2. Declaration
+			i.
+
+
+

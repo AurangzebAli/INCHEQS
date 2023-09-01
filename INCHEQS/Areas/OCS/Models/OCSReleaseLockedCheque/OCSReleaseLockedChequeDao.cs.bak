@@ -1,0 +1,52 @@
+﻿//using INCHEQS.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Data;
+//using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using INCHEQS.DataAccessLayer;
+using INCHEQS.Common;
+using System.Data.SqlClient;
+
+namespace INCHEQS.Areas.OCS.Models.OCSReleaseLockedCheque
+{
+    public class OCSReleaseLockedChequeDao : OCSIReleaseLockedChequeDao
+    {
+        private readonly ApplicationDbContext dbContext;
+        public OCSReleaseLockedChequeDao(ApplicationDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
+        public DataTable ListLockedCheque(string bankCode)
+        {
+            DataTable ds = new DataTable();
+            string stmt = "SELECT out.flditeminitialid,fldcapturingdate,flduic,fldserial,fldpvaccno,fldamount,usr.flduserabb FROM view_outwarditem out LEFT JOIN tblusermaster usr on out.fldlockuser = usr.flduserid WHERE /*coalesce(fldapprovalstatus, '') = '' AND*/ coalesce(flduserid,0) <> 0";
+
+            //ds = dbContext.GetRecordsAsDataTable(stmt);
+            ds = dbContext.GetRecordsAsDataTable(stmt, new[] {
+                new SqlParameter ("@fldBankCode", bankCode/*CurrentUser.Account.BankCode*/)
+            });
+
+            return ds;
+        }
+
+        public void DeleteProcessUsingCheckbox(string InwardItemId)
+        {
+            string[] aryText = InwardItemId.Split(',');
+            //string stmt = "UPDATE tblInwardItemInfoStatus SET fldAssignedUserId = NULL WHERE fldAssignedUserId=@fldAssignedUserId";
+            //dbContext.ExecuteNonQuery(stmt, new[] { new SqlParameter("@fldAssignedUserId", fldAssignedUserId) });
+
+            if ((aryText.Length > 0))
+            {
+                string stmt = "UPDATE tblinwarditeminfostatus SET fldassigneduserid = NULL WHERE fldinwarditemid in (" + DatabaseUtils.getParameterizedStatementFromArray(aryText) + ") ;";
+                stmt = stmt + "Delete from tbliteminfo WHERE flditeminitialid in (" + DatabaseUtils.getParameterizedStatementFromArray(aryText) + ") ;";
+                dbContext.ExecuteNonQuery(stmt, DatabaseUtils.getSqlParametersFromArray(aryText).ToArray());
+
+            }
+
+
+        }
+    }
+}

@@ -1,0 +1,21 @@
+﻿@using INCHEQS.Resources
+<table class="table table-bordered mTop10">
+    <thead>
+        <tr>
+            <th>@Locale.ChequeSerialNo</th>
+            <th>@Locale.StateCode</th>
+            <th>@Locale.BranchCode</th>
+            <th>@Locale.AccountNumber</th>
+            <th>@Locale.Transcode</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><span>@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo")</span></td>
+            <td><span>@ViewBag.InwardItemViewModel.getField("fldPreStateCode")@ViewBag.InwardItemViewModel.getField("fldIssueBankCode")</span></td>
+            <td><span>@ViewBag.InwardItemViewModel.getField("fldIssueBranchCode")@ViewBag.InwardItemViewModel.getField("fldIssueDigit")</span></td>
+            <td><span>@ViewBag.InwardItemViewModel.getField("fldAccountNumber")</span></td>
+            <td><span>@ViewBag.InwardItemViewModel.getField("fldTransCode")</span></td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,30 @@
+﻿@using INCHEQS.Resources
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline secure-form", id = "searchForm" })) {
+    @Html.AntiForgeryToken();
+    <h4>@ViewBag.SearchPage.PageTitle</h4>
+    <hr />
+    <div class="row">
+        @Html.Partial("SearchPage/_GenericFieldsForm")
+    </div>
+    <hr />
+    <div class="form-group">
+        <Input type="radio" id="radioAIF" name="radioAIF" value="Daily" checked> @Locale.AIFDaily
+        <Input type="radio" id="radioAIF" name="radioAIF" value="Monthly"> @Locale.AIFMonthly
+        <hr />
+        <button type="submit" class="btn btn-default search" data-action="@Url.Action("SearchResultPage")" >@Locale.Search</button>
+        <button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("LoadAIFFile")">Load AIF File</button>
+        
+        
+  
+    </div>
+    <div id="resultContainer"></div>
+
+}
+
+<div id="dataProcessContainer" data-processname="@ViewBag.ProcessName"></div>
+<input id="dataProcessType" value="Other" type="hidden">
+
+@Scripts.Render("~/bundles/FileUpload")
+@Scripts.Render("~/bundles/SearchPage")
+
+@Scripts.Render("~/bundles/DataProcessRealTime")

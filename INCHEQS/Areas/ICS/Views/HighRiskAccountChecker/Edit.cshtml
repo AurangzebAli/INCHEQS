@@ -1,0 +1,76 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "HighRiskAccountChecker", FormMethod.Post, new { @Class = "secure-form" }))
+{
+	@Html.AntiForgeryToken()
+
+	<div class="form-horizontal">
+		<h4>Maintenance > Account Setting > High Risk Account Profile (Checker)</h4>
+		<hr />
+		<span class="red"><i>*@Locale.RequiredField</i></span>
+		<table class="table form-table table-no-border">
+			<tbody>
+
+				<tr>
+					<th>Internal Branch Code</th>
+					<td>
+						<input type="hidden" name="Status" value="@ViewBag.HighRiskAccountChecker.fldApproveStatus" />
+						<input type="hidden" name="fldInternalBranchCode" value="@ViewBag.HighRiskAccountChecker.fldInternalBranchCode" />
+						<input type="text" value="@ViewBag.HighRiskAccountChecker.fldInternalBranchCode" disabled />
+						<span class="red-star"> *</span>
+					</td>
+				</tr>
+
+				<tr>
+					<th>Account Number</th>
+					<td>
+						<input type="hidden" name="fldHighRiskAccount" value="@ViewBag.HighRiskAccountChecker.fldHighRiskAccount" />
+						<input type="text" value="@ViewBag.HighRiskAccountChecker.fldHighRiskAccount" disabled />
+						<span class="red-star"> *</span>
+					</td>
+				</tr>
+				<tr>
+					<th>Amount</th>
+					@if (ViewBag.HighRiskAccount != null)
+					{
+						if (ViewBag.HighRiskAccount.fldHighRiskAmount != ViewBag.HighRiskAccountChecker.fldHighRiskAmount)
+						{
+
+							<td>
+								<input type="hidden" name="fldHighRiskAmount" value="@ViewBag.HighRiskAccountChecker.fldHighRiskAmount" />
+								<input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@String.Format("{0:n}", ViewBag.HighRiskAccountChecker.fldHighRiskAmount)" autocomplete="off" disabled/>
+								<span class="red-star"> *</span>
+								@*@String.Format("{0:n}", ViewBag.findVerificationLimit["fld1stAmt"])*@
+								@*<input type="text" value="@StringUtils.FormatCurrency(@ViewBag.HighRiskAccount.fldHighRiskAmount)" name="fldHighRiskAmount" />*@
+							</td>
+
+						}
+						else
+						{
+							<td>
+								<input type="hidden" name="fldHighRiskAmount" value="@ViewBag.HighRiskAccountChecker.fldHighRiskAmount" />
+								<input type="text" value="@String.Format("{0:n}", ViewBag.HighRiskAccountChecker.fldHighRiskAmount)" autocomplete="off" disabled/>
+								<span class="red-star"> *</span>
+								@*@String.Format("{0:n}", ViewBag.findVerificationLimit["fld1stAmt"])*@
+								@*<input type="text" value="@StringUtils.FormatCurrency(@ViewBag.HighRiskAccount.fldHighRiskAmount)" name="fldHighRiskAmount" />*@
+							</td>
+					}
+				}
+				</tr>
+				</tbody>
+		</table>
+		    <button data-action="@Url.Action("/Approve2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.HighRiskAccountChecker.VERIFY) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+			<button data-action="@Url.Action("/Reject2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.HighRiskAccountChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+			<a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.HighRiskAccountChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+
+	</div>
+	<script type="text/javascript">
+    $(function () {
+		$('#fldHighRiskAmount').maskMoney({ allowZero: true });
+    })
+	function setTwoNumberDecimal(event) {
+		this.value = parseFloat(this.value).toFixed(2);
+	}
+	</script>
+}

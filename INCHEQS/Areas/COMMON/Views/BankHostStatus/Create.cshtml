@@ -1,0 +1,75 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "BankHostStatus", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Maintenance > Cheque Verification > Bank Host Status (Add) </h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>Bank Host Status Code</th>
+                    <td>
+                        <input type="text" value="" name="fldBankHostStatusCode" minlength="3" maxlength="3" /><span class="red-star"> *</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Bank Host Status Description</th>
+                    <td>
+                        <input type="text" value="" name="fldBankHostStatusDesc" maxlength="150" style="width:300px" /><span class="red-star"> *</span>
+                    </td>
+                </tr>
+
+                @*<tr>
+                    <th>@Locale.BankIndicator</th>
+                    <td>
+                        <select class="default" name="bankIndicator" maxlength="20">
+                            @foreach (var row in ViewBag.BankType.Rows) {
+                                <option value="@row["fldBankType"]" >@row["fldBankTypeDesc"]
+                                </option>
+                            }
+                        </select>
+                    </tr>*@
+
+                <tr>
+                    <th>Bank Host Status Action</th>
+                    <td>
+                        <select name="fldBankHostStatusActionCode" id="fldBankHostStatusActionCode">
+                            <option value=""> </option>
+                            <option value="N">N </option>
+                            <option value="B">B </option>
+
+                            @*@foreach (var item in ViewBag.HostStatusAction)
+        {
+            <option value="@item.hostActionCode">@item.hostActionCode - @item.hostActionDesc</option>
+        }*@
+                        </select>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <Th>Reject Code</Th>
+
+                    <td>
+                        <select name="fldRejectCode" id="fldRejectCode">
+                            <option value=""> </option>
+                            @foreach (var item in ViewBag.RejectCode)
+                            {
+                                <option value="@item.hostRejectCode">@item.hostRejectCode - @item.hostRejectDesc</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <button type="submit" data-action="@Url.Action("/SaveCreate")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIds.BankHostStatus.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.BankHostStatus.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}

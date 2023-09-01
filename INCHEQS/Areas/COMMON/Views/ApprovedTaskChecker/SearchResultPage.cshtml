@@ -1,0 +1,45 @@
+﻿@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using INCHEQS.Models.SearchPageConfig;
+@Html.Partial("SearchPage/_InfoBox")
+@*@using (Html.BeginForm("Verify", "ApprovedChecker", FormMethod.Post, new { @Class = "secure-form" })) {*@
+    
+    <div class="form-horizontal">
+        <table id="search-result-table" class="table table-striped table-hover table-bordered">
+            <thead>
+                <tr>
+                    @Html.Partial("SearchPage/_TableHeaderColumns")
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+                {
+                    <tr class="clickable-row-without-search" data-action="@Url.Action("Edit")">
+                        @Html.Partial("SearchPage/_TableBodyColumns", row)
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                @Html.Partial("SearchPage/_TablePaginationFooter")
+            </tfoot>
+        </table>
+
+        <input type="hidden" name="formAction" id="formAction" />
+        <button data-action="@Url.Action("/VerifyA")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsOCS.ApprovedGroupChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+        <button data-action="@Url.Action("/VerifyR")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsOCS.ApprovedGroupChecker.VERIFY) ? "" : "hidden")"  confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+    </div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $(".getFormAction").off("click.action").on("click.action", function () {
+            $("#formAction").val($(this).val())
+            //alert($("#formAction").val())
+            //alert($(this).val())
+            //$('input[name="formAction"]').val($(this).val())
+        })
+    })
+</script>
+
+@Scripts.Render("~/bundles/SearchResultPage")

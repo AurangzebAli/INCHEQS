@@ -1,0 +1,29 @@
+﻿@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Resources;
+<table id="search-result-table" class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            @Html.Partial("SearchPage/_TableHeaderColumns")
+            @*<th>Action</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+        {
+            <tr>
+                @Html.Partial("SearchPage/_TableBodyColumns", row)
+                @*<td>
+                        <a href="" class="btn btn-default btn-xs row-action-download" data-action="@Url.Action("Download")">Download</a>
+                    </td>*@
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        @Html.Partial("SearchPage/_TablePaginationFooter")
+    </tfoot>
+</table>
+<button class="btn btn-default modal-submit" data-action="@Url.Action("PPSFileListing")" data-title="File(s) Available List">File(s) Available List</button>
+
+
+
+@Scripts.Render("~/bundles/SearchResultPage")

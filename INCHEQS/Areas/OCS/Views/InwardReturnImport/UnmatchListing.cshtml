@@ -1,0 +1,24 @@
+﻿@using INCHEQS.Resources
+<table class="table table-bordered table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>UIC</th>
+            <th>ItemInitial ID</th>
+            <th>Return Reason</th>
+            @*<th>Representment?</th>*@
+            <th>Inward Return Filename</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var file in ViewBag.FileList)
+        {
+            <tr>
+                <td>@file.fldUIC</td>
+                <td>@file.fldIRItemInitialID</td>
+                <td>@file.fldRejectDesc</td>
+                @*<td>@file.fldisRepresentment</td>*@
+                <td>@file.fldFileName</td>
+            </tr>
+        }
+    </tbody>
+</table>

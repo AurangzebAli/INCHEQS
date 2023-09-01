@@ -1,0 +1,47 @@
+﻿@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using INCHEQS.Models.SearchPageConfig;
+@Html.Partial("SearchPage/_InfoBox")
+    
+<div class="form-horizontal">
+    <table id="search-result-table" class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                @Html.Partial("SearchPage/_TableHeaderColumns")
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+            {
+
+                <tr class="clickable-row-without-search" data-action="@Url.Action("SecurityProfile")">
+                    @Html.Partial("SearchPage/_TableBodyColumns", row)
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            @Html.Partial("SearchPage/_TablePaginationFooter")
+        </tfoot>
+    </table>
+    <br />
+
+    <input type="hidden" name="fldUserAuthMethod" value=@(ViewBag.SecurityProfileTemp.fldUserAuthMethod)>
+
+    <a data-action="@Url.Action("/VerifyA")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.SecurityProfileChecker.VERIFY) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</a>
+    <a data-action="@Url.Action("/VerifyR")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.SecurityProfileChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</a>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $(".getFormAction").off("click.action").on("click.action", function () {
+            $("#formAction").val($(this).val())
+            //alert($("#formAction").val())
+            //alert($(this).val())
+            //$('input[name="formAction"]').val($(this).val())
+        })
+    })
+</script>
+
+@Scripts.Render("~/bundles/SearchResultPage")

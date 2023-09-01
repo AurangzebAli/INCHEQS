@@ -1,0 +1,194 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+
+@{
+    ViewBag.Title = "Matching Details";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Matching Details</title>
+</head>
+<body>
+    <div>
+        <table class="table table-bordered" id="tblMatchingDetails">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Cheque Number</th>
+                    <th>Account Number</th>
+                    <th>Bank Code</th>
+                    <th>State Code</th>
+                    <th>Branch Code</th>
+                    <th>Cheque Date</th>
+                    <th>Cheque Amount</th>
+                    <th>Payee Name</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td>Scanning Component</td>
+                    @*@foreach (var items in ViewBag.ScanningComponent)
+                    {
+
+
+                        <td>@items.ScanAccountNo</td>
+                        <td>@items.ScanBankCode</td>
+                        <td>@items.ScanStateCode</td>
+                        <td>@items.ScanBranchCode</td>
+                        <td>@items.ScanChequeDate</td>
+                        <td>@items.ScanChequeAmount</td>
+                        <td>@items.ScanPayeeName</td>
+                    }*@
+                    <td id="ScanChequeNo">@ViewBag.ScanningComponent[2].ScanChequeNo</td>
+                    <td>@ViewBag.ScanningComponent[2].ScanAccountNo</td>
+                    <td>@ViewBag.ScanningComponent[2].ScanBankCode</td>
+                    <td>@ViewBag.ScanningComponent[2].ScanStateCode</td>
+                    <td>@ViewBag.ScanningComponent[2].ScanBranchCode</td>
+                    <td>@ViewBag.ScanningComponent[4].ScanChequeDate</td>
+                    <td>@StringUtils.FormatCurrency(ViewBag.ScanningComponent[4].ScanChequeAmount)</td>
+                    <td id="ScanPayeeName">@ViewBag.ScanningComponent[4].ScanPayeeName</td>
+                </tr>
+
+                <tr>
+                    <td>PPS File Cheque Information</td>
+                    @foreach (var items1 in ViewBag.PPSFile)
+                    {
+                        <td>@items1.PPSChequeNo</td>
+                        <td>@items1.PPSAccountNo</td>
+                        <td>@items1.PPSBankCode</td>
+                        <td>@items1.PPSStateCode</td>
+                        <td>@items1.PPSBranchCode</td>
+                        <td>@items1.PPSChequeDate</td>
+                        <td>@StringUtils.FormatCurrency(items1.PPSChequeAmount)</td>
+                        <td id="PPSPayeeName">@items1.PPSPayeeName</td>
+                    }
+                </tr>
+
+                <tr>
+                    <td>Overall Matching Percentage</td>
+                    <td colspan="8" id="overallPercentage"></td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="hidden" id="comparecell" onclick="comparecell();" />
+    </div>
+</body>
+</html>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //console.log("efd");
+        $('#comparecell').trigger('click');
+        //console.log("aaa");
+    });
+    function comparecell() {
+        var row = $("#tblMatchingDetails tr").length;
+        //console.log("abc");
+        //console.log(row);
+        //console.log("ocr " & document.getElementById("tblMatchingDetails").rows[1].cells.item(8).innerHTML);
+        //console.log("cheque " & document.getElementById("tblMatchingDetails").rows[2].cells.item(8).innerHTML);
+        if (row > 1) {
+            //console.log("fffff");
+            var ocrPayeeInfo = document.getElementById("tblMatchingDetails").rows[1].cells.item(8).innerHTML;
+            var chequePayeeInfo = document.getElementById("tblMatchingDetails").rows[2].cells.item(8).innerHTML;
+            //alert(ocrPayeeInfo);
+            //alert(chequePayeeInfo);
+            //console.log("ocr " & document.getElementById("tblMatchingDetails").rows[1].cells.item(8).innerHTML);
+            //console.log("cheque " & document.getElementById("tblMatchingDetails").rows[2].cells.item(8).innerHTML)
+            //chequePayeeInfo = chequePayeeInfo.replace(" ", "");
+            //chequePayeeInfo = chequePayeeInfo.replace(" ", "");
+            //var ocrDateInfo = document.getElementById("chequeInfo").rows[1].cells.item(4).innerHTML;
+            //var chequeDateInfo = document.getElementById("tblFindPayee").rows[1].cells.item(4).innerHTML;
+
+            /*var chequeStatusInfo = document.getElementById("tblFindPayee").rows[1].cells.item(6).innerHTML;*/
+
+            if (ocrPayeeInfo != chequePayeeInfo) {
+                $('#PPSPayeeName').css({
+                    'background-color': '#FFB6C1'
+                });
+                $('#ScanPayeeName').css({
+                    'background-color': '#FFB6C1'
+                });
+            }
+
+            //if (ocrDateInfo != chequeDateInfo) {
+            //    $('#fldIssueDate').css({
+            //        'background-color': '#FFB6C1'
+            //    });
+            //}
+
+            //if (chequeStatusInfo != "U") {
+            //    $('#Status').css({
+            //        'background-color': '#FFB6C1'
+            //    });
+            //}
+        }
+        calculatePercentage();
+    }
+
+    function calculatePercentage() {
+        var row = $("#tblMatchingDetails tr").length;
+        var totalMatch = 0;
+        var percentage = 0;
+ 
+        if (row > 1) {
+
+            var ScanChequeNo = document.getElementById("tblMatchingDetails").rows[1].cells.item(1).innerHTML;
+            var ScanAccountNo = document.getElementById("tblMatchingDetails").rows[1].cells.item(2).innerHTML;
+            var ScanBankCode = document.getElementById("tblMatchingDetails").rows[1].cells.item(3).innerHTML;
+            var ScanStateCode = document.getElementById("tblMatchingDetails").rows[1].cells.item(4).innerHTML;
+            var ScanBranchCode = document.getElementById("tblMatchingDetails").rows[1].cells.item(5).innerHTML;
+            var ScanChequeDate = document.getElementById("tblMatchingDetails").rows[1].cells.item(6).innerHTML;
+            var ScanChequeAmount = document.getElementById("tblMatchingDetails").rows[1].cells.item(7).innerHTML;
+            var ScanPayeeName = document.getElementById("tblMatchingDetails").rows[1].cells.item(8).innerHTML;
+
+            var PPSChequeNo = document.getElementById("tblMatchingDetails").rows[2].cells.item(1).innerHTML;
+            var PPSAccountNo = document.getElementById("tblMatchingDetails").rows[2].cells.item(2).innerHTML;
+            var PPSBankCode = document.getElementById("tblMatchingDetails").rows[2].cells.item(3).innerHTML;
+            var PPSStateCode = document.getElementById("tblMatchingDetails").rows[2].cells.item(4).innerHTML;
+            var PPSBranchCode = document.getElementById("tblMatchingDetails").rows[2].cells.item(5).innerHTML;
+            var PPSChequeDate = document.getElementById("tblMatchingDetails").rows[2].cells.item(6).innerHTML;
+            var PPSChequeAmount = document.getElementById("tblMatchingDetails").rows[2].cells.item(7).innerHTML;
+            var PPSPayeeName = document.getElementById("tblMatchingDetails").rows[2].cells.item(8).innerHTML;
+
+            if (ScanChequeNo == PPSChequeNo) {
+                totalMatch = totalMatch + 1;
+            }
+            if (ScanAccountNo == PPSAccountNo) {
+                totalMatch = totalMatch + 1;
+            }
+            if (ScanBankCode == PPSBankCode) {
+                totalMatch = totalMatch + 1;
+            }
+            if (ScanStateCode == PPSStateCode) {
+                totalMatch = totalMatch + 1;
+            }
+            if (ScanBranchCode == PPSBranchCode) {
+                totalMatch = totalMatch + 1;
+            }
+            if (ScanChequeDate == PPSChequeDate) {
+                totalMatch = totalMatch + 1;
+            }
+            if (ScanChequeAmount == PPSChequeAmount) {
+                totalMatch = totalMatch + 1;
+            }
+            if (ScanPayeeName == PPSPayeeName) {
+                totalMatch = totalMatch + 1;
+            }
+        }
+        percentage = (totalMatch / 8) * 100
+        percentage = parseFloat(percentage)
+        $("#overallPercentage").text(percentage);
+    }
+
+
+
+        
+
+</script>

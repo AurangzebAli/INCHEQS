@@ -1,0 +1,110 @@
+﻿using INCHEQS.ConfigVerificationBranch.BranchActivation;
+using INCHEQS.Helpers;
+using INCHEQS.Security.AuditTrail;
+using INCHEQS.Models.SearchPageConfig;
+using INCHEQS.TaskAssignment;
+using INCHEQS.Resources;
+using INCHEQS.Security;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+
+namespace INCHEQS.Areas.ICS.Controllers.InwardClearing.ProgressMonitoring
+{
+    public class BranchActivationController : BaseController
+    {
+
+        private readonly IPageConfigDao pageConfigDao;
+        private readonly IAuditTrailDao auditTrailDao;
+        private readonly IBranchActivationDao branchActivationDao;
+        public BranchActivationController(IPageConfigDao pageConfigDao, IBranchActivationDao branchActivationDao, IAuditTrailDao auditTrailDao)
+        {
+            this.pageConfigDao = pageConfigDao;
+            this.branchActivationDao = branchActivationDao;
+            this.auditTrailDao = auditTrailDao;
+        }
+
+        // GET: ICS/BranchActivation
+        [CustomAuthorize(TaskIds = TaskIds.BranchActivation.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Index()
+        {
+            ViewBag.SearchPage = pageConfigDao.GetSearchFormModelFromConfig(CurrentUser.Account, new PageSqlConfig(TaskIds.BranchActivation.INDEX));
+            ViewBag.Message = branchActivationDao.GetMessageList();
+            ViewBag.GetMessage = branchActivationDao.GetMessage();
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.BranchActivation.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult SaveMessage(FormCollection col)
+        {
+
+            List<String> errorMessages = branchActivationDao.Validate(col);
+
+            if ((errorMessages.Count > 0))
+            {
+                TempData["ErrorMsg"] = errorMessages;
+            }
+            else
+            {
+                if (col["txtMessage"] != null)
+                {
+                    branchActivationDao.InsertNewMessage(col["txtMessage"], CurrentUser.Account.UserId, CurrentUser.Account.BankCode, CurrentUser.Account.SpickCode);
+                    auditTrailDao.Log("Message : " + col["txtMessage"] + " - send to Branch.", CurrentUser.Account);
+                }
+                if (col["MessageOption"] != "")
+                {
+                    branchActivationDao.InsertNewMessage(col["MessageOption"], CurrentUser.Account.UserId, CurrentUser.Account.BankCode, CurrentUser.Account.SpickCode);
+                    auditTrailDao.Log("Message : " + col["MessageOption"] + " - send to Branch.", CurrentUser.Account);
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.BranchActivation.INDEX)]
+        public ActionResult SearchResultPage(FormCollection collection)
+        {
+            string clearDate = collection["fldClearDate"];
+
+            ViewBag.CutOfftime = branchActivationDao.GetCutOffTime(clearDate);
+            ViewBag.ChequeActivation = branchActivationDao.GetChequeActivation(clearDate);
+            ViewBag.cutOffDate = branchActivationDao.GetCutOffTime(clearDate);
+
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.BranchActivation.INDEX)]
+        public ActionResult Update(FormCollection col)
+        {
+            string activation = col["branchActivate"];
+            string cutOffDate = col["fldClearDate"];
+            string cutOffStartTime = col["endHourStartTime"] + ":" + col["endMinStartTime"] + ":000";
+            string cutOffTime = col["endHourEndTime"] + ":" + col["endMinEndTime"] + ":000";
+
+            List<String> errorMessages = branchActivationDao.Validate(col);
+
+            if ((errorMessages.Count > 0))
+            {
+                TempData["ErrorMsg"] = errorMessages;
+            }
+            else
+            {
+                branchActivationDao.DeleteCheckActivation();
+
+                branchActivationDao.InsertCutOffTime(activation, cutOffDate, cutOffStartTime, cutOffTime, CurrentUser.Account.UserId, CurrentUser.Account.BankCode);
+                branchActivationDao.InsertChequeActivation(col, CurrentUser.Account.UserId, CurrentUser.Account.BankCode);
+
+                TempData["Notice"] = Locale.SuccessfullyUpdated;
+
+            }
+
+            return RedirectToAction("Index");
+
+        }
+    }
+}

@@ -1,0 +1,153 @@
+﻿﻿@using INCHEQS.Resources;
+@{
+    /**/
+
+    /**/
+
+    /**/
+    string urlAction = Url.Action("PrintCheque");
+    if (ViewBag.TaskRole == "ChequeRetriever")
+    {
+        urlAction = Url.Action("PrintChequeRetriever");
+    }
+}
+<input type="hidden" name="bankDesc" value="@ViewBag.CurrentUser.BankDesc">
+<input type="hidden" name="fldUIC2" value="@ViewBag.InwardItemViewModel.getField("fldUIC")">
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "ReviewAction"))
+{
+    <button type="button" id="reviewBtn" data-action="@Url.Action("ReviewAction")" value="Rev" class="btn-verification-border btn-verification btn-medium normal-submit-Verification" style="margin-left :5px;">Review</button>
+}
+
+<button type="button" class="modal-submit btn-verification-border btn-verification bold" data-action="@Url.Action("MatchingDetails")">Matching Details</button>
+<button type="button" class="modal-submit btn-medium btn-verification-border btn-verification" data-action="@Url.Action("ChequeHistory")">@Locale.AuditTrail</button>
+
+@if (ViewBag.InwardItemViewModel.getField("TotalRecord") != "" && (ViewBag.ImgRetrieve != "Y"))
+{
+    if ((Int32.Parse(ViewBag.InwardItemViewModel.getField("TotalRecord")) > 1) && (ViewBag.ImgRetrieve != "Y"))
+    {
+        if ((ViewBag.InwardItemViewModel.getField("PreviousValue") == "" || ViewBag.InwardItemViewModel.getField("PreviousValue") == "0") && (ViewBag.InwardItemViewModel.getField("NextValue") != "" && ViewBag.InwardItemViewModel.getField("NextValue") != "0"))
+        {
+            <button type="button" id="previousBtn" class="normal-submit btn-verification-border btn-verification btn-medium btn-action-verification" disabled>@Locale.Previous</button>
+            if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationReturn"))
+            {
+                if (ViewBag.TaskId.ToString().Trim() == "306550")
+                {
+                    <button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-upi btn-medium normal-submit-pending-branch" style="margin-left :5px;">UPI</button>
+                }
+                else
+                {
+                    @*<button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-upi btn-medium normal-submit-Verification" style="margin-left :5px;">UPI</button>*@
+                }
+            }
+            @*<button type="button" class="action-download btn-verification-border btn-verification btn-medium btn-action-verification btn-print" data-action="@urlAction">@Locale.Print</button>*@
+            if (ViewBag.TaskId.ToString().Trim() != "306220" && ViewBag.TaskId.ToString().Trim() != "306230")
+            {
+                <button type="button" id="nextBtn" class="normal-submit btn-verification-border btn-verification btn-medium btn-action-verification" data-action="@Url.Action("NextCheque")">@Locale.Next</button>
+            }
+
+        }
+        else if ((ViewBag.InwardItemViewModel.getField("NextValue") == "" || ViewBag.InwardItemViewModel.getField("NextValue") == "0") && (ViewBag.InwardItemViewModel.getField("PreviousValue") != "" && ViewBag.InwardItemViewModel.getField("PreviousValue") != "0"))
+        {
+            <button type="button" id="previousBtn" class="normal-submit btn-verification-border btn-verification btn-medium btn-action-verification" data-action="@Url.Action("PrevCheque")">@Locale.Previous</button>
+            if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationReturn"))
+            {
+                if (ViewBag.TaskId.ToString().Trim() == "306550")
+                {
+                    <button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-upi btn-medium normal-submit-pending-branch" style="margin-left :5px;">UPI</button>
+                }
+                else
+                {
+                    @*<button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-upi btn-medium normal-submit-Verification" style="margin-left :5px;">UPI</button>*@
+                }
+
+            }
+            @*<button type="button" class="action-download btn-verification-border btn-verification btn-medium btn-action-verification btn-print" data-action="@urlAction">@Locale.Print</button>*@
+            <button type="button" id="nextBtn" class="normal-submit btn-verification-border btn-verification btn-medium btn-action-verification" disabled>@Locale.Next</button>
+
+        }
+        else if ((ViewBag.InwardItemViewModel.getField("NextValue") != "" && ViewBag.InwardItemViewModel.getField("NextValue") != "0") && (ViewBag.InwardItemViewModel.getField("PreviousValue") != "" && ViewBag.InwardItemViewModel.getField("PreviousValue") != "0"))
+        {
+            <button type="button" id="previousBtn" class="normal-submit btn-verification-border btn-verification btn-medium btn-action-verification" data-action="@Url.Action("PrevCheque")">@Locale.Previous</button>
+            if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationReturn"))
+            {
+                if (ViewBag.TaskId.ToString().Trim() == "306550")
+                {
+                    <button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-upi btn-medium normal-submit-pending-branch" style="margin-left :5px;">UPI</button>
+                }
+                else
+                {
+                    @*<button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-upi btn-medium normal-submit-Verification" style="margin-left :5px;">UPI</button>*@
+                }
+            }
+            @*<button type="button" class="action-download btn-verification-border btn-verification btn-medium btn-action-verification btn-print" data-action="@urlAction">@Locale.Print</button>*@
+
+            if (ViewBag.TaskId.ToString().Trim() != "306220" && ViewBag.TaskId.ToString().Trim() != "306230")
+            {
+                <button type="button" id="nextBtn" class="normal-submit btn-verification-border btn-verification btn-medium btn-action-verification" data-action="@Url.Action("NextCheque")">@Locale.Next</button>
+            }
+        }
+        else
+        {
+            if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationReturn"))
+            {
+                if (ViewBag.TaskId.ToString().Trim() == "306550")
+                {
+                    <button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-upi btn-medium normal-submit-pending-branch" style="margin-left :5px;">UPI</button>
+                }
+                else
+                {
+                    @*<button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-upi btn-medium normal-submit-Verification" style="margin-left :5px;">UPI</button>*@
+                }
+
+            }
+
+            @*<button type="button" class="action-download btn-verification-border btn-verification btn-medium btn-action-verification btn-print" data-action="@urlAction">@Locale.Print</button>*@
+        }
+
+        @*<button type="button" id="nextBtn" class="normal-submit btn-verification-border btn-verification btn-medium btn-action-verificationz" data-action="@Url.Action("NextCheque")">@Locale.Next</button>*@
+        @*if (!ViewBag.InwardItemViewModel.getField("RowNumber").Equals(ViewBag.InwardItemViewModel.getField("TotalRecord")))
+            {
+                <button type="button" id="nextBtn" class="normal-submit btn btn-default btn-xs" data-action="@Url.Action("NextCheque")">@Locale.Next</button>
+            }*@
+    }
+    else
+    {
+        @*<button type="button" id="previousBtn" class="normal-submit btn btn-verification btn-sm" data-action="@Url.Action("PrevCheque")">@Locale.Previous</button>*@
+        if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationReturn"))
+        {
+            if (ViewBag.TaskId.ToString().Trim() == "306550")
+            {
+                <button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-upi btn-medium normal-submit-pending-branch" style="margin-left :5px;">UPI</button>
+            }
+            else
+            {
+                @*<button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-upi btn-medium normal-submit-Verification" style="margin-left :5px;">UPI</button>*@
+            }
+        }
+        @*<button type="button" id="nextBtn" class="normal-submit btn btn-verification btn-sm" data-action="@Url.Action("NextCheque")">@Locale.Next</button>*@
+        @*<button type="button" class="action-download btn-verification-border btn-verification btn-medium btn-action-verification btn-print" data-action="@urlAction">@Locale.Print</button>*@
+    }
+}
+else
+{
+    @*<button type="button" id="previousBtn" class="normal-submit btn btn-verification btn-sm" data-action="@Url.Action("PrevCheque")">@Locale.Previous</button>*@
+    if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationReturn"))
+    {
+        if (ViewBag.TaskId.ToString().Trim() == "306550")
+        {
+            <button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-upi btn-medium normal-submit-pending-branch" style="margin-left :5px;">UPI</button>
+        }
+        else
+        {
+            @*<button type="button" id="returnBtn" data-action="@Url.Action("VerificationReturn")" class="btn-verification-border btn-upi btn-medium normal-submit-Verification" style="margin-left :5px;">UPI</button>*@
+        }
+    }
+
+    @*<button type="button" id="nextBtn" class="normal-submit btn btn-verification btn-sm" data-action="@Url.Action("NextCheque")">@Locale.Next</button>*@
+    @*<button type="button" class="action-download btn-verification-border btn-verification btn-medium btn-action-verification btn-print" data-action="@urlAction">@Locale.Print</button>*@
+}
+<button type="button" class="action-download btn-verification-border btn-verification btn-medium btn-action-verification btn-print" data-action="@urlAction">@Locale.Print</button>
+<button type="button" id="closeBtn" class="btn-verification-border btn-verification btn-medium" data-action="@Url.Action("Close")">@Locale.btnClose</button>
+
+
+

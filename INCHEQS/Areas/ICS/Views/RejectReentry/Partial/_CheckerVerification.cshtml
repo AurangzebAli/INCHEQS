@@ -1,0 +1,54 @@
+﻿@using INCHEQS.Resources
+@*<span disabled="disabled" class="micr-info-ics fldCheckDigit txtBlack @(ViewBag.InwardItemViewModel.getField("fldOriCheckDigit") == ""  ? "txtBlack" : "txtRed")" value="@ViewBag.InwardItemViewModel.getField("fldCheckDigit")" maxlength="2" />*@
+<span class="micr-info-ics fldCheckDigit txtBlack @(ViewBag.InwardItemViewModel.getField("fldOriCheckDigit") == ""  ? "txtBlack" : "txtRed")" " name="new_fldCheckDigit" value="@ViewBag.InwardItemViewModel.getField("fldCheckDigit").Trim()">@ViewBag.InwardItemViewModel.getField("fldCheckDigit").Trim()</span>
+<input type="text" readonly="readonly" name="new_fldChequeSerialNo" class="micr-info-ics cheque-input rr_fldChequeSerialNo number-only @(ViewBag.InwardItemViewModel.getField("fldOriChequeSerialNo") == "" ? "txtBlack" : "txtRed")" value="@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo")" maxlength="6" />
+@*<input type="text" disabled="disabled" class="micr-info-ics fldIssueBankCode txtBlack @(ViewBag.InwardItemViewModel.getField("fldOriIssueBankCode") == ""  ? "txtBlack" : "txtRed")" value="@ViewBag.InwardItemViewModel.getField("fldIssueBankCode")" maxlength="2" />*@
+@*<input type="text" disabled="disabled" class="micr-info-ics fldIssueStateCode txtBlack @(ViewBag.InwardItemViewModel.getField("fldOriIssueStateCode") == ""  ? "txtBlack" : "txtRed")" value="@ViewBag.InwardItemViewModel.getField("fldIssueStateCode")" maxlength="2" />
+    <input type="text" disabled="disabled" class="micr-info-ics fldIssueBranchCode txtBlack @(ViewBag.InwardItemViewModel.getField("fldOriIssueBranchCode") == ""  ? "txtBlack" : "txtRed")" value="@ViewBag.InwardItemViewModel.getField("fldIssueBranchCode")" maxlength="3" />*@
+<span class="micr-info-ics fldIssueBankCode txtBlack" name="new_fldIssueBankCode" value="@ViewBag.InwardItemViewModel.getField("fldIssueBankCode").Trim()">@ViewBag.InwardItemViewModel.getField("fldIssueBankCode").Trim()</span>
+<span class="micr-info-ics fldIssueStateCode txtBlack" name="new_fldIssueStateCode">@ViewBag.InwardItemViewModel.getField("fldIssueStateCode").Trim()</span>
+<span class="micr-info-ics fldIssueBranchCode txtBlack" name="new_fldIssueBranchCode">@ViewBag.InwardItemViewModel.getField("fldIssueBranchCode").Trim()</span>
+<input type="text" readonly="readonly" name="new_fldAccountNumber" class="micr-info-ics cheque-input rr_fldAccountNumber number-only @(ViewBag.InwardItemViewModel.getField("fldOriAccountNumber") == ""  ? "txtBlack" : "txtRed")" value="@ViewBag.InwardItemViewModel.getField("fldAccountNumber")" maxlength="10" />
+@*<input type="text" disabled="disabled" class="micr-info-ics fldTransCode txtBlack @(ViewBag.InwardItemViewModel.getField("fldOriTransCode") == ""  ? "txtBlack" : "txtRed")" value="@ViewBag.InwardItemViewModel.getField("fldTransCode")" maxlength="2" />*@
+<span class="micr-info-ics fldTransCode txtBlack" name="new_fldTransCode" value="@ViewBag.InwardItemViewModel.getField("fldTransCode").Trim()">@ViewBag.InwardItemViewModel.getField("fldTransCode").Trim()</span>
+<input type="hidden" id="remarkField" name="remarkField" value="">
+<input type="hidden" disabled="disabled" id="fldOriCheckDigit" name="fldOriCheckDigit" value="@ViewBag.InwardItemViewModel.getField("fldOriCheckDigit")" maxlength="2" />
+<input type="hidden" readonly="readonly" id="fldOriChequeSerialNo" name="fldOriChequeSerialNo" value="@ViewBag.InwardItemViewModel.getField("fldOriChequeSerialNo")" maxlength="6" />
+<input type="hidden" disabled="disabled" id="fldOriIssueBankCode" name="fldOriIssueBankCode" value="@ViewBag.InwardItemViewModel.getField("fldOriIssueBankCode")" maxlength="2" />
+<input type="hidden" disabled="disabled" id="fldOriIssueStateCode" name="fldOriIssueStateCode" value="@ViewBag.InwardItemViewModel.getField("fldOriIssueStateCode")" maxlength="2" />
+<input type="hidden" disabled="disabled" id="fldOriIssueBranchCode" name="fldOriIssueBranchCode" value="@ViewBag.InwardItemViewModel.getField("fldOriIssueBranchCode")" maxlength="3" />
+<input type="hidden" readonly="readonly" id="fldOriAccountNumber" name="fldOriAccountNumber" value="@ViewBag.InwardItemViewModel.getField("fldOriAccountNumber")" maxlength="10" />
+<input type="hidden" disabled="disabled" id="fldOriTransCode" name="fldOriTransCode" value="@ViewBag.InwardItemViewModel.getField("fldOriTransCode")" maxlength="2" />
+
+@*<input type="text" disabled="disabled" class="cheque-input new_fldCheckDigit number-only @(ViewBag.InwardItemViewModel.getField("fldOriCheckDigit") == ""  ? "" : "txtRed")" name="new_fldCheckDigit" value="@ViewBag.InwardItemViewModel.getField("fldCheckDigit").Trim()" maxlength="2" style="text-align: center;" />
+    <input type="text" disabled="disabled" class="cheque-input new_fldIssueChequeType number-only @(ViewBag.InwardItemViewModel.getField("fldOriIssueChequeType") == "" ? "" : "txtRed")" name="new_fldIssueChequeType" value="@ViewBag.InwardItemViewModel.getField("fldIssueChequeType").Trim()" maxlength="1" style="text-align: center;" />
+    <input type="text" disabled="disabled" class="cheque-input new_fldIssueLocation number-only @(ViewBag.InwardItemViewModel.getField("fldOriIssuelocation") == ""  ? "" : "txtRed")" name="new_fldIssueLocation" value="@ViewBag.InwardItemViewModel.getField("fldIssueLocation").Trim()" maxlength="1" style="text-align: center;" />
+    <input type="text" disabled="disabled" class="cheque-input new_fldIssueBankCode number-only @(ViewBag.InwardItemViewModel.getField("fldOriIssueBankCode") == ""  ? "" : "txtRed")" name="new_fldIssueBankCode" value="@ViewBag.InwardItemViewModel.getField("fldIssueBankCode").Trim()" maxlength="3" style="text-align: center;" />
+    <input type="text" disabled="disabled" class="cheque-input new_fldIssueBranchCode number-only @(ViewBag.InwardItemViewModel.getField("fldOriIssueBranchCode") == ""  ? "" : "txtRed")" name="new_fldIssueBranchCode" value="@ViewBag.InwardItemViewModel.getField("fldIssueBranchCode").Trim()" maxlength="4" style="text-align: center;" />
+    <input type="text" disabled="disabled" class="cheque-input new_fldChequeSerialNo number-only @(ViewBag.InwardItemViewModel.getField("fldOriChequeSerialNo") == ""  ? "" : "txtRed")" name="new_fldChequeSerialNo" value="@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo").Trim()" maxlength="6" style="text-align: center;" />
+    <input type="text" disabled="disabled" class="cheque-input new_fldAccountNumber number-only @(ViewBag.InwardItemViewModel.getField("fldOriAccountNumber") == ""  ? "" : "txtRed")" name="new_fldAccountNumber" value="@ViewBag.InwardItemViewModel.getField("fldAccountNumber").Trim()" maxlength="20" style="text-align: center;" />
+    <input type="hidden" id="remarkField" name="remarkField" value="">
+    <input type="hidden" disabled="disabled" class="cheque-input new_fldCheckDigit number-only @(ViewBag.InwardItemViewModel.getField("fldOriCheckDigit") == ""  ? "" : "txtRed")" name="new_fldCheckDigit" value="@ViewBag.InwardItemViewModel.getField("fldCheckDigit").Trim()" maxlength="2" style="text-align: center;" />
+    <input type="hidden" disabled="disabled" class="cheque-input new_fldIssueChequeType number-only @(ViewBag.InwardItemViewModel.getField("fldOriIssueChequeType") == "" ? "" : "txtRed")" name="new_fldIssueChequeType" value="@ViewBag.InwardItemViewModel.getField("fldIssueChequeType").Trim()" maxlength="1" style="text-align: center;" />
+    <input type="hidden" disabled="disabled" class="cheque-input new_fldIssueLocation number-only @(ViewBag.InwardItemViewModel.getField("fldOriIssuelocation") == ""  ? "" : "txtRed")" name="new_fldIssueLocation" value="@ViewBag.InwardItemViewModel.getField("fldIssueLocation").Trim()" maxlength="1" style="text-align: center;" />
+    <input type="hidden" disabled="disabled" class="cheque-input new_fldIssueBankCode number-only @(ViewBag.InwardItemViewModel.getField("fldOriIssueBankCode") == ""  ? "" : "txtRed")" name="new_fldIssueBankCode" value="@ViewBag.InwardItemViewModel.getField("fldIssueBankCode").Trim()" maxlength="3" style="text-align: center;" />
+    <input type="hidden" disabled="disabled" class="cheque-input new_fldIssueBranchCode number-only @(ViewBag.InwardItemViewModel.getField("fldOriIssueBranchCode") == ""  ? "" : "txtRed")" name="new_fldIssueBranchCode" value="@ViewBag.InwardItemViewModel.getField("fldIssueBranchCode").Trim()" maxlength="4" style="text-align: center;" />
+    <input type="hidden" disabled="disabled" class="cheque-input new_fldChequeSerialNo number-only @(ViewBag.InwardItemViewModel.getField("fldOriChequeSerialNo") == ""  ? "" : "txtRed")" name="new_fldChequeSerialNo" value="@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo").Trim()" maxlength="6" style="text-align: center;" />
+    <input type="hidden" disabled="disabled" class="cheque-input new_fldAccountNumber number-only @(ViewBag.InwardItemViewModel.getField("fldOriAccountNumber") == ""  ? "" : "txtRed")" name="new_fldAccountNumber" value="@ViewBag.InwardItemViewModel.getField("fldAccountNumber").Trim()" maxlength="20" style="text-align: center;" />*@
+
+
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "ConfirmMICR"))
+{
+    <td><button data-action="@Url.Action("ConfirmMICR")" class="normal-submit-Verification btn btn-default">@Locale.Approve</button></td>
+}
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "RepairMICR"))
+{
+    <td><button data-action="@Url.Action("RepairMICR")" class="normal-submit-Verification btn btn-default">@Locale.ReferBack</button></td>
+}
+<div class="row">
+    <div class="col-sm-9">
+        @*<span class="bold">@Locale.Remarks</span><br />*@
+        <textarea class="remarks" name="textAreaRemarks" hidden>@ViewBag.InwardItemViewModel.getField("fldRemarks")</textarea>
+    </div>
+</div>
+

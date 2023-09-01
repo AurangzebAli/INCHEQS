@@ -1,0 +1,70 @@
+﻿using INCHEQS.Security.User;
+using System.Collections.Generic;
+using System.Web.Mvc;
+
+namespace INCHEQS.Areas.COMMON.Models.Group
+{
+    public interface IGroupProfileDao
+    {
+        string GetPageTitle(string TaskId);
+
+        //DELETE
+        bool DeleteGroupMaster(string groupId);
+        bool DeleteGroupUser(string groupId);
+        bool DeleteGroupTask(string groupId);
+
+        //get menu title
+        string GetMenuTitle(string TaskId);
+
+        //check if group exist in groupmaster/groupmastertemp table
+        bool CheckGroupMasterExistByID(string groupId, string Action);
+        bool CheckGroupMasterTempExistByID(string groupId, string Action);
+
+        //check if group user exist in groupusertemp table
+        bool CheckGroupUserExistInTemp(string groupId, string userId, string Action);
+
+        //check if group user exist in groupuser table
+        bool CheckGroupUserExist(string groupId, string userId);
+
+        //validate group
+        List<string> ValidateGroup(FormCollection col, string Action, string groupId);
+        void CreateGroupMasterTemp(FormCollection col, string strUpdateId, string Action);
+        void CreateGroupUserTemp(string groupId, string userId, string strUpdateId, string Action);
+
+        //List of available users
+        List<UserModel> ListAvailableUserInGroup(string strBankCode);
+        void CreateGroupMaster(FormCollection col, string strBankCode);
+        void CreateGroupUser(FormCollection col, string userId, string Action);
+        List<UserModel> ListSelectedUserInGroup(string groupId, string strBankCode);
+
+        GroupProfileModel GetGroup(string groupId, string Action);
+
+        bool NoChangesGroup(FormCollection col, string groupId);
+        bool NoChangesGroupSelectedUser(FormCollection col, string groupId);
+
+        //update groupmaster table
+        void UpdateGroupMasterTable(FormCollection col, string strUpdate);
+
+        void UpdateGroupUserTable(string groupId, string userId);
+
+        //delete group user not selected
+        void DeleteGroupUserNotSelected(string groupId, string userIds);
+        //delete group user from selected
+        void DeleteGroupUserSelected(string groupId, string userIds);
+
+
+
+        //checker
+        void MoveToGroupMasterFromTemp(string GroupId, string Action);
+        void MoveToGroupUserFromTemp(string groupId, string userId, string Action);
+        void DeleteGroupUserTemp(string groupId, string userId, string Action);
+        void DeleteGroupMasterTemp(string groupId, string Action);
+        void DeleteGroupUserFromTemp(string groupId, string userId);
+        void UpdateGroupMasterTemp(string groupId);
+        void UpdateGroupUserTemp(string groupId, string userId);
+
+        GroupProfileModel GetGroupChecker(string groupId, string Action);
+        List<UserModel> ListSelectedUserInGroupChecker(string groupId, string strBankCode);
+        List<UserModel> ListAvailableUserInGroupChecker(string strBankCode);
+    }
+}

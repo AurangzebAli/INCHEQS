@@ -1,0 +1,601 @@
+﻿@using System.Data;
+@using INCHEQS.Resources;
+
+
+@{
+    ViewBag.Title = "FUJI";
+    Layout = "~/Views/Shared/_LayoutCapturing.cshtml";
+}
+
+<h4>OCS - Cheque Capturing</h4>
+
+<hr />
+
+<div id="divNotice" Class="alert alert-success alert-dismissible" role="alert" style="display: none;">
+    <span id="sNotice"></span>
+</div>
+<div id="divWarning" Class="alert alert-warning alert-dismissible" role="alert" style="display: none;">
+    <span id="sWarning"></span>
+</div>
+<div id="divErrorMsg" Class="alert alert-danger alert-dismissible" role="alert" style="display: none;">
+    <span id="sErrorMsg"></span>
+</div>
+<div class="form-horizontal">
+    <div id="divCapturingTitle">
+        <table style="width:1300px;">
+            <tr>
+                <td style="width:99%;height:22px;white-space :nowrap" class="cssPageTitleBar">
+
+                    <span style="display:none;" id="ComClientStatus">| ComClient Status : - <input type="button" class="btn btn-default btn-s" name="btnComClient" onclick="ConnectComClient();" size="20" value="Connect"></span>
+                    <a href="@Url.Action("Redirect", new { CapturingMode = ViewBag.CapturingModel.CapMode, ChequeType = ViewBag.CapturingModel.ChqType, ChequeStatus = ViewBag.CapturingModel.ChequeStatus , PostingMode = ViewBag.CapturingModel.PostingMode, CapBranchId = ViewBag.CapturingModel.CapBranchId , BranchCode = ViewBag.CapturingModel.BranchCode , UserBankDesc = ViewBag.CapturingModel.UserBankDesc , BranchDesc = ViewBag.CapturingModel.BranchDesc ,  WorkstationBranchId = ViewBag.CapturingModel.WorkstationBranchId})" class="btn btn-default btn-s secure-nav" id="btnRefresh" style="height:0px;visibility:hidden;"></a>
+                </td>
+                <td style="width:1%;height:22px;white-space :nowrap " align="right">
+                    <input style="width:100px;" type="button" class="btn btn-default btn-s" id="btnScan" name="btnScan" value="Import" />&nbsp;
+                    <input style="width:100px;" type="button" class="btn btn-default btn-s" id="btnEject" name="btnEject" value="Eject" />&nbsp;&nbsp;
+                </td>
+                <td>
+                    <a href="@Url.Action("Index")" Class="btn btn-default btn-s secure-nav" id="btnClose">@Locale.btnClose</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br />
+    <div>
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="row" style="display:none;">
+                    <div class="col-sm-3">
+                        <span class="border border-light">Clearing Date</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span id="sProcessingDate">@ViewBag.CapturingModel.ProcessDate</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span class="border border-light">Clearing Date</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span id="sSProcessingDate">@Convert.ToDateTime(ViewBag.CapturingModel.ProcessDate).ToString("dd-MM-yyyy")</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Currency Code</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>MMK</span>
+                    </div>
+                </div>
+
+                @*<div class="row">
+            <div class="col-sm-3">
+                <span>Capturing Mode</span>
+            </div>
+            <div class="col-sm-1">
+                <span>:</span>
+            </div>
+            <div class="col-sm-8">
+                <span id="sCapMode">@ViewBag.CapturingModel.CapModeDesc</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <span>Cheque Type</span>
+            </div>
+            <div class="col-sm-1">
+                <span>:</span>
+            </div>
+            <div class="col-sm-8">
+                <span id="sChequeType">@ViewBag.CapturingModel.ChqTypeDesc</span>
+            </div>
+        </div>*@
+
+
+                <div class="row" style="display:none;">
+                    <div class="col-sm-3">
+                        <span>Presenting Bank</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span id="sClrBranchId">@ViewBag.CapturingModel.ClrBranchId</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Presenting Bank</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span id="sClBranchId">@ViewBag.CapturingModel.ClrBranchId.Substring(1, 3) - @ViewBag.CapturingModel.UserBankDesc</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Capturing Branch</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span id="sClBranchCode">@ViewBag.CapturingModel.CapBranchId - @ViewBag.CapturingModel.BranchDesc</span>
+                        <span id="sClBranchCode">@*@ViewBag.CapturingModel.ClrBranchId.Substring(4, 4) - @ViewBag.CapturingModel.BranchDesc*@</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Clearing Branch</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span id="sClrBranchCode">@ViewBag.CapturingModel.BranchCode - @ViewBag.CapturingModel.BranchDesc</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Scanner Id</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        @*<span id="sScannerId">@ViewBag.CapturingModel.ScannerId</span>*@
+                        <span id="sScannerId">@ViewBag.CapturingModel.ScannerId.ToString().PadLeft(3, '0')</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Capturing Mode</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span id="sClrBranchCode">@ViewBag.CapturingModel.CapModeDesc</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Posting Mode</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span id="sClrBranchCode">@ViewBag.CapturingModel.PostingModeDesc</span>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Batch Number</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        @*<span id="sBatchNo"></span>*@
+                        <span id="sBatchNo">@ViewBag.CapturingModel.ServerBatchNo.ToString().PadLeft(4, '0')</span>
+                    </div>
+                </div>
+                @*<div class="row">
+            <div class="col-sm-3">
+                <span>Presenting Branch</span>
+            </div>
+            <div class="col-sm-1">
+                <span>:</span>
+            </div>
+            <div class="col-sm-8">
+                <span id="sBranchId">@ViewBag.CapturingModel.ClrBranchId.Substring(6, 4)</span>
+            </div>
+        </div>*@
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Sequence Number</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span id="sSeqNo">@ViewBag.CapturingModel.ServerSeqNo.ToString().PadLeft(4, '0')</span>
+                    </div>
+                </div>
+                <div class="row" style="visibility:hidden;">
+                    <div class="col-sm-3">
+                        <span>Source Branch Id</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span id="sSourceBranchId"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>IQA Test Status</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span><input type="text" name="sIQAList" id="sIQAList" value="" readonly="readonly" maxlength="70" /></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>MICR Test Status</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span><input type="text" name="sMICRList" id="sMICRList" value="" readonly="readonly" maxlength="70" style="width:300px" /></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>Description</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>P = Pass     F = Fail     D = Duplicate </span>
+                    </div>
+
+                </div>
+                @*<div class="row">
+                    <div class="col-sm-3">
+                        <span>@*Currency Code*@</span>
+                @*</div>
+                    <div class="col-sm-1">
+                        <span>@*:</span>
+                    </div>
+                    <div class="col-sm-8">*@
+                <span><input type="radio" name="optCurrencyCode" id="optBDT" checked value="1" hidden />&nbsp;@*MMK*@&nbsp;&nbsp;</span>
+                @*</div>
+                    </div>*@
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>@*Item Type*@</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>@*:*@</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>
+                            <input type="radio" name="optChequeTranType" hidden id="optNormal" value="Normal" checked />@*&nbsp;Normal&nbsp;&nbsp*@
+                            <input type="radio" name="optChequeTranType" hidden id="optBOC" value="BOC" />@*&nbsp;BOC&nbsp;&nbsp*@
+                            <input type="radio" name="optChequeTranType" hidden id="optBIR" value="BIR" />@*&nbsp;BIR&nbsp;&nbsp*@
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>
+                            @*Priority*@
+                        </span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>@*:*@</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>
+                            <input type="radio" name="optPriority" hidden id="optPrioNormal" value="0" checked />@*&nbsp;Normal&nbsp;&nbsp;</span>*@
+                            <span style="visibility:hidden;"><input type="radio" name="optPriority" id="optDirectMark" value="1" />&nbsp;High&nbsp;&nbsp;</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span>@*CICS Mode*@</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>@*:*@</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>
+                            <input type="radio" hidden name="optCICSModeType" id="optBothCICS" value="0" />@*&nbsp;Both&nbsp;&nbsp;*@
+                            <input type="radio" hidden name="optCICSModeType" id="optCICSMode" value="1" checked />@*&nbsp;CICS&nbsp;&nbsp;*@
+                            <input type="radio" hidden name="optCICSModeType" id="optNONCICSMode" value="2">@*&nbsp;Non-CICS&nbsp;&nbsp;*@
+                        </span>
+                    </div>
+                </div>
+                @*<div class="row">
+                    <div class="col-sm-3">
+                        <span>Presentment</span>
+                    </div>
+                    <div class="col-sm-1">
+                        <span>:</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <span>*@
+                <input type="radio" hidden name="optPresentment" id="optPre1st" value="1" checked />@*&nbsp;1st&nbsp;&nbsp;*@
+                <input type="radio" hidden name="optPresentment" id="optPre2nd" value="2" />@*&nbsp;2nd&nbsp;&nbsp;*@
+                @*  </span>
+                    </div>
+                        </div>*@
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <span>Scanner Status</span>
+                <span>:</span>
+                <span><input type="text" name="txtStatus" id="txtStatus" style="width:350px" readonly /></span>
+            </div>
+
+            <div class="col-sm-7">
+                <span>UIC</span>
+                <span>:</span>
+                <span><input type="text" name="txtUIC" id="txtUIC" style="width:300px" readonly /></span>
+                <span id="loadingMessage" name="loadingMessage"></span>
+            </div>
+
+
+        </div>
+
+        <div>&nbsp;</div>
+        <div class="row">
+            <div class="col-sm-5" id="divScannedImage">
+                <object classid='CLSID:7DA419CF-5707-4B29-B792-51F807234365' id='scnControl' name='scnControl' codebase="@Url.Content("~/CAB/FUJIOCX.CAB#version=1,0,0,7")">OCX</object>
+            </div>
+            <div class="col-sm-7" id="divScannedData">
+                <div class="row" id="divScanTitle">
+                    <div class="col-sm-12">
+                        <div class="row" id="divScanLogButtons" style="font-size: 14px;">
+                            <div class="col-sm-12">
+                                <input type="button" style="width:100px;" name="btnIQA" id="btnIQA" class="hidden btn btn-default btn-s" value="IQA" disabled="disabled" />
+                              
+                                <input type="button" style="width:110px;" name="btnForceIQAPass" id="btnForceIQAPass" class="btn btn-default btn-s @(ViewBag.CapturingModel.ForceIQA == "Y"  ? "" : "hidden")" value="Force IQA" />
+                               
+                                <input type="button" style="width:100px;" name="btnForceMICRPass" id="btnForceMICRPass" class="btn btn-default btn-s @(ViewBag.CapturingModel.AllowForceMICR == "1"  ? "" : "hidden")" value="Force MICR" />
+                                
+                                <input type="button" style="width:100px;" name="btnRescan" id="btnRescan" class="btn btn-default btn-s" value="Re-Import" disabled="disabled" />
+                               
+                                <input type="button" style="width:100px;" name="btnRemove" id="btnRemove" class="btn btn-default btn-s" value="Remove" disabled="disabled" />
+                               
+                                <input type="button" style="width:100px;" name="btnRemoveAll" id="btnRemoveAll" class="btn btn-default btn-s" value="Remove All" disabled="disabled" />
+                                
+                                <input type="button" style="width:100px;" name="btnEndBatch" id="btnEndBatch" class="btn btn-default btn-s" value="End Batch" disabled="disabled" />
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div>&nbsp;</div>
+                        @* <div class="row" id="divScanLogTitle">
+                                <div class="col-sm-12">
+                                    <table id="tblScanningTitle" class="table">
+                                        <tr>
+                                            <td>
+                                                <div class="pull-right">Scanning Result &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span style="text-align:right;">Total Cheques: <label id="sTotalChecks" style="color:blue"></label></span>] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [<span style="text-align:right;">Total Deposit Slips: <label id="sTotalDp" style="color:red"></label></span>]</div>
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>*@
+                        <div class="row" id="divScanLogHead">
+                            <div class="col-sm-12">
+                                <table id="tblScannedHead" class="table table-bordered table-hover" style="width: 800px; font-size: 12px; margin-bottom: 0px;">
+                                    <thead>
+                                        <tr>
+                                            @*<th rowspan="2" style="height: 12px; width: 9%;"><p>No.</p></th>
+                                                <th rowspan="2" style="height: 12px; width: 5%;"><p>IQA Test</p></th>
+        <th rowspan="2" style="height: 12px; width: 5%;"><p>Cheque Type</p></th>
+                                                <th rowspan="2" style="height: 12px; width: 5%;"><p>MICR Test</p></th>
+                                                <th rowspan="2" style="height: 12px; width: 39%;"><p>MICR</p></th>
+                                                <th rowspan="2" style="height: 12px; width: 39%;"><p>UIC</p></th>
+        <th rowspan="2" style="height: 12px; width: 39%;"><p>test</p></th>*@
+                                            <th rowspan="2" style="height: 20px; width: 4.5%;"><p>No.</p></th>
+                                            <th rowspan="2" style="width: 4%;"><p>Item Type</p></th>
+                                            <th rowspan="2" style="height: 20px; width: 6.5%;"><p>IQA Test</p></th>
+                                            <th rowspan="2" style="height: 20px; width: 6.5%;"><p>MICR Test</p></th>
+                                            <th style="height: 20px; width: 42.3%;" rowspan="2"><p>MICR</p></th>
+                                            <th style="height: 20px; width: 25%;" rowspan="2"><p>UIC</p></th>
+                                            <th style="height: 20px; width: 6.4%;" rowspan="2"><p>Bank Test</p></th>
+
+                                            <th style="height: 20px; width: 3.8%;"><input type=checkbox name="CheckBoxControl" id="CheckBox1" onClick="jsCheckAll(this);" /></th>
+
+                                            @*<th rowspan="2" style="height: 12px; width: 29px;"><p>&nbsp;</p></th>*@
+                                            @*<th>MICR Test</th>*@
+                                            <!-- <th style="padding:5px;"><p>&nbsp;</p></th> -->
+                                            <!--<th rowspan="2" style="padding:5px;"><p>&nbsp;</p></th>-->
+                                            @*<th style="padding:5px;">IQA Test</th>*@
+                                        </tr>
+                                        @*<tr>*@
+                                        @*<th style="height: 20px"><input type=checkbox name="CheckBoxControl" id="CheckBox1" onClick="jsCheckAll(this);" /></th>*@
+                                        @*</tr>*@
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row" id="divScanLog">
+                            <div class="col-sm-12">
+                                <table id="tblScanned" class="table table-bordered" style="width: 800px; font-size: 12px; margin-top: 0px;">
+
+                                    <tbody id="tblBody"></tbody>
+                                    <tfoot id="tblFooter" class="hidden">
+                                        <tr onclick="javascript:jsDisplayScanItem(this, 1)" onmouseover="javascript:jsRowMouseOver(this)" onmouseleave="javascript:jsRowMouseLeave(this)" style="cursor: pointer;">
+                                            @*<td style="height: 12px; width: 9%;"></td>
+                                                <td style="height: 12px; width: 9%;"></td>
+        <td style="height: 12px; width: 9%;"></td>
+                                                <td style="height: 12px; width: 5%;" align="center"></td>
+                                                @*<td width="8%" style="height: 12px;" align="center"></td>*@
+                                            @*<td width="45%" style="height: 12px;"></td>*@
+                                            @*<td style="height: 12px; width: 39%;"></td>
+                                                <td style="height: 12px; width: 39%;"></td>
+        <td style="height: 12px; width: 29px;"></td>*@
+
+                                            @*This one is okay one*@
+                                            @*<td style="width: 6.5%; height: 12px;"></td>
+        <td style="width: 6.5%; height: 12px;"></td>
+        <td style="width: 6.5%; height: 12px;"></td>
+        <td style="width: 30%; height: 12px;" align="center"></td>
+        <td style="width: 18%; height: 12px;"></td>
+        <td style="width: 6.5%; height: 12px;"></td>
+        <td width: 6.5%; height: 12px;>&nbsp;</td>*@
+
+                                            <td style="width: 5.5%; height: 12px;"></td>
+                                            <td style="width: 6.4%; height: 12px;"></td>
+                                            <td style="width: 6.5%; height: 12px;"></td>
+                                            <td style="width: 7%; height: 12px;"></td>
+                                            <td style="width: 42%; height: 12px;" align="center"></td>
+                                            <td style="width: 24%; height: 12px;"></td>
+                                            <td style="width: 6.4%; height: 12px;"></td>
+                                            <td style="width: 3.8%; height: 12px;">&nbsp;</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    @*-------HIDDEN FIELDS--------*@
+    <input type="hidden" id="hScannerModel" name="hScannerModel" value="@ViewBag.CapturingModel.ScannerModel" />
+    <input type="hidden" id="hiddenShowChequeTranType" name="hiddenShowChequeTranType" value="" />
+    <input type="hidden" id="hiddenNoItemperBatch" name="hiddenNoItemperBatch" value="0" />
+    <input type="hidden" id="hScannerError" name="hScannerError" value="@ViewBag.CapturingModel.ScannerErrorXML" />
+    <input type="hidden" id="hSelectedCapMode" name="hSelectedCapMode" value="@ViewBag.CapturingModel.CapMode" />
+    <input type="hidden" id="hSelectedPostingMode" name="hSelectedPostingMode" value="@ViewBag.CapturingModel.PostingMode" />
+    <input type="hidden" id="hSelectedCapModeDesc" name="hSelectedCapMode" value="@ViewBag.CapturingModel.CapModeDesc" />
+    <input type="hidden" id="hChqType" name="hChqType" value="@ViewBag.CapturingModel.ChqType" />
+    <input type="hidden" id="hChqTypeDesc" name="hChqTypeDesc" value="@ViewBag.CapturingModel.ChqTypeDesc" />
+    <input type="hidden" id="hChequeStatus" name="hChequeStatus" value="@ViewBag.CapturingModel.ChequeStatus" />
+    <input type="hidden" id="hEndorseLine" name="hEndorseLine" value="@ViewBag.CapturingModel.EndorseAllignment" />
+    <input type="hidden" id="hPriority" name="hPriority" value="0" />
+    <input type="hidden" id="hImmediateEntry" name="hImmediateEntry" value="" />
+    <input type="hidden" id="hClrDate" name="hClrDate" value="@ViewBag.CapturingModel.ProcessDateHidden" />
+    <input type="hidden" id="hWorkstationBranchId" name="hWorkstationBranchId" value="@ViewBag.CapturingModel.WorkstationBranchId" />
+    <input type="hidden" id="hCapBranch" name="hCapBranch" value="@ViewBag.CapturingModel.CapBranchId" />
+    <input type="hidden" id="hBankType" name="hBankType" value="@ViewBag.CapturingModel.BankType" />
+    <input type="hidden" id="hCurrencyCode" name="hCurrencyCode" value="" />
+    <input type="hidden" id="hStrChqType" name="strChqType" value="@ViewBag.CapturingModel.ChqType" />
+    <input type="hidden" id="hRowClickUIC" name="hRowClickUIC" value="" />
+    <input type="hidden" id="hSelectedRowIndex" name="hSelectedRowIndex" value="" />
+    <input type="hidden" id="hMICR" name="hMICR" value="" />
+    <input type="hidden" id="hServerBatchNo" name="hServerBatchNo" value="@ViewBag.CapturingModel.ServerBatchNo" />
+    <input type="hidden" id="hServerSeqNo" name="hServerSeqNo" value="@ViewBag.CapturingModel.ServerSeqNo" />
+    <input type="hidden" id="hCompletedSeqNo" name="hCompletedSeqNo" value="@ViewBag.CapturingModel.CompletedSeqNo" />
+    <input type="hidden" id="hTotalCounter" name="hTotalCounter" value="0" />
+    <input type="hidden" id="hNCFRequired" name="hNCFRequired" value="@ViewBag.CapturingModel.NCFRequired" />
+    <input type="hidden" id="hChequeType" name="hChequeType" value="" />
+    <input type="hidden" id="hTransAmount" name="hTransAmount" value="" />
+    <input type="hidden" id="hTransUIC" name="hTransUIC" value="" />
+    <input type="hidden" id="hLastUIC" name="hLastUIC" value="" />
+    <input type="hidden" id="hIQA0" name="hIQA0" value="@ViewBag.CapturingModel.IQA0" />
+    <input type="hidden" id="hIQA1" name="hIQA1" value="@ViewBag.CapturingModel.IQA1" />
+    <input type="hidden" id="hIQA2" name="hIQA2" value="@ViewBag.CapturingModel.IQA2" />
+    <input type="hidden" id="hForceIQA" name="hForceIQA" value="@ViewBag.CapturingModel.ForceIQA" />
+    <input type="hidden" id="hAllowForceMICR" name="hAllowForceMICR" value="@ViewBag.CapturingModel.AllowForceMICR" />
+    <input type="hidden" id="hSourceBranch" name="hSourceBranch" value="@ViewBag.CapturingModel.SourceBranchId" />
+    <input type="hidden" id="hFloatDays" name="hFloatDays" value="@ViewBag.CapturingModel.FloatDays" />
+    <input type="hidden" id="hPresentment" name="hPresentment" value="" />
+    <input type="hidden" id="hScannerOn" name="hScannerOn" value="@ViewBag.CapturingModel.ScannerOn" />
+    <input type="hidden" id="hCapturingPath" name="hCapturingPath" value="@ViewBag.CapturingModel.CapturingPath" />
+    <input type="hidden" id="hCaptureFileLocation" name="hCaptureFileLocation" value="" />
+    <input type="hidden" id="hTaskId" name="hTaskId" value="" />
+    <input type="hidden" id="hErrorMsg" name="hErrorMsg" value="" />
+    <input type="hidden" id="hUserId" name="hUserId" value="@ViewBag.CapturingModel.UserId" />
+    <input type="hidden" id="hZeroValue" name="hZeroValue" value="0" />
+    <input type="hidden" id="hAutoCapture" name="hAtuoCapture" value="@ViewBag.CapturingModel.AutoCapture" />
+    <input type="hidden" id="hPromptMaxMessage" name="hPromptMaxMessage" value="" />
+    <input type="hidden" id="hRefreshPage" name="hRefreshPage" value="" />
+    <input type="hidden" id="hCaptureCurrency" name="hCaptureCurrency" value="@ViewBag.CapturingModel.CaptureCurrency" />
+    <input type="hidden" id="hLockBoxKey" name="hLockBoxKey" value="@ViewBag.CapturingModel.LockBoxKey" />
+    <input type="hidden" id="hOCRRequire" name="hOCRRequire" value="@ViewBag.CapturingModel.OCRRequire" />
+    <input type="hidden" id="hLockBoxAccNo" name="hLockBoxAccNo" value="@ViewBag.CapturingModel.LockBoxAccNo" />
+    <input type="hidden" id="hSelectedUIC" name="hSelectedUIC" value="" />
+    <input type="hidden" id="hSingleSlip" name="hSingleSlip" value="" />
+    <input type="hidden" id="hUserBankCode" name="hUserBankCode" value="@ViewBag.CapturingModel.UserBankCode" />
+
+</div>
+
+<div class="hidden">
+    <xml id="xmlCapturingMode">
+    </xml>
+
+    <xml id="xmlData">
+        <root>
+            <scanner>
+                <scanner_id />
+                <total_rec>0</total_rec>
+                <batch_id />
+                <late />
+                <currency />
+                <capturing_date />
+                <capturing_time />
+                <capturing_branch />
+                <capturing_mode />
+                <posting_mode />
+                <cheque_type />
+                <cics_mode />
+                <capturing_by />
+                <cheque_status />
+                <clearing_branch />
+                <priority />
+                <bank_type />
+                <nc_flag />
+                <dtf_flag>0</dtf_flag>
+                <transamount />
+                <transuic />
+                <flag1 />
+                <flag2 />
+                <flag3 />
+                <flag4 />
+                <flag5 />
+            </scanner>
+            <datas />
+            <file>
+                <checksum />
+            </file>
+        </root>
+    </xml>
+
+    <xml id="xmlFields"></xml>
+
+    <xml id="xmlScannerTuning">@ViewBag.CapturingModel.ScannerTuningXML</xml>
+
+    <xml id="xmlMessage"></xml>
+</div>
+<script>
+
+    //$(".capturing-fullview").off('click').on('click', function (e) {
+        $(".header,.left-panel,#cssmenu,#search-fields-section,.switcher,footer,#capturingtitleindex").hide();
+    //});
+</script>
+
+
+<script src="~/Scripts/OCS/capturing.js"></script>
+<script src="~/Scripts/OCS/fuji.js"></script>

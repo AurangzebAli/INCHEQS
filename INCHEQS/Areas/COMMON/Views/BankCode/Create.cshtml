@@ -1,0 +1,62 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "BankCode", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>@Locale.BankCodeMaintenance</h4>
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <tbody>
+            <tr>
+                <th>@Locale.BankCode</th>
+                <td>
+                    <input type="text" value="" name="bankCode" class="number-only" maxlength="3" /><span class="red-star"> *</span>
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.BankDescription</th>
+                <td>
+                    <input type="text" value="" name="bankDesc" maxlength="100" style="width:300px" /><span class="red-star"> *</span>
+                </td>
+            </tr>
+            @*<tr>
+                <th>@Locale.BankIndicator</th>
+                <td>
+                    <select class="default" name="bankIndicator" maxlength="20">
+                        @foreach (var row in ViewBag.BankType.Rows) {
+                            <option value="@row["fldBankType"]" >@row["fldBankTypeDesc"]
+                            </option>
+                        }
+                    </select>
+                </tr>*@
+            <tr>
+                <th>@Locale.BankAbbreviation</th>
+                <td>
+                    <input type="text" value="" name="bankAbbreviation" maxlength="10" /><span class="red-star"> *</span>
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.BankType</th>
+                <td>
+                    <select class="default" name="bankTypeId" maxlength="20">
+                        @foreach (var row in ViewBag.BankType.Rows)
+                        {
+                            <option value="@row["fldBankType"]">
+                                @row["fldBankType"] - @row["fldBankTypeDesc"]
+                            </option>
+                        }
+                    </select>
+                    <span class="red-star"> *</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button type="submit" data-action="@Url.Action("/SaveCreate")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIds.BankCode.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+    <a href="@Url.Action("Create")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.BankCode.INDEX) ? "" : "hidden")">@Locale.btnReset</a>
+    <a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.BankCode.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+</div>
+}

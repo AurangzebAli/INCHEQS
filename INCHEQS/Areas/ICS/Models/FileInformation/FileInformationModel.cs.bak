@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace INCHEQS.Models.FileInformationModels {
+    public class FileInformationModel {
+        public string fileStatus { get; set; }
+        public string fileName { get; set; }
+        public string fldPosPayType { get; set; }
+        public string fileSize { get; set; }
+        public string fileTimeStamp { get; set; }
+        
+    }
+}

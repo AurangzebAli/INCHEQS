@@ -1,0 +1,57 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Security
+<h4>@Locale.UtilitiesSendEmail</h4>
+@using (Html.BeginForm("SendMessage", "SendEmail", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+
+        <hr />
+        <table class="table form-table table-no-border">
+            <tr>
+                <td>@Locale.To:</td>
+                <td>
+                    <select name="emailList" id="emailList" class="label2" style="WIDTH: 260px">
+                        <option value='A' selected> @Locale.ALL </option>
+                        @foreach (var row in ViewBag.EmailLists) {
+                            <option value="@row">@row</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>@Locale.From:</td>
+                <td>
+                    <input type="text" class="textbox" name="txtFrom" id="txtFrom" readonly size="40" value="@ViewBag.UserEmail">
+                </td>
+            </tr>
+            <tr>
+                <td>@Locale.Subject:</td>
+                <td>
+                    <input type="text" class="textbox" name="txtSubject" id="txtSubject" size="40" maxlength="265"><font size="1" color="red" face="verdana">(Max Length = 265 characters)</font>
+                </td>
+            </tr>
+            <tr>
+                <td>@Locale.SendingMethod:</td>
+                <td>
+                    <select id="method" name="method" class="textbox" style="WIDTH: 260px">
+                        <option value='A'>@Locale.BothAlertNotificationandEmail</option>
+                        <option value='0'>@Locale.AlertNotificationOnly</option>
+                        <option value='1'>@Locale.EmailOnly</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea name="txtAreaBody" id="txtAreaBody" class="textbox" rows="17" cols="80"></textarea>
+                </td>
+            </tr>
+
+
+        </table>
+        <br>
+        <button type="submit" class="btn btn-default">@Locale.Send</button>
+
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav">@Locale.Cancel</a>
+    </div>
+}

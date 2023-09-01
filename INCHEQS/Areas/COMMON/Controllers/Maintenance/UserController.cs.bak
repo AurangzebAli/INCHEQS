@@ -1,0 +1,327 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using INCHEQS.Security;
+//using INCHEQS.Security.User;
+using INCHEQS.Security.AuditTrail;
+using INCHEQS.Resources;
+using INCHEQS.TaskAssignment;
+using INCHEQS.Models.SearchPageConfig;
+using System.Data.SqlClient;
+using INCHEQS.Models.SearchPageConfig.Services;
+//using INCHEQS.Areas.ICS.Models.SystemProfile;
+using INCHEQS.Security.SecurityProfile;
+using INCHEQS.Security.SystemProfile;
+using INCHEQS.Areas.COMMON.Models.Users;
+using log4net;
+using System.Data;
+
+namespace INCHEQS.Areas.COMMON.Controllers.Maintenance
+{
+
+    public class UserController : BaseController
+    {
+
+        private readonly IUserDao userDao;
+        private readonly IAuditTrailDao auditTrailDao;
+        private IPageConfigDao pageConfigDao;
+        protected readonly ISearchPageService searchPageService;
+        protected readonly ISystemProfileDao systemProfileDao;
+        private readonly ISecurityProfileDao securityProfileDao;
+        private static readonly ILog _log = LogManager.GetLogger(typeof(UserController));
+        public UserController(IUserDao userDao, IAuditTrailDao auditTrailDao, IPageConfigDao pageConfigDao, ISearchPageService searchPageService, ISystemProfileDao systemProfileDao, ISecurityProfileDao securityProfileDao)
+        {
+            this.pageConfigDao = pageConfigDao;
+            this.userDao = userDao;
+            this.auditTrailDao = auditTrailDao;
+            this.searchPageService = searchPageService;
+            this.systemProfileDao = systemProfileDao;
+            this.securityProfileDao = securityProfileDao;
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.User.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Index()
+        {
+            ViewBag.SearchPage = pageConfigDao.GetSearchFormModelFromConfig(CurrentUser.Account, new PageSqlConfig(TaskIds.User.INDEX));
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.User.INDEX)]
+        [GenericFilter(AllowHttpGet = true)]
+        public virtual ActionResult SearchResultPage(FormCollection collection)
+        {
+            ViewBag.SearchResult = pageConfigDao.getResultListFromDatabaseView(new PageSqlConfig(TaskIds.User.INDEX, "View_ApprovedUser", "fldUserAbb", "fldBankCode=@fldBankCode", new[] {
+                    new SqlParameter("@fldBankCode",CurrentUser.Account.BankCode)}),
+            collection);
+            return View();
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.User.EDIT)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Edit(FormCollection collection, string id = null)
+        {
+            try
+            {
+                Dictionary<string, string> filter = searchPageService.GetFormFiltersFromRow(collection);
+                if (!string.IsNullOrEmpty(id))
+                {
+                    ViewBag.User = userDao.CheckUserMasterByID("",id, "UserId");
+                }
+                else
+                {
+                    ViewBag.User = userDao.CheckUserMasterByID("", filter["fldUserId"],"UserId");
+                }
+
+                ViewBag.Branch = userDao.ListBranch(CurrentUser.Account.BankCode);
+                ViewBag.VerificationClass = userDao.ListVerificationClass(CurrentUser.Account.BankCode);
+                //ViewBag.VerificationLimit = systemProfileDao.GetValueFromSystemProfile("VerificationLimit", CurrentUser.Account.BankCode).Trim();
+                //ViewBag.City = userDao.ListCity();
+                //ViewBag.Officer = userDao.ListOfficer(CurrentUser.Account.BankCode, @ViewBag.User.fldUserAbb);
+                //ViewBag.GetOfficer = userDao.GetOfficerId(@ViewBag.User.fldUserAbb);
+                //ViewBag.BranchAvailableList = userDao.ListAvailableBranch(@ViewBag.User.fldUserAbb);
+                //ViewBag.BranchSelectedList = userDao.ListSelectedBranch(CurrentUser.Account.BankCode, @ViewBag.User.fldUserAbb);
+                //ViewBag.VerificationClass = userDao.ListVerificationClass();
+                //ViewBag.Security = securityProfileDao.GetSecurityProfile();
+
+                //Check if LoginAD "Y" to display password
+                //ViewBag.EnableLoginAD = systemProfileDao.GetValueFromSystemProfile("LoginAD", CurrentUser.Account.BankCode).Trim();
+                return View();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.User.UPDATE)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Update(FormCollection col)
+        {
+            try
+            {
+                string afterTask = "";
+                afterTask = TaskIds.User.UPDATE;
+                //string systemProfile = systemProfileDao.GetValueFromSystemProfile("UserChecker", CurrentUser.Account.BankCode).Trim();
+                string securityProfile = securityProfileDao.GetValueFromSecurityProfile("fldDualApproval", CurrentUser.Account.BankCode).Trim();
+
+                List<String> errorMessages = userDao.ValidateUser(col, "Update", CurrentUser.Account.BankCode);
+
+                if ((errorMessages.Count > 0))
+                {
+                    TempData["ErrorMsg"] = errorMessages;
+                }
+                else
+                {
+                    if (userDao.CheckUserMasterTempByID(col["fldUserId"], "", "UserId") == false)
+                    {
+                        if ("N".Equals(securityProfile))
+                        {
+                            UserModel before = userDao.CheckUserMasterByID("",col["fldUserId"], "UserId");
+                            auditTrailDao.Log("Edit User - Before Update=> User Abb : " + before.fldUserAbb + " User Desc : " + before.fldUserDesc + " Disable : " + before.fldDisableLogin + " Branch Code : " + before.fldBranchCode + " User Type : " + before.userType + " ID Suspended At : " + before.fldIDExpDate, CurrentUser.Account);
+
+                            //update Process
+                            userDao.UpdateUserMaster(col, col["fldUserId"]);
+                            TempData["Notice"] = Locale.RecordsuccesfullyUpdated;
+
+                            UserModel after = userDao.CheckUserMasterByID("", col["fldUserId"], "UserId");
+                            //auditTrailDao.Log("Edit User - After Update=> User Abb : " + after.fldUserAbb + " User Desc : " + after.fldUserDesc + " Disable : " + after.fldDisableLogin + " Branch Code : " + after.fldBranchCode + " User Type : " + after.userType + " ID Suspended At : " + after.fldIDExpDate, CurrentUser.Account);
+
+                            string ActionDetail = userDao.UserEditTemplate(before, after, "Edit", col);
+                            auditTrailDao.SecurityLog("Edited", "Edit User", ActionDetail, afterTask, "1", CurrentUser.Account);
+
+                            TempData["Notice"] = Locale.RecordsuccesfullyUpdated;
+                        }
+                        else
+                        {
+                            UserModel before = userDao.CheckUserMasterByID("", col["fldUserId"], "UserId");
+                            userDao.CreateUserMasterTemp(col, CurrentUser.Account.BankCode, col["fldUserId"], "Update");
+                            TempData["Notice"] = Locale.UserSuccessfullyAddedtoApprovedUpdate;
+                            //auditTrailDao.Log("User Record Successfully Added to Temp Table for Check to Approve . User Id : " + col["fldUserId"], CurrentUser.Account);
+                            UserModel after = userDao.CheckUserMasterByTempID("", col["fldUserId"], "UserId");
+
+                            string ActionDetail = userDao.UserEditTemplate(before, after, "Edit", col);
+                            auditTrailDao.SecurityLog("Edited", "Edit User", ActionDetail, afterTask, "1", CurrentUser.Account);
+
+                            
+                        }
+                    }
+                    else
+                    {
+                        TempData["Warning"] = Locale.UserPendingApproval;
+                    }
+                }
+                return RedirectToAction("Edit", new { id = col["fldUserId"] });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.User.DELETE)]
+        [HttpPost]
+        public ActionResult Delete(FormCollection col)
+        {
+            try
+            {
+                string afterTask = "";
+                afterTask = TaskIds.User.DELETE;
+                //Get value from system profile
+                //string systemProfile = systemProfileDao.GetValueFromSystemProfile("UserChecker", CurrentUser.Account.BankCode).Trim();
+                string securityProfile = securityProfileDao.GetValueFromSecurityProfile("fldDualApproval", CurrentUser.Account.BankCode).Trim();
+
+                string x = col["deleteBox"];
+                string _userType = "";
+                DataTable ds = new DataTable();
+                if ((col["deleteBox"]) != null)
+                {
+                    List<string> arrResults = col["deleteBox"].Split(',').ToList();
+                    foreach (string arrResult in arrResults)
+                    {
+                        UserModel CheckUserType = userDao.CheckUserMasterByID(arrResult, "", "UserAbb");
+                        if (CheckUserType != null)
+                        {
+                            _userType = CheckUserType.userType;
+                        }
+                        if (!_userType.Equals("System"))
+                        {
+                            if (userDao.CheckUserMasterTempByID("", arrResult, "UserAbb") == false)
+                            {
+                                if ("N".Equals(securityProfile))
+                                {
+                                    userDao.DeleteUserMaster(arrResult);
+                                    string ActionDetail = userDao.UserDeleteTemplate(null, null, "Deleted", "Delete", arrResult);
+                                    auditTrailDao.SecurityLog("Deleted", "Delete User", ActionDetail, afterTask, "1", CurrentUser.Account);
+                                    TempData["Notice"] = Locale.RecordsuccesfullyDeleted;
+                                }
+                                else
+                                {
+                                    userDao.CreateUserMasterTemp(col,CurrentUser.Account.BankCode, arrResult,"Delete");
+                                    string ActionDetail = userDao.UserDeleteTemplate(null, null, "Deleted", "Delete", arrResult);
+                                    auditTrailDao.SecurityLog("Deleted", "Delete User", ActionDetail, afterTask, "1", CurrentUser.Account);
+                                    TempData["Notice"] = Locale.UserSuccessfullyAddedtoApproved;
+                                }
+                            }
+                            else
+                            {
+                                TempData["Warning"] = Locale.UserPendingApproval;
+                            }
+                        }
+                        else
+                        {
+                            TempData["Notice"] = Locale.SystemUserIdNotAllowedtoDelete;
+                        }
+                    }
+
+                    //audittrail
+                    if ("N".Equals(securityProfile))
+                    {
+                        //auditTrailDao.Log("Delete - User Id: " + col["deleteBox"], CurrentUser.Account);
+                    }
+                    else
+                    {
+                        //auditTrailDao.Log("Add into Temporary record to Delete - User Id: " + col["deleteBox"], CurrentUser.Account);
+                    }
+
+                }
+                else
+                {
+                    TempData["Warning"] = Locale.PleaseSelectARecord;
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                //_log.Error(ex);
+                throw ex;
+            }
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.User.CREATE)]
+        [GenericFilter(AllowHttpGet = true)]
+        public ActionResult Create()
+        {
+            try
+            {
+                //ViewBag.Bank = CurrentUser.Account;
+                ViewBag.Branch = userDao.ListBranch(CurrentUser.Account.BankCode);
+                ViewBag.VerificationClass = userDao.ListVerificationClass(CurrentUser.Account.BankCode);
+                //ViewBag.Officer = userDao.ListOfficer(CurrentUser.Account.BankCode, CurrentUser.Account.UserAbbr);
+                //ViewBag.BranchAvailableList = userDao.ListAvailableBranch(CurrentUser.Account.BankCode);
+                //ViewBag.BranchSelectedList = userDao.ListSelectedBranch(CurrentUser.Account.BankCode, CurrentUser.Account.UserId);
+                //ViewBag.VerificationClass = userDao.ListVerificationClass();
+                //ViewBag.City = userDao.ListCity();
+                //Check if LoginAD "Y" to display password
+                //ViewBag.EnableLoginAD = systemProfileDao.GetValueFromSystemProfile("LoginAD", CurrentUser.Account.BankCode).Trim();
+                return View();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        [CustomAuthorize(TaskIds = TaskIds.User.SAVECREATE)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveCreate(FormCollection col)
+        {
+            try
+            {
+                string afterTask = "";
+                afterTask = TaskIds.User.SAVECREATE;
+                //Get value from system profile
+                //string systemProfile = systemProfileDao.GetValueFromSystemProfile("UserChecker", CurrentUser.Account.BankCode).Trim();
+                string securityProfile = securityProfileDao.GetValueFromSecurityProfile("fldDualApproval", CurrentUser.Account.BankCode).Trim();
+
+                UserModel user = new UserModel();
+                List<string> errorMessages = userDao.ValidateUser(col, "Create", CurrentUser.Account.UserId);
+
+                if ((errorMessages.Count > 0))
+                {
+                    TempData["ErrorMsg"] = errorMessages;
+                }
+                else
+                {
+                    if (userDao.CheckUserMasterTempByID("", col["fldUserAbb"], "UserAbb") == false)
+                    {
+                        if ("N".Equals(securityProfile))
+                        {
+                            userDao.CreateUserMasterTemp(col, CurrentUser.Account.BankCode, CurrentUser.Account.UserId, "Create");
+                            userDao.MoveToUserMasterFromTemp(col["fldUserAbb"], "Create");
+                            TempData["Notice"] = Locale.RecordsuccesfullyCreated;
+                            //auditTrailDao.Log("Add - User Abb: " + col["fldUserAbb"], CurrentUser.Account);
+                            string ActionDetail = userDao.UserAddTemplate(col, null, "Add", "Create");
+                            auditTrailDao.SecurityLog("Newly Added", "Add User", ActionDetail, afterTask, "1", CurrentUser.Account);
+
+                        }
+                        else
+                        {
+                            userDao.CreateUserMasterTemp(col, CurrentUser.Account.BankCode, CurrentUser.Account.UserId, "Create");
+                            TempData["Notice"] = Locale.UserSuccessfullyCreated;
+                            //auditTrailDao.Log("Add into Temporary record to Create - User Abb: " + col["fldUserAbb"], CurrentUser.Account);
+                            string ActionDetail = userDao.UserAddTemplate(col, null, "Add", "Create");
+                            auditTrailDao.SecurityLog("Newly Added", "Add User", ActionDetail, afterTask, "1", CurrentUser.Account);
+
+                        }
+                    }
+                    else
+                    {
+                        TempData["Notice"] = Locale.UserProfileAlreadyExiststoDeleteorUpdate;
+                    }
+
+                }
+                return RedirectToAction("Create");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
+}

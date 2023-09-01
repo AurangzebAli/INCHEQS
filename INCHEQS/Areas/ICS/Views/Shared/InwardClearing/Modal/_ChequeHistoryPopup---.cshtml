@@ -1,0 +1,138 @@
+﻿@using INCHEQS.Resources
+@using System.Globalization
+
+@{
+    ViewBag.Title = "ChequeHistory";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_ChequeHistory</title>
+</head>
+<body>
+    <div>
+        <table class="table" style="width:100%; white-space:normal;">
+            @*<thead>
+                    <tr>
+                        <th>@Locale.UserName</th>
+                        <th>@Locale.Action</th>
+                        <th>@Locale.ReturnReason</th>
+                        <th>@Locale.Remarks</th>
+                        @*<th>@Locale.InternalRemarks</th>
+                        <th>@Locale.ExternalRemarks</th>
+                        <th>@Locale.DateandTime</th>
+                        <th>@Locale.Module</th>
+                    </tr>
+                </thead>*@
+            <tbody>
+                @foreach (var row in ViewBag.ChequeHistory.Rows)
+                {
+                    if (@row["fldUserType"].ToString().Trim() == "branch")
+                    {
+                <tr>
+                    <td class="blue bold">@row["fldUserAbb"]</td>
+                    <td class="blue bold">@row["fldActionStatusDesc"]</td>
+                    <td class="blue bold">
+                         @if (row["fldRejectCode"].ToString().Trim() != "")
+                                {
+                                    string rejectdesc;
+                                    if (row["fldRejectCode"].ToString().Trim() == "000")
+                                    {
+                                        rejectdesc = "OK";
+                                    }
+                                    else
+                                    {
+                                        rejectdesc = row["fldRejectDesc"].ToString().Trim();
+                                    }
+                                    @(row["fldRejectCode"] + '-' + rejectdesc);
+                                }
+
+
+                                @if (row["fldRemarks"].ToString().Trim() != "" && row["fldRemarks"] != null)
+                                {
+                                    foreach (var remark in row["fldRemarks"].Split('|'))
+                                    {
+                                        @('[' + remark + ']');
+                                    }
+                                }
+                    </td>
+                    <td class="blue bold">@DateTime.ParseExact(row["fldCreateTimeStamp"].Trim(), "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture).ToString("HH:mm:ss tt")</td>
+                    @*<td class="blue">@row["fldCreateTimeStamp"]</td>*@
+                </tr>
+                    }
+                    else if (@row["fldActionStatus"].ToString().Trim() == "R" || @row["fldActionStatus"].ToString().Trim() == "B")
+                    {
+                <tr>
+                    <td class="red bold">@row["fldUserAbb"]</td>
+                    <td class="red bold">@row["fldActionStatusDesc"]</td>
+                    <td class="red bold">
+                         @if (row["fldRejectCode"].ToString().Trim() != "")
+                                {
+                                    string rejectdesc;
+                                    if (row["fldRejectCode"].ToString().Trim() == "000")
+                                    {
+                                        rejectdesc = "OK";
+                                    }
+                                    else
+                                    {
+                                        rejectdesc = row["fldRejectDesc"].ToString().Trim();
+                                    }
+                                    @(row["fldRejectCode"] + '-' + rejectdesc);
+                                }
+
+
+                                @if (row["fldRemarks"].ToString().Trim() != "" && row["fldRemarks"] != null)
+                                {
+                                    foreach (var remark in row["fldRemarks"].Split('|'))
+                                    {
+                                        @('[' + remark + ']');
+                                    }
+                                }
+                    </td>
+                    <td class="red bold">@DateTime.ParseExact(row["fldCreateTimeStamp"].Trim(), "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture).ToString("HH:mm:ss tt")</td>
+                    @*<td class="red">@row["fldCreateTimeStamp"]</td>*@
+                </tr>
+                    }
+                    else
+                    {
+                <tr>
+                    <td class="bold">@row["fldUserAbb"]</td>
+                    <td class="bold">@row["fldActionStatusDesc"]</td>
+                    <td class="bold">
+                         @if (row["fldRejectCode"].ToString().Trim() != "")
+                                {
+                                    string rejectdesc;
+                                    if (row["fldRejectCode"].ToString().Trim() == "000")
+                                    {
+                                        rejectdesc = "OK";
+                                    }
+                                    else
+                                    {
+                                        rejectdesc = row["fldRejectDesc"].ToString().Trim();
+                                    }
+                                    @(row["fldRejectCode"] + '-' + rejectdesc);
+                                }
+
+
+                                @if (row["fldRemarks"].ToString().Trim() != "" && row["fldRemarks"] != null)
+                                {
+                                    foreach (var remark in row["fldRemarks"].Split('|'))
+                                    {
+                                        @('[' + remark + ']');
+                                    }
+                                }
+                    </td>
+                    <td class="bold">@DateTime.ParseExact(row["fldCreateTimeStamp"].Trim(), "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture).ToString("HH:mm:ss tt")</td>
+                    @*<td>@row["fldCreateTimeStamp"]</td>*@
+                </tr>
+                    }
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

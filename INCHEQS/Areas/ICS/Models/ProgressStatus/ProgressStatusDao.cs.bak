@@ -1,0 +1,31 @@
+﻿using INCHEQS.DataAccessLayer;
+using INCHEQS.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+//using System.Data.Entity;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace INCHEQS.Models.ProgressStatus {
+    public class ProgressStatusDao {
+        
+        private readonly ApplicationDbContext dbContext;
+        public ProgressStatusDao(ApplicationDbContext dbContext) {
+            this.dbContext = dbContext;
+        }
+
+
+        //public ProgressStatusModel getReportForInwardItemQueue(string ViewId) {
+        //    ProgressStatusModel model = new ProgressStatusModel();
+        //    string sql = string.Format("SELECT * FROM {0} ", ViewId);
+        //        using (DbDataReader dr = dbContext.ExecuteReader( CommandType.Text, sql, new[] { new SqlParameter("","") })) {
+
+        //        }                   
+            
+        //    return model;
+        //}
+    }
+}

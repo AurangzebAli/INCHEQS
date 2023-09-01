@@ -1,0 +1,18 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{ 
+
+}
+<table class="table form-table table-no-border th-silvered" style="margin-top: 40px"><tr>
+    <th>Stale Date</th>
+        <td><span class="red big-text stale-date"></span></td>
+    </tr>
+    <tr>
+        <th>@Locale.ChequeClearingDate</th>
+        <td><span class="red big-text clear-date">@DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))</span></td>
+    </tr>
+    <tr>
+        <th>@Locale.Amount</th>
+        <td><span class="red big-text">@StringUtils.FormatCurrency(ViewBag.InwardItemViewModel.getField("fldAmount"))</span></td>
+    </tr>
+</table>

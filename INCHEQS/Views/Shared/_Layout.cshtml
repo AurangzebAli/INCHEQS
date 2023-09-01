@@ -1,0 +1,72 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
+    <title>INCHEQS @ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/dataTable")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/dataTable")
+    @Scripts.Render("~/bundles/moment")
+    @Scripts.Render("~/bundles/lodash")
+    @Scripts.Render("~/bundles/bootbox")
+    @Scripts.Render("~/bundles/appConfig")
+    @Scripts.Render("~/bundles/app")
+    @Scripts.Render("~/bundles/menu")
+    @Scripts.Render("~/bundles/moneymask")
+
+
+</head>
+<body>
+
+    @Html.Partial("Security/_TaskIdNotice")
+    <div class="hidden">
+        <span id="mainMenuTitle">@ViewBag.MainMenuTitle</span>
+        <span id="jQueryDateFormat">@ViewBag.DateFormat</span>
+        <span id="contextPath">@Url.Content("~")</span>
+    </div>
+    <div>
+        <img src="~/Content/Images/spin_big.gif" id="loading-indicator" style="display:none;z-index: 1;" />
+    </div>
+    <!-- Header Begin Here -->
+    @Html.Partial("Partials/_Header")
+    <!-- Menu Begin Here -->
+    @Html.Partial("Partials/_TopMenu")
+    <!-- Content Begin Here -->
+    <div class="content" id="content">
+        <div class="content-inner" style="height: 760px;">
+            <!-- Sub Menu Begin Here -->
+            @Html.Partial("Partials/_LeftMenu")
+            <!-- Main Begin Here -->
+            <div id="right-panel" class="right-panel">
+
+                <!-- Notice Begin Here -->
+                @Html.Partial("Partials/_Notice")
+
+                <!-- Yeild Begin Here -->
+                <div id="main-body-container" class="yeild">
+                    @RenderBody()
+                </div>
+            </div>
+
+
+            <div style="clear:both"></div>
+        </div>
+    </div>
+    <!-- Trigger the modal with a button -->
+    @Html.Partial("Partials/_Modal")
+
+    <!-- footer Begin Here -->
+    <footer class="footer">
+        @Html.Partial("Partials/_Footer")
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+﻿@using INCHEQS.Resources
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline secure-form submit-onload", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+    <h4>@ViewBag.SearchPage.PageTitle</h4>
+    <div class="row">
+        <hr />
+        @Html.Partial("SearchPage/_GenericFieldsForm")
+    </div>
+    <hr />
+    <div class="form-group">
+        <button class="btn btn-default init-search">Search</button>
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "Process"))
+        {
+            <button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("Process")" data-title="Process">Process</button>
+        }
+    </div>
+
+    <div id="resultContainer"></div>
+}
+
+@Scripts.Render("~/bundles/SearchPage")

@@ -1,0 +1,48 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+<table class="table form-table table-no-border">
+    <tr>
+        <th>@Locale.ChequeClearingDate</th>
+        <td>@DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))</td>
+    </tr>
+    <tr>
+        <th>UIC</th>
+        <td>@ViewBag.InwardItemViewModel.getField("fldUIC")</td>
+    </tr>
+    <tr>
+        <th>Account Number</th>
+        <td>@ViewBag.InwardItemViewModel.getField("fldAccountNumber")</td>
+    </tr>
+    <tr>
+        <th>Cheque Number</th>
+        <td>@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo")</td>
+    </tr>
+    <tr>
+        <th>Paying Branch</th>
+        <td>@ViewBag.InwardItemViewModel.getField("fldBRSTN")</td>
+    </tr>
+    <tr>
+        <th>Presenting Bank</th>
+        <td>@ViewBag.InwardItemViewModel.getField("fldPreBankDesc")</td>
+    </tr>
+    <tr>
+        <th>@Locale.Amount</th>
+        <td>@StringUtils.FormatCurrency(ViewBag.InwardItemViewModel.getField("fldAmount"))</td>
+    </tr>
+    <tr>
+        <th>NC Flag</th>
+        <td>@ViewBag.InwardItemViewModel.getField("fldTransDesc")</td>
+    </tr>
+    <tr>
+        <th>Host Reject</th>
+        <td>@ViewBag.InwardItemViewModel.getField("fldRejectStatus7")</td>
+    </tr>
+    <tr>
+        <th>Return Reason</th>
+        <td>
+            Return Code: @ViewBag.InwardItemViewModel.getField("fldRejectCode") - @ViewBag.InwardItemViewModel.getField("fldRejectDesc") <br />
+            Remarks: @ViewBag.InwardItemViewModel.getField("fldRemarks")
+        </td>
+
+    </tr>
+</table>

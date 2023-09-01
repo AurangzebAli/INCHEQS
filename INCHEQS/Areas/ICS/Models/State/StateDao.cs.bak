@@ -1,0 +1,41 @@
+﻿using INCHEQS.DataAccessLayer;
+using INCHEQS.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace INCHEQS.Models.State {
+    public class StateDao : IStateDao {
+
+        private readonly ApplicationDbContext dbContext;
+        public StateDao(ApplicationDbContext dbContext) {
+            this.dbContext = dbContext;
+        }
+
+        public DataTable getAllState() {
+            DataTable ds = new DataTable();
+
+            string stmt = "SELECT  fldStatecode,fldStateDesc FROM tblStatemaster";
+
+            ds = dbContext.GetRecordsAsDataTable(stmt);
+
+            return ds;
+        }
+
+        public DataTable GetAllIssuingBankBranch()
+        {
+            DataTable ds = new DataTable();
+
+        string stmt = "select fldBranchId,fldBranchDesc from tblBranchMaster bm inner join tblBankMaster bmz on bm.fldBankcode = bmz.fldBankCode";
+
+        ds = dbContext.GetRecordsAsDataTable(stmt);
+
+            return ds;
+    }
+
+}
+}

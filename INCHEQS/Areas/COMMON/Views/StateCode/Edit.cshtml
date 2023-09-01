@@ -1,0 +1,37 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "Message", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Locale.StateCodeEdit</h4>
+
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.StateCodeColumn</th>
+
+                    <td>
+                        <input type="hidden" value="@ViewBag.StateCode.fldStateCode" name="fldStateCode" />@ViewBag.StateCode.fldStateCode
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.StateDescColumn</th>
+
+                    <td>
+                        <input style="width:250px" type="text" name="fldStateDesc" value="@ViewBag.StateCode.fldStateDesc" autocomplete="off" maxlength="100" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" data-action="@Url.Action("/UPDATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIds.StateCode.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <button data-action="@Url.Action("/Edit")" Class="btn btn-default secure-nav normal-submit-without-search @(CurrentUser.HasTask(TaskIds.StateCode.EDIT) ? "" : "hidden")">@Locale.Reset</button>
+        <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.StateCode.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+<script src="~/Scripts/App/app.js"></script>

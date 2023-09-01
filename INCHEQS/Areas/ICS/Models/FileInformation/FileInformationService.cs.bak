@@ -1,0 +1,225 @@
+﻿using INCHEQS.Common;
+using INCHEQS.Helpers;
+using INCHEQS.Resources;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Data;
+using System.Data.SqlClient;
+using INCHEQS.DataAccessLayer;
+
+using System.Globalization;
+
+
+
+namespace INCHEQS.Models.FileInformation {
+    public class FileInformationService {
+        private readonly ApplicationDbContext dbContext;
+        private IFileManagerDao fileManagerDao;
+        public FileInformationService(ApplicationDbContext dbContext, IFileManagerDao fileManagerDao)
+        {
+            this.dbContext = dbContext;
+            this.fileManagerDao = fileManagerDao;
+        }
+
+        public List<FileInformationModel> GetFileInFolder(string folderName, string selectedDate, int dateSubString, int bankSubString, string fileExt, string bankCode) {
+
+            List<FileInformationModel> filesList = new List<FileInformationModel>();
+            string[] filePath = Directory.GetFiles(folderName);
+            string convertedDate = DateUtils.formatDateToFileDate(selectedDate);
+            string fileDate = "";
+            string bankCodeFromFile = "";
+            int strDateLength = 8; //20161231 (8 char length)
+
+            foreach (var item in filePath) {
+                FileInformationModel fileInformationModel = new FileInformationModel();
+                FileInfo fileInfo = new FileInfo(item);
+                fileInformationModel.fileName = Path.GetFileName(item);
+                if (fileInformationModel.fileName.Length >= dateSubString.ToString().Length + strDateLength) {
+                    //Get date from file name
+                    //fileDate = fileInformationModel.fileName.Substring(dateSubString, strDateLength);
+                    fileDate = dateSubString.ToString();
+                    //Get bank code from file name (e.g 029.ICL)
+                    //bankCodeFromFile = fileInformationModel.fileName.Substring(bankSubString, 3);
+                    bankCodeFromFile = bankSubString.ToString();
+
+                } else { fileDate = Locale.NoDateInFileName; }
+                //(fileDate.Equals(convertedDate) &&
+                if  (bankCodeFromFile.Equals(bankCode) && fileExt.Equals(fileInfo.Extension)) {
+                    fileInformationModel.fileSize = fileInfo.Length.ToString();
+                    DateTime creationTime = fileInfo.CreationTime;
+                    fileInformationModel.fileTimeStamp = DateUtils.formatTimeStampFromSql(creationTime.ToString());
+                    filesList.Add(fileInformationModel);
+                }
+            }
+            return filesList;
+        }
+        public List<FileInformationModel> GetAllFileInFolder(string folderName, int bankSubString, string bankCode)
+        {
+            
+            List<FileInformationModel> filesList = new List<FileInformationModel>();
+            //string[] filePath = Directory.GetFiles(folderName);
+            //string fileDate = "";
+            //string bankCodeFromFile = "";
+            string[] filePath = Directory.GetDirectories(folderName);
+
+            foreach (var item in filePath)
+            {
+                FileInformationModel fileInformationModel = new FileInformationModel();
+                FileInfo fileInfo = new FileInfo(item);
+                fileInformationModel.fileName = item.ToString();
+                //if (fileInformationModel.fileName.Length >= bankSubString + 3) {
+                //    //Get bank code from file name (e.g 029.ICL)
+                //    bankCodeFromFile = fileInformationModel.fileName.Substring(bankSubString, 3);
+                //} else { fileDate = Locale.NoDateInFileName; }
+                //if (bankCodeFromFile.Equals(bankCode)) {
+
+                fileInformationModel.fileSize = item.Length.ToString();
+
+                //   DateTime creationTime = fileInfo.CreationTime;
+                //   fileInformationModel.fileTimeStamp = DateUtils.formatTimeStampFromSql(creationTime.ToString());
+
+                fileInformationModel.fileTimeStamp = fileInfo.CreationTime.ToString();
+                filesList.Add(fileInformationModel);
+                //}
+            }
+            return filesList;
+        }
+        public List<FileInformationModel> GetAllFileInFolderICS(string folderName,string completefolderName, int bankSubString, string bankCode, string clearDate) {
+            string dateClearing = DateTime.ParseExact(clearDate, "dd-mm-yyyy", CultureInfo.InvariantCulture).ToString("yyyymmdd");
+
+            List<FileInformationModel> filesList = new List<FileInformationModel>();
+            //string[] filePath = Directory.GetFiles(folderName);
+            //string fileDate = "";
+            //string bankCodeFromFile = "";
+            //string[] filePath = Directory.GetDirectories(folderName);
+            string[] filePath = Directory.GetFiles(folderName);
+            foreach (var item in filePath) {
+                FileInformationModel fileInformationModel = new FileInformationModel();
+                FileInfo fileInfo = new FileInfo(item);
+                fileInformationModel.fileName = item.ToString();
+                //if (fileInformationModel.fileName.Length >= bankSubString + 3) {
+                //    //Get bank code from file name (e.g 029.ICL)
+                //    bankCodeFromFile = fileInformationModel.fileName.Substring(bankSubString, 3);
+                //} else { fileDate = Locale.NoDateInFileName; }
+                //if (bankCodeFromFile.Equals(bankCode)) {
+
+                //   fileInformationModel.fileSize = item.Length.ToString();
+
+                //   DateTime creationTime = fileInfo.CreationTime;
+                //   fileInformationModel.fileTimeStamp = DateUtils.formatTimeStampFromSql(creationTime.ToString());
+                //fileInformationModel.fileStatus = 
+               
+                fileInformationModel.fileStatus = checkICLUploadStatus(item.ToString());
+                fileInformationModel.fileTimeStamp = fileInfo.CreationTime.ToString();
+                filesList.Add(fileInformationModel);
+                //}
+            }
+            if (Directory.Exists(completefolderName + dateClearing))
+            {
+                string[] completefilePath = Directory.GetFiles(completefolderName + dateClearing);
+                foreach (var item in completefilePath)
+                {
+                    FileInformationModel fileInformationModel = new FileInformationModel();
+                    FileInfo fileInfo = new FileInfo(item);
+                    fileInformationModel.fileName = item.ToString();
+                    //if (fileInformationModel.fileName.Length >= bankSubString + 3) {
+                    //    //Get bank code from file name (e.g 029.ICL)
+                    //    bankCodeFromFile = fileInformationModel.fileName.Substring(bankSubString, 3);
+                    //} else { fileDate = Locale.NoDateInFileName; }
+                    //if (bankCodeFromFile.Equals(bankCode)) {
+
+                    //   fileInformationModel.fileSize = item.Length.ToString();
+
+                //   DateTime creationTime = fileInfo.CreationTime;
+                //   fileInformationModel.fileTimeStamp = DateUtils.formatTimeStampFromSql(creationTime.ToString());
+                    //fileInformationModel.fileStatus = 
+
+                    fileInformationModel.fileStatus = checkICLUploadStatus(item.ToString());
+                fileInformationModel.fileTimeStamp = fileInfo.CreationTime.ToString();
+                filesList.Add(fileInformationModel);
+                //}
+            }
+            }
+                
+            return filesList;
+        }
+
+        public string checkICLUploadStatus(string itemPath)
+        {
+            string status = "";
+            string ICLFileName = Path.GetFileName(itemPath);
+            string stmt = "select fldFlag from tblinwardclearingfile where fldinwardfilename = @fldinwardfilename";
+            DataTable dt = dbContext.GetRecordsAsDataTable(stmt, new[] {
+              new SqlParameter("@fldinwardfilename",ICLFileName)
+            });
+            if (dt.Rows.Count > 0)
+            {
+                status = "Completed";
+            }
+            else
+            {
+                status = "Pending";
+            }
+            return status;
+        }
+
+        public void DeleteDirectory(string path) {
+            foreach (string directory in Directory.GetDirectories(path)) {
+                DeleteDirectory(directory);
+            }
+
+            try {
+                Directory.Delete(path, true);
+            } catch (IOException) {
+                Directory.Delete(path, true);
+            } catch (UnauthorizedAccessException) {
+                Directory.Delete(path, true);
+            }
+        }
+
+        public void DeleteDirectory(string path, bool recursive, string originalPath = "") {
+            // Delete all files and sub-folders?
+            if (recursive) {
+                // Yep... Let's do this
+                var subfolders = Directory.GetDirectories(path);
+                foreach (var s in subfolders) {
+                    try {
+                        DeleteDirectory(s, recursive);
+                    } catch (Exception ex) {
+                        ex.ToString();
+                    }
+                }
+            }
+
+            // Get all files of the folder
+            var files = Directory.GetFiles(path);
+            foreach (var f in files) {
+                // Get the attributes of the file
+                var attr = File.GetAttributes(f);
+
+                // Is this file marked as 'read-only'?
+                if ((attr & FileAttributes.ReadOnly) == FileAttributes.ReadOnly) {
+                    // Yes... Remove the 'read-only' attribute, then
+                    File.SetAttributes(f, attr ^ FileAttributes.ReadOnly);
+                }
+
+                // Delete the file
+                File.Delete(f);
+            }
+
+            // When we get here, all the files of the folder were
+            // already deleted, so we just delete the empty folder
+            try {
+                if (originalPath.Equals("")) {
+                    Directory.Delete(path);
+                }
+            } catch (Exception ex) {
+                ex.ToString();
+            }
+        }
+    }
+
+}

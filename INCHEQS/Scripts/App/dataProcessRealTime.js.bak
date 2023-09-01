@@ -1,0 +1,145 @@
+﻿
+(function () {
+    $(document).ready(function () {
+        bindRefreshPageRealtime();
+        bindSearchButton();
+        getLatestProcess();
+    });
+
+    function bindSearchButton() {
+        $(".search").on('click', function (e) {
+            getLatestProcess()
+        })
+    }
+
+
+    function bindRefreshPageRealtime() {
+
+        $(".init-refresh-page-realtime").on('click', function (e) {
+            var r = confirm("Execute the process. Are you sure?")
+
+            if (r == true) {
+            var $this = $(this);
+            var $form = $this.closest('form');
+
+            //1. Change url to the button url
+            //2. submit
+            //3. revert back to original action
+
+            var originalAction = $form.attr("action");
+            $form.attr("action", $this.data("action"))
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: $(this).data("action"),
+                data: $form.serialize(),
+                success: function (data) {
+                    $("#notice .notice-body").html(data.notice)
+                    $("#notice").removeClass("hidden");
+
+                }
+            });
+            $form.attr("action", originalAction);
+            if ($(".notice-body").html().indexOf("ERROR") <= 0) {
+                //Delay the process
+                setTimeout(function () {
+                    submitLatestProcess();
+                }, 10000);
+            }
+            }
+         
+
+
+        })
+    }
+
+
+    function getLatestProcess() {
+        //console.log("getLatestProcess")
+       // debugger;
+        var dataParam;
+        var dataUrl;
+        var dataProcessType = $("#dataProcessType").val();
+
+        if (dataProcessType == "ICL") {
+            dataParam = "cleardate=" + $("[name=fldClearDate]").val() + "&pospaytype=" + $("#dataProcessContainer").data("pospaytype") + "&processname=" + $("#dataProcessContainer").data("processname");
+            dataUrl = App.ContextPath + "DataProcessApi/AsJsonICL";
+        } else if (dataProcessType == "ECCS") {
+            dataParam = "cleardate=" + $("[name=fldClearDate]").val() + "&processname=" + $("#dataProcessContainer").data("processname") + "&filetype=" + $("[name=fileType]").val();
+            dataUrl = App.ContextPath + "DataProcessApi/AsJsonECCS";
+        } else if ($("#dataProcessContainer").data("processname") == "ICSEOD") {
+            dataParam = "cleardate=" + $("[name=fldClearDate]").val() + "&processname=" + $("#dataProcessContainer").data("processname");
+            dataUrl = App.ContextPath + "DataProcessApi/AsJsonEOD";
+        } else {
+            dataParam = "cleardate=" + $("[name=fldClearDate]").val() + "&processname=" + $("#dataProcessContainer").data("processname");
+            dataUrl = App.ContextPath + "DataProcessApi/AsJson";
+        }
+
+        if ($("#dataProcessContainer").length > 0) {
+            $.ajax({
+                cache: false,
+                url: dataUrl,
+                method: "POST",
+                data: dataParam,
+                beforeSend: function () {
+                    $(".resultLoader").toggleClass("hidden");
+                },
+                success: function (data) {
+                    $(".resultLoader").toggleClass("hidden");
+                    var $ul = $("<ul />");
+                    _.each(data, function (d) {
+                        $ul.append("<li>" + d + "</li>")
+                    });
+                    $("#dataProcessContainer").html($ul);
+                    if (data.length > 0) {
+                        //if (dataProcessType == "ICL") {
+                        //   // Check if last data or last 2 data contain "Complete"
+                        //    if (data[data.length - 1].indexOf("Data was Completed") >= 0 ||
+                            //    data[data.length - 2].indexOf("Data was Completed") >= 0 ||
+                            //    data[data.length - 3].indexOf("Data was Completed") >= 0
+                            //    ) {
+                            //    $("#notice .notice-body").html("Process Complete")
+                            //    clearTimeoutIfExist();
+                        //    } else if (data[data.length - 1].indexOf("Error") >= 0) {
+                            //    $("#notice .notice-body").html("Process Error")
+                            //    clearTimeoutIfExist();
+                        //    }
+                        //} else {
+                            if ($("#dataProcessContainer ul li:last #processStatus").text() == "4") {
+                                $("#notice .notice-body").html("Process Complete")
+                                clearTimeoutIfExist();
+                            }
+                        //}
+
+                    } else {
+                        clearTimeoutIfExist();
+                    }
+                }
+            })
+        }
+    }
+
+
+    function submitLatestData() {
+        //empty container to give way other script
+        $('#resultContainer').empty();
+        var $form = $(".init-refresh-page-realtime").closest('form');
+        $form.submit();
+    }
+    function submitLatestProcess() {
+        getLatestProcess()
+        timeout = setTimeout(submitLatestProcess, 10000);
+        $(document).on('click', '.menu', function (e) {
+            clearTimeoutIfExist();
+        });
+    }
+
+
+    function clearTimeoutIfExist() {
+        if (!(typeof timeout === 'undefined' || timeout === null)) {
+            clearTimeout(timeout);
+        }
+        submitLatestData();
+    }
+
+})()

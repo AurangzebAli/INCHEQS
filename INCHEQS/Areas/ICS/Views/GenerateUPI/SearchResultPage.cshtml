@@ -1,0 +1,34 @@
+﻿@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@Html.Partial("SearchPage/_InfoBox")
+
+
+<table id="search-result-table" class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                @Html.Partial("SearchPage/_TableHeaderColumns")
+                @*<th>Details</th>
+                <th width="300">Action</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+            {
+
+            <tr>
+                @Html.Partial("SearchPage/_TableBodyColumnsNoLink", row)
+
+                @*<td><button type="button" class="row-modal-submit-Posted-detail btn btn-default btn-xs" data-action="@Url.Action("GeneratedItemsForUPI")">Details</button></td>
+                <td><a href="" class="btn btn-default btn-xs row-action-downloadUPI" data-action="@Url.Action("Download")">Download</a></td>*@
+
+            </tr>
+            }
+        </tbody>
+    <tfoot>
+        @Html.Partial("SearchPage/_TablePaginationFooter")
+    </tfoot>
+</table>
+
+@Scripts.Render("~/bundles/SearchResultPage")
+<script src="~/Scripts/App/common.js"></script>

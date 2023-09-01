@@ -1,0 +1,84 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Security
+@using (Html.BeginForm("Update", "OCSRetentionPeriod", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Maintenance - System Setting - OCS Retention Period</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border table-utility">
+            <tr>
+                <th>
+                    Outward Clearing Retention Period
+                </th>
+                <td>
+                    <input type="text" id="OCInt" name="OCInt" value="@ViewBag.OCSRetentionPeriod.OCInt" maxLength=3 class="number-only">
+                    <select name="OCIntType" id="OCIntType" @ViewBag.Disabled>
+                        <option value="" selected="selected">Select Interval Type</option>
+                        @foreach (var item in @ViewBag.ListInterval)
+                        {
+                            <option value="@item.IntType" @(ViewBag.OCSRetentionPeriod.OCIntType == item.IntType ? "selected" : "")>@item.IntType</option>
+                        }
+                    </select><span class="red-star" id="OCIntTyperedstar" name="OCIntTyperedstar"> *</span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    Outward Clearing History Retention Period
+                </th>
+                <td>
+                    <input type="text" id="OCHistoryInt" name="OCHistoryInt" value="@ViewBag.OCSRetentionPeriod.OCHistoryInt" maxLength=3 class="number-only">
+                    <select name="OCHistoryIntType" id="OCHistoryIntType" @ViewBag.Disabled>
+                        <option value="" selected="selected">Select Interval Type</option>
+                        @foreach (var item in @ViewBag.ListInterval)
+                        {
+                            <option value="@item.IntType" @(ViewBag.OCSRetentionPeriod.OCHistoryIntType == item.IntType ? "selected" : "")>@item.IntType</option>
+                        }
+                    </select>
+                    <span class="red-star" id="OCHistoryIntTyperedstar" name="OCHistoryIntTyperedstar"> *</span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    Inward Return Retention Period
+                </th>
+                <td>
+                    <input type="text" id="IRInt" name="IRInt" value="@ViewBag.OCSRetentionPeriod.IRInt" maxLength=3 class="number-only">
+                    <select name="IRIntType" id="IRIntType" @ViewBag.Disabled>
+                        <option value="" selected="selected">Select Interval Type</option>
+                        @foreach (var item in @ViewBag.ListInterval)
+                        {
+                            <option value="@item.IntType" @(ViewBag.OCSRetentionPeriod.IRIntType == item.IntType ? "selected" : "")>@item.IntType</option>
+                        }
+                    </select>
+                    <span class="red-star" id="IRIntTyperedstar" name="IRIntTyperedstar"> *</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <button onclick="return Confirm()" id=btnsave alt=Save type="submit" value=Save name=btnSave class="btn btn-default @(CurrentUser.HasTask(TaskIdsOCS.OCSRetentionPeriod.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+                    <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIdsOCS.OCSRetentionPeriod.INDEX) ? "" : "hidden")">@Locale.Reset</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+<script type="text/javascript">
+    function Confirm() {
+        var input = $("<input />");
+        input.attr("type", "hidden").attr("name", "confirm_value");
+        if (confirm("Do you want to save data?")) {
+            input.val("Yes");
+            return true;
+        } else {
+            input.val("No");
+            return false;
+        }
+        $("form")[0].appendChild(input[0]);
+    }
+</script>

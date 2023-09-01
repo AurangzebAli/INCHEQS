@@ -1,0 +1,640 @@
+﻿using INCHEQS.DataAccessLayer;
+using INCHEQS.DataAccessLayer.OCS;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Web.Mvc;
+using System.Linq;
+using INCHEQS.Security;
+using INCHEQS.Resources;
+using INCHEQS.Areas.COMMON.Models.Branch;
+
+namespace INCHEQS.Areas.COMMON.Models.HubBranch
+{
+    public class HubBranchDao : IHubBranchDao
+    {
+        private readonly ApplicationDbContext dbContext;
+        private readonly OCSDbContext ocsdbContext;
+
+
+        public HubBranchDao(ApplicationDbContext dbContext, OCSDbContext ocsdbContext)
+        {
+            this.dbContext = dbContext;
+            this.ocsdbContext = ocsdbContext;
+        }
+
+        public void CreateHubBranchMasterTemp(FormCollection col, string bankcode, string crtUser)
+        {
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            dynamic bankCode = bankcode/*CurrentUser.Account.BankCode*/;
+            try
+            {
+                sqlParameterNext.Add(new SqlParameter("@fldHubCode", col["fldHubCode"].ToString()));
+                sqlParameterNext.Add(new SqlParameter("@fldHubDesc", col["fldHubDesc"].ToString()));
+                sqlParameterNext.Add(new SqlParameter("@fldBankcode", bankCode));
+                sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", Convert.ToInt16(crtUser)));
+                sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", (object)DateTime.Now));
+                sqlParameterNext.Add(new SqlParameter("@fldApproveStatus", "U"));
+
+
+
+                dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciHubMasterBranchTemp", sqlParameterNext.ToArray());
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+        }
+
+        public List<BranchModel> ListSelectedBranchInHub(string hubCode, string strBankCode)
+        {
+            List<BranchModel> branchModels = new List<BranchModel>();
+            DataTable dtHubBranch = new DataTable();
+            List<string> branchIds = new List<string>();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", ""));
+            sqlParameterNext.Add(new SqlParameter("@Action", "SelectAll"));
+            sqlParameterNext.Add(new SqlParameter("@fldBankcode", strBankCode));
+            dtHubBranch = dbContext.GetRecordsAsDataTableSP("spcgHubBranch", sqlParameterNext.ToArray());
+            if (dtHubBranch.Rows.Count > 0)
+            {
+                foreach (DataRow row in dtHubBranch.Rows)
+                {
+                    BranchModel branchModel = new BranchModel()
+                    {
+                        fldBranchId = row["fldBranchId"].ToString(),
+                        fldBranchCode = row["fldbranchCode"].ToString(),
+                        fldBranchDesc = row["fldBranchDesc"].ToString()
+                    };
+                    branchModels.Add(branchModel);
+                }
+            }
+
+
+            return branchModels;
+        }
+
+        public List<BranchModel> ListSelectedBranchInHubChecker(string hubCode, string strBankCode)
+        {
+            List<BranchModel> branchModels = new List<BranchModel>();
+            DataTable dtHubBranch = new DataTable();
+            List<string> branchIds = new List<string>();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+            sqlParameterNext.Add(new SqlParameter("@fldBankcode", strBankCode));
+            dtHubBranch = dbContext.GetRecordsAsDataTableSP("spcgSelectedBranchInHubBranchChecker", sqlParameterNext.ToArray());
+            if (dtHubBranch.Rows.Count > 0)
+            {
+                foreach (DataRow row in dtHubBranch.Rows)
+                {
+                    BranchModel branchModel = new BranchModel()
+                    {
+                        fldBranchCode = row["fldbranchCode"].ToString(),
+                        fldBranchDesc = row["fldBranchDesc"].ToString()
+                    };
+                    branchModels.Add(branchModel);
+                }
+            }
+
+
+            return branchModels;
+        }
+        public bool CheckHubBranchMasterTempByID(string HubCode, string SearchFor)
+        {
+            DataTable resultTable = new DataTable();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldHubCode", HubCode));
+            sqlParameterNext.Add(new SqlParameter("@SearchFor", SearchFor));
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgHubBranchMasterbyIdTemp", sqlParameterNext.ToArray());
+            if (resultTable.Rows.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void AddBranchToHubBranchTempToUpdate(string branchId, string hubCode, string strUpdate, string strBankCode, string strAction)
+        {
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            dynamic bankCode = strBankCode/*CurrentUser.Account.BankCode*/;
+            try
+            {
+                if (strAction == "Create")
+                {
+                    sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+                    sqlParameterNext.Add(new SqlParameter("@fldBranchId", branchId));
+                    sqlParameterNext.Add(new SqlParameter("@fldBankcode", bankCode));
+                    sqlParameterNext.Add(new SqlParameter("@fldCreateUserId", Convert.ToInt16(strUpdate)));
+                    sqlParameterNext.Add(new SqlParameter("@fldCreateTimeStamp", (object)DateTime.Now));
+                    sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", Convert.ToInt16(strUpdate)));
+                    sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", (object)DateTime.Now));
+                    sqlParameterNext.Add(new SqlParameter("@fldApproveStatus", "A"));
+                    sqlParameterNext.Add(new SqlParameter("@Action", strAction));
+                }
+                else if (strAction == "Update")
+                {
+                    sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+                    sqlParameterNext.Add(new SqlParameter("@fldBranchId", branchId));
+                    sqlParameterNext.Add(new SqlParameter("@fldBankcode", bankCode));
+                    sqlParameterNext.Add(new SqlParameter("@fldCreateUserId", Convert.ToInt16(strUpdate)));
+                    sqlParameterNext.Add(new SqlParameter("@fldCreateTimeStamp", (object)DateTime.Now));
+                    sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", Convert.ToInt16(strUpdate)));
+                    sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", (object)DateTime.Now));
+                    sqlParameterNext.Add(new SqlParameter("@fldApproveStatus", "U"));
+                    sqlParameterNext.Add(new SqlParameter("@Action", strAction));
+
+                }
+                else if (strAction == "Delete")
+                {
+                    sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+                    sqlParameterNext.Add(new SqlParameter("@fldBranchId", branchId));
+                    sqlParameterNext.Add(new SqlParameter("@fldBankcode", bankCode));
+                    sqlParameterNext.Add(new SqlParameter("@fldCreateUserId", Convert.ToInt16(strUpdate)));
+                    sqlParameterNext.Add(new SqlParameter("@fldCreateTimeStamp", (object)DateTime.Now));
+                    sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", Convert.ToInt16(strUpdate)));
+                    sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", (object)DateTime.Now));
+                    sqlParameterNext.Add(new SqlParameter("@fldApproveStatus", "D"));
+                    sqlParameterNext.Add(new SqlParameter("@Action", strAction));
+                }
+                dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciHubBranchTemp", sqlParameterNext.ToArray());
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+        }
+
+        public bool CheckBranchExistInHub(string hubCode, string branchId, string strBankCode)
+        {
+            bool flag = false;
+            DataTable resultTable = new DataTable();
+            List<string> userIds = new List<string>();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", branchId));
+            sqlParameterNext.Add(new SqlParameter("@Action", "SelectwithID"));
+            sqlParameterNext.Add(new SqlParameter("@fldBankcode", strBankCode));
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgHubBranch", sqlParameterNext.ToArray());
+            if (resultTable.Rows.Count > 0)
+            {
+                flag = true;
+            }
+
+
+
+
+            return flag;
+        }
+
+        public bool DeleteAllBranchInHub(string hubCode, string bankCode)
+        {
+
+            try
+            {
+                int intRowAffected;
+                bool blnResult = false;
+                List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+                sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+                sqlParameterNext.Add(new SqlParameter("@fldBankCode", bankCode));
+                intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcdHubBranch", sqlParameterNext.ToArray());
+                if (intRowAffected > 0)
+                {
+                    blnResult = true;
+                }
+                else
+                {
+                    blnResult = false;
+                }
+                return blnResult;
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+        }
+
+        public void DeleteAllBranchInHubTemp(string hubCode)
+        {
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            try
+            {
+                sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+               
+
+
+
+
+                dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcdHubBranchTemp", sqlParameterNext.ToArray());
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+        }
+        public void DeleteAllBranchInHubTempById(string hubCode, string branchid)
+        {
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            try
+            {
+                sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+                sqlParameterNext.Add(new SqlParameter("@fldBranchId", branchid));
+
+
+
+
+                dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcdHubBranchTempById", sqlParameterNext.ToArray());
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+        }
+
+
+
+        public bool DeleteBranchNotSelected(string hubCode, string branchIds, string strBankCode)
+        {
+            bool blnResult = false;
+            string[] strArrays = branchIds.Split(new char[] { ',' });
+            if (strArrays.Length != 0)
+            {
+                int intRowAffected;
+
+                List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+                sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+                sqlParameterNext.Add(new SqlParameter("@fldBranchId", branchIds));
+                sqlParameterNext.Add(new SqlParameter("@fldBankcode", strBankCode));
+                intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcdHubBranchnotSelected", sqlParameterNext.ToArray());
+                if (intRowAffected > 0)
+                {
+                    blnResult = true;
+                }
+                else
+                {
+                    blnResult = false;
+                }
+
+            }
+            return blnResult;
+        }
+
+        public bool DeleteBranchNotSelectedApproval(string hubCode, string branchIds)
+        {
+            bool blnResult = false;
+            string[] strArrays = branchIds.Split(new char[] { ',' });
+            if (strArrays.Length != 0)
+            {
+                int intRowAffected;
+
+                List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+                sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+                sqlParameterNext.Add(new SqlParameter("@fldBranchId", branchIds));
+                intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcdHubBranchnotSelectedApproval", sqlParameterNext.ToArray());
+                if (intRowAffected > 0)
+                {
+                    blnResult = true;
+                }
+                else
+                {
+                    blnResult = false;
+                }
+
+            }
+            return blnResult;
+        }
+
+        public void InsertBranchInHub(string hubCode, string branchId, string strUpdate, string strUpdateId, string strBankCode)
+        {
+
+            try
+            {
+                List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+                dynamic bankCode = strBankCode/*CurrentUser.Account.BankCode*/;
+
+                sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+                sqlParameterNext.Add(new SqlParameter("@fldBranchId", branchId));
+                sqlParameterNext.Add(new SqlParameter("@fldCreateUserId", strUpdate));
+                sqlParameterNext.Add(new SqlParameter("@fldCreateTimeStamp", (object)DateTime.Now));
+                sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", strUpdateId));
+                sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", (object)DateTime.Now));
+                sqlParameterNext.Add(new SqlParameter("@fldBankCode", strBankCode));
+
+
+
+                dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciHubBranch", sqlParameterNext.ToArray());
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+        }
+
+        public List<BranchModel> ListAvailableBranchInHub(string strBankCode,string hubCode)
+        {
+            List<BranchModel> branchModels = new List<BranchModel>();
+            DataTable resultTable = new DataTable();
+            List<string> branchIds = new List<string>();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            try
+            {
+
+                sqlParameterNext.Add(new SqlParameter("@fldBankcode", strBankCode));
+                sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+                resultTable = dbContext.GetRecordsAsDataTableSP("spcgAvailableHubBranch", sqlParameterNext.ToArray());
+                if (resultTable.Rows.Count > 0)
+                {
+                    foreach (DataRow row in resultTable.Rows)
+                    {
+                        BranchModel branchModel = new BranchModel()
+                        {
+                            fldBranchId = row["fldBranchId"].ToString(),
+                            fldBranchCode = row["fldBranchCode"].ToString(),
+                            fldBranchDesc = row["fldBranchDesc"].ToString(),
+                        };
+                        branchModels.Add(branchModel);
+                    }
+                }
+
+
+
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+            return branchModels;
+        }
+        public List<BranchModel> ListAvailableBranchInHubChecker(string strBankCode)
+        {
+            List<BranchModel> branchModels = new List<BranchModel>();
+            DataTable resultTable = new DataTable();
+            List<string> branchIds = new List<string>();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+            try
+            {
+
+                sqlParameterNext.Add(new SqlParameter("@fldBankcode", strBankCode));
+                resultTable = dbContext.GetRecordsAsDataTableSP("spcgAvailableHubBranchChecker", sqlParameterNext.ToArray());
+                if (resultTable.Rows.Count > 0)
+                {
+                    foreach (DataRow row in resultTable.Rows)
+                    {
+                        BranchModel branchModel = new BranchModel()
+                        {
+
+                            fldBranchCode = row["fldBranchCode"].ToString(),
+                            fldBranchDesc = row["fldBranchDesc"].ToString(),
+                        };
+                        branchModels.Add(branchModel);
+                    }
+                }
+
+
+
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+            return branchModels;
+        }
+        public List<string> ListSelectedBranchInHubTemp(string hubCode, string strBankCode)
+        {
+            DataTable resultTable = new DataTable();
+            List<string> branchIds = new List<string>();
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            try
+            {
+                sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+                sqlParameterNext.Add(new SqlParameter("@fldBankcode", strBankCode));
+                resultTable = dbContext.GetRecordsAsDataTableSP("spcgHubBranchTemp", sqlParameterNext.ToArray());
+                if (resultTable.Rows.Count > 0)
+                {
+                    foreach (DataRow row in resultTable.Rows)
+                    {
+                        branchIds.Add(row["fldBranchCode"].ToString());
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+            return branchIds;
+        }
+
+        public void MoveToHubMasterFromTemp(string HubCode, string Action)
+        {
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldHubCode", HubCode));
+            sqlParameterNext.Add(new SqlParameter("@fldApproveStatus", "Y"));
+            sqlParameterNext.Add(new SqlParameter("@Action", Action));
+            dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spciHubBranchMasterFromTemp", sqlParameterNext.ToArray());
+        }
+
+        public void UpdateHubBranch(string hubCode)
+        {
+            List<string> branchIds = this.ListSelectedBranchInHubTemp(hubCode, CurrentUser.Account.BankCode);
+
+            if ((branchIds.Count) != 0)
+            {
+                foreach (string branchId in branchIds)
+                {
+                    this.DeleteBranchNotSelected(hubCode, branchId, CurrentUser.Account.BankCode);
+                }
+                foreach (string branchId in branchIds)
+                {
+                    if ((this.CheckBranchExistInHub(hubCode, branchId, CurrentUser.Account.BankCode)))
+                    {
+                        this.UpdateSelectedBranch(hubCode, branchId, CurrentUser.Account.UserId, CurrentUser.Account.BankCode);
+                    }
+                    else
+                    {
+                        this.InsertBranchInHub(hubCode, branchId, CurrentUser.Account.UserId, CurrentUser.Account.UserId, CurrentUser.Account.BankCode);
+                    }
+                }
+            }
+            else
+            {
+                this.DeleteAllBranchInHub(hubCode, CurrentUser.Account.BankCode);
+            }
+        }
+
+        public bool UpdateSelectedBranch(string hubCode, string BranchId, string strUpdate, string strBankCode)
+        {
+            int intRowAffected;
+            bool blnResult = false;
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubCode));
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", BranchId));
+            sqlParameterNext.Add(new SqlParameter("@fldBankCode", strBankCode));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", Convert.ToInt16(strUpdate)));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", (object)DateTime.Now));
+
+
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcuHubBranch", sqlParameterNext.ToArray());
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+            return blnResult;
+        }
+
+        public bool UpdateHubMaster(FormCollection col, string userId)
+        {
+            int intRowAffected;
+            bool blnResult = false;
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldHubCode", col["fldHubCode"].ToString()));
+            sqlParameterNext.Add(new SqlParameter("@fldHubDesc", col["fldHubDesc"].ToString()));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateUserId", Convert.ToInt16(userId)));
+            sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", (object)DateTime.Now));
+
+
+            intRowAffected = dbContext.ExecuteNonQuery(CommandType.StoredProcedure, "spcuHubMaster", sqlParameterNext.ToArray());
+            if (intRowAffected > 0)
+            {
+                blnResult = true;
+            }
+            else
+            {
+                blnResult = false;
+            }
+            return blnResult;
+
+
+        }
+
+        public List<string> ValidateHubBranch(FormCollection col, string action, string branchId, string bankCode)
+        {
+            int counter = 0;
+            bool counterval = false;
+            List<string> branchIds = new List<string>();
+            List<string> strs = new List<string>();
+
+
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            DataTable resultTable = new DataTable();
+
+            sqlParameterNext.Add(new SqlParameter("@fldHubCode", col["fldHubCode"].Trim()));
+            sqlParameterNext.Add(new SqlParameter("@fldBranchId", branchId));
+            sqlParameterNext.Add(new SqlParameter("@Action", action));
+            sqlParameterNext.Add(new SqlParameter("@fldBankcode", bankCode));
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgHubBranch", sqlParameterNext.ToArray());
+            if ((col["selectedBranch"]) != null)
+            {
+                branchIds = col["selectedBranch"].Split(',').ToList();
+                if (branchIds.Count == resultTable.Rows.Count)
+                {
+                    foreach (string branch in branchIds)
+                    {
+                        if (resultTable.Rows.Count > 0)
+                        {
+                            foreach (DataRow row in resultTable.Rows)
+                            {
+                                if (row["fldBranchId"].ToString().Equals(branch))
+                                {
+                                    counterval = true;
+                                }
+                                else
+                                {
+                                    counterval = false;
+                                }
+                            }
+                        }
+
+                    }
+                }
+                else
+                {
+                    counterval = false;
+                }
+
+            }
+            else
+            {
+                if (resultTable.Rows.Count == 0)
+                {
+                    counterval = true;
+                }
+            }
+            if (counterval == true)
+            {
+                counter++;
+            }
+            if (counter == 1)
+            {
+                strs.Add(Locale.NoChanges);
+            }
+
+
+
+            return strs;
+        }
+        public bool CheckHubBranchExistInTemp(string hubcode, string branchCode, string Action)
+        {
+            DataTable resultTable = new DataTable();
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+
+
+            if (Action == "Add")
+            {
+                sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubcode));
+                sqlParameterNext.Add(new SqlParameter("@fldBranchCode", branchCode));
+                sqlParameterNext.Add(new SqlParameter("@Action", Action));
+                sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", "A"));
+                sqlParameterNext.Add(new SqlParameter("@fldBankCode", CurrentUser.Account.BankCode));
+            }
+            else if (Action == "Delete")
+            {
+                sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubcode));
+                sqlParameterNext.Add(new SqlParameter("@fldBranchCode", branchCode));
+                sqlParameterNext.Add(new SqlParameter("@Action", Action));
+                sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", "D"));
+                sqlParameterNext.Add(new SqlParameter("@fldBankCode", CurrentUser.Account.BankCode));
+            }
+            else if (Action == "Update")
+            {
+                sqlParameterNext.Add(new SqlParameter("@fldHubCode", hubcode));
+                sqlParameterNext.Add(new SqlParameter("@fldBranchCode", branchCode));
+                sqlParameterNext.Add(new SqlParameter("@Action", Action));
+                sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", ""));
+                sqlParameterNext.Add(new SqlParameter("@fldBankCode", CurrentUser.Account.BankCode));
+            }
+
+            resultTable = dbContext.GetRecordsAsDataTableSP("spcgHubBanchExistInTempbyID", sqlParameterNext.ToArray());
+
+            if (resultTable.Rows.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+    }
+}

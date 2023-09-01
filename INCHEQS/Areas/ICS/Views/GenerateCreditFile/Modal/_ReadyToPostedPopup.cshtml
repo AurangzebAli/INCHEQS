@@ -1,0 +1,49 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+    ViewBag.Title = "ReadyitemToPostedHistory";
+    var i = 0;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_ReadyitemToPostedHistory</title>
+</head>
+<body>
+    <div style="overflow-y: scroll; height:500px;">
+        <table class="table table-bordered">
+            <tr>Item Ready for Credit Posting Details</tr>
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>UIC</th>
+                    <th>Account Number</th>
+                    <th>Cheque Number</th>
+                    <th>Issue Bank</th>
+                    <th>Presenting Bank</th>
+                    <th>Amount</th>
+                    <th>Reject Code</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in ViewBag.PostedHistory.Rows)
+                {
+                <tr>
+                    <td>@{i++;} @i</td>
+                    <td>@row["fldUIC"]</td>
+                    <td>@row["fldAccountNumber"]</td>
+                    <td>@row["fldChequeSerialNo"]</td>
+                    <td>@row["fldIssueBankCode"]@row["fldIssueBranchCode"]</td>
+                    <td>@row["fldPreBankCode"]@row["fldPreBranchCode"]</td>
+                    <td align="right">@StringUtils.FormatCurrency((row["fldAmount"]).ToString())</td>
+                    <td>@row["fldRejectCode"] - @row["fldRejectDesc"]</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

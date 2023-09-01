@@ -1,0 +1,23 @@
+﻿@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Resources;
+    <table id="search-result-table" class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                @Html.Partial("SearchPage/_TableHeaderColumns")
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (List<DataField> row in ViewBag.SearchResult.TableData) {
+                <tr class="inward-item-fullview clickable-row-without-search" data-action="@Url.Action("View")">
+                    @Html.Partial("SearchPage/_TableBodyColumns", row)
+
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            @Html.Partial("SearchPage/_TablePaginationFooter")
+        </tfoot>
+    </table>
+
+
+@Scripts.Render("~/bundles/SearchResultPage")

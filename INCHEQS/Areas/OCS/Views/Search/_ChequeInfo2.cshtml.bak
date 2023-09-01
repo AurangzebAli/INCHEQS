@@ -1,0 +1,160 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+
+}
+<table class="table form-table table-no-border">
+    <tr hidden>
+        <td class="bold">UIC </td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("flduic")</td>
+
+    </tr>
+    <tr>
+        <td class="bold">Capturing Date</td>
+        <td>:</td>
+        <td>@DateUtils.formatDateFromSql(ViewBag.OutwardItemViewModel.getField("fldcapturingdate"))</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Presenting Bank</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldcapturingbranch").Substring(1, 3)</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Presenting Bank Name</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldpresentingbankname")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Presenting Branch</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldcapturingbranch").Substring(4, 4)</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Scanner ID</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldscannerid")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Batch Number</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldbatchnumber")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Sequence Number</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldseqno")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Issuing Bank</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldbankcode")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Issuing Bank Name</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldbankdesc")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Issuing Branch</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldbranchcode")</td>
+
+    </tr>
+    <tr>
+        <td class="bold">Source</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("source")</td>
+
+    </tr>
+    <tr>
+        <td class="bold">Amount</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldamount")</td>
+    </tr>
+
+    @foreach (var row in ViewBag.lstCreditAcc)
+    {
+        //foreach (var row1 in ViewBag.lstCreditAccName)
+        //{
+        //if (@row1.count == @row.count)
+        //{
+                <tr>
+                    <td class="bold">Creditor Account Number @row.count</td>
+                    <td>:</td>
+                    <td>@row.creditacc</td>
+    </tr>
+
+                <tr>
+                    <td class="bold">Creditor Account Name @row.count</td>
+                    <td>:</td>
+                    <td>@row.creditaccname</td>
+                </tr>
+            //}
+
+
+
+        @*}
+        break;*@
+    }
+
+
+
+    @*@foreach (var row in ViewBag.lstCreditAcc)
+    {
+            <tr>
+            <td class="bold">Creditor Account Number</td>
+            <td>:</td>
+            <td>@ViewBag.OutwardItemViewModel.getField("fldcreditaccno")</td>
+        </tr>
+    }*@
+    <tr>
+        <td class="bold">Cheque Status</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldclearingstatusdesc")</td>
+    </tr>
+    <tr>
+        <td class="bold">Remarks</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldremark")</td>
+    </tr>
+    <tr>
+        <td class="bold">Return Code</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldreturncode")</td>
+    </tr>
+    <tr>
+        <td class="bold">Return Description</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldreason")</td>
+    </tr>
+    <tr>
+        <td class="bold">Posting Status</td>
+        <td>:</td>
+        <td>@ViewBag.OutwardItemViewModel.getField("fldpostingstatus")</td>
+
+    </tr>
+</table>
+<style>
+    .bold {
+        font-weight: bold;
+    }
+</style>

@@ -1,0 +1,33 @@
+﻿@using INCHEQS.Resources
+<table class="table table-bordered table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>@Locale.FileName</th>
+            <th>Import Status</th>
+            @*<th>@Locale.Size</th>*@
+            <th>@Locale.DateandTime</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var file in ViewBag.FileList)
+        {
+        <tr>
+            <td>@file.fileName</td>
+            <td>
+            <td>@file.fileStatus</td>
+            @*@if (file.fileStatus == "Completed")
+        {
+            <font style="color:green">@file.fileStatus</font>
+        }
+        else
+        {
+            <font style="color:red">@file.fileStatus</font>
+        }*@
+
+            @*</td>*@
+            @*<td>file.fileSize Bytes</td>*@
+            <td>@file.fileTimeStamp</td>
+        </tr>
+        }
+    </tbody>
+</table>

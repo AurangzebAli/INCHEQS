@@ -1,0 +1,94 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "DedicatedBranchDay", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Maintenance - Dedicated Branch</h4>
+        <hr />
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.UserAbbreviation</th>
+                    <td>
+                        @ViewBag.User.fldUserAbb
+                    </td>
+                </tr>
+                <tr style="display:none">
+                    <th>@Locale.UserAbbreviation</th>
+                    <td>
+                        <input type="text" value="@ViewBag.User.fldUserAbb" name="fldUserAbb" />
+                        <input type="hidden" value="@ViewBag.User.fldUserId" name="fldUserId" />
+                    </td>
+                </tr>              
+                <tr style="display:none">
+                    <th>@Locale.UserDescription</th>
+                    <td>
+                        <input type="text" value="@ViewBag.User.fldUserDesc" name="fldUserDesc" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr style="display:none" class="@(ViewBag.EnableLoginAD == "Y" ? "hidden" : "") ">
+                    <th>@Locale.Password</th>
+                    <td>
+                        <input type="password" value="@ViewBag.User.fldPassword" name="fldPassword" />
+                        <span class="red-star">*</span>
+                        <input type="hidden" value="@ViewBag.User.fldPassword" name="passwordChecker" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.UserTypeCCD</th>
+                    <td id="UserTypeCCD">
+                        @ViewBag.UserType2.userType
+                        <input style="display:none" type="hidden" name="userType2" id="verifier1" value="@ViewBag.UserType2.userType" />
+                    </td>
+                </tr>
+                <tr style="display:none;">
+                    <th>@Locale.ClearDate</th>
+                    <td><input type="text" value="@ViewBag.ClearDate" id="fldIDExpDate" name="fldIDExpDate" class="form-date" style="height:25px" />
+                </tr>
+                <tr id="SelectVerifierBranch">
+                    <td colspan="2">
+                        <div class="form-select">
+                            <div>
+                                <b>@Locale.BranchAvailableList</b><br>
+                                <select multiple="multiple" class="form-multiple select-from">
+                                    @foreach (var item in ViewBag.BranchAvailableList)
+                                    {
+                                        <option value="@item.fldConBranchCode">@item.fldBranchDesc</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-move">
+                                <br />
+                                <p>
+                                    <input type="button" title="select all" class="btn btn-default btn-move addAll" value="&gt;&gt;">
+                                </p>
+                                <p><input type="button" title="select" class="btn btn-default btn-move addOne" value="&gt;"></p>
+                                <p><input type="button" title="remove" class="btn btn-default btn-move rmOne" value="&lt;"></p>
+                                <p><input type="button" title="remove all" class="btn btn-default btn-move rmAll" value="&lt;&lt;"></p>
+                            </div>
+                            <div>
+                                <b>@Locale.BranchSelectedList</b><br>
+                                <select multiple="multiple" class="form-multiple select-to" name="selectedTask">
+                                    @foreach (var item in ViewBag.BranchSelectedList)
+                                    {
+                                        <option value="@item.fldConBranchCode">@item.fldBranchDesc</option>
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.DedicatedBranchDay.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.DedicatedBranchDay.INDEX) ? "" : "hidden")">@Locale.BackBtn</a>
+    </div>
+}
+
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/dedicatedbranch.js"></script>
+<script src="~/Scripts/App/app.js"></script>

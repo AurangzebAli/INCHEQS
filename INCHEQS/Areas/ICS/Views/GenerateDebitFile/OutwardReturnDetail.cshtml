@@ -1,0 +1,29 @@
+﻿@using INCHEQS.Resources
+<table class="table table-bordered table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>Data File Batch</th>
+            <th>Account No.</th>
+            <th>Cheque No.</th>
+            <th>TC</th>
+            <th>Cheque Amount</th>
+            <th>Return Amount</th>
+            <th>Status</th>
+            <th>Remarks</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.OutwardReturnDetail.Rows) {
+            <tr>
+                <td>@item["fldDataFileName"]</td>
+                <td>@item["fldAccountNumber"]</td>
+                <td>@item["fldChequeSerialNo"]</td>
+                <td>@item["fldTransCode"]</td>
+                <td>@StringUtils.FormatCurrency(item["fldAmount"].ToString())</td>
+                <td>@StringUtils.FormatCurrency(item["fldReturnAmount"].ToString())</td>
+                <td>@item["fldItemStatus"]</td>
+                <td>@item["fldRemark"]</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,55 @@
+﻿
+@*@using INCHEQS.Resources
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("Progress"), @Class = "form-inline secure-form", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+    
+
+    <div id="resultContainer"></div>
+}
+
+@Scripts.Render("~/bundles/SearchPage")*@
+
+
+@using INCHEQS.Resources
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("Progress"), @Class = "form-inline secure-form", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+<div id="search-fields-section">
+    <h4>@ViewBag.SearchPage.PageTitle</h4>
+    <hr />
+
+    <span>Clearing Date: <input type="text" name="fldClearDate" value="@ViewBag.ClearDate" readonly /></span>
+
+    <span>
+        <select name="bankCode" hidden>
+            <option value="">ALL</option>
+            <option value="32">32</option>
+            <option value="47">47</option>
+        </select>
+    </span>
+    <br />
+    <br />
+    <hr />
+    <div class="row">
+
+        <span>
+            Branch: <input type="checkbox" name="branchBox" value="Branch" />
+        </span>
+        <hr />
+
+        @Html.Partial("SearchPage/_GenericFieldsForm")
+
+    </div>
+
+
+    <br />
+    <hr />
+    <div class="form-group">
+        <button type="submit" class="btn btn-default init-search" data-action="@Url.Action("Progress")">@Locale.Search</button>
+    </div>
+</div>
+    <div id="resultContainer"></div>
+}
+@Scripts.Render("~/bundles/SearchPage")

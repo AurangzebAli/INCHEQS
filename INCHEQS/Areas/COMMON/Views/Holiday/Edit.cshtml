@@ -1,0 +1,114 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "Holiday", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.MaintenanceHolidayedit</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr></tr>
+                <tr>
+                    <th>@Locale.ScheduleType</th>
+                    <td>
+                        <input type="radio" name="OneTime" id="OneTime" value="@ViewBag.holiday.recurrType"  @(ViewBag.holiday.recurring == "N" ? "checked='true'" : "") />&nbsp;@Locale.OneTime  &nbsp;&nbsp;&nbsp;
+                        <input type="text" value="@ViewBag.holiday.Date" id="fldDate" name="fldDate" class="form-date" style="height:25px" />
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr>
+                    <td></td>
+                    <td><input type="radio" name="OneTime" id="Recurring" value="@ViewBag.holiday.recurring" @(ViewBag.holiday.recurring == "Recurring" ? "checked='true'" : "") />&nbsp;@Locale.Recurring</td>
+                </tr>
+                <tr></tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        &nbsp;&nbsp;&nbsp;<input type="radio" name="RecurringType" id="Week" value="@ViewBag.holiday.recurrType" @(ViewBag.holiday.recurrType == "Week" ? "checked='true'" : "")  />&nbsp;@Locale.Weekly &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" checked="@ViewBag.holiday.MonChecked" name="Days" class="Days" id="monday" value="1" />&nbsp;@Locale.Monday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" checked="@ViewBag.holiday.tueChecked" name="Days" class="Days" id="tuesday" value="2" />&nbsp;@Locale.Tuesday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" checked="@ViewBag.holiday.wedChecked" name="Days" class="Days" id="wednesday" value="3" />&nbsp;@Locale.Wednesday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" checked="@ViewBag.holiday.thuChecked" name="Days" class="Days" id="thursday" value="4" />&nbsp;@Locale.Thursday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" checked="@ViewBag.holiday.friChecked" name="Days" class="Days" id="friday" value="5" />&nbsp;@Locale.Friday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" checked="@ViewBag.holiday.satChecked" name="Days" class="Days" id="saturday" value="6" />&nbsp;@Locale.Saturday &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" checked="@ViewBag.holiday.sunChecked" name="Days" class="Days" id="sunday" value="7" />&nbsp;@Locale.Sunday &nbsp;&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr></tr>
+                @*<tr>
+                    <td></td>
+                    <td id="MonthRadio">
+                        &nbsp;&nbsp;&nbsp;<input type="radio" name="RecurringTypeM" id="Month"  />&nbsp;@Locale.Monthly &nbsp;&nbsp;&nbsp;
+                        <select class="dropdownWeek" id="dropdownWeek" name="dropdownWeek">
+                            <option value="1">1st</option>
+                            <option value="2">2nd</option>
+                            <option value="3">3rd</option>
+                            <option value="4">4th</option>
+                            <option value="5">5th</option>
+                        </select>&nbsp;
+                        of every &nbsp;
+                        <select id="dropdownDay" name="dropdownDay">
+                            <option value="1">Monday</option>
+                            <option value="2">Tuesday</option>
+                            <option value="3">Wednesday</option>
+                            <option value="4">Thursday</option>
+                            <option value="5">Friday</option>
+                        </select>
+                    </td>
+                </tr>*@
+                <tr></tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        &nbsp;&nbsp;&nbsp;<input type="radio" name="RecurringType" id="Year" value="@ViewBag.holiday.recurrType" />&nbsp; @Locale.Yearly  &nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp; <input type="text" value="@ViewBag.holiday.Date" id="fldYearDate" name="fldYearDate" class="form-date" style="height:25px" />
+                    </td>
+                </tr>
+                @*<tr>
+                    <th>@Locale.ScheduleType</th>
+                    <td>
+                        <input type="radio" name="RecurringType" id="Year" value="@ViewBag.holiday.recurrType" />&nbsp;@Locale.Yearly  &nbsp;&nbsp;&nbsp;
+                        <input type="text" value="@ViewBag.holiday.Date" id="fldYearDate" name="fldYearDate" class="form-date" style="height:25px" />
+                    </td>
+                </tr>*@
+                <tr>
+                    <th>@Locale.Description</th>
+                    <td>
+                        <input type="text" name="fldHolidayDescription" maxlength="100" style="width:620px;" value="@ViewBag.holiday.Desc" autocomplete="off" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                @*<tr>
+                    <Th>Active</Th>
+                    <td>
+                        <input type="checkbox" checked="@ViewBag.holiday.Activecheck" name="active" id="active" value="@ViewBag.holiday.fldActiveHoliday" ><span> Yes</span>
+                    </td>
+                </tr>*@
+                <tr>
+                    <td>
+                        <input type="hidden" value="@ViewBag.holiday.HolidayId" name="HolidayId" />
+                        <input type="hidden" id="recurrTypeVal" name="recurrTypeVal" value="@ViewBag.holiday.recurrType" />
+                        <input type="hidden" id="recurrTypeWMon" name="recurrTypeWMon" value="@ViewBag.holiday.fldDayMon" />
+                        <input type="hidden" id="recurrTypeWTue" name="recurrTypeWTue" value="@ViewBag.holiday.fldDayTue" />
+                        <input type="hidden" id="recurrTypeWWed" name="recurrTypeWWed" value="@ViewBag.holiday.fldDayWed" />
+                        <input type="hidden" id="recurrTypeWThu" name="recurrTypeWThu" value="@ViewBag.holiday.fldDayThu" />
+                        <input type="hidden" id="recurrTypeWFri" name="recurrTypeWFri" value="@ViewBag.holiday.fldDayFri" />
+                        <input type="hidden" id="recurrTypeWSat" name="recurrTypeWSat" value="@ViewBag.holiday.fldDaySat" />
+                        <input type="hidden" id="recurrTypeWSun" name="recurrTypeWSun" value="@ViewBag.holiday.fldDaySun" />
+                        <input type="hidden" id="HolidayDate" name="HolidayDate" value="@ViewBag.holiday.Date" />
+                        @*<input type="hidden" id="ActiveHoliday" name="ActiveHoliday" value="@ViewBag.holiday.fldActiveHoliday" />*@
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" data-action="@Url.Action("/UPDATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIds.Holiday.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.Holiday.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/app.js"></script>
+<script src="~/Scripts/App/Holiday.js"></script>

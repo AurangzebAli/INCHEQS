@@ -1,0 +1,23 @@
+﻿using System;
+
+namespace INCHEQS.TaskAssignment
+{
+    public class TaskIdsICS
+    {
+        public static class LargeAmount
+        {
+            public const string INDEX = "102670";
+            public const string EDIT = "102677";
+            public const string UPDATE = "102677";
+        }
+
+        public static class LargeAmountChecker
+        {
+            public const string INDEX = "102671";
+            public const string VERIFY = "102671";
+            public const string VERIFYA = "102671";
+        }
+
+
+    }
+}

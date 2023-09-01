@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = ViewBag.SearchResult.PageTitle;
+}
+@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Resources
+
+<table id="search-result-table" class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            @Html.Partial("SearchPage/_TableHeaderColumns")
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            string urlAction = Url.Action("ChequeVerificationPage");
+            if (ViewBag.TaskRole == "ChequeRetriever")
+            {
+                urlAction = Url.Action("ChequeRetrieverPage");
+            }
+        }
+        @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+        {
+            if (ViewBag.TaskId.ToString().Trim() != "306250" && ViewBag.TaskId.ToString().Trim() != "309230")
+            {
+                <tr class="inward-item-fullview" data-action="@urlAction">
+                    @Html.Partial("SearchPage/_TableBodyColumns", row)
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    @Html.Partial("SearchPage/_TableBodyColumnsNoLink", row)
+                </tr>
+            }
+
+        }
+    </tbody>
+    <tfoot>
+        @Html.Partial("SearchPage/_TablePaginationFooterForVerification")
+    </tfoot>
+</table>
+
+
+
+@if (ViewBag.SearchResult.TotalRecordCount > 0)
+{
+    if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "Generate"))
+    {
+        <a class="btn btn-default verification-inward-item-fullview btn-Generate" data-action="@Url.Action("Generate")">Generate</a>
+    }
+    if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "ApproveAll"))
+    {
+        <a class="btn btn-default modal-submit" data-action="@Url.Action("ApproveAll")">Approve All</a>
+    }
+    if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "ReturnAll"))
+    {
+        <a class="btn btn-default modal-submit" data-action="@Url.Action("ReturnAll")">Return All</a>
+    }
+    if (ViewBag.TaskId == "306220" || ViewBag.TaskId == "309100")
+    {
+           if (ViewBag.SearchResult.TotalOutstandingCount != 0)
+        {
+            if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "LockVerification"))
+            {
+                <a class="btn btn-default verification-inward-item-fullview" data-action="@Url.Action("LockVerification")">Verification</a>
+            }
+        }
+    }
+    else
+    {   
+        if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "LockVerification"))
+        {
+            <a class="btn btn-default verification-inward-item-fullview" data-action="@Url.Action("LockVerification")">Verification</a>
+        }
+    }
+    /* SEARCHPENDINGREVIEWBUTTON */
+    @*if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "LockReview"))
+    {
+        <a class="btn btn-default verification-inward-item-fullview" data-action="@Url.Action("LockVerification")">Pending Review</a>
+    }*@
+    if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "PrintAll"))
+    {
+        <button class="btn btn-default modal-submit" data-action="@Url.Content("~/ICS/ICCSPrintReport/PrintReport?p=all")" data-title="Print Report - All">Print</button>
+    }
+    if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "PrintSum"))
+    {
+        <button class="btn btn-default modal-submit" data-action="@Url.Content("~/ICS/ICCSPrintReport/PrintReport?p=sum")" data-title="Print Report - Summary">Print Summary</button>
+    }
+    if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "PrintMine"))
+    {
+        <button class="btn btn-default modal-submit" data-action="@Url.Content("~/ICS/ICCSPrintReport/PrintReport?p=mine")" data-title="Print Report (Mine)">Print</button>
+    }
+}
+@Scripts.Render("~/bundles/SearchResultPage")

@@ -1,0 +1,91 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("StateCode", "StateCodeChecker", FormMethod.Post, new { @Class = "secure-form" })) {
+
+    @Html.AntiForgeryToken();
+
+<div class="form-horizontal">
+    <h4>@Locale.StateCodeChecker</h4>
+    
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <tbody>
+            @if (@ViewBag.StateCodeMaster != null)
+            {
+                <tr>
+                    <th>@Locale.StateCodeColumn</th>
+
+                    @if (@ViewBag.StateCodeMaster.fldStateCode != @ViewBag.StateCodeMasterTemp.fldStateCode)
+                    {
+                        <td>
+                            <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000; width:250px;" value="@ViewBag.StateCodeMasterTemp.fldStateCode" autocomplete="off" maxlength="2" disabled />
+                            <input type="text" name="fldStateCode" value="@ViewBag.StateCodeMasterTemp.fldStateCode" hidden />
+                            <input type="text" name="Action" value="@ViewBag.StateCodeMasterTemp.fldApproveStatus" hidden />
+                            <span class="red-star">*</span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input type="text" style="width:250px" value="@ViewBag.StateCodeMaster.fldStateCode" autocomplete="off" maxlength="2" disabled />
+                            <input type="text" name="fldStateCode" value="@ViewBag.StateCodeMaster.fldStateCode" hidden />
+                            <input type="text" name="Action" value="@ViewBag.StateCodeMasterTemp.fldApproveStatus" hidden />
+                            <span class="red-star">*</span>
+                        </td>
+
+                    }
+
+                </tr>
+                <tr>
+                    <th>@Locale.StateDescColumn</th>
+
+                    @if (@ViewBag.StateCodeMaster.fldStateDesc != @ViewBag.StateCodeMasterTemp.fldStateDesc)
+                    {
+                        <td>
+                            <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000; width:250px;" value="@ViewBag.StateCodeMasterTemp.fldStateDesc" autocomplete="off" maxlength="100" disabled />
+                            @*<input type="text" name="fldStateDesc" value="@ViewBag.StateCodeMasterTemp.fldStateDesc" hidden />*@
+                            <span class="red-star">*</span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input type="text" style="width:250px" value="@ViewBag.StateCodeMaster.fldStateDesc" autocomplete="off" maxlength="100" disabled />
+                            @*<input type="text" name="fldStateDesc" value="@ViewBag.StateCodeMaster.fldStateDesc" hidden />*@
+                            <span class="red-star">*</span>
+                        </td>
+
+                    }
+
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <th>@Locale.StateCodeColumn</th>
+                    <td>
+                        <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000; width:250px;" value="@ViewBag.StateCodeMasterTemp.fldStateCode" autocomplete="off" maxlength="2" disabled />
+                        <input type="text" name="fldStateCode" value="@ViewBag.StateCodeMasterTemp.fldStateCode" hidden />
+                        <input type="text" name="Action" value="@ViewBag.StateCodeMasterTemp.fldApproveStatus" hidden />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.StateDescColumn</th>
+                    <td>
+                        <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000; width:250px;" value="@ViewBag.StateCodeMasterTemp.fldStateDesc" autocomplete="off" maxlength="100" disabled />
+                        @*<input type="text" name="fldStateDesc" value="@ViewBag.StateCodeMasterTemp.fldStateDesc" hidden />*@
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button data-action="@Url.Action("/VerifyA2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.StateCodeChecker.VERIFY) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+    <button data-action="@Url.Action("/VerifyR2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.StateCodeChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+    <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.StateCodeChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+</div>}
+
+<script src="~/Scripts/App/app.js"></script>

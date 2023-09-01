@@ -1,0 +1,74 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+
+<html>
+
+<body>
+    @using (Html.BeginForm("VerificationPullOut", "Verification", FormMethod.Post, new { @Class = "form-inline secure-form" }))
+    {
+
+        <input type="hidden" name="fldInwardItemId" value="@ViewBag.FormCollection["fldInwardItemId"]">
+        <input type="hidden" name="fldClearDate" value="@ViewBag.FormCollection["fldClearDate"]">
+        <input type="hidden" name="current_fldAmount" value="@ViewBag.FormCollection["current_fldAmount"]">
+        <input type="hidden" name="current_fldAccountNumber" value="@ViewBag.FormCollection["current_fldAccountNumber"]">
+        <input type="hidden" name="current_fldChequeSerialNo" value="@ViewBag.FormCollection["current_fldChequeSerialNo"]">
+        <input type="hidden" name="fldUpdateTimestamp" value="@ViewBag.FormCollection["fldUpdateTimestamp"]">
+        <input type="hidden" name="new_textRejectCode" value="@ViewBag.FormCollection["new_textRejectCode"]">
+        <input type="hidden" name="fldCharges" value="@ViewBag.FormCollection["fldCharges"]">
+        <input type="hidden" name="textAreaRemarks" value="@ViewBag.FormCollection["textAreaRemarks"]">
+        <input type="hidden" name="current_fldUIC" value="@ViewBag.FormCollection["current_fldUIC"]">
+        <input type="hidden" name="remarkField" value="@ViewBag.FormCollection["remarkField"]">
+        <input type="hidden" name="new_rejectCode" value="@ViewBag.FormCollection["new_rejectCode"]">
+        <input type="hidden" name="NextValue" value="@ViewBag.FormCollection["NextValue"]">
+
+
+        <table class="table form-table table-no-border">
+
+            <thead>
+                <tr>
+                    <td>
+                        Pull Out ID
+                    </td>
+                    <td>
+                        Pull Out Reason
+                    </td>
+                </tr>
+            </thead>
+            <TBODY>
+                @foreach (var item in ViewBag.PullOutReason)
+                {
+                    <TR>
+                        <td>
+                            @item.pullOutId
+                        </td>
+                        <td>
+                            @item.pullOutDesc
+                        </td>
+                        <td>
+                            <input type="checkbox" value="@item.pullOutDesc" name="pullOutReasonBox" />
+                        </td>
+                    </TR>
+                }
+            </TBODY>
+            <tfoot>
+                <tr>
+                    <td>Other Reason</td>
+                    <td><input type="text" id="pullOutReason" name="pullOutReason" /></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <button type="submit" class="btn btn-default" id="pullOutBtn" data-action="@Url.Action("VerificationPullOut")">Submit</button>
+
+    }
+
+
+</body>
+
+</html>
+<script>
+    $('#pullOutBtn').click(function () {
+        $('#myModal').modal('hide');
+    });
+</script>
+@Scripts.Render("~/bundles/app")

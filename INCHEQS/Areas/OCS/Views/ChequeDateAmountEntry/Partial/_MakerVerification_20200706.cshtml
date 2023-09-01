@@ -1,0 +1,264 @@
+﻿@using INCHEQS.Resources
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<style>
+    .cheqeAmmountEntrybox {
+        /*width: 100%;*/
+        /*margin: auto;*/
+        position: absolute;
+        /*left: 100px;
+        right: 100px;*/
+        /*top:500px;*/
+        /*bottom: 500px;*/
+    }
+
+    .BoxChequeAmountEntry {
+        /*width: 100px;
+        height:100px;*/
+        /*margin: auto;
+        width: 100%;*/
+        /*margin: auto;*/
+        /*position: absolute;*/
+        left: -300px;
+        right: 0px;
+        top: -20px;
+        /*bottom: 500px;*/
+    }
+
+
+    /*.BoxTransparentdiv {
+        display: inline-block;
+        width: 300px;
+        height: 500px;
+    }*/
+</style>
+
+<div class="ChequAmountEntry">
+    <div id="BoxTransparentdiv" class="BoxChequeAmountEntry" style="width:250px">
+        <!--Include a header DIV with the same name as the draggable DIV, followed by "header":-->
+
+        <div id="BoxChequeAmountEntryheader" class="titlebar">
+            <span class="title">Amount Entry</span>
+        </div>
+        <div hidden>
+
+        </div>
+        <div class="BoxChequeAmountEntry">
+            <div>
+                &nbsp;
+            </div>
+            <div>
+                &nbsp;
+            </div>
+            <div class="container">
+                &nbsp;
+            </div>
+        </div>
+        @if (Convert.ToDecimal(@ViewBag.OutwardItemViewModel.getField("fldamount")).ToString() == "0.00")
+        {
+            <div>
+                <label for="atm">Chq Amt: </label>
+                <input id="atm" class="form-control  number-only" @*type="number"*@ @*lang="en-150"*@
+                       name="txtChequeAmount"
+                       style="font-size:medium;text-align:right;background-color: yellow;
+			border: 1px;"
+                       autofocus
+                       @*data-type="currency" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"*@
+                       type="text"
+                       @*value=@Html.Raw(String.Format("{0:N}",Convert.ToDecimal(@ViewBag.OutwardItemViewModel.getField("fldamount")))) onkeyup="this.value=addCommas(this.value);" />*@
+                       @*value=@Html.Raw(String.Format("{0}",Convert.ToDecimal(@ViewBag.OutwardItemViewModel.getField("fldamount")))) onblur="addDecimal()" onkeypress="return isNumber(event)" />*@
+                       value="" />
+
+
+            </div>
+        }
+        else
+        {
+            <div>
+                <label for="atm">Chq Amt: </label>
+                <input id="atm" class="form-control  number-only" @*type="number"*@ @*lang="en-150"*@
+                       name="txtChequeAmount"
+                       style="font-size:medium;text-align:right;background-color: yellow;
+			       border: 1px;"
+                       autofocus
+                       @*data-type="currency" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"*@
+                       type="text"
+                       @*value=@Html.Raw(String.Format("{0:N}",Convert.ToDecimal(@ViewBag.OutwardItemViewModel.getField("fldamount")))) onkeyup="this.value=addCommas(this.value);" />*@
+                       @*value=@Html.Raw(String.Format("{0}",Convert.ToDecimal(@ViewBag.OutwardItemViewModel.getField("fldamount")))) onblur="addDecimal()" onkeypress="return isNumber(event)" />*@
+                       value=@Html.Raw(String.Format("{0}",Convert.ToDecimal(@ViewBag.OutwardItemViewModel.getField("fldamount")))) @*onkeypress="return isNumber(event)"*@ />
+
+
+            </div>
+        }
+
+
+
+
+    </div>
+</div>
+@*@Html.Partial("Common/_TransactionCodeSelectList", (string)ViewBag.OutwardItemViewModel.getField("fldTCCode"))*@
+@*<input type="hidden" name="new_fldTCCode" value="@ViewBag.OutwardItemViewModel.getField("fldTCCode")" readonly="readonly" />*@
+
+
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "ChequeAmountConfirm"))
+{
+
+    if (ViewBag.OutwardItemViewModel.lockedCheque == true)
+    {
+        <input disabled type="text" class="cheque-input new_fldcheckdigit number-only @(ViewBag.OutwardItemViewModel.getField("fldoricheckdigit") == ""  ? "" : "txtRed")" name="new_fldcheckdigit" value="@ViewBag.OutwardItemViewModel.getField("fldcheckdigit")" maxlength="2" style="width: 45px; margin-left:14px; margin-right:auto;" />
+        @*<input readonly type="text" class="cheque-input new_fldserial number-only @(ViewBag.OutwardItemViewModel.getField("fldoriserial") == "" ? "" : "txtRed")" name="new_fldserial" value="@ViewBag.OutwardItemViewModel.getField("fldserial")" maxlength="6" style="width: 100px; margin:auto;"/>*@
+        @*<input readonly type="text" class="cheque-input new_fldbankcode number-only @(ViewBag.OutwardItemViewModel.getField("fldoribankcode") == ""  ? "" : "txtRed")" name="new_fldbankcode" value="@ViewBag.OutwardItemViewModel.getField("fldbankcode")" maxlength="2"style="width: 45px; margin:auto;"/>*@
+        @*<input readonly type="text" class="cheque-input new_fldbranchcode number-only @(ViewBag.OutwardItemViewModel.getField("fldoribranchcode") == ""  ? "" : "txtRed")" name="new_fldbranchcode" value="@ViewBag.OutwardItemViewModel.getField("fldbranchcode")" maxlength="3"style="width: 60px; margin:auto;"/>*@
+        <input disabled type="text" class="cheque-input new_fldtype number-only @(ViewBag.OutwardItemViewModel.getField("fldoritype") == ""  ? "" : "txtRed")" name="new_fldtype" value="@ViewBag.OutwardItemViewModel.getField("fldtype")" maxlength="1" style="width: 30px; margin:auto; text-align:center;" />
+        <input disabled type="text" class="cheque-input new_fldstatecode number-only @(ViewBag.OutwardItemViewModel.getField("fldoristatecode") == ""  ? "" : "txtRed")" name="new_fldstatecode" value="@ViewBag.OutwardItemViewModel.getField("fldstatecode")" maxlength="1" style="width: 30px; margin:auto;" />
+        @*<input readonly type="text" class="cheque-input new_fldissueraccno number-only @(ViewBag.OutwardItemViewModel.getField("fldoriissueraccno") == ""  ? "" : "txtRed")" name="new_fldissueraccNo" value="@ViewBag.OutwardItemViewModel.getField("fldissueraccno")" maxlength="10" style="width: 150px; margin:auto;" />*@
+        <input hidden type="text" class="cheque-input new_fldtccode number-only @(ViewBag.OutwardItemViewModel.getField("fldoritccode") == ""  ? "" : "txtRed")" name="new_fldtccode" value="@ViewBag.OutwardItemViewModel.getField("fldtccode")" maxlength="2" style="width: 45px; margin-left:auto; margin-right:200px;" />
+
+        <input hidden disabled type="text" class="cheque-input new_fldlocation number-only @(ViewBag.OutwardItemViewModel.getField("fldorilocation") == ""  ? "" : "txtRed")" name="new_fldlocation" value="@ViewBag.OutwardItemViewModel.getField("fldlocation")" maxlength="1" style="width: 30px; margin:auto; text-align:center;" />
+        <input disabled type="text" class="cheque-input new_fldbankcode number-only @(ViewBag.OutwardItemViewModel.getField("fldoribankcode") == ""  ? "" : "txtRed")" name="new_fldbankcode" value="@ViewBag.OutwardItemViewModel.getField("fldbankcode")" maxlength="3" style="width: 40px; margin:auto; text-align:center;" />
+        <input disabled type="text" class="cheque-input new_fldbranchcode number-only @(ViewBag.OutwardItemViewModel.getField("fldoribranchcode") == ""  ? "" : "txtRed")" name="new_fldbranchcode" value="@ViewBag.OutwardItemViewModel.getField("fldbranchcode")" maxlength="4" style="width: 50px; margin:auto; text-align:center;" />
+        <input disabled type="text" class="cheque-input new_fldserial number-only @(ViewBag.OutwardItemViewModel.getField("fldoriserial") == "" ? "" : "txtRed")" name="new_fldserial" value="@ViewBag.OutwardItemViewModel.getField("fldserial")" maxlength="6" style="width: 70px; margin:auto; text-align:center;" />
+        <input disabled type="text" class="cheque-input new_fldissueraccno number-only @(ViewBag.OutwardItemViewModel.getField("fldoriissueraccno") == ""  ? "" : "txtRed")" name="new_fldissueraccNo" value="@ViewBag.OutwardItemViewModel.getField("fldissueraccno")" maxlength="20" style="width: 200px; margin:auto; text-align:center;" />
+        <input readonly disabled type="text" class="cheque-input new_fldamount number-only @(ViewBag.OutwardItemViewModel.getField("fldamount") == ""  ? "" : "txtRed")" name="new_fldamount" @*value="@ViewBag.OutwardItemViewModel.getField("fldamount")"*@ value=@Html.Raw(String.Format("{0:N}",Convert.ToDecimal(@ViewBag.OutwardItemViewModel.getField("fldamount")))) maxlength="20" style="width: 150px; margin:auto; text-align:center;" />
+
+
+        <td><button id="Confirmbtn" data-action="@Url.Action("ChequeAmountConfirm")" class="normal-submit btn btn-default btn-xs" disabled>Confirm</button></td>
+        if (ViewBag.TaskRole == "ChequeAmountEntry")
+        {
+
+            <div class="form-group">
+                <button style="color:red" type="button" id="rejectBtn" class="btn btn-default normal-submit-confirm-action btn-xs" disabled data-action="@Url.Action("ChequeAmountReject")">@Locale.RejectBtn</button>
+            </div>
+        }
+        if (ViewBag.TaskRole == "ChequeAccountEntry")
+        {
+            <div class="form-group">
+                <button style="color:red" type="button" id="rejectBtn" class="btn btn-default normal-submit-confirm-action btn-xs" disabled data-action="@Url.Action("ChequeAccountReject")">@Locale.RejectBtn</button>
+            </div>
+        }
+        @*if (ViewBag.TaskRole == "ChequeDateAmountEntry")
+        {
+            <div class="form-group">
+                <button style="color:red" type="button" id="rejectBtn" class="btn btn-default normal-submit-confirm-action btn-xs" disabled data-action="@Url.Action("ChequeDateAmountReject")">@Locale.RejectBtn</button>
+            </div>
+        }*@
+    }
+    else
+    {
+        if (ViewBag.OutwardItemViewModel.getField("fldreasoncode") == "430" || ViewBag.OutwardItemViewModel.getField("fldclreasoncode") == "420" || ViewBag.OutwardItemViewModel.getField("fldclearingstatus") != "0")
+        {
+            <input disabled type="text" class="cheque-input new_fldcheckdigit number-only @(ViewBag.OutwardItemViewModel.getField("fldoricheckdigit") == ""  ? "" : "txtRed")" name="new_fldcheckdigit" value="@ViewBag.OutwardItemViewModel.getField("fldcheckdigit")" maxlength="2" style="width: 45px; margin-left:14px; margin-right:auto;" />
+            @*<input readonly type="text" class="cheque-input new_fldserial number-only @(ViewBag.OutwardItemViewModel.getField("fldoriserial") == "" ? "" : "txtRed")" name="new_fldserial" value="@ViewBag.OutwardItemViewModel.getField("fldserial")" maxlength="6" style="width: 100px; margin:auto;"/>*@
+            @*<input readonly type="text" class="cheque-input new_fldbankcode number-only @(ViewBag.OutwardItemViewModel.getField("fldoribankcode") == ""  ? "" : "txtRed")" name="new_fldbankcode" value="@ViewBag.OutwardItemViewModel.getField("fldbankcode")" maxlength="2"style="width: 45px; margin:auto;"/>*@
+            @*<input readonly type="text" class="cheque-input new_fldbranchcode number-only @(ViewBag.OutwardItemViewModel.getField("fldoribranchcode") == ""  ? "" : "txtRed")" name="new_fldbranchcode" value="@ViewBag.OutwardItemViewModel.getField("fldbranchcode")" maxlength="3"style="width: 60px; margin:auto;"/>*@
+            <input disabled type="text" class="cheque-input new_fldtype number-only @(ViewBag.OutwardItemViewModel.getField("fldoritype") == ""  ? "" : "txtRed")" name="new_fldtype" value="@ViewBag.OutwardItemViewModel.getField("fldtype")" maxlength="1" style="width: 30px; margin:auto; text-align:center;" />
+            <input disabled type="text" class="cheque-input new_fldstatecode number-only @(ViewBag.OutwardItemViewModel.getField("fldoristatecode") == ""  ? "" : "txtRed")" name="new_fldstatecode" value="@ViewBag.OutwardItemViewModel.getField("fldstatecode")" maxlength="1" style="width: 30px; margin:auto;" />
+            @*<input readonly type="text" class="cheque-input new_fldissueraccno number-only @(ViewBag.OutwardItemViewModel.getField("fldoriissueraccno") == ""  ? "" : "txtRed")" name="new_fldissueraccNo" value="@ViewBag.OutwardItemViewModel.getField("fldissueraccno")" maxlength="10" style="width: 150px; margin:auto;" />*@
+            <input hidden type="text" class="cheque-input new_fldtccode number-only @(ViewBag.OutwardItemViewModel.getField("fldoritccode") == ""  ? "" : "txtRed")" name="new_fldtccode" value="@ViewBag.OutwardItemViewModel.getField("fldtccode")" maxlength="2" style="width: 45px; margin-left:auto; margin-right:200px;" />
+
+            <input hidden disabled type="text" class="cheque-input new_fldlocation number-only @(ViewBag.OutwardItemViewModel.getField("fldorilocation") == ""  ? "" : "txtRed")" name="new_fldlocation" value="@ViewBag.OutwardItemViewModel.getField("fldlocation")" maxlength="1" style="width: 30px; margin:auto; text-align:center;" />
+            <input disabled type="text" class="cheque-input new_fldbankcode number-only @(ViewBag.OutwardItemViewModel.getField("fldoribankcode") == ""  ? "" : "txtRed")" name="new_fldbankcode" value="@ViewBag.OutwardItemViewModel.getField("fldbankcode")" maxlength="3" style="width: 40px; margin:auto; text-align:center;" />
+            <input disabled type="text" class="cheque-input new_fldbranchcode number-only @(ViewBag.OutwardItemViewModel.getField("fldoribranchcode") == ""  ? "" : "txtRed")" name="new_fldbranchcode" value="@ViewBag.OutwardItemViewModel.getField("fldbranchcode")" maxlength="4" style="width: 50px; margin:auto; text-align:center;" />
+            <input disabled type="text" class="cheque-input new_fldserial number-only @(ViewBag.OutwardItemViewModel.getField("fldoriserial") == "" ? "" : "txtRed")" name="new_fldserial" value="@ViewBag.OutwardItemViewModel.getField("fldserial")" maxlength="6" style="width: 70px; margin:auto; text-align:center;" />
+            <input disabled type="text" class="cheque-input new_fldissueraccno number-only @(ViewBag.OutwardItemViewModel.getField("fldoriissueraccno") == ""  ? "" : "txtRed")" name="new_fldissueraccNo" value="@ViewBag.OutwardItemViewModel.getField("fldissueraccno")" maxlength="20" style="width: 200px; margin:auto; text-align:center;" />
+            <input readonly disabled type="text" class="cheque-input new_fldamount number-only @(ViewBag.OutwardItemViewModel.getField("fldamount") == ""  ? "" : "txtRed")" name="new_fldamount" @*value="@ViewBag.OutwardItemViewModel.getField("fldamount")"*@ value=@Html.Raw(String.Format("{0:N}",Convert.ToDecimal(@ViewBag.OutwardItemViewModel.getField("fldamount")))) maxlength="20" style="width: 150px; margin:auto; text-align:center;" />
+
+
+            <td>
+                <button id="Confirmbtn" data-action="@Url.Action("ChequeAmountConfirm")" class="normal-submit btn btn-default btn-xs" disabled>Confirm </button>
+                <button style="color:red" data-action="@Url.Action("ChequeAmountReject")" class="normal-submit btn btn-default" disabled>Reject</button>
+            </td>
+
+        }
+        else
+        {
+            <input type="text" class="cheque-input new_fldcheckdigit number-only @(ViewBag.OutwardItemViewModel.getField("fldoricheckdigit") == ""  ? "" : "txtRed")" name="new_fldcheckdigit" value="@ViewBag.OutwardItemViewModel.getField("fldcheckdigit")" maxlength="2" style="width: 45px; margin-left:14px; margin-right:auto;" />
+            @*<input type="text" class="cheque-input new_fldserial number-only @(ViewBag.OutwardItemViewModel.getField("fldoriserial") == "" ? "" : "txtRed")" name="new_fldserial" value="@ViewBag.OutwardItemViewModel.getField("fldserial")" maxlength="6" style="width: 100px; margin:auto;"/>*@
+            @*<input type="text" class="cheque-input new_fldbankcode number-only @(ViewBag.OutwardItemViewModel.getField("fldoribankcode") == ""  ? "" : "txtRed")" name="new_fldbankcode" value="@ViewBag.OutwardItemViewModel.getField("fldbankcode")" maxlength="2"style="width: 45px; margin:auto;"/>*@
+            @*<input type="text" class="cheque-input new_fldbranchcode number-only @(ViewBag.OutwardItemViewModel.getField("fldoribranchcode") == ""  ? "" : "txtRed")" name="new_fldbranchcode" value="@ViewBag.OutwardItemViewModel.getField("fldbranchcode")" maxlength="3"style="width: 60px; margin:auto;"/>*@
+            <input type="text" class="cheque-input new_fldtype number-only @(ViewBag.OutwardItemViewModel.getField("fldoritype") == ""  ? "" : "txtRed")" name="new_fldtype" value="@ViewBag.OutwardItemViewModel.getField("fldtype")" maxlength="1" style="width: 30px; margin:auto; text-align:center;" />
+            <input type="text" class="cheque-input new_fldstatecode number-only @(ViewBag.OutwardItemViewModel.getField("fldoristatecode") == ""  ? "" : "txtRed")" name="new_fldstatecode" value="@ViewBag.OutwardItemViewModel.getField("fldstatecode")" maxlength="1" style="width: 30px; margin:auto;" />
+            @*<input type="text" class="cheque-input new_fldissueraccno number-only @(ViewBag.OutwardItemViewModel.getField("fldoriissueraccno") == ""  ? "" : "txtRed")" name="new_fldissueraccNo" value="@ViewBag.OutwardItemViewModel.getField("fldissueraccno")" maxlength="10" style="width: 150px; margin:auto;" />*@
+            <input hidden type="text" class="cheque-input new_fldtccode number-only @(ViewBag.OutwardItemViewModel.getField("fldoritccode") == ""  ? "" : "txtRed")" name="new_fldtccode" value="@ViewBag.OutwardItemViewModel.getField("fldtccode")" maxlength="2" style="width: 45px; margin-left:auto; margin-right:200px;" />
+            <input hidden type="text" class="cheque-input new_fldlocation number-only @(ViewBag.OutwardItemViewModel.getField("fldorilocation") == ""  ? "" : "txtRed")" name="new_fldlocation" value="@ViewBag.OutwardItemViewModel.getField("fldlocation")" maxlength="1" style="width: 30px; margin:auto; text-align:center;" />
+            <input type="text" class="cheque-input new_fldbankcode number-only @(ViewBag.OutwardItemViewModel.getField("fldoribankcode") == ""  ? "" : "txtRed")" name="new_fldbankcode" value="@ViewBag.OutwardItemViewModel.getField("fldbankcode")" maxlength="3" style="width: 40px; margin:auto; text-align:center;" />
+            <input type="text" class="cheque-input new_fldbranchcode number-only @(ViewBag.OutwardItemViewModel.getField("fldoribranchcode") == ""  ? "" : "txtRed")" name="new_fldbranchcode" value="@ViewBag.OutwardItemViewModel.getField("fldbranchcode")" maxlength="4" style="width: 50px; margin:auto; text-align:center;" />
+            <input type="text" class="cheque-input new_fldserial number-only @(ViewBag.OutwardItemViewModel.getField("fldoriserial") == "" ? "" : "txtRed")" name="new_fldserial" value="@ViewBag.OutwardItemViewModel.getField("fldserial")" maxlength="6" style="width: 70px; margin:auto; text-align:center;" />
+            <input type="text" class="cheque-input new_fldissueraccno number-only @(ViewBag.OutwardItemViewModel.getField("fldoriissueraccno") == ""  ? "" : "txtRed")" name="new_fldissueraccNo" value="@ViewBag.OutwardItemViewModel.getField("fldissueraccno")" maxlength="20" style="width: 200px; margin:auto; text-align:center;" />
+            @*@Html.Raw(String.Format("{0:N}", @ViewBag.OutwardItemViewModel.getField("fldamount")))*@ @*@(((decimal)ViewBag.CalculatePrice).ToString("C2"))*@
+            <input readonly disabled type="text" class="cheque-input new_fldamount @(ViewBag.OutwardItemViewModel.getField("fldamount") == ""  ? "" : "txtRed")" name="new_fldamount" value=@Html.Raw(String.Format("{0:N}",Convert.ToDecimal(@ViewBag.OutwardItemViewModel.getField("fldamount")))) @*value="@ViewBag.OutwardItemViewModel.getField("fldamount")"*@ @*onkeyup="this.value=addCommas(this.value);"*@ maxlength="20" style="width: 150px; margin:auto; text-align:center;" />
+
+            <div class="form-group">
+
+                @*<td><button  class="btn btn-default normal-submit-confirm-action" data-action="@Url.Action("ChequeAmountConfirm")">Confirm</button></td>*@
+                <td><button id="Confirmbtn" class="btn btn-default normal-submit-confirm-action btn-xs" data-action="@Url.Action("ChequeAmountConfirm")">Confirm</button></td>
+
+            </div>
+
+            if (ViewBag.TaskRole == "ChequeAmountEntry")
+            {
+                <div class="form-group">
+                    <button type="button" id="rejectBtn" class="btn btn-default normal-submit-confirm-action btn-xs" data-action="@Url.Action("ChequeAmountReject")">@Locale.RejectBtn</button>
+                </div>
+            }
+            if (ViewBag.TaskRole == "ChequeAccountEntry")
+            {
+                <div class="form-group">
+                    <button type="button" id="rejectBtn" class="btn btn-default normal-submit-confirm-action btn-xs" data-action="@Url.Action("ChequeAccountReject")">@Locale.RejectBtn</button>
+                </div>
+            }
+        }
+    }
+
+
+}
+<div class="row">
+    <div class="col-sm-8" style="position: relative; left: 12px;">
+        <span class="bold">@Locale.Remarks</span><br />
+        <textarea class="remarks" name="textAreaRemarks" maxlength="100"></textarea>
+    </div>
+</div>
+<script>
+    (function () {
+        $(document).ready(function () {
+            var input = "";
+            $("#atm").val("");
+            $("#atm").focus();
+            $("#atm").keydown(function (e) {
+                //handle backspace key
+                if (e.keyCode == 8 && input.length > 0) {
+                    input = input.slice(0, input.length - 1); //remove last digit
+                    $(this).val(addCommas(formatNumber(input)));
+                }
+                else if (e.keyCode == 107) {
+                    $("#Confirmbtn").trigger('click');
+                }
+                else {
+                    var key = getKeyValue(e.keyCode);
+                    if (key) {
+                        input += key; //add actual digit to the input string
+                        $(this).val(addCommas(formatNumber(input))); //format input string and set the input box value to it
+                    }
+                }
+                return false;
+            });
+            function getKeyValue(keyCode) {
+                if (keyCode > 57) { //also check for numpad keys
+                    keyCode -= 48;
+                }
+                if (keyCode >= 48 && keyCode <= 57) {
+                    return String.fromCharCode(keyCode);
+                }
+            }
+            function formatNumber(input) {
+                if (isNaN(parseFloat(input))) {
+                    return "0.00"; //if the input is invalid just set the value to 0.00
+                }
+                var num = parseFloat(input);
+                return (num / 100).toFixed(2); //move the decimal up to places return a X.00 format
+            }
+            function addCommas(num) {
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+        });
+    })();
+</script>

@@ -1,0 +1,205 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Security
+@using (Html.BeginForm("Redirect", "BranchEndOfDay", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Utilities > OCS > Branch End Of Day</h4>
+        <div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <table>
+                    <tr>
+                        <th>
+                            <label>Process Date</label>
+                        </th>
+                        <th>
+                            <label>Presenting Bank Branch</label>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" disabled="disabled" name="currentDate" value="@Convert.ToDateTime(ViewBag.CurrentDate).ToString("dd-MM-yyyy")">
+                            &emsp;&emsp;
+                        </td>
+                        <td style="width :80% ; height :22px; white-space :nowrap " align="left">
+                            <select name="ajaxBranchSelectList" id="ajaxBranchSelectList" style="width:90%;">
+                                <option value="All">All</option>
+                            </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            
+            </div>            
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-sm-12">
+                <fieldset style="border: 2px solid; color:gray">
+                    <legend>Branch Items Summary</legend> 
+                    <br />
+                <table width="100%">
+                    <tr>
+                        <td align="center">
+                            <table>
+                                <tr>
+                                    <td style="width:200px"></td>
+                                    <td align="right" style="width:150px;"><b>Total Item</b></td>
+                                    <td align="right" style="width:200px"><b>Total Amount</b></td>
+                                </tr>
+                                <tr>
+                                        <td align="right"><b>Outstanding Item(s)</b></td>
+                                    <td align="right"><span id="sReadyForSubmissionTotalItem">0</span></td>
+                                    <td align="right"><span id="sReadyForSubmissionTotalAmount">0.00</span></td>
+                                </tr>
+                                <tr>
+                                        <td align="right"><b>Item(s) Submitted to Center</b></td>
+                                    <td align="right"><span id="sSubmittedtoClearingHouseTotalItem">0</span></td>
+                                    <td align="right"><span id="sSubmittedtoClearingHouseTotalAmount">0.00</span></td>
+                                </tr>
+                                    <tr style="border-top:2px solid; border-top-color:gray">
+                                        <td align="center"><b>Branch Grand Total</b></td>
+                                    <td align="right"><span id="sGrandTotalItem">0</span></td>
+                                    <td align="right"><span id="sGrandTotalAmount">0.00</span></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                    <br/>
+                </fieldset>                
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-sm-12">
+                <fieldset style="border: 2px solid; color:gray">
+                    <legend>Hub Items Summary</legend>
+                    <br />
+                    <table width="100%">
+                        <tr>
+                            <td align="center">
+                                <table>
+                                    <tr>
+                                        <td style="width:200px"></td>
+                                        <td align="right" style="width:150px;"><b>Total Item</b></td>
+                                        <td align="right" style="width:200px"><b>Total Amount</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><b>Outstanding Item(s)</b></td>
+                                        <td align="right"><span id="sHubReadyForSubmissionTotalItem">0</span></td>
+                                        <td align="right"><span id="sHubReadyForSubmissionTotalAmount">0.00</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><b>Item(s) Submitted to Center</b></td>
+                                        <td align="right"><span id="sHubSubmittedtoClearingHouseTotalItem">0</span></td>
+                                        <td align="right"><span id="sHubSubmittedtoClearingHouseTotalAmount">0.00</span></td>
+                                    </tr>
+                                    <tr style="border-top:2px solid; border-top-color:gray">
+                                        <td align="center"><b>Hub Grand Total</b></td>
+                                        <td align="right"><span id="sHubGrandTotalItem">0</span></td>
+                                        <td align="right"><span id="sHubGrandTotalAmount">0.00</span></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </fieldset>
+                </div>
+            </div>
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-sm-12">
+                <fieldset style="border: 2px solid; color:gray">
+                    <legend>End Of Day</legend>
+                    <br />
+                <table width="100%">
+                    <tr>
+                        <td align="center">
+                            <table>
+                                <tr>
+                                    <td align="right">
+                                        <b>End Of Day Status:&nbsp;</b>
+                                    </td>
+                                    <td align="left">
+                                        <b><span id="sEODStatus"></span></b>
+                                    </td>
+                                        <td></td>
+                                </tr>
+                                <tr>
+                                        @*<td align="right"><b>Amount:&nbsp;</b></td>
+                                        <td align="left"><input type="text" name="txtAmount" id="txtAmount" value="0.00" style="text-align: right" class="number-only">&nbsp;</td>*@
+                                        <td></td>
+                                        <td><input type="button" style="width:120px;" name="btnEOD" id="btnEOD" class="btn btn-default btn-xs" value="End Of Day" /></td>
+                                    </tr>    
+                                @*<tr>
+                                    <td align="right"><b>Difference:&nbsp;</b></td>
+                                    <td align="left"><input type="text" readonly="readonly" name="txtDifference" id="txtDifference" value="0.00" style="text-align: right"></td>
+                                    <td></td>
+                                </tr>*@
+                            </table>
+                                <br />
+                            @*<input type="button" value="Print" onclick="window.print()" id="button1" name="button1">*@
+                        </td>
+                    </tr>
+                </table>
+                    <br />
+                </fieldset>
+            </div>
+        </div>
+        <br />
+        @*<div class="row">
+            <div class="col-sm-6">
+                <br />
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2" align="right">AccountNo</div>
+                    <div class="col-sm-7" align="right"><input type="text" id="txtAccountNo" name="accountNo" class="number-only" style="width:90%;" maxlength="12"><span class="red-star">*</span></div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2" align="right">Branch</div>
+                    <div class="col-sm-7" align="right"><select name="transType" id="ajaxBranchSelectList" style="width:90%;"></select><span class="red-star">*</span></div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-7" align="right"><input type="button" style="width:100px;" name="btnSave" id="btnSave" class="btn btn-default btn-s" value="Save" /></div>
+                </div>
+                <textarea cols="40" rows="3" name="ImageString" id="ImageString" style="display: none;"></textarea>
+            </div>
+        </div>*@
+     
+    </div>
+}
+<div class="dialog-form" title="Validation Checking">
+    <form>
+        <fieldset>
+            <label style="color:red">* Required Field</label>
+            <br />
+            <label for="name">User Login ID</label>&emsp;
+            <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all">
+            <label style="color:red">*</label>
+            <br />
+            <label for="password">Password</label>&emsp;&emsp;&emsp;
+            <input type="password" name="password" id="password" class="text ui-widget-content ui-corner-all">
+            <label style="color:red">*</label>
+
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+
+</div>
+
+<script src="~/Scripts/OCS/branchEOD.js"></script>
+    <!-- modal-dialog -->

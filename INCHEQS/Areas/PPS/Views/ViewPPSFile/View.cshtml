@@ -1,0 +1,66 @@
+﻿@using INCHEQS.Common;
+@using INCHEQS.Resources;
+
+@using (Html.BeginForm("Index", "ViewPPSFile", FormMethod.Post, new { @Class = "secure-form" }))
+{
+@Html.AntiForgeryToken();
+<h1>Positive Pay File Maintenance</h1>
+<div>
+
+    <table>
+        <tr>
+            <td>Issue Date:</td>
+            <td>@ViewBag.PayeeDetails.fldIssueDate</td>
+        </tr>
+        <tr>
+            <td>Account Number: </td>
+            <td>@ViewBag.PayeeDetails.fldAccNo</td>
+        </tr>
+        <tr>
+            <td>Cheque Number: </td>
+            <td>@ViewBag.PayeeDetails.fldChequeNo</td>
+        </tr>
+        <tr>
+            <td>Payee Name: </td>
+            <td>@ViewBag.PayeeDetails.fldPayeeName</td>
+        </tr>
+        <tr>
+            <td>Amount (RM): </td>
+                <td>
+                    @StringUtils.FormatCurrency(@ViewBag.PayeeDetails.fldAmount.ToString())
+                </td>
+        </tr>
+        <tr>
+            <td>Paid Status: </td>
+            <td>@ViewBag.PayeeDetails.fldStatus</td>
+        </tr>
+        <tr>
+            <td>Validity Status: </td>
+            <td>@ViewBag.PayeeDetails.validFlag</td>
+        </tr>
+    </table>
+</div>
+
+    <div id="resultContainer"></div>
+    <button type="submit" id="btnBack" class="btn btn-default secure-nav" data-action="@Url.Action("Index")">@Locale.Back</button>
+
+
+
+}
+<script>
+    $("#btnBack").click(function (e) {
+        e.preventDefault();
+        var $form = $(this).closest("form");
+        $.ajax({
+            type: "POST",
+            url: $(this).data("action"),
+            data: $form.serialize(),
+            success: function (data) {
+                $("#resultContainer").html(data);
+                $("#searchForm").trigger("submit");
+                $(".right-panel").css("background-color", "#ffffff");
+                $(".header,.left-panel,#cssmenu,#search-fields-section,.switcher,footer").show();
+            }
+        })
+    })
+</script>

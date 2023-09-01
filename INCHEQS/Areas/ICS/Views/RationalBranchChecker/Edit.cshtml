@@ -1,0 +1,61 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Edit", "RationalBranch", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@ViewBag.PageTitle</h4>
+        <hr />
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+					<th>@Locale.MergeBranch</th>
+                    <td>@ViewBag.Rationalbranch.fldCBranchId, @ViewBag.Rationalbranch.fldIBranchId - @ViewBag.Rationalbranch.fldCBranchDesc 
+                    <input type="hidden" disabled="disabled" size="20" value="@ViewBag.Rationalbranch.fldCBranchId" name="fldGroupId" /> 
+                    <input type="hidden" size="20" value="@ViewBag.Rationalbranch.fldCBranchId" name="fldCBranchId" id="fldCBranchId" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form-select">
+                            <div>
+                                <b>@Locale.RationalBranchAvailableList</b><br>
+                                <select multiple="multiple" contenteditable="false" class="form-multiple select-from">
+                                    @foreach (var item in ViewBag.AvailableRationalBranch)
+                                    {
+									<option value="@item.fldCBranchId">@item.fldCBranchId, @item.fldIBranchId - @item.fldCBranchDesc</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-move">
+                                <br /><br /><br />
+                                <p><input type="button" disabled="disabled" title="select" style='width:100px' class="btn btn-default btn-move addOne" value="Add"></p>
+                                <p><input type="button" disabled="disabled" title="select all" style='width:100px' class="btn btn-default btn-move addAll" value="Add All"></p>
+                                <p><input type="button" disabled="disabled" title="remove" style='width:100px' class="btn btn-default btn-move rmOne" value="Remove"></p>
+                                <p><input type="button" disabled="disabled" title="remove all" style='width:100px' class="btn btn-default btn-move rmAll" value="Remove All"></p>
+                                <br />
+                            </div>
+                            <div>
+                                <b>@Locale.RationalBranchSelectedList</b><br>
+                                <select multiple="multiple" contenteditable="false" class="form-multiple select-to" name="selectedUser">
+                                    @foreach (var item in ViewBag.SelectedRationalBranch)
+                                    {
+                                        <option value="@item.fldCBranchId">@item.fldCBranchId, @item.fldIBranchId - @item.fldCBranchDesc</option>
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button data-action="@Url.Action("/VerifyA2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.RationalBranchChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+        <button data-action="@Url.Action("/VerifyR2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.RationalBranchChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.RationalBranchChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/app.js"></script>

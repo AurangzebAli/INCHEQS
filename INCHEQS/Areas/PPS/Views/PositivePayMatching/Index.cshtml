@@ -1,0 +1,42 @@
+﻿@using INCHEQS.Common
+@using INCHEQS.Resources
+@{
+    /**/
+
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline submit-onload secure-form", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+
+
+    <input type="hidden" value="@Convert.ToDateTime(DateUtils.GetCurrentDate()).ToString("dd-MM-yyyy")" name="fldClearDate" />
+
+    <div>
+        <h4>PPS - Positive Pay Matching</h4>
+        <span>Select A Bank Code: </span>
+        <select name="ddlBankCode" id="ddlBankCode">
+            <option value="all">ALL</option>
+            <option value="18">18 - RHB BANK BERHAD</option>
+            <option value="43">43 - RHB ISLAMIC BANK BERHAD</option>
+        </select>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-default init-search" data-action="@Url.Action("SearchResultPage")">Search</button>
+    </div>
+    <br />
+
+    <div id="resultContainer"></div>
+    <button class="btn btn-default init-refresh-page-realtime" id="btnSubmit" data-action="@Url.Action("StartMatching")">Start</button>
+    <button class="btn btn-default modal-submit" data-action="@Url.Action("ViewMatchingResult")">View</button>
+    @*<button class="btn btn-default modal-print" data-action="@Url.Content("~/PPS/PrintReport?p=all&tId=" + 318180 )" data-title="Print Report - All">@Locale.Print</button>*@
+
+}
+
+<div id="dataProcessContainer" data-processname="@ViewBag.ProcessName"></div>
+<input id="inwardProcessType" value="Other" type="hidden">
+
+@Scripts.Render("~/bundles/DataProcessRealTime")
+@Scripts.Render("~/bundles/SearchPage")

@@ -1,0 +1,25 @@
+﻿@using INCHEQS.Resources
+<div class="form-group">
+    <button type="button" class="btn btn-default normal-submit">@Locale.AddToList</button>
+    <button type="button" class="btn btn-default normal-submit">@Locale.RemoveList</button>
+    <button type="button" id="manualUploadButton" class="btn btn-default">@Locale.ManualUpload</button>
+</div>
+
+@Html.Partial("Partial/_UploadForm")
+
+<table id="fileContainer" class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            <th><input type="checkbox" /></th>
+            <th>@Locale.FileName</th>
+            <th></th>
+            <th>@Locale.LastModified</th>
+            <th>@Locale.Load</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+@Scripts.Render("~/bundles/FileUpload")

@@ -1,0 +1,55 @@
+﻿@using INCHEQS.Resources
+
+@{
+
+    var i = 0;
+}
+<div><span style="border-bottom: 1px solid;" class="h4 bold">File(s) Available List</span></div>
+	<div>
+		<span style="border-bottom: 1px solid;" class="h5 bold">Folder Path Details:</span>
+		<br />
+
+		<span class="h5">Source Folder Path : @ViewBag.FolderPathFrom</span>
+		<br />
+		<br />
+
+	</div>
+
+	<table class="table table-bordered table-condensed table-striped">
+		@if (ViewBag.FolderList != null)
+		{
+			<thead>
+				<tr>
+					<th>No.</th>
+					<th>File Name</th>
+					@*<th>Folder Count</th>*@
+					<th>File Size(KB)</th>
+					<th>File Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var folder in ViewBag.FolderList)
+				{
+					<tr>
+						<td>@{i++;} @i</td>
+						<td>@folder.fileName</td>
+						@*<td>@folder.folderCount</td>*@
+						<td>@folder.fileSize KB</td>
+						<td>@folder.fileTimeStamp</td>
+					</tr>
+				}
+			</tbody>
+		}
+		else
+		{
+			<thead>
+
+			</thead>
+			<tbody>
+				<tr>
+					<td>Folder Not Found</td>
+				</tr>
+			</tbody>
+		}
+
+	</table>

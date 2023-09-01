@@ -1,0 +1,81 @@
+﻿@using INCHEQS.Resources
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline secure-form submit-onload", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken(); 
+    <h4>@ViewBag.SearchPage.PageTitle</h4>
+    <div class="row">
+        <div class="col-sm-12" style="border-top: 2px solid gray;">
+            <div id="divTitleBar3" class="titleBar">
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="width :73%; height: 22px;" class="cssPageTitleBar">
+                            Center End Of Day
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    @*@Html.ActionLink("Click here", "ActionName", "ControllerName", new { @onclick = "return Submit();" });
+    <a href="@Url.Action("PerformEOD")" class="btn btn-default secure-nav" onclick="return confirm ('Are you sure want to delete blog?');">@Locale.btnClose</a>
+    @Html.ActionLink("Checkout and view order list", "PerformEOD", "BranchEndOfDaySummary", null, new { onclick = "return confirm('Are you sure you want to click this link?')" })
+    <input id="ButtonDelete" type="button" value="Delete Experiment" class="btn btn-default secure-nav " onclick="if (confirm('Are you sure you want to delete experiment???')) data-action='@Url.Action("/PerformEOD")'" />*@
+    if (ViewBag.EODStatus == "Done")
+    {
+        <div class="row text-center">
+            <div class="col-sm-12">
+                <button id="btnEOD" data-action="@Url.Action("/PerformEOD")" class="btn btn-default btn-xs disabled">Perform End Of Day</button>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-sm-12">
+                <h5>
+                    <b>End Of Day Status: </b>
+                    <span id="sEODStatus" style="color:blue"><b>@ViewBag.EODStatus</b></span>
+                </h5>
+            </div>
+        </div>
+    }
+    else {
+        <div class="row text-center">
+            <div class="col-sm-12">
+                <button id="btnEOD" data-action="@Url.Action("/PerformEOD")" class="btn btn-default btn-xs">Perform End Of Day</button>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-sm-12">
+                <h5><b>End Of Day Status: </b>
+                    <span id="sEODStatus" style="color:red"><b>@ViewBag.EODStatus</b></span>
+                </h5>
+            </div>
+        </div>
+    }
+    
+    <br />
+    <div class="row">
+        <div class="col-sm-12" style="border-top: 2px solid gray;">
+            <div id="divTitleBar3" class="titleBar">
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="width :73%; height: 22px;" class="cssPageTitleBar">
+                            Branch End Of Day Summary
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        @Html.Partial("SearchPage/_GenericFieldsForm")
+    </div>
+    <hr />
+    <div class="form-group">
+        <button class="btn btn-default init-search">Search</button>
+    </div>
+
+    <div id="resultContainer"></div>
+}
+
+@Scripts.Render("~/bundles/SearchPage")
+<script src="~/Scripts/OCS/confirm.js"></script>

@@ -1,0 +1,144 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "BankCodeChecker", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>@Locale.BankCodeMaintenanceChecker</h4>
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <tbody>
+            <tr>
+                <th>@Locale.BankCode</th>
+                <td>
+                    <input type="hidden" value="@ViewBag.BankCodeTemp["fldBankCode"]" name="bankCode" />@ViewBag.BankCodeTemp["fldBankCode"]
+                    <input type="hidden" value="@ViewBag.BankCodeTemp["fldApproveStatus"]" name="fldAction" />
+                </td>
+
+            </tr>
+            @if (ViewBag.BankCodeTemp["fldApproveStatus"] == "U")
+            {
+
+                <tr>
+                    <th>@Locale.BankDescription</th>
+                    <td>
+                        @if (ViewBag.BankCodeTemp["fldBankDesc"] == ViewBag.BankCode["fldBankDesc"])
+                        {
+                            <input type="hidden" value="@ViewBag.BankCodeTemp["fldBankDesc"]" name="bankDesc" />
+                            <input type="text" value="@ViewBag.BankCodeTemp["fldBankDesc"]" maxlength="100" name="bankDesc" style="width:300px" disabled="disabled" />
+
+                        }
+                        else
+                        {
+                            <input type="hidden" value="@ViewBag.BankCodeTemp["fldBankDesc"]" name="bankDesc" />
+                            <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.BankCodeTemp["fldBankDesc"]" maxlength="100" name="bankDesc" style="width:300px" disabled="disabled" />
+
+                        }
+                        <span class="red-star"> *</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BankAbbreviation</th>
+                    <td>
+                        @if (ViewBag.BankCodeTemp["fldBankAbb"] == ViewBag.BankCode["fldBankAbb"])
+                        {
+                            <input type="hidden" value="@ViewBag.BankCodeTemp["fldBankAbb"]" name="bankAbbreviation" />
+                            <input type="text" value="@ViewBag.BankCodeTemp["fldBankAbb"]" maxlength="10" disabled="disabled" />
+
+                        }
+                        else
+                        {
+                            <input type="hidden" value="@ViewBag.BankCodeTemp["fldBankAbb"]" name="bankAbbreviation" />
+                            <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.BankCodeTemp["fldBankAbb"]" maxlength="10" disabled="disabled" />
+
+                        }
+                        <span class="red-star"> *</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BankType</th>
+                    <td>
+                        @if (ViewBag.BankCodeTemp["fldBankType"] == ViewBag.BankCode["fldBankType"])
+                        {
+                            <input type="hidden" value="@ViewBag.BankCodeTemp["fldBankType"].Trim()" name="bankTypeId" />
+                            <select class="default" maxlength="20" disabled="disabled">
+                                @foreach (var row in ViewBag.BankType.Rows)
+                                {
+                                    <option value="@row["fldBankType"]" @(ViewBag.BankCodeTemp["fldBankType"].Trim() == row["fldBankType"].Trim() ? "selected" : "")>
+                                        @row["fldBankType"] - @row["fldBankTypeDesc"]
+                                    </option>
+                                }
+                            </select>
+                        }
+                        else
+                        {
+                            <style>
+                                select[disabled='disabled']::-ms-value {
+                                    color: #FFFFFF;
+                                    background-color: #FF0000;
+                                }
+
+                                select[disabled='disabled'] {
+                                    color: #FFFFFF;
+                                    background-color: #FF0000;
+                                }
+                            </style>
+                            <input type="hidden" value="@ViewBag.BankCodeTemp["fldBankType"].Trim()" name="bankTypeId" />
+                            <select class="default" maxlength="20" disabled="disabled">
+                                @foreach (var row in ViewBag.BankType.Rows)
+                                {
+                                    <option value="@row["fldBankType"]" @(ViewBag.BankCodeTemp["fldBankType"].Trim() == row["fldBankType"].Trim() ? "selected" : "")>
+                                        @row["fldBankType"] - @row["fldBankTypeDesc"]
+                                    </option>
+                                }
+                            </select>
+
+                        }
+                        <span class="red-star"> *</span>
+                    </td>
+               </tr>
+            }
+            else
+            {
+                <tr>
+                    <th>@Locale.BankDescription</th>
+                    <td>
+                        <input type="hidden" value="@ViewBag.BankCodeTemp["fldBankDesc"]" name="bankDesc" />
+                        <input type="text" value="@ViewBag.BankCodeTemp["fldBankDesc"]" maxlength="100" name="bankDesc" style="width:300px" disabled="disabled"/>
+
+                        <span class="red-star"> *</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BankAbbreviation</th>
+                    <td>
+                        <input type="hidden" value="@ViewBag.BankCodeTemp["fldBankAbb"]" name="bankAbbreviation" />
+                        <input type="text" value="@ViewBag.BankCodeTemp["fldBankAbb"]"  maxlength="10" disabled="disabled"/>
+                        <span class="red-star"> *</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BankType</th>
+                    <td>
+                        <input type="hidden" value="@ViewBag.BankCodeTemp["fldBankType"].Trim()" name="bankTypeId" />
+                        <select class="default" maxlength="20" disabled="disabled">
+                            @foreach (var row in ViewBag.BankType.Rows)
+                            {
+                                <option value="@row["fldBankType"]" @(ViewBag.BankCodeTemp["fldBankType"].Trim() == row["fldBankType"].Trim() ? "selected" : "")>
+                                    @row["fldBankType"] - @row["fldBankTypeDesc"]
+                                </option>
+                            }
+                        </select>
+                        <span class="red-star"> *</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button data-action="@Url.Action("/Approve2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.BankCodeChecker.VERIFY) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+    <button data-action="@Url.Action("/Reject2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.BankCodeChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+    <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.BankCodeChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+</div>
+}

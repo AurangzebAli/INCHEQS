@@ -1,0 +1,120 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+
+<html>
+
+<body>
+    @using (Html.BeginForm("", "", FormMethod.Post, new { @Class = "form-inline secure-form", id = "StartBatchICR" }))
+    {
+        <div>
+            <h4>Start Batch ICR Progress</h4>
+            <table class="table form-table">
+
+                <thead>
+                    <tr style="background-color:aqua">
+                        <td>
+                            @ViewBag.ICRProgress.fldMachineID
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <TBODY>
+
+                    <TR>
+                        <td>Total</td>
+                        <td>
+                            <span id="totalCount"></span>
+                            @*@ViewBag.ICRProgress.totalCount*@
+                        </td>
+                        <td style="text-align:center">
+                            Start Time
+                        </td>
+                        <td>
+                            <span id="startTime"></span>
+                            @*@ViewBag.StartEndTime.startTime*@
+                        </td>
+                    </TR>
+                    <TR>
+                        <td style="color:green">Completed</td>
+                        <td style="color:green">
+                            <span id="successCount"></span>
+                            @*@ViewBag.ICRProgress.successCount*@
+                        </td>
+                        <td style="text-align:center">
+                            End Time
+                        </td>
+                        <td>
+                            <span id="endTime"></span>
+                            @*@ViewBag.StartEndTime.endTime*@
+                        </td>
+                    </TR>
+                    <TR>
+                        <td style="color:blue">Item Left</td>
+                        <td style="color:blue">
+                            <span id="itemLeftCount"></span>
+                            @*@ViewBag.ICRProgress.itemLeftCount*@
+                        </td>
+                    </TR>
+                    <TR>
+                        <td style="color:red">Error</td>
+                        <td style="color:red">
+                            <span id="failCount"></span>
+                            @*@ViewBag.ICRProgress.failCount*@
+                        </td>
+
+                    </TR>
+
+
+                </TBODY>
+
+            </table>
+
+            <div id="outerDiv" style="background-color:#EEEEEE;
+                height:30px; width:500px; padding:5px">
+                <div id="innerDiv" style="background-color:red; height:19px;
+             width:0px; color:white; text-align:center">
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h5>Progress Detail</h5>
+        </div>
+
+        <div>
+            <table class="table th table-condensed" id="progressDetails">
+                <thead>
+                    <tr>
+                        <th>Cheque Number</th>
+                        <th>Account Number</th>
+                        <th>Status</th>
+                        <th>Remark</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*@foreach (var items in ViewBag.ProgressDetails)
+                        {
+                            <tr>
+                                <td>@items.fldChequeNumber</td>
+                                <td>@items.fldAccountNumber</td>
+                                <td>@items.fldStatus</td>
+                                <td>@items.fldRemarks</td>
+                            </tr>
+                        }*@
+                </tbody>
+            </table>
+        </div>
+
+    }
+
+
+</body>
+
+</html>
+
+@if (ViewBag.CheckResult == true)
+{
+    @Scripts.Render("~/bundles/StartBatchICR")
+}

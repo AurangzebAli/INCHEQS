@@ -1,0 +1,14 @@
+﻿<div class="row mTop20">
+    <div class="col-lg-5 mBot10" data-div-width="5">
+        @Html.Partial("Partial/_Information")
+    </div>
+
+    @foreach (var row in ViewBag.Config.Rows) {
+        <div id="@row["divId"]" data-taskid="@row["taskId"]" data-widget-type="@row["widgetType"]" data-div-width="@row["DivWidth"]" class="dashboard-element col-lg-@row["DivWidth"]">
+            <h4 class="text-right">@row["title"]</h4>
+            <div class="widget-body"></div>
+        </div>
+    }
+</div>
+
+@Scripts.Render("~/bundles/dashboard")

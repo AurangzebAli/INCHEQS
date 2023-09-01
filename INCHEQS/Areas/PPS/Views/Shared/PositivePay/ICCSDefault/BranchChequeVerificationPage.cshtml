@@ -1,0 +1,114 @@
+﻿@using System.Data;
+@using INCHEQS.Common;
+@using INCHEQS.Resources;
+@{
+    ViewBag.Title = "BranchChequeVerificationPage";
+    Layout = "~/Views/Shared/_LayoutBranchChequeVerification.cshtml";
+}
+@{
+    int MinusTotalRecord;
+    int i = 0;
+    string OriTotalRecord = "";
+    if (ViewBag.MinusRecordIndicator != null)
+    {
+        MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalRecord")) - 1;
+        if (ViewBag.StoreProc != null)
+        {
+            MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+        }
+    }
+    else
+    {
+        MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalRecord"));
+    }
+
+    if (ViewBag.LockIndicator != null)
+    {
+        OriTotalRecord = ViewBag.InwardItemViewModel.getField("TotalRecord");
+        <input type="hidden" id="OriTotalRecordHolder" value="@OriTotalRecord">
+    }
+}
+<div style="background-color: #ffffff">
+    <div class="row mTop10">
+        <div class="col-sm-6">
+            <span class="h4 bold txtBlack">@ViewBag.PageTitle</span>
+            @if (ViewBag.InwardItemViewModel.getField("fldApprovalStatusPending").ToString().Trim() == "A")
+            {
+                <span class="txtBlack bold">[Approved]</span>
+            }
+            else if (ViewBag.InwardItemViewModel.getField("fldApprovalStatusPending").ToString().Trim() == "R")
+            {
+                <span class="txtBlue bold">[Rejected]</span>
+            }
+            else if (ViewBag.InwardItemViewModel.getField("fldApprovalStatusPending").ToString().Trim() == "B")
+            {
+                <span class="txtRed bold">[Pending]</span>
+            }
+            <input type="hidden" name="NextValue" value="@ViewBag.InwardItemViewModel.getField("NextValue")">
+            <input type="hidden" name="PreviousValue" value="@ViewBag.InwardItemViewModel.getField("PreviousValue")">
+            <input type="hidden" name="DataAction" value="@ViewBag.DataAction">
+            @if (ViewBag.TaskId != "308170" && ViewBag.TaskId != "308180" && ViewBag.TaskId != "308190" && ViewBag.TaskId != "308200")
+            {
+                <span class="red bold">[@MinusTotalRecord / </span>
+                <span class="red bold" id="OriTotalRecord">1</span>
+                <span class="red bold">]</span>
+            }
+
+        </div>*@
+        </div>
+        <div class="col-sm-6 text-right">
+            @Html.Partial("InwardClearing/ICCSDefault/Partial/_BranchAction2")
+            @Html.Partial("InwardClearing/Base/_ChequeControlAction")
+        </div>
+    </div>
+
+    <div class="row">
+        @*<div class="col-sm-7 text-right">
+                @Html.Partial("InwardClearing/ICCSDefault/Partial/_Action3")
+            </div>*@
+        <div class="col-sm-7 text-left">
+            @Html.Partial("InwardClearing/Base/_BranchChequeDetail")
+        </div>
+        @*<div class="col-sm-5" style="overflow:scroll;height:200px">
+            @Html.Partial("InwardClearing/Modal/_ChequeHistoryPopup")
+        </div>*@
+        <div class="col-sm-7">
+            @Html.Partial("InwardClearing/Base/_ChequeImage")
+            @Html.Partial("InwardClearing/Base/_MICRDetail")
+            @Html.Partial("InwardClearing/Base/_ChequeImageAction")
+        </div>
+        @*<div class="col-sm-4">
+                <div id="signatureInfo" style="width:255px;"></div>
+                <br />
+            </div>*@
+    </div>
+    <br />
+    @*<div class="row">
+            <div class="col-sm-12">
+                    @Html.Partial("InwardClearing/ICCSDefault/Partial/_Action2")
+            </div>
+        </div>*@
+    <br />
+    @*<div class="row">
+            <div class="col-sm-12">
+                @Html.Partial("InwardClearing/Base/_SignatureList")
+            </div>
+        </div>*@
+
+
+</div>
+
+
+@*<script>
+        $(document).keydown(function (event) {
+            if (event.which == 113) { //F2
+                $("#approveBtn").click();
+            }
+        });
+    </script>*@
+
+
+
+
+
+

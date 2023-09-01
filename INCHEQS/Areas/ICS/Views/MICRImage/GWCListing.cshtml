@@ -1,0 +1,108 @@
+﻿@using INCHEQS.Resources
+
+@{
+
+    var i = 0;
+}
+
+<div>
+    <span style="border-bottom: 1px solid;" class="h5 bold">Folder Path Details:</span>
+    <br />
+
+    <span class="h5">Source Folder Path : @ViewBag.FolderPathFrom</span>
+    <br />
+    <br />
+
+</div>
+
+<table class="table table-bordered table-condensed table-striped">
+    @if (ViewBag.FolderList != null)
+    {
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Folder Name</th>
+                @*<th>Folder Count</th>*@
+                <th>Folder Size(KB)</th>
+                <th>Folder Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var folder in ViewBag.FolderList)
+            {
+                <tr>
+                    <td>@{i++;} @i</td>
+                    <td>@folder.folderName</td>
+                    @*<td>@folder.folderCount</td>*@
+                    <td>@folder.folderSize KB</td>
+                    <td>@folder.folderTimeStamp</td>
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        <thead>
+
+        </thead>
+        <tbody>
+            <tr>
+                <td>Folder Not Found</td>
+            </tr>
+        </tbody>
+    }
+
+</table>
+<style>
+    #hide input[type=file] {
+        display: none;
+        margin: 10px;
+    }
+
+        #hide input[type=file] + label {
+            display: inline-block;
+            margin: 20px;
+            padding: 4px 32px;
+            background-color: #FFFFFF;
+            border: solid 1px #666F77;
+            border-radius: 6px;
+            color: #666F77;
+        }
+
+        #hide input[type=file]:active + label {
+            background-image: none;
+            background-color: #2D6C7A;
+            color: #FFFFFF;
+        }
+</style>
+
+<div id="hide">
+    @*data-action="@Url.Action("GWCListing") normal-submit-confirm-action-button-browse"*@
+    <label class="btn btn-default ">
+        <input id="file" type="file" multiple name="file" onchange="javascript:updateList()" />
+        <span class="">Browse</span>
+    </label>
+    <button id="btnUpload" class="btn btn-default normal-submit-confirm-action-button-upload" data-action="@Url.Action("Upload")" data-title="Upload">Upload</button>
+</div>
+
+
+
+@*<p>Selected files:</p>*@
+
+<div id="fileList"></div>
+
+<script>
+    updateList = function () {
+        var input = document.getElementById('file');
+        var output = document.getElementById('fileList');
+        var children = "";
+        for (var i = 0; i < input.files.length; ++i) {
+            if (input.files.item(i).name.indexOf('.zip') != -1)
+                children += '<li>' + input.files.item(i).name + '</li>';
+            else
+                alert('Please select only zip file');
+                
+        }
+        output.innerHTML = '<ul>' + children + '</ul>';
+    }
+</script>

@@ -1,0 +1,15 @@
+﻿@using INCHEQS.Resources
+<div>
+    <button type="button" data-btnfor="reset" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Reset</button>
+    <button type="button" id="frontBtn" data-btnfor="front" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Front</button>
+    <button type="button" data-btnfor="back" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Back</button> &nbsp; &nbsp; &nbsp;
+    <button type="button" data-btnfor="bw" class="modify-cheque-btn btn btn-default btn-xs">Black White</button>
+    <button type="button" data-btnfor="greyscale" class="modify-cheque-btn btn btn-default btn-xs">Greyscale</button>
+    @*@if (Convert.ToDouble(ViewBag.InwardItemViewModel.getField("fldAmount")) >= ViewBag.LargeAmount) {
+            <button type="button" data-btnfor="uv" class="modify-cheque-btn btn btn-default btn-xs">UV</button>
+        }*@ &nbsp; &nbsp; &nbsp;
+
+    <button type="button" data-btnfor="rotate" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Rotate</button>
+    <button type="button" data-btnfor="invert" class="modify-cheque-btn btn btn-default btn-xs">@Locale.Invert</button>
+    <button type="button" data-btnfor="large" class="modify-cheque-btn btn btn-default btn-xs">@Locale.BigImage</button>
+</div>

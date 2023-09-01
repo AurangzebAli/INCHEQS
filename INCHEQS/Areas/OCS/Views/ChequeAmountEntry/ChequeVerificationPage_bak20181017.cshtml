@@ -1,0 +1,75 @@
+﻿@using System.Data;
+@using INCHEQS.Resources
+@{
+	ViewBag.Title = "ChequeVerificationPage";
+	Layout = "~/Views/Shared/_LayoutChequeVerification.cshtml";
+
+	int MinusTotalRecord;
+	string OriTotalRecord = "";
+	if (ViewBag.MinusRecordIndicator != null) {
+		// MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalRecord")) - 1;
+		MinusTotalRecord = 0;
+	} else {
+		//MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalRecord"));
+		MinusTotalRecord = 0;
+}
+	if (ViewBag.DatabaseViewName == "View_Verification") {
+		MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+	}
+	if (ViewBag.LockIndicator != null) {
+		OriTotalRecord = ViewBag.InwardItemViewModel.getField("TotalRecord");
+        <input type="hidden" id="OriTotalRecordHolder" value="@OriTotalRecord">
+    }
+    
+}
+
+<div>
+    <div class="row mTop10">
+        <div class="col-sm-7">
+            <span class="h4">@Locale.RejectReentry</span>
+            <span Class="red">@ViewBag.InwardItemViewModel.getField("fldTransDesc")</span>
+            <span class="h5"> @ViewBag.InwardItemViewModel.getField("fldItemStatus")</span>
+            <span class="red bold">[@MinusTotalRecord / </span>
+            <span class="red bold" id="OriTotalRecord">1</span>
+            <span class="red bold">]</span>
+            <div class="row">
+                <div class="col-sm-6">
+                    <span class="h5 mRig50">@Locale.UIN </span>
+                    <span>@ViewBag.InwardItemViewModel.getField("fldUIC")</span>
+                </div>
+                <div class="col-sm-6">
+                    <span class="h5 bold">HOST STATUS :</span>
+                    <span class="txtRed bold blink">@ViewBag.InwardItemViewModel.getField("fldRejectStatus1") - @ViewBag.HostStatus</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5 text-right">
+            @Html.Partial("InwardClearing/Base/_ChequeControlAction")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            @Html.Partial("InwardClearing/Base/_ChequeImage")
+        </div>
+        <div class="col-sm-4">
+            @Html.Partial("InwardClearing/Base/_ChequeInfo")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 reject-reentry-action">
+
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "RejectReentryAction")) {
+            if (ViewBag.TaskRole == "Checker") {
+                @Html.Partial("Partial/_CheckerVerification")
+            } else {
+                @Html.Partial("Partial/_MakerVerification")
+            }
+        }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            @Html.Partial("InwardClearing/Base/_RejectReentryShowMICR")
+        </div>
+    </div>
+</div>

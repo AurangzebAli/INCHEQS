@@ -1,0 +1,47 @@
+﻿@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Resources;
+    <table id="search-result-table" class="table table-striped table-hover table-bordered">
+        @if (ViewBag.Type == "Ready")
+        {
+            <thead>
+                <tr>
+                    @Html.Partial("SearchPage/_TableHeaderColumns")
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+                {
+                    <tr>
+                        @Html.Partial("SearchPage/_TableBodyColumns", row)
+                        <td>
+                            <a href="" class="btn btn-default btn-xs row-action-branch" data-action="@Url.Action("Submit")">Submit Batch</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            <thead>
+                <tr>
+                    @Html.Partial("SearchPage/_TableHeaderColumns")
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+                {
+                    <tr>
+                        @Html.Partial("SearchPage/_TableBodyColumns", row)
+                    </tr>
+                }
+            </tbody>
+        }
+
+        <tfoot>
+            @Html.Partial("SearchPage/_TablePaginationFooter")
+        </tfoot>
+    </table>
+
+
+@Scripts.Render("~/bundles/SearchResultPage")

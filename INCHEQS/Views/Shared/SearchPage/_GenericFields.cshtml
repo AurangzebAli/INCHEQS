@@ -1,0 +1,146 @@
+﻿@using INCHEQS.Resources
+
+@foreach (var field in ViewBag.SearchPage.FormFields)
+{
+  
+   
+    if ("DateFromTo".Equals(field.fieldType))
+    {
+        <div class="row">
+            <div class="form-horizontal col-sm-2">
+                <span style="font-size-adjust:initial"><label class="txtBlack" for="@field.fieldId">Start Date </label></span>
+            </div>
+            <div class="form-horizontal col-sm-2">
+                <input type="text" class="form-control @(field.isReadOnly == "Y" ? "" : "date-start") txtBlack" name="from_@field.fieldId" value="@field.fieldDefaultValue" readonly />
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-horizontal col-sm-2">
+                <span style="font-size-adjust:initial"><label class="txtBlack" for="@field.fieldId">End Date</label></span>
+            </div>
+            <div class="form-horizontal col-sm-2">
+                <input type="text" class="form-control @(field.isReadOnly == "Y" ? "" : "date-end") txtBlack" name="to_@field.fieldId" value="@field.fieldDefaultValue" readonly />
+            </div>
+        </div>
+
+
+    }
+    else
+    {
+        <div class="row">
+            <div class="form-horizontal col-sm-2">
+                <span style="font-size-adjust:initial"><label class="txtBlack" for="@field.fieldId">@field.fieldLabel</label></span>
+            </div>
+            <div class="form-horizontal col-sm-2">
+                @if ("TextBox".Equals(field.fieldType))
+                {
+                    <input type="text" class="form-control txtBlack" maxlength="@field.length" name="@field.fieldId" value="@field.fieldDefaultValue" @(field.isReadOnly == "Y" ? "readonly" : "") />
+                }
+                @if ("NumberBox".Equals(field.fieldType))
+                {
+                    <input type="text" class="form-control number-only txtBlack" maxlength="@field.length" name="@field.fieldId" value="@field.fieldDefaultValue" @(field.isReadOnly == "Y" ? "readonly" : "") />
+                }
+                @if ("Currency".Equals(field.fieldType))
+                {
+                    <input type="text" class="form-control number-only floatnumber txtBlack" style="text-align:right" maxlength="@field.length" name="@field.fieldId" value="@field.fieldDefaultValue" @(field.isReadOnly == "Y" ? "readonly" : "") />
+                }
+
+                @if ("SelectList".Equals(field.fieldType))
+                {
+                    <select class="form-control txtBlack" name="@field.fieldId">
+                        @if (field.keyValueFieldList != null)
+                        {
+                            foreach (var pair in field.keyValueFieldList)
+                            {
+                                <option value="@pair.value.Trim()" @(field.fieldDefaultValue == pair.value ? "selected" : "")>@pair.text</option>
+                            }
+                        }
+                    </select>
+                }
+                @if ("SelectListWithAll".Equals(field.fieldType))
+                {
+                    if ("fldIssueBankCode".Equals(@field.fieldId) || "fldissuebankcode".Equals(@field.fieldId))
+                    {
+                        <select class="form-control txtBlack" id="fldIssueBankCode" name="@field.fieldId">
+                            <option value="">@Locale.ALL</option>
+                            @if (field.keyValueFieldList != null)
+                            {
+                                foreach (var pair in field.keyValueFieldList)
+                                {
+                                    <option value="@pair.value.Trim()" @(field.fieldDefaultValue == pair.value ? "selected" : "")>@pair.text</option>
+                                }
+                            }
+                        </select>
+                    }
+                    else if ("fldIssueBankBranch".Equals(@field.fieldId) || "PayBranchCode".Equals(@field.fieldId))
+                    {
+                        <select class="form-control txtBlack" id="fldIssueBankBranch" name="@field.fieldId">
+                            <option value="">@Locale.ALL</option>
+                            @if (field.keyValueFieldList != null)
+                            {
+                                foreach (var pair in field.keyValueFieldList)
+                                {
+                                    <option value="@pair.value.Trim()" @(field.fieldDefaultValue == pair.value ? "selected" : "")>@pair.text</option>
+                                }
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        <select class="form-control txtBlack" name="@field.fieldId">
+                            <option value="">@Locale.ALL</option>
+                            @if (field.keyValueFieldList != null)
+                            {
+                                foreach (var pair in field.keyValueFieldList)
+                                {
+                                    <option value="@pair.value.Trim()" @(field.fieldDefaultValue == pair.value ? "selected" : "")>@pair.text</option>
+                                }
+                            }
+                        </select>
+                    }
+                }
+                @if ("Date".Equals(field.fieldType))
+                {
+                    <input type="text" class="form-control @(field.isReadOnly == "Y"? "" : "form-date") txtBlack" name="@field.fieldId" value="@field.fieldDefaultValue" readonly />
+                }
+
+            </div>
+        </div>
+    }
+}
+<script type="text/javascript">
+
+    /*$(function () {
+        $('.currency').maskMoney({ allowZero: false });
+    })*/
+
+    $(document).ready(function () {
+        $(".floatnumber").change(function () {
+            if ($(this).val() != "") {
+
+                var value = parseFloat($(this).val()).toFixed(2)
+                var parts = value.toString().split(".");
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                //parts.join(".")
+                $(this).val(parts.join("."));
+                //$(this).val(parseFloat($(this).val()).toFixed(2));
+            } else {
+                $(this).val("");
+            }
+        });
+    });
+
+    /*function setTwoNumberDecimal() {
+        this.value = parseFloat(this.value).toFixed(2);
+
+        if (this.value != "" && this.value != null) {
+            if (this.value != "0") {
+                $(function () {
+                    $('.currency').maskMoney({ allowZero: false });
+                })
+            } else {
+                this.value = parseFloat(this.value).toFixed(2);
+            }
+
+    }*/
+</script>

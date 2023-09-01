@@ -1,0 +1,43 @@
+﻿using INCHEQS.Security.AuditTrail;
+using INCHEQS.Models.Sequence;
+using System.Collections.Generic;
+using INCHEQS.DataAccessLayer;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace INCHEQS.Areas.ICS.Models.ChequeImage  
+{
+    public class ICSChequeImageDao : IICSChequeImageDao
+    {
+
+        private readonly ApplicationDbContext dbContext;
+        private readonly ISequenceDao sequenceDao;
+        private readonly IAuditTrailDao auditTrailDao;
+
+        public ICSChequeImageDao(ApplicationDbContext dbContext, ISequenceDao sequenceDao, IAuditTrailDao auditTrailDao)
+        {
+            this.dbContext = dbContext;
+            this.sequenceDao = sequenceDao;
+            this.auditTrailDao = auditTrailDao;
+        }
+
+
+        public DataTable GetImageByte(string uic)
+        {
+
+            DataTable ds = new DataTable();
+            //string stmt = "select " +
+            //"(select fldimagecode from tblocsmicrimage where fldimagetype = 'gf.jpg' and flduic = @flduic limit 1) as fldgfrontimgbt, " +
+            //"(select fldimagecode from tblocsmicrimage where fldimagetype = 'gb.jpg' and flduic = @flduic limit 1) as fldgbackimgbt, " +
+            //"(select fldimagecode from tblocsmicrimage where fldimagetype = 'bf.tif' and flduic = @flduic limit 1) as fldfrontimgbt, " +
+            //"(select fldimagecode from tblocsmicrimage where fldimagetype = 'bb.tif' and flduic = @flduic limit 1) as fldbackimgbt, " +
+            //"(select fldimagecode from tblocsmicrimage where fldimagetype = 'gu.tif' and flduic = @flduic limit 1) as flduvimgbt ";
+            string stmt = "select fldGFrontIMGCode as fldgfrontimgbt, fldGBackIMGCode as fldgbackimgbt, fldFrontIMGCode as fldfrontimgbt, fldBackIMGCode as fldbackimgbt,fldUVIMGCode as flduvimgbt  from tbliteminitial where fldUIC = @flduic";
+            List<SqlParameter> sqlParams = new List<SqlParameter>();
+            sqlParams.Add(new SqlParameter("@flduic", uic));
+            ds = dbContext.GetRecordsAsDataTable(stmt, sqlParams.ToArray());
+
+            return ds;
+        }
+    }
+}

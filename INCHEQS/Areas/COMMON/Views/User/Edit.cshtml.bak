@@ -1,0 +1,229 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "User", FormMethod.Post, new { @Class = "secure-form" })) {
+@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>@Locale.AdministratorUserProfileEdit</h4>
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <tbody>
+            <tr>
+                <th>@Locale.UserLoginId</th>
+                <td>
+                    <input type="text" value="@ViewBag.User.fldUserAbb" name="fldUserAbb" disabled/>
+                    <span class="red-star" id="editUserIdredstar" name="editUserIdredstar">*</span>
+                    <input type="hidden" value="@ViewBag.User.fldUserId" name="fldUserId" />
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.UserName</th>
+                <td>
+                    <input type="text" value="@ViewBag.User.fldUserDesc" name="fldUserDesc" maxlength="50" />
+                    <span class="red-star">*</span>
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.UserType</th>
+                <td>
+                    @Locale.Center <input type="radio" name="userType" id="Admin" value="Admin" @(ViewBag.User.userType == "Admin" ? "checked='true'" : "") /> &nbsp;&nbsp;&nbsp;
+                    @Locale.Branch <input type="radio" name="userType" id="branch" value="branch" @(ViewBag.User.userType == "branch" ? "checked='true'" : "") /> &nbsp;&nbsp;&nbsp;
+                    @Locale.System <input type="radio" name="userType" id="System" value="System" @(ViewBag.User.userType == "System" ? "checked='true'" : "") />&nbsp;&nbsp;&nbsp;<span class="red-star" id="usertyperedstar" name="usertyperedstar">*</span>
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.BranchCode</th>
+                <td>
+                    <select name="fldBranchCode" id="fldBranchCode">
+                        <option value=""> </option>
+                        @foreach (var item in @ViewBag.Branch)
+                        {
+                            <option value="@item.fldConBranchCode" @(ViewBag.User.fldBranchCode.Trim() == item.fldConBranchCode.Trim() ? "selected" : "")>@item.fldConBranchCode - @item.fldBranchDesc</option>
+                        }
+                    </select>
+                    <span class="red-star" id="BranchCoderedstar" name="BranchCoderedstar" style="visibility:hidden;">*</span>
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.VerificationClass</th>
+                <td>
+                    <select name="fldVerificationClass" id="fldVerificationClass">
+                        <option value=""> </option>
+                        @foreach (var item in @ViewBag.VerificationClass)
+                        {
+                            <option value="@item.fldClass" @(ViewBag.User.fldVerificationClass.Trim() == item.fldClass.Trim() ? "selected" : "")> Class @item.fldClass : @item.fldLimitDesc</option>
+                        }
+                    </select>
+                    <span class="red-star" id="VerificationClassredstar" name="VerificationClassredstar">*</span>
+                    <input type="hidden" value="@ViewBag.User.fldVerificationClass" name="fldVerificationClass_2" />
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.VerificationLimit</th>
+                <td>
+                    <input type="text" name="fldVerificationLimit" id="fldVerificationLimit"value="@ViewBag.User.fldVerificationLimit" class="number-only" autocomplete="off" maxlength="3" />
+                    <span class="red-star">*</span>
+                    <input type="hidden" value="@ViewBag.User.fldVerificationLimit" name="fldVerificationLimit_2" />
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.Disable</th>
+                <td><input type="checkbox" id="fldDisableLogin" name="fldDisableLogin" @(ViewBag.User.fldDisableLogin == "Y" ? "checked=true value=Y" : "value=N") /> Yes</td>
+            </tr>
+            <tr>
+                <th>@Locale.Password</th>
+                <td>
+                    <input type="password" value="@ViewBag.User.fldPassword" name="fldPassword" id="fldPassword" maxlength="50"/>
+                    <span class="red-star" id="Passwordredstar" name="Passwordredstar">*</span>
+                    <input type="hidden" value="@ViewBag.User.fldPassword" name="passwordChecker" />
+                    &nbsp;&nbsp;<span><input type="checkbox" id="chkboxPassword" name="chkboxPassword" value="" /> Update Password</span>
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.ConfirmPassword</th>
+                <td>
+                    <input type="password" name="fldConfirmPassword" id="fldConfirmPassword" maxlength="50" autocomplete="off" />
+                    <span class="red-star" id="ConfirmPasswordredstar" name="ConfirmPasswordredstar">*</span>
+                </td>
+            </tr>
+
+
+            @if (1 == 0)
+            {
+                <tr>
+                    <th>@Locale.EmailAccount</th>
+                    <td><input type="text" value="@ViewBag.User.fldEmail" name="fldEmail" /></td>
+                </tr>
+                <tr>
+                    <th>@Locale.VerificationLimit</th>
+                    <td><input type="text" value="@ViewBag.User.fldVerificationLimit" name="fldVerificationLimit" /></td>
+                </tr>
+                <tr><td colspan="2">&nbsp;</td></tr>
+                <tr>
+                    <th>@Locale.BankDescription</th>
+                    <td>@ViewBag.User.fldBankCode - @ViewBag.User.fldBankDesc</td>
+                </tr>
+            <tr>
+                <th>@Locale.UserTypeCCD</th>
+                <td id="UserTypeCCD">
+                    <input type="hidden" id="officercheckbox" value="@ViewBag.User.fldAdminFlag"/>
+                    @Locale.Verifier1 <input type="radio" name="userType2" id="verifier1" value="N" /> &nbsp;&nbsp;&nbsp;
+                    @Locale.VerifierOfficer <input type="radio" name="userType2" id="verifierofficer" value="Y" />
+                    @Locale.VerifierSupervisor <input type="radio" name="userType2" id="verifiersupervisor" value="S" />
+                </td>
+            </tr>
+            <tr id="SelectOfficer" style="display:none;">
+                <th>@Locale.SelectUserOfficer</th>
+                <td>
+                    <select name="SelectUserOfficer" id="SelectUserOfficer">
+                        <option value=""> </option>
+                        @foreach (var item in ViewBag.Officer)
+                        {
+                            <option value="@item.fldUserAbbOfficer"@(ViewBag.GetOfficer.fldOfficerId.Trim() == item.fldUserAbbOfficer.Trim() ? "selected" : "")>@item.fldUserAbbOfficer - @item.fldAdminFlag</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr id="SelectVerifierBranch" style="display:none;">
+                <td colspan="2">
+                    <div class="form-select">
+                        <div>
+                            <b>@Locale.BranchAvailableList</b><br>
+                            <select multiple="multiple" class="form-multiple select-from">
+                                @foreach (var item in ViewBag.BranchAvailableList)
+                                {
+                                    <option value="@item.fldConBranchCode">@item.fldBranchDesc</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-move">
+                            <br />
+                            <p>
+                                <input type="button" title="select all" class="btn btn-default btn-move addAll" value="&gt;&gt;">
+                            </p>
+                            <p><input type="button" title="select" class="btn btn-default btn-move addOne" value="&gt;"></p>
+                            <p><input type="button" title="remove" class="btn btn-default btn-move rmOne" value="&lt;"></p>
+                            <p><input type="button" title="remove all" class="btn btn-default btn-move rmAll" value="&lt;&lt;"></p>
+                        </div>
+                        <div>
+                            <b>@Locale.BranchSelectedList</b><br>
+                            <select multiple="multiple" class="form-multiple select-to" name="selectedTask">
+                                @foreach (var item in ViewBag.BranchSelectedList)
+                                {
+                                    <option value="@item.fldConBranchCode">@item.fldBranchDesc</option>
+                                }
+                            </select>
+
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <th>@Locale.VerificationClass</th>
+                <td>
+                    <select name="fldVerificationClass" id="fldVerificationClass">
+                        @foreach (var item in @ViewBag.VerificationClass)
+                        {
+                            <option value="@item.fldClass"  @(ViewBag.User.fldClass == item.fldClass ? "selected" : "")>Class @item.fldClass : @item.fldLimitDesc</option>
+                        }
+                    </select>
+
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.VerificationLimit</th>
+                <td>
+                    <input type="text" value="@ViewBag.User.fldVerificationLimit" name="fldVerificationLimit" />
+                    <span class="red-star">*</span>
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.City</th>
+                <td>
+                    <select name="fldCity" id="fldCity">
+                        @foreach (var item in @ViewBag.City)
+                        {
+                        <option value="@item.fldStateCode" @(ViewBag.User.fldCity == item.fldStateCode ? "selected" : "")>@item.fldStateCode - @item.fldStateDesc</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.Disable</th>
+                <td>
+                    <select name="fldDisableLogin1" id="fldDisableLogin1">
+                        <option value="Y" @(ViewBag.User.fldDisableLogin == "Y" ? "selected" : "")>Y</option>
+                        <option value="N" @(ViewBag.User.fldDisableLogin == "N" ? "selected" : "")>N</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.FailedLoginDate</th>
+                <td>@ViewBag.User.fldFailLoginDate</td>
+            </tr>
+            <tr>
+                <th>@Locale.PasswordExpiryDate</th>
+                <td>@ViewBag.User.fldPasswordExpDate</td>
+            </tr>
+            <tr>
+                <th>@Locale.IDSuspendStartat</th>
+                <td><input type="text" value="@ViewBag.User.fldIDExpDate" name="fldIDExpDate" class="form-date" readonly style="height:25px" /></td>
+            </tr>
+            <tr>
+                <th>@Locale.DateCreated</th>
+                <td>@ViewBag.User.fldCreateTimeStamp</td>
+            </tr>
+}
+        </tbody>
+    </table>
+    <button type="submit" data-action="@Url.Action("/UPDATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIds.User.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+    <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.User.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+</div>
+}
+
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/user.js"></script>
+<script src="~/Scripts/App/app.js"></script>

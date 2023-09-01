@@ -1,0 +1,1198 @@
+﻿using INCHEQS.ConfigVerificationBranch.BranchActivation;
+using INCHEQS.Areas.ICS.Models.Verification;
+using INCHEQS.ConfigVerification.VerificationLimit;
+using INCHEQS.Common;
+using INCHEQS.Security.Account;
+using INCHEQS.Models.CommonInwardItem;
+using INCHEQS.Models.SearchPageConfig;
+using INCHEQS.Models.Sequence;
+using INCHEQS.TaskAssignment;
+using INCHEQS.ConfigVerification.ThresholdSetting;
+//using INCHEQS.Models.VerificationLimit;
+using INCHEQS.Resources;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Web.Mvc;
+using INCHEQS.DataAccessLayer;
+using INCHEQS.Areas.COMMON.Models.ReturnCode;
+
+namespace INCHEQS.Models.Verification
+{
+    public class VerificationDao : IVerificationDao
+    {
+        private readonly IPageConfigDao pageConfigDao;
+        private readonly ICommonInwardItemDao commonInwardItemDao;
+        private readonly ISequenceDao sequenceDao;
+        private readonly IThresholdSettingDao thresholdSettingDao;
+        private readonly IVerificationLimitDao verificationLimitDao;
+        private readonly IBranchActivationDao branchActivationDao;
+        private readonly ApplicationDbContext dbContext;
+        private readonly IReturnCodeDao returnCodeDao;
+
+        public VerificationDao(ISequenceDao sequenceDao, IPageConfigDao pageConfigDao, ICommonInwardItemDao commonInwardItemDao, IThresholdSettingDao thresholdSettingDao, IVerificationLimitDao verificationLimitDao, ApplicationDbContext dbContext, IBranchActivationDao branchActivationDao, IReturnCodeDao returnCodeDao)
+        {
+            this.pageConfigDao = pageConfigDao;
+            this.commonInwardItemDao = commonInwardItemDao;
+            this.sequenceDao = sequenceDao;
+            this.thresholdSettingDao = thresholdSettingDao;
+            this.verificationLimitDao = verificationLimitDao;
+            this.dbContext = dbContext;
+            this.branchActivationDao = branchActivationDao;
+            this.returnCodeDao = returnCodeDao;
+        }
+
+        public Dictionary<string, dynamic> ExtendInfoStatusNonConfirmField(Dictionary<string, dynamic> field, AccountModel currentUser)
+        {
+            field.Add("fldNonConfirmUserID", currentUser.UserId);
+            field.Add("fldNonConfirmUserClass", currentUser.VerificationClass);
+            field.Add("fldNonConfirmTimeStamp", DateUtils.GetCurrentDatetimeForSql());
+            field.Add("fldApprovalStatus", DBNull.Value);
+            field.Add("fldApprovalUserId", currentUser.UserId);
+            field.Add("fldApprovalUserClass", DBNull.Value);
+            field.Add("fldApprovalTimeStamp", DBNull.Value);
+            return field;
+        }
+
+        public Dictionary<string, dynamic> ExtendInfoStatusApprovalField(Dictionary<string, dynamic> field, AccountModel currentUser)
+        {
+            field.Add("fldApprovalUserId", currentUser.UserId);
+            field.Add("fldApprovalUserClass", currentUser.VerificationClass);
+            field.Add("fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql());
+            field.Add("fldNonConfirmStatus", DBNull.Value);
+            field.Add("fldNonConfirmUserID", DBNull.Value);
+            field.Add("fldNonConfirmUserClass", DBNull.Value);
+            field.Add("fldNonConfirmTimeStamp", DBNull.Value);
+            field.Add("fldHostDebit", 5);//TODO: Unknown process
+            return field;
+        }
+
+        public Dictionary<string, dynamic> ExtendInfoStatusCommonField(Dictionary<string, dynamic> field, FormCollection collection)
+        {
+            field.Add("fldApprovalIndicator", "Y"); //TODO: unknown process
+            field.Add("fldCharges", collection["fldCharges"].Replace(",", ""));
+            field.Add("fldUpdateTimeStamp", DateUtils.GetCurrentDatetimeForSql());
+            field.Add("fldRemarks", collection["textAreaRemarks"]);
+            field.Add("fldExtRemarks", collection["textAreaExtRemarks"]);
+            return field;
+        }
+
+        public Dictionary<string, dynamic> ExtendPendingInfoCommonField(Dictionary<string, dynamic> field, FormCollection collection, AccountModel currentUser)
+        {
+            field.Add("fldApprovalUserId", currentUser.UserId);
+            field.Add("fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql());
+            field.Add("fldUpdateUserID", currentUser.UserId);
+            field.Add("fldUpdateTimeStamp", DateUtils.GetCurrentDatetimeForSql());
+            field.Add("fldCharges", collection["fldCharges"].Replace(",", ""));
+            field.Add("fldRemarks", collection["textAreaRemarks"]);
+            return field;
+        }
+        public void VerificationReturnAll(AccountModel currentUser)
+        {
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            string sqlCondition = "fldInwardItemId IN (SELECT fldInwardItemId FROM View_ReturnAll)";
+
+            sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn);
+            sqlUpdateInfoStatus.Add("fldApprovalIndicator", "Y"); //TODO: unknown process
+            sqlUpdateInfoStatus.Add("fldUpdateTimeStamp", DateUtils.GetCurrentDatetimeForSql());
+            sqlUpdateInfoStatus.Add("fldRemarks", "Return All");
+
+            ExtendInfoStatusApprovalField(sqlUpdateInfoStatus, currentUser);
+
+            dbContext.ConstructAndExecuteUpdateCommandWithStringCondition("tblInwardItemInfoStatus", sqlUpdateInfoStatus, sqlCondition);
+        }
+        public void VerificationApproveAll(AccountModel currentUser)
+        {
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            string sqlCondition = "fldInwardItemId IN (SELECT fldInwardItemId FROM View_ApproveAll)";
+
+            sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationApprove);
+            sqlUpdateInfoStatus.Add("fldApprovalIndicator", "Y"); //TODO: unknown process
+            sqlUpdateInfoStatus.Add("fldUpdateTimeStamp", DateUtils.GetCurrentDatetimeForSql());
+            sqlUpdateInfoStatus.Add("fldRemarks", "Approve All");
+
+            ExtendInfoStatusApprovalField(sqlUpdateInfoStatus, currentUser);
+
+            dbContext.ConstructAndExecuteUpdateCommandWithStringCondition("tblInwardItemInfoStatus", sqlUpdateInfoStatus, sqlCondition);
+        }
+
+        public void VerificationApprove(FormCollection collection, AccountModel currentUser, string taskRole)
+        {
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+            double itemAmount = Convert.ToDouble(collection["current_fldAmount"]);
+            //Maker Condition
+            if (taskRole.Equals("Maker"))
+            {
+                double approveThresholdLimit = thresholdSettingDao.GetThresholdLimit("A", 1, currentUser.BankCode);
+                //If amount more then threshold
+                if (itemAmount >= approveThresholdLimit)
+                {
+                    sqlUpdateInfoStatus.Add("fldNonConfirmStatus", VerificationStatus.ACTION.VerificationApprove);
+                    ExtendInfoStatusNonConfirmField(sqlUpdateInfoStatus, currentUser);
+                }
+                //if not, just approved it
+                else
+                {
+                    sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationApprove);
+                    ExtendInfoStatusApprovalField(sqlUpdateInfoStatus, currentUser);
+                }
+            }
+            //Checker 1 Condition
+            else if (taskRole.Equals("Checker1"))
+            {
+                double approveThresholdLimit = thresholdSettingDao.GetThresholdLimit("A", 2, currentUser.BankCode);
+                //If amount more then threshold
+                if (itemAmount >= approveThresholdLimit)
+                {
+                    sqlUpdateInfoStatus.Add("fldNonConfirmStatus", VerificationStatus.ACTION.VerificationApprove1stChecker);
+                    ExtendInfoStatusNonConfirmField(sqlUpdateInfoStatus, currentUser);
+                }
+                //if not, just approved it
+                else
+                {
+                    sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationApprove);
+                    ExtendInfoStatusApprovalField(sqlUpdateInfoStatus, currentUser);
+                }
+            }
+            //Last Checker COndition
+            else if (taskRole.Equals("Checker"))
+            {
+                sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationApprove);
+                ExtendInfoStatusApprovalField(sqlUpdateInfoStatus, currentUser);
+            }
+            //Compulsory update for tblInwardItemInfoStatus
+            ExtendInfoStatusCommonField(sqlUpdateInfoStatus, collection);
+            //Since it approved, all reject code will be OK by desc
+            sqlUpdateInfoStatus.Add("fldRejectCode", "000");
+            //Excute the command
+            dbContext.ConstructAndExecuteUpdateCommand("tblInwardItemInfoStatus", sqlUpdateInfoStatus, sqlCondition);
+        }
+
+        public void VerificationApproveNew(FormCollection collection, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction)
+        {
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+            double itemAmount = Convert.ToDouble(collection["current_fldAmount"]);
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            string accNo = "";
+            string cheqNo = "";
+            accNo = collection["current_fldAccountNumber"];
+            cheqNo = collection["current_fldChequeSerialNo"];
+
+            if (pageConfig.TaskId == "308150" || pageConfig.TaskId == "308160")
+            {
+                if (pageConfig.TaskRole.Equals("Maker"))
+                {
+                        sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", DBNull.Value));
+                        sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                        sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", DBNull.Value));
+                        sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DBNull.Value));
+                        sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", VerificationStatus.ACTION.BranchLargeAmtApproveMaker));
+                        sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", currentUser.UserId));
+                        sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", currentUser.VerificationClass));
+                        sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+
+             
+                }
+                //Checker 1 Condition
+                else if (pageConfig.TaskRole.Equals("Checker1"))
+                {
+
+                        sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.BranchLargeAmtApproveChecker));
+                        sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                        sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", currentUser.VerificationClass));
+                        sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                        sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", DBNull.Value));
+                        sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", DBNull.Value));
+                        sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", DBNull.Value));
+                        sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DBNull.Value));
+
+                }
+                //Last Checker COndition
+                else if (pageConfig.TaskRole.Equals("Checker"))
+                {
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationApprove));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", currentUser.VerificationClass));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DBNull.Value));
+                }
+
+            }
+            else
+            { 
+
+            //Maker Condition
+            if (pageConfig.TaskRole.Equals("Maker"))
+            {
+                double approveThresholdLimit = thresholdSettingDao.GetThresholdLimit("A", 1, currentUser.BankCode);
+                //If amount more then threshold
+                if (itemAmount >= approveThresholdLimit)
+                {
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", VerificationStatus.ACTION.VerificationApprove));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", currentUser.VerificationClass));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                }
+                //if not, just approved it
+                else
+                {
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationApprove));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", currentUser.VerificationClass));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DBNull.Value));
+                }
+            }
+            //Checker 1 Condition
+            else if (pageConfig.TaskRole.Equals("Checker1"))
+            {
+                double approveThresholdLimit = thresholdSettingDao.GetThresholdLimit("A", 2, currentUser.BankCode);
+                //If amount more then threshold
+                if (itemAmount >= approveThresholdLimit)
+                {
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", VerificationStatus.ACTION.VerificationApprove1stChecker));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", currentUser.VerificationClass));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                }
+                //if not, just approved it
+                else
+                {
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationApprove));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", currentUser.VerificationClass));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DBNull.Value));
+                }
+            }
+            //Last Checker COndition
+            else if (pageConfig.TaskRole.Equals("Checker"))
+            {
+                sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationApprove));
+                sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", currentUser.VerificationClass));
+                sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", DBNull.Value));
+                sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", DBNull.Value));
+                sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", DBNull.Value));
+                sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DBNull.Value));
+            }
+        }
+            //Compulsory update for tblInwardItemInfoStatus
+            //sqlParameterNext.Add(new SqlParameter("@fldApprovalIndicator", "Y")); //TODO: unknown process
+            sqlParameterNext.Add(new SqlParameter("@fldCharges", collection["fldCharges"].Replace(",", "")));
+            //sqlParameterNext.Add(new SqlParameter("@fldUpdateTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+            //Since it approved, all reject code will be OK by desc
+            //sqlParameterNext.Add(new SqlParameter("fldRejectCode", commonInwardItemDao.GetRejectCodeByRejectDesc("Default")));
+            sqlParameterNext.Add(new SqlParameter("fldRejectCode", "000"));
+            //history param
+            sqlParameterNext.Add(new SqlParameter("@fldQueue", pageConfig.TaskId));
+            //sqlParameterNext.Add(new SqlParameter("fldActionStatusId", nextHistorySecNo);
+            sqlParameterNext.Add(new SqlParameter("@fldActionStatus", verifyAction));
+            sqlParameterNext.Add(new SqlParameter("@fldUIC", collection["current_fldUIC"]));
+            sqlParameterNext.Add(new SqlParameter("@fldInwardItemID", collection["fldInwardItemId"]));
+            //sqlParameterNext.Add(new SqlParameter("@fldCreateTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+            sqlParameterNext.Add(new SqlParameter("@fldRemarks", collection["remarkField"]));
+            sqlParameterNext.Add(new SqlParameter("@fldTextAreaRemarks", collection["textAreaRemarks"]));
+            sqlParameterNext.Add(new SqlParameter("@fldTextExtAreaRemarks", collection["textAreaExtRemarks"]));
+            //sqlParameterNext.Add(new SqlParameter("@fldVerifySeq", ""));
+            sqlParameterNext.Add(new SqlParameter("@fldCreateUserID", currentUser.UserId));
+            sqlParameterNext.Add(new SqlParameter("@accountNumber", accNo));
+            sqlParameterNext.Add(new SqlParameter("@chequeNumber", cheqNo));
+            sqlParameterNext.Add(new SqlParameter("@BankCode", currentUser.BankCode));
+            //Excute the command
+            dbContext.GetRecordsAsDataTableSP("sp_updateApprovedInwardItem", sqlParameterNext.ToArray());
+           // dbContext.ConstructAndExecuteUpdateCommand("tblInwardItemInfoStatus", sqlUpdateInfoStatus, sqlCondition);
+        }
+
+
+        public void VerificationReturn(FormCollection collection, AccountModel currentUser, string taskRole)
+        {
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+            double itemAmount = Convert.ToDouble(collection["current_fldAmount"]);
+            //Maker Condition
+            if (taskRole.Equals("Maker"))
+            {
+                double approveThresholdLimit = thresholdSettingDao.GetThresholdLimit("R", 1, currentUser.BankCode);
+                //If amount more then threshold
+                if (itemAmount >= approveThresholdLimit)
+                {
+                    sqlUpdateInfoStatus.Add("fldNonConfirmStatus", VerificationStatus.ACTION.VerificationReturn);
+                    ExtendInfoStatusNonConfirmField(sqlUpdateInfoStatus, currentUser);
+                }
+                //if not, just approved it
+                else
+                {
+                    sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn);
+                    ExtendInfoStatusApprovalField(sqlUpdateInfoStatus, currentUser);
+                }
+            }
+            //Checker 1 Condition
+            if (taskRole.Equals("Checker1"))
+            {
+                double approveThresholdLimit = thresholdSettingDao.GetThresholdLimit("R", 2, currentUser.BankCode);
+                //If amount more then threshold
+                if (itemAmount >= approveThresholdLimit)
+                {
+                    sqlUpdateInfoStatus.Add("fldNonConfirmStatus", VerificationStatus.ACTION.VerificationReturn1stChecker);
+                    ExtendInfoStatusNonConfirmField(sqlUpdateInfoStatus, currentUser);
+                }
+                //if not, just approved it
+                else
+                {
+                    sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn);
+                    ExtendInfoStatusApprovalField(sqlUpdateInfoStatus, currentUser);
+                }
+            }
+            //Last Checker COndition
+            else if (taskRole.Equals("Checker"))
+            {
+                sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn);
+                ExtendInfoStatusApprovalField(sqlUpdateInfoStatus, currentUser);
+            }
+            //Compulsory update for tblInwardItemInfoStatus
+            ExtendInfoStatusCommonField(sqlUpdateInfoStatus, collection);
+            //update Reject Code
+            sqlUpdateInfoStatus.Add("fldRejectCode", collection["new_textRejectCode"]);
+            //Excute the command
+            dbContext.ConstructAndExecuteUpdateCommand("tblInwardItemInfoStatus", sqlUpdateInfoStatus, sqlCondition);
+        }
+
+        public void VerificationReturnNew(FormCollection collection, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction)
+        {
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+            double itemAmount = Convert.ToDouble(collection["current_fldAmount"]);
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            string accNo = "";
+            string reject = "";
+            string cheqNo = "";
+            accNo = collection["current_fldAccountNumber"];
+            reject = collection["new_textRejectCode"];
+            cheqNo = collection["current_fldChequeSerialNo"];
+            //Maker Condition
+            if (pageConfig.TaskId == "308150" || pageConfig.TaskId == "308160")
+            {
+                if (pageConfig.TaskRole.Equals("Maker"))
+                {
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", VerificationStatus.ACTION.BranchLargeAmtRejectMaker));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", currentUser.VerificationClass));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+
+
+                }
+                //Checker 1 Condition
+                else if (pageConfig.TaskRole.Equals("Checker1"))
+                {
+
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.BranchLargeAmtRejectChecker));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", currentUser.VerificationClass));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DBNull.Value));
+
+                }
+                //Last Checker COndition
+                else if (pageConfig.TaskRole.Equals("Checker"))
+                {
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.BranchLargeAmtRejectChecker));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", currentUser.VerificationClass));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DBNull.Value));
+                }
+
+            }
+            else
+            {
+            if (pageConfig.TaskRole.Equals("Maker"))
+            {
+                double approveThresholdLimit = thresholdSettingDao.GetThresholdLimit("R", 1, currentUser.BankCode);
+                //If amount more then threshold
+                if (itemAmount >= approveThresholdLimit)
+                {
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", VerificationStatus.ACTION.VerificationReturn));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", currentUser.VerificationClass));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                }
+                //if not, just approved it
+                else
+                {
+                    //sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn);
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", currentUser.VerificationClass));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DBNull.Value));
+                }
+            }
+            //Checker 1 Condition
+            if (pageConfig.TaskRole.Equals("Checker1"))
+            {
+                double approveThresholdLimit = thresholdSettingDao.GetThresholdLimit("R", 2, currentUser.BankCode);
+                //If amount more then threshold
+                if (itemAmount >= approveThresholdLimit)
+                {
+                    //sqlUpdateInfoStatus.Add("fldNonConfirmStatus", VerificationStatus.ACTION.VerificationReturn1stChecker);
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", VerificationStatus.ACTION.VerificationReturn1stChecker));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", currentUser.VerificationClass));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                }
+                //if not, just approved it
+                else
+                {
+                    //sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn);
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", currentUser.VerificationClass));
+                    sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", DBNull.Value));
+                    sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DBNull.Value));
+                }
+            }
+            //Last Checker COndition
+            else if (pageConfig.TaskRole.Equals("Checker"))
+            {
+                //sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn);
+                sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn));
+                sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", currentUser.VerificationClass));
+                sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", DBNull.Value));
+                sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", DBNull.Value));
+                sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", DBNull.Value));
+                sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DBNull.Value));
+            }
+            }
+            //Compulsory update for tblInwardItemInfoStatus
+            //ExtendInfoStatusCommonField(sqlUpdateInfoStatus, collection);
+            //update Reject Code
+            //sqlUpdateInfoStatus.Add("fldRejectCode", collection["new_textRejectCode"]);
+            sqlParameterNext.Add(new SqlParameter("@fldCharges", collection["fldCharges"].Replace(",", "")));
+            sqlParameterNext.Add(new SqlParameter("@fldRejectCode", reject));
+            //history param
+            sqlParameterNext.Add(new SqlParameter("@fldQueue", pageConfig.TaskId));
+            sqlParameterNext.Add(new SqlParameter("@fldActionStatus", verifyAction));
+            sqlParameterNext.Add(new SqlParameter("@fldUIC", collection["current_fldUIC"]));
+            sqlParameterNext.Add(new SqlParameter("@fldInwardItemID", collection["fldInwardItemId"]));
+            sqlParameterNext.Add(new SqlParameter("@fldRemarks", collection["remarkField"]));
+            sqlParameterNext.Add(new SqlParameter("@fldTextAreaRemarks", collection["textAreaRemarks"]));
+            sqlParameterNext.Add(new SqlParameter("@fldTextExtAreaRemarks", collection["textAreaExtRemarks"]));
+            sqlParameterNext.Add(new SqlParameter("@fldCreateUserID", currentUser.UserId));
+            sqlParameterNext.Add(new SqlParameter("@accountNumber", accNo));
+            sqlParameterNext.Add(new SqlParameter("@chequeNumber", cheqNo));
+            sqlParameterNext.Add(new SqlParameter("@BankCode", currentUser.BankCode));
+            //Excute the command
+            dbContext.GetRecordsAsDataTableSP("sp_updateReturnInwardItem", sqlParameterNext.ToArray());
+            //dbContext.ConstructAndExecuteUpdateCommand("tblInwardItemInfoStatus", sqlUpdateInfoStatus, sqlCondition);
+        }
+
+        public void VerificationRoute(FormCollection collection, AccountModel currentUser)
+        {
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+
+            sqlUpdateInfoStatus.Add("fldNonConfirmStatus", VerificationStatus.ACTION.VerificationRoute);
+            sqlUpdateInfoStatus.Add("fldRejectCode", collection["new_textRejectCode"]);
+            ExtendInfoStatusNonConfirmField(sqlUpdateInfoStatus, currentUser);
+            ExtendInfoStatusCommonField(sqlUpdateInfoStatus, collection);
+            //Excute the command
+            dbContext.ConstructAndExecuteUpdateCommand("tblInwardItemInfoStatus", sqlUpdateInfoStatus, sqlCondition);
+
+            //Route : insert pending info
+            Dictionary<string, dynamic> sqlInsertPendingInfo = new Dictionary<string, dynamic>();
+            sqlInsertPendingInfo.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationRoute);
+            sqlInsertPendingInfo.Add("fldPendingID", sequenceDao.GetNextSequenceNo("tblPendingInfo"));
+            sqlInsertPendingInfo.Add("fldInwardItemId", collection["fldInwardItemId"]);
+            sqlInsertPendingInfo.Add("fldCreateUserID", currentUser.UserId);
+            sqlInsertPendingInfo.Add("fldCreateTimeStamp", DateUtils.GetCurrentDatetimeForSql());
+            sqlInsertPendingInfo.Add("fldRejectCode", collection["new_textRejectCode"]);
+
+            ExtendPendingInfoCommonField(sqlInsertPendingInfo, collection, currentUser);
+            //Excute the command
+            dbContext.ConstructAndExecuteInsertCommand("tblPendingInfo", sqlInsertPendingInfo);
+        }
+
+        public void VerificationRouteNew(FormCollection collection, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction)
+        {
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            string accNo = "";
+            string cheqNo = "";
+            accNo = collection["current_fldAccountNumber"];
+            cheqNo = collection["current_fldChequeSerialNo"];
+
+            //sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationRoute));
+            sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", DBNull.Value));
+            sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+            sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", DBNull.Value));
+            sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DBNull.Value));
+            sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", VerificationStatus.ACTION.VerificationRoute));
+            sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", currentUser.UserId));
+            sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", currentUser.VerificationClass));
+            sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+            sqlParameterNext.Add(new SqlParameter("@fldCharges", collection["fldCharges"].Replace(",", "")));
+            sqlParameterNext.Add(new SqlParameter("fldRejectCode", collection["new_textRejectCode"]));
+            //history param
+            sqlParameterNext.Add(new SqlParameter("@fldQueue", pageConfig.TaskId));
+            sqlParameterNext.Add(new SqlParameter("@fldActionStatus", verifyAction));
+            sqlParameterNext.Add(new SqlParameter("@fldUIC", collection["current_fldUIC"]));
+            sqlParameterNext.Add(new SqlParameter("@fldInwardItemID", collection["fldInwardItemId"]));
+            sqlParameterNext.Add(new SqlParameter("@fldRemarks", collection["remarkField"]));
+            sqlParameterNext.Add(new SqlParameter("@fldTextAreaRemarks", collection["textAreaRemarks"]));
+            sqlParameterNext.Add(new SqlParameter("@fldCreateUserID", currentUser.UserId));
+            sqlParameterNext.Add(new SqlParameter("@accountNumber", accNo));
+            sqlParameterNext.Add(new SqlParameter("@chequeNumber", cheqNo));
+            sqlParameterNext.Add(new SqlParameter("@BankCode", currentUser.BankCode));
+            dbContext.GetRecordsAsDataTableSP("sp_updatePendingInwardItem", sqlParameterNext.ToArray());
+            //Excute the command
+            //dbContext.ConstructAndExecuteInsertCommand("tblPendingInfo", sqlInsertPendingInfo);
+        }
+
+        public void VerificationPullOut(FormCollection collection, AccountModel currentUser)
+        {
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+            //Pull Out Field
+            sqlUpdateInfoStatus.Add("fldNonConfirmStatus", VerificationStatus.ACTION.VerificationPullOut);
+            ExtendInfoStatusNonConfirmField(sqlUpdateInfoStatus, currentUser);
+            ExtendInfoStatusCommonField(sqlUpdateInfoStatus, collection);
+            //Pull Out Reject Code
+            sqlUpdateInfoStatus.Add("fldRejectCode", collection["new_textRejectCode"]);
+            //Excute the command
+            dbContext.ConstructAndExecuteUpdateCommand("tblInwardItemInfoStatus", sqlUpdateInfoStatus, sqlCondition);
+        }
+
+        public void BranchConfirmation(FormCollection collection, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction)
+        {
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            string accNo = "";
+            string cheqNo = "";
+            accNo = collection["current_fldAccountNumber"];
+            cheqNo = collection["current_fldChequeSerialNo"];
+            sqlParameterNext.Add(new SqlParameter("@fldQueue", pageConfig.TaskId));
+            sqlParameterNext.Add(new SqlParameter("@fldUIC", collection["current_fldUIC"]));
+            sqlParameterNext.Add(new SqlParameter("@fldInwardItemID", collection["fldInwardItemId"]));
+            sqlParameterNext.Add(new SqlParameter("@fldRemarks", collection["remarkField"]));
+            sqlParameterNext.Add(new SqlParameter("@fldTextAreaRemarks", collection["textAreaRemarks"]));
+            sqlParameterNext.Add(new SqlParameter("@fldCreateUserID", currentUser.UserId));
+            sqlParameterNext.Add(new SqlParameter("@accountNumber", accNo));
+            sqlParameterNext.Add(new SqlParameter("@chequeNumber", cheqNo));
+            sqlParameterNext.Add(new SqlParameter("@BankCode", currentUser.BankCode));
+            
+            dbContext.GetRecordsAsDataTableSP("sp_updateBranchConfirmation", sqlParameterNext.ToArray());
+        }
+
+        public void VerificationRepair(FormCollection collection, AccountModel currentUser)
+        {
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+            //Pull Out Field
+            sqlUpdateInfoStatus.Add("fldNonConfirmStatus", VerificationStatus.ACTION.VerificationRepair);
+            ExtendInfoStatusNonConfirmField(sqlUpdateInfoStatus, currentUser);
+            ExtendInfoStatusCommonField(sqlUpdateInfoStatus, collection);
+            //Excute the command
+            dbContext.ConstructAndExecuteUpdateCommand("tblInwardItemInfoStatus", sqlUpdateInfoStatus, sqlCondition);
+        }
+
+        public void VerificationRepairNew(FormCollection collection, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction)
+        {
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            string accNo = "";
+            string cheqNo = "";
+            accNo = collection["current_fldAccountNumber"];
+            cheqNo = collection["current_fldChequeSerialNo"];
+            //Pull Out Field
+            //sqlUpdateInfoStatus.Add("fldNonConfirmStatus", VerificationStatus.ACTION.VerificationRepair);
+            //sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationRoute));
+            sqlParameterNext.Add(new SqlParameter("@fldApprovalStatus", DBNull.Value));
+            sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+            sqlParameterNext.Add(new SqlParameter("@fldApprovalUserClass", DBNull.Value));
+            sqlParameterNext.Add(new SqlParameter("@fldApprovalTimeStamp", DBNull.Value));
+            sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", VerificationStatus.ACTION.VerificationRepair));
+            sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserID", currentUser.UserId));
+            sqlParameterNext.Add(new SqlParameter("@fldNonConfirmUserClass", currentUser.VerificationClass));
+            sqlParameterNext.Add(new SqlParameter("@fldNonConfirmTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+            sqlParameterNext.Add(new SqlParameter("@fldCharges", collection["fldCharges"].Replace(",", "")));
+            sqlParameterNext.Add(new SqlParameter("fldRejectCode", collection["new_textRejectCode"]));
+            //history param
+            sqlParameterNext.Add(new SqlParameter("@fldQueue", pageConfig.TaskId));
+            sqlParameterNext.Add(new SqlParameter("@fldActionStatus", verifyAction));
+            sqlParameterNext.Add(new SqlParameter("@fldUIC", collection["current_fldUIC"]));
+            sqlParameterNext.Add(new SqlParameter("@fldInwardItemID", collection["fldInwardItemId"]));
+            sqlParameterNext.Add(new SqlParameter("@fldRemarks", collection["remarkField"]));
+            sqlParameterNext.Add(new SqlParameter("@fldTextAreaRemarks", collection["textAreaRemarks"]));
+            sqlParameterNext.Add(new SqlParameter("@fldCreateUserID", currentUser.UserId));
+            sqlParameterNext.Add(new SqlParameter("@accountNumber", accNo));
+            sqlParameterNext.Add(new SqlParameter("@chequeNumber", cheqNo));
+            sqlParameterNext.Add(new SqlParameter("@BankCode", currentUser.BankCode));
+            dbContext.GetRecordsAsDataTableSP("sp_updateRepairInwardItem", sqlParameterNext.ToArray());
+            //Excute the command
+            //dbContext.ConstructAndExecuteUpdateCommand("tblInwardItemInfoStatus", sqlUpdateInfoStatus, sqlCondition);
+        }
+
+
+        public void BranchApprove(FormCollection collection, AccountModel currentUser, string taskRole)
+        {
+            Dictionary<string, dynamic> sqlUpdatePendingInfo = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+            
+            //Maker Condition
+            if (taskRole.Equals("Maker"))
+            {
+                sqlUpdatePendingInfo.Add("fldApprovalStatus", VerificationStatus.ACTION.BranchApproveMaker);
+                sqlUpdatePendingInfo.Add("fldRejectCode", "000");
+                sqlUpdatePendingInfo.Add("fldValidateFlag", "0");
+
+                sqlUpdateInfoStatus.Add("fldNonConfirmStatus", VerificationStatus.ACTION.BranchApproveMaker);
+                sqlUpdateInfoStatus.Add("fldRejectCode", "000");
+                ExtendInfoStatusNonConfirmField(sqlUpdateInfoStatus, currentUser);
+            }
+            //Checker 1 Condition
+            else if (taskRole.Equals("Checker"))
+            {
+                // initialize Approve the Approval or Rejection based on MAKER
+                string itemStatus = commonInwardItemDao.GetBranchItemStatus(collection);
+                if (itemStatus.Equals(VerificationStatus.ACTION.BranchApproveMaker))
+                {
+
+                    sqlUpdatePendingInfo.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationApprove);
+                    sqlUpdatePendingInfo.Add("fldRejectCode", "000");
+                    sqlUpdatePendingInfo.Add("fldValidateFlag", "0");
+
+                    sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationApprove);
+                    sqlUpdateInfoStatus.Add("fldRejectCode", "000");
+                    ExtendInfoStatusApprovalField(sqlUpdateInfoStatus, currentUser);
+
+                }
+                else if (itemStatus.Equals(VerificationStatus.ACTION.BranchReturnMaker))
+                {
+
+                    sqlUpdatePendingInfo.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn);
+                    sqlUpdatePendingInfo.Add("fldRejectCode", collection["new_textRejectCode"]);
+                    sqlUpdatePendingInfo.Add("fldValidateFlag", "0");
+
+                    sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn);
+                    sqlUpdateInfoStatus.Add("fldRejectCode", collection["new_textRejectCode"]);
+                    ExtendInfoStatusApprovalField(sqlUpdateInfoStatus, currentUser);
+
+                }
+            }
+
+            //Excute the command tblPendingInfo
+            ExtendPendingInfoCommonField(sqlUpdatePendingInfo, collection, currentUser);
+            dbContext.ConstructAndExecuteUpdateCommand("tblPendingInfo", sqlUpdatePendingInfo, sqlCondition);
+
+            //Excute the command tblInwardItemInfoStatus
+            ExtendInfoStatusCommonField(sqlUpdateInfoStatus, collection);
+            dbContext.ConstructAndExecuteUpdateCommand("tblInwardItemInfoStatus", sqlUpdateInfoStatus, sqlCondition);
+        }
+
+        public void BranchApproveNew(FormCollection collection, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction, Boolean verificationlimit)
+        {
+
+            List<SqlParameter> sqlParameterNew = new List<SqlParameter>();
+            Dictionary<string, dynamic> sqlUpdatePendingInfo = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+            string accNo = "";
+            string cheqNo = "";
+            accNo = collection["current_fldAccountNumber"];
+            cheqNo = collection["current_fldChequeSerialNo"];
+            //Maker Condition
+            if (pageConfig.TaskRole.Equals("Maker") || verificationlimit == false)
+            {
+                sqlParameterNew.Add(new SqlParameter("@fldPendingRejectCode", "000"));
+                sqlParameterNew.Add(new SqlParameter("@fldPendingApprovalStatus", VerificationStatus.ACTION.BranchApproveMaker));
+                sqlParameterNew.Add(new SqlParameter("@fldApprovalStatus", DBNull.Value));
+                sqlParameterNew.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                sqlParameterNew.Add(new SqlParameter("@fldApprovalUserClass", DBNull.Value));
+                sqlParameterNew.Add(new SqlParameter("@fldApprovalTimeStamp", DBNull.Value));
+                sqlParameterNew.Add(new SqlParameter("@fldNonConfirmStatus", VerificationStatus.ACTION.BranchApproveMaker));
+                sqlParameterNew.Add(new SqlParameter("@fldNonConfirmUserID", currentUser.UserId));
+                sqlParameterNew.Add(new SqlParameter("@fldNonConfirmUserClass", currentUser.VerificationClass));
+                sqlParameterNew.Add(new SqlParameter("@fldNonConfirmTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                sqlParameterNew.Add(new SqlParameter("@fldCharges", "0"));
+                sqlParameterNew.Add(new SqlParameter("fldRejectCode", "000"));
+                sqlParameterNew.Add(new SqlParameter("@fldQueue", pageConfig.TaskId));
+                sqlParameterNew.Add(new SqlParameter("@fldActionStatus", verifyAction));
+                sqlParameterNew.Add(new SqlParameter("@fldUIC", collection["current_fldUIC"]));
+                sqlParameterNew.Add(new SqlParameter("@fldInwardItemID", collection["fldInwardItemId"]));
+                sqlParameterNew.Add(new SqlParameter("@fldRemarks", collection["remarkField"]));
+                sqlParameterNew.Add(new SqlParameter("@fldTextAreaRemarks", collection["textAreaRemarks"]));
+                sqlParameterNew.Add(new SqlParameter("@fldCreateUserID", currentUser.UserId));
+                sqlParameterNew.Add(new SqlParameter("@accountNumber", accNo));
+                sqlParameterNew.Add(new SqlParameter("@chequeNumber", cheqNo));
+                sqlParameterNew.Add(new SqlParameter("@BankCode", currentUser.BankCode));
+                dbContext.GetRecordsAsDataTableSP("sp_updateApprovedPendingInwardItem", sqlParameterNew.ToArray());
+
+            }
+            //Checker 1 Condition
+            else if (pageConfig.TaskRole.Equals("Checker"))
+            {
+                // initialize Approve the Approval or Rejection based on MAKER
+                //string itemStatus = commonInwardItemDao.GetBranchItemStatus(collection);
+                //if (itemStatus.Equals(VerificationStatus.ACTION.VerificationRoute) || itemStatus.Equals(VerificationStatus.ACTION.BranchApproveMaker))
+                //{
+                //    sqlParameterNew.Add(new SqlParameter("@fldPendingRejectCode", commonInwardItemDao.GetRejectCodeByRejectDesc("Default")));
+                //    sqlParameterNew.Add(new SqlParameter("@fldPendingApprovalStatus", VerificationStatus.ACTION.VerificationApprove));
+                //    if (collection["RejectStatus1"] == "005" || collection["RejectStatus2"] == "005")
+                //    {
+                //        sqlParameterNew.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationRouteCreditControl));
+                //    }
+                //    else
+                //    {
+                //        sqlParameterNew.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationApprove));
+                //    }
+
+                    sqlParameterNew.Add(new SqlParameter("@fldPendingRejectCode", "000"));
+                    sqlParameterNew.Add(new SqlParameter("@fldPendingApprovalStatus", VerificationStatus.ACTION.VerificationApprove));
+                        sqlParameterNew.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationApprove));
+                    sqlParameterNew.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNew.Add(new SqlParameter("@fldApprovalUserClass", currentUser.VerificationClass));
+                    sqlParameterNew.Add(new SqlParameter("@fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                    sqlParameterNew.Add(new SqlParameter("@fldNonConfirmStatus", DBNull.Value));
+                    sqlParameterNew.Add(new SqlParameter("@fldNonConfirmUserID", DBNull.Value));
+                    sqlParameterNew.Add(new SqlParameter("@fldNonConfirmUserClass", DBNull.Value));
+                    sqlParameterNew.Add(new SqlParameter("@fldNonConfirmTimeStamp", DBNull.Value));
+                    sqlParameterNew.Add(new SqlParameter("@fldCharges", "0"));
+                    sqlParameterNew.Add(new SqlParameter("fldRejectCode", "000"));
+                    sqlParameterNew.Add(new SqlParameter("@fldQueue", pageConfig.TaskId));
+                    sqlParameterNew.Add(new SqlParameter("@fldActionStatus", verifyAction));
+                    sqlParameterNew.Add(new SqlParameter("@fldUIC", collection["current_fldUIC"]));
+                    sqlParameterNew.Add(new SqlParameter("@fldInwardItemID", collection["fldInwardItemId"]));
+                    sqlParameterNew.Add(new SqlParameter("@fldRemarks", collection["remarkField"]));
+                    sqlParameterNew.Add(new SqlParameter("@fldTextAreaRemarks", collection["textAreaRemarks"]));
+                    sqlParameterNew.Add(new SqlParameter("@fldCreateUserID", currentUser.UserId));
+                    sqlParameterNew.Add(new SqlParameter("@accountNumber", accNo));
+                    sqlParameterNew.Add(new SqlParameter("@chequeNumber", cheqNo));
+                    sqlParameterNew.Add(new SqlParameter("@BankCode", currentUser.BankCode));
+                    dbContext.GetRecordsAsDataTableSP("sp_updateApprovedPendingInwardItem", sqlParameterNew.ToArray());
+
+                //}
+                //else if (itemStatus.Equals(VerificationStatus.ACTION.BranchReturnMaker))
+                //{
+                //    sqlParameterNew.Add(new SqlParameter("@fldPendingRejectCode", collection["new_textRejectCode"]));
+                //    sqlParameterNew.Add(new SqlParameter("@fldPendingApprovalStatus", VerificationStatus.ACTION.VerificationReturn));
+                //    sqlParameterNew.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn));
+                //    sqlParameterNew.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                //    sqlParameterNew.Add(new SqlParameter("@fldApprovalUserClass", currentUser.VerificationClass));
+                //    sqlParameterNew.Add(new SqlParameter("@fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                //    sqlParameterNew.Add(new SqlParameter("@fldNonConfirmStatus", DBNull.Value));
+                //    sqlParameterNew.Add(new SqlParameter("@fldNonConfirmUserID", DBNull.Value));
+                //    sqlParameterNew.Add(new SqlParameter("@fldNonConfirmUserClass", DBNull.Value));
+                //    sqlParameterNew.Add(new SqlParameter("@fldNonConfirmTimeStamp", DBNull.Value));
+                //    sqlParameterNew.Add(new SqlParameter("@fldCharges", "0"));
+                //    sqlParameterNew.Add(new SqlParameter("fldRejectCode", collection["new_textRejectCode"]));
+                //    sqlParameterNew.Add(new SqlParameter("@fldQueue", pageConfig.TaskId));
+                //    sqlParameterNew.Add(new SqlParameter("@fldActionStatus", verifyAction));
+                //    sqlParameterNew.Add(new SqlParameter("@fldUIC", collection["current_fldUIC"]));
+                //    sqlParameterNew.Add(new SqlParameter("@fldInwardItemID", collection["fldInwardItemId"]));
+                //    sqlParameterNew.Add(new SqlParameter("@fldRemarks", collection["remarkField"]));
+                //    sqlParameterNew.Add(new SqlParameter("@fldTextAreaRemarks", collection["textAreaRemarks"]));
+                //    sqlParameterNew.Add(new SqlParameter("@fldCreateUserID", currentUser.UserId));
+                //    sqlParameterNew.Add(new SqlParameter("@accountNumber", accNo));
+                //    sqlParameterNew.Add(new SqlParameter("@chequeNumber", cheqNo));
+                //    sqlParameterNew.Add(new SqlParameter("@BankCode", currentUser.BankCode));
+                //    dbContext.GetRecordsAsDataTableSP("sp_updateReturnPendingInwardItem", sqlParameterNew.ToArray());
+                //}
+            }
+
+            //history param
+
+        }
+
+
+        public void BranchReturn(FormCollection collection, AccountModel currentUser, string taskRole)
+        {
+            Dictionary<string, dynamic> sqlUpdatePendingInfo = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+
+            //Maker Condition
+            if (taskRole.Equals("Maker"))
+            {
+                sqlUpdatePendingInfo.Add("fldApprovalStatus", VerificationStatus.ACTION.BranchReturnMaker);
+                sqlUpdateInfoStatus.Add("fldNonConfirmStatus", VerificationStatus.ACTION.BranchReturnMaker);
+                ExtendInfoStatusNonConfirmField(sqlUpdateInfoStatus, currentUser);
+            }
+            //Checker 1 Condition
+            else if (taskRole.Equals("Checker"))
+            {
+                sqlUpdatePendingInfo.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn);
+                sqlUpdateInfoStatus.Add("fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn);
+                ExtendInfoStatusApprovalField(sqlUpdateInfoStatus, currentUser);
+            }
+
+            //Excute the command tblPendingInfo
+            sqlUpdatePendingInfo.Add("fldRejectCode", collection["new_textRejectCode"]);
+            sqlUpdatePendingInfo.Add("fldValidateFlag", "0");
+            ExtendPendingInfoCommonField(sqlUpdatePendingInfo, collection, currentUser);
+            dbContext.ConstructAndExecuteUpdateCommand("tblPendingInfo", sqlUpdatePendingInfo, sqlCondition);
+
+            //Excute the command tblInwardItemInfoStatus
+            sqlUpdateInfoStatus.Add("fldRejectCode", collection["new_textRejectCode"]);
+            ExtendInfoStatusCommonField(sqlUpdateInfoStatus, collection);
+            dbContext.ConstructAndExecuteUpdateCommand("tblInwardItemInfoStatus", sqlUpdateInfoStatus, sqlCondition);
+        }
+
+        public void BranchReturnNew(FormCollection collection, AccountModel currentUser, QueueSqlConfig pageConfig, string verifyAction, Boolean verificationlimit)
+        {
+
+            List<SqlParameter> sqlParameterNew = new List<SqlParameter>();
+            Dictionary<string, dynamic> sqlUpdatePendingInfo = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+            string accNo = "";
+            string cheqNo = "";
+            accNo = collection["current_fldAccountNumber"];
+            cheqNo = collection["current_fldChequeSerialNo"];
+            //Maker Condition
+            if (pageConfig.TaskRole.Equals("Maker") || verificationlimit == false)
+            {
+                sqlParameterNew.Add(new SqlParameter("@fldPendingRejectCode", collection["new_textRejectCode"]));
+                sqlParameterNew.Add(new SqlParameter("@fldPendingApprovalStatus", VerificationStatus.ACTION.BranchReturnMaker));
+                sqlParameterNew.Add(new SqlParameter("@fldApprovalStatus", DBNull.Value));
+                sqlParameterNew.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                sqlParameterNew.Add(new SqlParameter("@fldApprovalUserClass", DBNull.Value));
+                sqlParameterNew.Add(new SqlParameter("@fldApprovalTimeStamp", DBNull.Value));
+                sqlParameterNew.Add(new SqlParameter("@fldNonConfirmStatus", VerificationStatus.ACTION.BranchReturnMaker));
+                sqlParameterNew.Add(new SqlParameter("@fldNonConfirmUserID", currentUser.UserId));
+                sqlParameterNew.Add(new SqlParameter("@fldNonConfirmUserClass", currentUser.VerificationClass));
+                sqlParameterNew.Add(new SqlParameter("@fldNonConfirmTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                sqlParameterNew.Add(new SqlParameter("@fldCharges", "0"));
+                sqlParameterNew.Add(new SqlParameter("fldRejectCode", collection["new_textRejectCode"]));
+
+            }
+            //Checker 1 Condition
+            else if (pageConfig.TaskRole.Equals("Checker"))
+            {
+
+                    sqlParameterNew.Add(new SqlParameter("@fldPendingRejectCode", collection["new_textRejectCode"]));
+                    sqlParameterNew.Add(new SqlParameter("@fldPendingApprovalStatus", VerificationStatus.ACTION.VerificationReturn));
+                    sqlParameterNew.Add(new SqlParameter("@fldApprovalStatus", VerificationStatus.ACTION.VerificationReturn));
+                    sqlParameterNew.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+                    sqlParameterNew.Add(new SqlParameter("@fldApprovalUserClass", currentUser.VerificationClass));
+                    sqlParameterNew.Add(new SqlParameter("@fldApprovalTimeStamp", DateUtils.GetCurrentDatetimeForSql()));
+                    sqlParameterNew.Add(new SqlParameter("@fldNonConfirmStatus", DBNull.Value));
+                    sqlParameterNew.Add(new SqlParameter("@fldNonConfirmUserID", DBNull.Value));
+                    sqlParameterNew.Add(new SqlParameter("@fldNonConfirmUserClass", DBNull.Value));
+                    sqlParameterNew.Add(new SqlParameter("@fldNonConfirmTimeStamp", DBNull.Value));
+                    sqlParameterNew.Add(new SqlParameter("@fldCharges", "0"));
+                    sqlParameterNew.Add(new SqlParameter("fldRejectCode", collection["new_textRejectCode"]));
+
+            }
+
+            //history param
+            sqlParameterNew.Add(new SqlParameter("@fldQueue", pageConfig.TaskId));
+            sqlParameterNew.Add(new SqlParameter("@fldActionStatus", verifyAction));
+            sqlParameterNew.Add(new SqlParameter("@fldUIC", collection["current_fldUIC"]));
+            sqlParameterNew.Add(new SqlParameter("@fldInwardItemID", collection["fldInwardItemId"]));
+            sqlParameterNew.Add(new SqlParameter("@fldRemarks", collection["remarkField"]));
+            sqlParameterNew.Add(new SqlParameter("@fldTextAreaRemarks", collection["textAreaRemarks"]));
+            sqlParameterNew.Add(new SqlParameter("@fldCreateUserID", currentUser.UserId));
+            sqlParameterNew.Add(new SqlParameter("@accountNumber", accNo));
+            sqlParameterNew.Add(new SqlParameter("@chequeNumber", cheqNo));
+            sqlParameterNew.Add(new SqlParameter("@BankCode", currentUser.BankCode));
+            dbContext.GetRecordsAsDataTableSP("sp_updateReturnPendingInwardItem", sqlParameterNew.ToArray());
+
+        }
+
+        public void BranchReferBack(FormCollection collection, AccountModel currentUser)
+        {
+            Dictionary<string, dynamic> sqlUpdatePendingInfo = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlUpdateInfoStatus = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> sqlCondition = new Dictionary<string, dynamic>() { { "fldInwardItemId", collection["fldInwardItemId"] } };
+
+            //Excute the command tblPendingInfo
+            sqlUpdatePendingInfo.Add("fldApprovalStatus", VerificationStatus.ACTION.BranchReferBackChecker);
+            sqlUpdatePendingInfo.Add("fldValidateFlag", "0");
+            ExtendPendingInfoCommonField(sqlUpdatePendingInfo, collection, currentUser);
+            dbContext.ConstructAndExecuteUpdateCommand("tblPendingInfo", sqlUpdatePendingInfo, sqlCondition);
+
+            //Excute the command tblInwardItemInfoStatus
+            sqlUpdateInfoStatus.Add("fldNonConfirmStatus", VerificationStatus.ACTION.BranchReferBackChecker);
+            ExtendInfoStatusNonConfirmField(sqlUpdateInfoStatus, currentUser);
+            sqlUpdateInfoStatus.Add("fldRejectCode", collection["new_textRejectCode"]);
+            ExtendInfoStatusCommonField(sqlUpdateInfoStatus, collection);
+            dbContext.ConstructAndExecuteUpdateCommand("tblInwardItemInfoStatus", sqlUpdateInfoStatus, sqlCondition);
+        }
+
+        public List<string> ValidateVerification(FormCollection col, AccountModel currentUser, string verifyAction)
+        {
+
+            List<string> err = new List<string>();
+            VerificationLimitModel verificationLimit = verificationLimitDao.GetVerifyLimit(currentUser.VerificationClass);
+            double itemAmount = Convert.ToDouble(col["current_fldAmount"]);
+
+            BranchActivationModel cutOffTime = branchActivationDao.GetCutOffTime(col["fldClearDate"]);
+            BranchActivationModel chequeActivation = branchActivationDao.GetChequeActivation(col["fldClearDate"]);
+
+            if (commonInwardItemDao.CheckIfRecordUpdatedOrDeleted(col["fldInwardItemId"], col["fldUpdateTimestamp"]))
+            {
+                err.Add(Locale.Thisrecordhasbeendeletedorupdatedbyanotheruser);
+            }
+
+            //Compare user class with amount 
+            if ("".Equals(verificationLimit.fldConcatenate))
+            {
+                if (StringUtils.Compare(verificationLimit.fld1stType, verificationLimit.fld1stAmt, itemAmount))
+                {
+                    err.Add(Locale.UserClassNotAuthorizetoVerify);
+                }
+            }
+            else if ("and".Equals(verificationLimit.fldConcatenate.Trim().ToLower()))
+            {
+                if (StringUtils.Compare(verificationLimit.fld1stType, verificationLimit.fld1stAmt, itemAmount) && StringUtils.Compare(verificationLimit.fld2ndType, itemAmount, verificationLimit.fld2ndAmt))
+                {
+                    err.Add(Locale.UserClassNotAuthorizetoVerify);
+                }
+            }
+            else if ("or".Equals(verificationLimit.fldConcatenate.Trim().ToLower()))
+            {
+                if (StringUtils.Compare(verificationLimit.fld1stType, verificationLimit.fld1stAmt, itemAmount) || StringUtils.Compare(verificationLimit.fld2ndType, itemAmount, verificationLimit.fld2ndAmt))
+                {
+                    err.Add(Locale.UserClassNotAuthorizetoVerify);
+                }
+            }
+
+            //Check ccu activation and cut off time
+            //if ("0".Equals(chequeActivation.fldCenterActivation) || String.IsNullOrEmpty(chequeActivation.fldCenterActivation))
+            //{
+            //    err.Add(Locale.VerificationNotAllowed);
+            //}
+
+
+            //Validation for Approve
+            if ("A".Equals(verifyAction))
+            {
+                //put verification for approve here if needed
+
+                if (!col["new_textRejectCode"].Trim().Equals("000") && !col["new_textRejectCode"].Trim().Equals(""))
+                {
+                    err.Add("Do not select Return Reason");
+                }
+
+            }
+            //Validation for Return
+            if ("R".Equals(verifyAction))
+            {
+                if (col["new_textRejectCode"].Trim().Equals("0") || col["new_textRejectCode"].Trim().Equals("000") || col["new_textRejectCode"].Trim().Equals("00") || col["new_textRejectCode"].Trim().Equals(""))
+                {
+                    err.Add(Locale.RejectCodeCannotEmpty);
+                }
+                if (returnCodeDao.CheckValidateReturnCode(col["new_textRejectCode"].Trim()))
+                {
+                    err.Add("Invalid Return Reason");
+                }
+            }
+            //Validation for Route
+            if ("B".Equals(verifyAction))
+            {
+                if (col["new_textRejectCode"].Trim().Equals("0") || col["new_textRejectCode"].Trim().Equals("00") || col["new_textRejectCode"].Trim().Equals(""))
+                {
+                    err.Add(Locale.RejectCodeCannotEmpty);
+                }
+            }
+            return err;
+        }
+
+        public List<string> LockedCheck(FormCollection col, AccountModel currentUser)
+        {
+            List<string> err = new List<string>();
+            if (commonInwardItemDao.CheckLockedCheck(col["fldInwardItemId"], currentUser.UserId))
+            {
+                err.Add("This check is locked by other user");
+            }
+            else
+            {
+                
+            }
+            return err;
+        }
+
+
+        public List<string> ValidateBranch(FormCollection col, AccountModel currentUser, string verifyAction)
+        {
+            List<string> err = new List<string>();
+            //VerificationLimitModel verificationLimit = verificationLimitDao.GetVerifyLimit(currentUser.VerificationClass);
+            double itemAmount = Convert.ToDouble(col["current_fldAmount"]);
+
+            BranchActivationModel cutOffTime = branchActivationDao.GetCutOffTime(col["fldClearDate"]);
+            BranchActivationModel chequeActivation = branchActivationDao.GetChequeActivation(col["fldClearDate"]);
+
+            //Comomon Validation
+            if (commonInwardItemDao.CheckIfRecordUpdatedOrDeleted(col["fldInwardItemId"], col["fldUpdateTimestamp"]))
+            {
+                err.Add(Locale.Thisrecordhasbeendeletedorupdatedbyanotheruser);
+            }
+
+            //Compare user class with amount 
+            //if ("".Equals(verificationLimit.fldConcatenate))
+            //{
+            //    if (StringUtils.Compare(verificationLimit.fld1stType, verificationLimit.fld1stAmt, itemAmount))
+            //    {
+            //        err.Add(Locale.UserClassNotAuthorizetoVerify);
+            //    }
+            //}
+            //else if ("and".Equals(verificationLimit.fldConcatenate.Trim().ToLower()))
+            //{
+            //    if (StringUtils.Compare(verificationLimit.fld1stType, verificationLimit.fld1stAmt, itemAmount) && StringUtils.Compare(verificationLimit.fld2ndType, itemAmount, verificationLimit.fld2ndAmt))
+            //    {
+            //        err.Add(Locale.UserClassNotAuthorizetoVerify);
+            //    }
+            //}
+            //else if ("or".Equals(verificationLimit.fldConcatenate.Trim().ToLower()))
+            //{
+            //    if (StringUtils.Compare(verificationLimit.fld1stType, verificationLimit.fld1stAmt, itemAmount) || StringUtils.Compare(verificationLimit.fld2ndType, itemAmount, verificationLimit.fld2ndAmt))
+            //    {
+            //        err.Add(Locale.UserClassNotAuthorizetoVerify);
+            //    }
+            //}
+
+            //Check branch activation and cut off time
+            if ("1".Equals(chequeActivation.fldCenterActivation))
+            {
+                if ("1".Equals(cutOffTime.fldActivation))
+                {
+                    if (DateTime.Now >= Convert.ToDateTime(cutOffTime.fldBranchCutOffTime))
+                    {
+                        err.Add(Locale.CutOffTimeActivatedBranchVerificationnotAllowed);
+                    }
+                }
+            }
+            else
+            {
+                err.Add(Locale.VerificationNotAllowed);
+            }
+
+            if ("H".Equals(verifyAction))
+            {
+                //put verification for approve here if needed
+
+                if (!col["new_textRejectCode"].Trim().Equals("000") && !col["new_textRejectCode"].Trim().Equals(""))
+                {
+                    err.Add("Do not select Return Reason");
+                }
+
+            }
+
+            //Validation for Return Branch
+            if ("J".Equals(verifyAction) || "K".Equals(verifyAction))
+            {
+                if (col["new_textRejectCode"].Trim().Equals("0") || col["new_textRejectCode"].Trim().Equals("000") || col["new_textRejectCode"].Trim().Equals("00") || col["new_textRejectCode"].Trim().Equals(""))
+                {
+                    err.Add(Locale.RejectCodeCannotEmpty);
+                }
+                if (returnCodeDao.CheckValidateReturnCode(col["new_textRejectCode"].Trim()))
+                {
+                    err.Add("Invalid Return Reason");
+                }
+            }
+
+            return err;
+        }
+
+        //add by shamil 20161225
+        //list the branch from tblDedicatedBranch using user id
+        public List<string> VerificationCondition(String UserId, String TaskId)
+        {
+            string stmt = "Select distinct (fldBranchId) as fldbranchcode from tbldedicatedbranchdate where" +
+                " flduserid=@UserId";
+            DataTable ds = dbContext.GetRecordsAsDataTable(stmt, new[] { new SqlParameter("@UserId", UserId) });
+            List<string> branchAvailable = new List<string>();
+            //ds = dbContext.GetRecordsAsDataTable(stmt);
+            foreach (DataRow row in ds.Rows)
+            {
+                branchAvailable.Add(row["fldbranchcode"].ToString());
+            }
+            return branchAvailable;
+            //return null;
+        }
+
+        public Boolean VerifyClassLimit(FormCollection col, AccountModel currentUser)
+        {
+            List<SqlParameter> sqlParameterNew = new List<SqlParameter>();
+            Boolean ind = false;
+
+            sqlParameterNew.Add(new SqlParameter("@userClass", currentUser.VerificationClass));
+            sqlParameterNew.Add(new SqlParameter("@Amount", col["current_fldAmount"]));
+            DataTable ds =  dbContext.GetRecordsAsDataTableSP("sp_checkVerificationLimit", sqlParameterNew.ToArray());
+
+            //ds = dbContext.GetRecordsAsDataTable(stmt);
+            foreach (DataRow row in ds.Rows)
+            {
+                if (row["result"].ToString() == "True")
+                {
+                    ind = true;
+                }
+                else
+                {
+                    ind = false;
+                }
+            }
+
+            return ind;
+        }
+
+
+
+
+
+
+    }
+}

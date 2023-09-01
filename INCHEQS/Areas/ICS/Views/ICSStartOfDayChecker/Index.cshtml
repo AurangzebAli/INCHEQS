@@ -1,0 +1,203 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Index", "ICSStartOfDayChecker", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken();
+    <h4>Utilities > ICS > Start Of Day (Checker)</h4>
+    <div class="row">
+        <hr />
+    </div>
+    <hr />
+
+    <div>
+        <table>
+            <tr>
+                <th>Current Process Date</th>
+                <td>
+                    : <input type="text" STYLE="width:150px;" id="currentDate" name="currentDate" value="@Convert.ToDateTime(ViewBag.CurrentDate).ToString("dd-MM-yyyy")" autocomplete="off" maxlength="2" disabled />
+                    <input type="text" name="currentDate" id="currentDate" value="@Convert.ToDateTime(ViewBag.CurrentDate).ToString("dd-MM-yyyy")" hidden />
+                </td>
+            </tr>
+
+            <tr>
+                <th>Next Process Date</th>
+                <td>
+                    : <input type="text" STYLE="width:150px;" id="processDate" name="processDate" value="@ViewBag.ProcessDate" autocomplete="off" maxlength="2" disabled />
+                    <input type="text" id="processDate" name="processDate" value="@ViewBag.ProcessDate" hidden />
+                </td>
+            </tr>
+
+            @if (@ViewBag.confirmprocessDate != null)
+            {
+            <tr>
+                <th>Confirm Process Date</th>
+                <td>
+                    : <input type="text" STYLE="width:150px;" id="confirmprocessDate" name="confirmprocessDate" value="@Convert.ToDateTime(ViewBag.confirmprocessDate).ToString("dd-MM-yyyy")" autocomplete="off" maxlength="2" disabled />
+                    <input type="text" id="confirmprocessDate" name="confirmprocessDate" value="@ViewBag.confirmprocessDate" hidden />
+                </td>
+                <td><br /></td>
+                <td>
+                    <button data-action="@Url.Action("/Approve")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsICS.ICSStartOfDayChecker.VERIFY) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+                    <button data-action="@Url.Action("/Reject")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsICS.ICSStartOfDayChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+                </td>
+            </tr>
+            }
+            else
+            {
+            <tr>
+                <th>Confirm Process Date</th>
+                <td>
+                    : <input type="text" STYLE="width:150px;" id="confirmprocessDate" name="confirmprocessDate" value="" autocomplete="off" maxlength="2" disabled />
+                    <input type="text" id="confirmprocessDate" name="confirmprocessDate" value="" hidden />
+                </td>
+                <td><br /></td>
+                <td>
+                    <button data-action="@Url.Action("/Approve")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsICS.ICSStartOfDayChecker.VERIFY) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+                    <button data-action="@Url.Action("/Reject")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsICS.ICSStartOfDayChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+                </td>
+            </tr>
+            }
+        </table>
+        
+    </div>
+    <br />
+    <div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div id="my-calendar"></div>
+            </div>
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="col-sm" style="font-weight:bold;">Legend</div>
+                    <br />
+                    <div class="col-sm">
+                        <table style="border-collapse:separate; border-spacing:0 5px; ">
+                            <tr>
+                                <td bgcolor="#54c571">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>Current Process Date</td>
+                            </tr>
+                            <tr>
+                                <td bgcolor="#ffff00">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>Next Process Date</td>
+                            </tr>
+                            <tr>
+                                <td bgcolor="#c0c0c0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>Holiday</td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+    </div>
+
+}
+
+<script type="application/javascript">
+                var eventData1 = "";
+                var strcurrentDate = $("#currentDate").val();
+                strcurrentDate = toDate(strcurrentDate);
+                strcurrentDate = formatDate(strcurrentDate);
+                var strNextprocessDate = $("#processDate").val();
+                 strNextprocessDate = toDate(strNextprocessDate);
+                strNextprocessDate = formatDate(strNextprocessDate);
+                var dateString = (new Date()).toISOString().split("T")[0];
+                eventData1 += '{"date":"' + strcurrentDate + '","badge": false,"title": "Current Process Date","classname": "CurrentProcessDate"},';
+                eventData1 += '{"date":"' + strNextprocessDate + '","badge": false,"title": "Next Process Date","classname": "NextProcessDate"},';
+                 $.ajax({
+                    async: false,
+                    cache: false,
+                    url: App.ContextPath + "CommonApi/ReturnHolidayDates",
+                    method: "POST",
+                    data: "Recurring=999",
+                    success: function (response) {
+                        $.each(response, function (i, item) {
+                        eventData1 = eventData1 + "{";
+                        eventData1 = eventData1 + '"date"';
+                        eventData1 = eventData1 + ":";
+                        eventData1 = eventData1 + '"' + item.fldHolidayDate + '"';
+                        eventData1 = eventData1 + ",";
+                        eventData1 = eventData1 + '"badge" : false';
+                        eventData1 = eventData1 + ",";
+                        eventData1 = eventData1 + '"title" : "' + item.fldHolidayDesc + '"';
+                        eventData1 = eventData1 + ",";
+                        eventData1 = eventData1 + '"classname" : "Weekend"';
+                        eventData1 = eventData1 + "},";
+                        });
+                    }
+                });
+
+
+            $(document).ready(function () {
+                var aaa = eventData1.replace(/,\s*$/, "");
+                var eventData = "[@@data]";
+                eventData = eventData.replace("@@data",aaa);
+                eventData = JSON.parse(eventData)
+                $("#my-calendar").zabuto_calendar({
+                    @*legend: [{
+                      type: "block",
+                      label: "Todays Date",
+                      classname: "rose"
+                    }],*@
+                    action: function() { myDateFunction(this.id); },
+                    data: eventData,
+                    language: "en",
+                    cell_border: true,
+                    today: true
+                    @*,,
+                    show_days: false,
+                    weekstartson: 0*@
+
+                    @*nav_icon: {
+                    prev: '<i class="fa fa-chevron-circle-left"></i>',
+                    next: '<i class="fa fa-chevron-circle-right"></i>'
+                    }*@
+            });
+
+            });
+
+    function myDateFunction(id) {
+        //debugger
+        var date = $("#" + id).data("date");
+        var hasEvent = $("#" + id).data("hasEvent");
+        var tempdate = new Array();
+        tempdate = date.split("-");
+        var NewDate = tempdate[2] + "-" + tempdate[1] + "-" + tempdate[0];
+        $("#processDate").val(NewDate);
+        //alert("NewDate" + NewDate);
+        //alert(date);
+    }
+     function toDate(dateStr) {
+      var parts = dateStr.split("-")
+      return new Date(parts[2], parts[1] - 1, parts[0])
+    }
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+</script>
+<style>
+    .CurrentProcessDate {
+        background-color: #54c571;
+    }
+
+    .NextProcessDate {
+        background-color: #ffff00;
+    }
+
+    .Weekend {
+        background-color: #c0c0c0;
+    }
+</style>
+@Scripts.Render("~/bundles/calendar")
+@Styles.Render("~/Content/calendar")

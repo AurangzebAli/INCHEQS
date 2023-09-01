@@ -1,0 +1,89 @@
+﻿@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@Html.Partial("SearchPage/_InfoBox")
+
+<table id="search-result-table" class="table table-striped table-hover table-bordered">
+    @if (ViewBag.Type == "Ready")
+    {
+        <thead>
+
+            <tr>
+                @Html.Partial("SearchPage/_TableHeaderColumns")
+                <th>Details</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+            {
+                <tr>
+                    @Html.Partial("SearchPage/_TableBodyColumnsNoLink", row)
+                    <td style="display:none"><input hidden type="checkbox" value="@row[0].ToString()" /></td>
+                    <td align="left"><button type="button" id="BtnReadyforReturnICLDetail" class="btn btn-default btn-xs BtnReadyforReturnICLDetail">Details</button></td>
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        <thead>
+
+
+            <tr>
+                @Html.Partial("SearchPage/_TableHeaderColumns")
+                <th>Details</th>
+                <th>ICL File</th>
+            </tr>
+
+
+
+        </thead>
+        <tbody>
+            @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+            {
+            <tr>
+                @Html.Partial("SearchPage/_TableBodyColumnsNoLink", row)
+                <td style="display:none"><input hidden type="checkbox" value="@row[12].ToString()" /></td>
+                <td align="left"><button type="button" id="BtnReturnedICLDetail" class="btn btn-default btn-xs BtnReturnedICLDetail">Details</button></td>
+                <td><a href="" @(row[10].value.Contains("Ready") ? "Disabled" : "") class="btn btn-default btn-xs row-action-download" data-action="@Url.Action("Download")">Download</a></td>
+            </tr>
+            }
+        </tbody>
+    }
+
+    <tfoot>
+        @Html.Partial("SearchPage/_TablePaginationFooter")
+    </tfoot>
+</table>
+@*@if (ViewBag.Type == "Ready")
+{
+
+    @*<button data-action="@Url.Action("/Generate")" Class="btn btn-default normal-submit-confirm-action-button @(CurrentUser.HasTask(TaskIdsICS.GenerateOutwardReturnICL.Clear) ? "" : "hidden")">Generate</button>*@
+    @*<button data-action="@Url.Action("/Generate")" Class="btn btn-default normal-submit-confirm-action-button">Generate</button>
+    @*<button data-action="@Url.Action("/Generate")" Class="btn btn-default init-refresh-page-realtime">Generate</button>
+    <button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("Generate")">Generate</button>
+}
+@if (ViewBag.Type == "Submitted")
+{
+    //<button data-action="@Url.Action("/Reject")" Class="btn btn-default secure-nav normal-submit-without-search @(CurrentUser.HasTask(TaskIdsOCS.BranchClearing.REJECT) ? "" : "hidden")">@Locale.CancelBatch</button>
+}
+<script type="text/javascript">
+    function Confirm() {
+        var input = $("<input />");
+        input.attr("type", "hidden").attr("name", "confirm_value");
+        if (confirm("Confirm Action?")) {
+            input.val("Yes");
+            return true;
+        } else {
+            input.val("No");
+            return false;
+        }
+        $("form")[0].appendChild(input[0]);
+    }
+</script>*@
+
+
+@Scripts.Render("~/bundles/SearchResultPage")
+<script src="~/Scripts/App/common.js"></script>
+<script src="~/Scripts/ICS/OutwardReturnItems.js"></script>

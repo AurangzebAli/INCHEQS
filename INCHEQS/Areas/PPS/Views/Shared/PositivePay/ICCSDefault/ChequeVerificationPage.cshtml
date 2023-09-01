@@ -1,0 +1,193 @@
+﻿@using System.Data;
+@using INCHEQS.Common
+@{
+    ViewBag.Title = "ChequeVerificationPage";
+    Layout = "~/Views/Shared/_LayoutChequeVerification.cshtml";
+}
+@{
+    int MinusTotalRecord;
+    int i = 0;
+    string OriTotalRecord = "";
+    if (ViewBag.NoLock != null && ViewBag.NoLock != false)
+    {
+        MinusTotalRecord = Convert.ToInt32("1");
+    }
+    else
+    {
+
+        if (ViewBag.MinusRecordIndicator != null && ViewBag.MinusRecordIndicator != false)
+        { // REENTERING  CHEQUE VERIFICATION PAGE
+
+            MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+            if (ViewBag.StoreProc != null)
+            {
+                MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+            }
+
+        }
+        else
+        {
+            // FIRST ENTERY TO CHEQUE VERIFICATION PAGE OR NEXT OR PREV
+            if (ViewBag.InwardItemViewModel.getField("TotalUnverified") == "")
+            {
+                MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalRecord"));
+            }
+            else if (ViewBag.InwardItemViewModel.getField("TotalRecord") == "1")
+            {
+                MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalRecord"));
+            }
+            else
+            {
+                MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+            }
+        }
+    }
+
+    if (ViewBag.LockIndicator != null)
+    {
+        OriTotalRecord = ViewBag.InwardItemViewModel.getField("TotalRecord");
+        <input type="hidden" id="OriTotalRecordHolder" value="@OriTotalRecord">
+    }
+
+<div style="background-color: #ffffff; width:100%; height:100%; padding-left:15px" class="row mTop20">
+    <div class="row mTop10">
+        <div class="col-sm-6">
+            <span class="h3 bold txtBlack">@ViewBag.PageTitle</span>
+            @if (ViewBag.TaskId.Trim() != "306510")
+            {
+                if (ViewBag.TaskId.Trim() == "308110" || ViewBag.TaskId.Trim() == "308170" || ViewBag.TaskId.Trim() == "308180" || ViewBag.TaskId.Trim() == "308190" || ViewBag.TaskId.Trim() == "308200")
+                {
+                    if (ViewBag.InwardItemViewModel.getField("fldApprovalStatusPending").ToString().Trim() == "A")
+                    {
+                        <span class="txtBlack bold">[Approved]</span>
+                    }
+                    else if (ViewBag.InwardItemViewModel.getField("fldApprovalStatusPending").ToString().Trim() == "R")
+                    {
+                        <span class="txtBlue bold">[Rejected]</span>
+                    }
+                    else if (ViewBag.InwardItemViewModel.getField("fldApprovalStatusPending").ToString().Trim() == "B")
+                    {
+                        <span class="txtRed bold">[Pending]</span>
+                    }
+                }
+                else
+                {
+                    if (ViewBag.InwardItemViewModel.getField("fldApprovalStatus").ToString().Trim() == "A")
+                    {
+                        <span class="txtBlack bold">[Approved]</span>
+                    }
+                    else if (ViewBag.InwardItemViewModel.getField("fldApprovalStatus").ToString().Trim() == "R")
+                    {
+                        <span class="txtBlue bold">[Rejected]</span>
+                    }
+                    else if (ViewBag.InwardItemViewModel.getField("fldApprovalStatus").ToString().Trim() == "B")
+                    {
+                        <span class="txtRed bold">[Pending]</span>
+                    }
+                }
+            }
+            else
+            {
+                if (ViewBag.InwardItemViewModel.getField("fldReviewed").ToString().Trim() == "1")
+                {
+                    <span class="txtBlack bold">[Reviewed]</span>
+                }
+            }
+
+            <input type="hidden" name="NextValue" value="@ViewBag.InwardItemViewModel.getField("NextValue")">
+            <input type="hidden" name="PreviousValue" value="@ViewBag.InwardItemViewModel.getField("PreviousValue")">
+            <input type="hidden" name="DataAction" value="@ViewBag.DataAction">
+            @if (ViewBag.TaskId.Trim() != "306530" && ViewBag.TaskId.Trim() != "306540" && ViewBag.TaskId.Trim() != "306550")
+            {
+                if ((ViewBag.TaskId.Trim() == "306510" && ViewBag.DataAction.Trim() == "ChequeVerificationPage") || (ViewBag.TaskId.Trim() == "306520" && ViewBag.DataAction.Trim() == "ChequeVerificationPage"))
+                {
+
+                }
+                else
+                {
+        <span class="red bold">[@MinusTotalRecord / </span>
+                    <span class="red bold" id="OriTotalRecord">1</span>
+                    <span class="red bold">]</span>
+                }
+
+            }
+            <br />
+            
+
+            <div class="row">
+                <div class="col-sm-13 text-left">
+                    <br />
+                    <table>
+                        <tr>
+                            <td class="col-lg-2 h4">
+                                UIC :  @ViewBag.InwardItemViewModel.getField("fldUIC")
+                            </td>
+                            @*<td class="col-lg-2"></td>*@
+                        <tr />
+                        @*<tr>
+                <td class="col-lg-2">
+                    Cheque Clearing Date :
+                </td>
+                <td class="col-lg-2 h1 red bold">@DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))</td>
+            </tr>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 text-right">
+            @Html.Partial("PositivePay/Base/_ChequeControlAction")
+        </div>
+    </div>
+
+    <br />
+    <div class="row">
+        <div class="col-sm-7">
+            @Html.Partial("PositivePay/Base/_ChequeImageAction")
+            <br />
+            @Html.Partial("PositivePay/Base/_ChequeImage")
+            @Html.Partial("PositivePay/Base/_MICRDetail")
+        </div>
+        <div class="col-sm-4">
+            @Html.Partial("PositivePay/Base/_ChequeDetail2")
+            @*<div id="signatureInfo" style="width:300px; height:200px; background-color:#f0f8ff; margin:0 0 0 10px; border:1px solid #787878"></div>*@
+            <div id="signatureInfo" class="col-sm-2" style="width:300px"></div>
+            <div id="signatureInfoDetail" class="col-sm-2"></div>
+
+        </div>
+    </div>
+
+    <div class="row" style="height:240px">
+        <div class="col-sm-12">
+            @Html.Partial("PositivePay/Base/_SignatureList")
+        </div>
+    </div>
+
+    <div class="row">
+        <br />
+        @if (ViewBag.Taskid == "308110" || ViewBag.TaskId.Trim() == "308170" || ViewBag.TaskId.Trim() == "308180" || ViewBag.TaskId.Trim() == "308190" || ViewBag.TaskId.Trim() == "308200")
+        {
+            <div class="col-sm-12 text-left">
+                @Html.Partial("PositivePay/ICCSDefault/Partial/_BranchAction2")
+            </div>
+        }
+        else
+        {
+            <div class="col-sm-12 text-left">
+                @Html.Partial("PositivePay/ICCSDefault/Partial/_Action3")
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+
+}
+
+
+
+
+
+
+

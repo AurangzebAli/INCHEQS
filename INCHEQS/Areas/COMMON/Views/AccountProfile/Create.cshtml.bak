@@ -1,0 +1,137 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("SaveCreate", "AccountProfile", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.AccountProfileMaintenanceAdd</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <TBODY>
+
+                <tr>
+                    <th>@Locale.AccountNumber</th>
+                    <td>
+                        <input style="width:200px" type="text" id="accountNumber" class="number-only" name="accountNumber" maxlength="20" /><span class="red-star"> *</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>@Locale.AccountName</th>
+                    <td>
+                        <input style="width:250px;" type="text" id="accountName" name="accountName" />
+                        <span class="red-star"> *</span>
+                    </td>
+                </tr>
+
+                <TR>
+                    <th>@Locale.AccountType</th>
+                    <td>
+                        <select style="width:150px" name="accountType" id="accountType">
+                            @foreach (var item in @ViewBag.AccountType)
+                            {
+                                <option value="@item.accountType">@item.accountTypeDesc</option>
+                            }
+                        </select>
+                        <span class="red-star"> *</span>
+                    </td>
+                </TR>
+
+                <TR>
+                    <th>@Locale.AccountStatus</th>
+                    <td>
+                        <select style="width:150px" name="accountStatus" id="accountStatus">
+                            @foreach (var item in @ViewBag.AccountStatus)
+                            {
+                                <option value="@item.accountStatus">@item.accountStatusDesc</option>
+                            }
+                        </select>
+                        <span class="red-star"> *</span>
+                    </td>
+                </TR>
+
+                <TR>
+                    <th>@Locale.InternalBranchCode</th>
+                    <td>
+                        <select style="width:250px" name="internalBranchCode" id="internalBranchCode">
+                            <option value="" selected="selected">Please Select Internal Branch Code</option>
+                            @foreach (var item in @ViewBag.InternalBranchCode)
+                            {
+                                <option value="@item.internalBranchCode">@item.internalBranchCode</option>
+                            }
+                        </select>
+                    </td>
+                </TR>
+
+                <tr>
+                    <th>@Locale.ContactNo</th>
+                    <td>
+                        <input style="width:200px" type="text" id="contactNo" name="contactNo" class="number-only" />
+                        @*<input type="hidden" id="SelectBank" name="SelectBank" style="border: none" readonly />*@
+                    </td>
+                </tr>
+
+                <TR>
+                    <Th>@Locale.Address1</Th>
+                    <td>
+                        <input style="width:250px;" type="text" id="address1" name="address1" maxlength="100">
+                    </td>
+                </TR>
+
+                <TR>
+                    <Th>@Locale.Address2</Th>
+                    <td>
+                        <input style="width:250px;" type="text" id="address2" name="address2" maxlength="100">
+                    </td>
+
+                </TR>
+
+                <TR>
+                    <Th>@Locale.Address3</Th>
+                    <td>
+                        <input style="width:250px;" type="text" id="address3" name="address3" maxlength="100">
+                    </td>
+                </TR>
+
+                <tr>
+                    <Th>@Locale.Postcode</Th>
+                    <td>
+                        <input type="text" id="postCode" name="postCode" class="number-only" maxlength="5" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <Th>@Locale.City</Th>
+                    <td>
+                        <input style="width:200px;" type="text" id="city" name="city" />
+                        @*<input type="hidden" id="SelectBank" name="SelectBank" style="border: none" readonly />*@
+                    </td>
+                </tr>
+
+                <TR>
+                    <Th>@Locale.Country</Th>
+                    <td>
+                        <select style="width:200px" name="country" id="country">
+                            <option value="" selected="selected">Please Select Country</option>
+                            @foreach (var item in @ViewBag.Country)
+                            {
+                                <option value="@item.countryCode">@item.countryDesc</option>
+                            }
+                        </select>
+                        
+                    </td>
+                </TR>
+
+            </TBODY>
+        </table>
+
+        <button type="submit" data-action="@Url.Action("/SAVECREATE")" Class="btn btn-default normal-submit-save-action-button   @(CurrentUser.HasTask(TaskIdsOCS.AccountProfile.CREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIdsOCS.AccountProfile.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+
+    </div>
+}
+
+
+

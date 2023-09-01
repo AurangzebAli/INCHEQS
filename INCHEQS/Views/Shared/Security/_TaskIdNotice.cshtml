@@ -1,0 +1,9 @@
+﻿
+@if (!string.IsNullOrEmpty(ViewBag.TaskIds)) {
+    <span id="taskId" class="hidden">@ViewBag.TaskIds</span>
+} else {
+    <span>NO Task ID specified In Controller - Danger</span>
+}
+@if(ViewData["IsExtended"] == null) { 
+    <span>Dear Developers please extend Base Controller in this controller. </span>   
+}

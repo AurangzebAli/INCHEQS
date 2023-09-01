@@ -1,0 +1,355 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Security
+@using (Html.BeginForm("SecurityProfile", "SecurityProfileChecker", FormMethod.Post, new { @Class = "form-inline submit-onload secure-form " }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.SecurityProfileChecker</h4>
+        <hr />
+
+        <table class="table form-table table-no-border table-utility">
+            <tr>
+                <th>
+                    @Locale.AuthenticationMethod
+                </th>
+                <td>
+                    <input type="radio" name="fldUserAuthMethod" id="fldUserAuthMethod" value="AD" @(ViewBag.SecurityProfileTemp.fldUserAuthMethod == "AD" ? "checked" : "") disabled> @Locale.ActiveDirectory
+                    <input type="radio" name="fldUserAuthMethod" id="fldUserAuthMethod2" value="LP" @(ViewBag.SecurityProfileTemp.fldUserAuthMethod == "LP" ? "checked" : "") disabled> @Locale.LocalProfiler
+                    <input type="hidden" name="fldUserAuthMethod" value=@(ViewBag.SecurityProfileTemp.fldUserAuthMethod)>
+                    <span class="red-star"> * </span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.UserIDLength
+                </th>
+                <td>
+                    @if (@ViewBag.SecurityProfileTemp.fldUserIdLengthMin != @ViewBag.SecurityProfile.fldUserIdLengthMin)
+                    {
+                        <input type="text" name="fldUserIdLengthMin" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.SecurityProfileTemp.fldUserIdLengthMin" maxLength=3 class="number-only" disabled /> @Locale.Min
+                        <input type="hidden" name="fldUserIdLengthMin" value=@(ViewBag.SecurityProfileTemp.fldUserIdLengthMin)>
+                        <span class="red-star"> * </span>
+                    }
+                    else
+                    {
+                        <input type="text" name="fldUserIdLengthMin" value="@ViewBag.SecurityProfileTemp.fldUserIdLengthMin" maxLength=3 class="number-only" disabled /> @Locale.Min
+                        <input type="hidden" name="fldUserIdLengthMin" value=@(ViewBag.SecurityProfileTemp.fldUserIdLengthMin)>
+                        <span class="red-star"> * </span>
+                    }
+
+
+                    @if (@ViewBag.SecurityProfileTemp.fldUserIdLengthMax != @ViewBag.SecurityProfile.fldUserIdLengthMax)
+                    {
+                        <input type="text" name="fldUserIdLengthMax" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.SecurityProfileTemp.fldUserIdLengthMax" maxLength=3 class="number-only" disabled /> @Locale.Min
+                        <input type="hidden" name="fldUserIdLengthMax" value=@(ViewBag.SecurityProfileTemp.fldUserIdLengthMax)>
+                        <span class="red-star"> * </span>
+                    }
+                    else
+                    {
+                        <input type="text" name="fldUserIdLengthMax" value="@ViewBag.SecurityProfileTemp.fldUserIdLengthMax" maxLength=3 class="number-only" disabled /> @Locale.Max
+                        <input type="hidden" name="fldUserIdLengthMax" value=@(ViewBag.SecurityProfileTemp.fldUserIdLengthMax)>
+                        <span class="red-star"> * </span>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Locale.UserAccountExpiryInterval
+                </th>
+                <td>
+
+                    @if (@ViewBag.SecurityProfileTemp.fldUserAcctExpiry != @ViewBag.SecurityProfile.fldUserAcctExpiry)
+                    {
+                        <input type="text" id="fldUserAcctExpiry" name="fldUserAcctExpiry" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.SecurityProfileTemp.fldUserAcctExpiry" maxLength=3 class="number-only" disabled>
+                        <input type="hidden" name="fldUserAcctExpiry" value=@(ViewBag.SecurityProfileTemp.fldUserAcctExpiry)>
+                    }
+                    else
+                    {
+                        <input type="text" id="fldUserAcctExpiry" name="fldUserAcctExpiry" value="@ViewBag.SecurityProfileTemp.fldUserAcctExpiry" maxLength=3 class="number-only" disabled>
+                        <input type="hidden" name="fldUserAcctExpiry" value=@(ViewBag.SecurityProfileTemp.fldUserAcctExpiry)>
+                    }
+
+                    @if (@ViewBag.SecurityProfileTemp.fldUserAcctExpiryInt != @ViewBag.SecurityProfile.fldUserAcctExpiryInt)
+                    {
+                        <select name="fldUserAcctExpiryInt" id="fldUserAcctExpiryInt" class="textbox" STYLE="color: #FFFFFF;background-color: #FF0000;" disabled>
+                            <option value="D" @(ViewBag.SecurityProfileTemp.fldUserAcctExpiryInt == "D" ? "selected" : "")>@Locale.Day</option>
+                            <option value="M" @(ViewBag.SecurityProfileTemp.fldUserAcctExpiryInt == "M" ? "selected" : "")>@Locale.Month</option>
+                            <option value="Y" @(ViewBag.SecurityProfileTemp.fldUserAcctExpiryInt == "Y" ? "selected" : "")>@Locale.Year</option>
+                        </select>
+                        <input type="hidden" name="fldUserAcctExpiryInt" value=@(ViewBag.SecurityProfileTemp.fldUserAcctExpiryInt)>
+                    }
+                    else
+                    {
+                        <select name="fldUserAcctExpiryInt" id="fldUserAcctExpiryInt" class="textbox" disabled>
+                            <option value="D" @(ViewBag.SecurityProfileTemp.fldUserAcctExpiryInt == "D" ? "selected" : "")>@Locale.Day</option>
+                            <option value="M" @(ViewBag.SecurityProfileTemp.fldUserAcctExpiryInt == "M" ? "selected" : "")>@Locale.Month</option>
+                            <option value="Y" @(ViewBag.SecurityProfileTemp.fldUserAcctExpiryInt == "Y" ? "selected" : "")>@Locale.Year</option>
+                        </select>
+                        <input type="hidden" name="fldUserAcctExpiryInt" value=@(ViewBag.SecurityProfileTemp.fldUserAcctExpiryInt)>
+                    }
+                    <span class="red-star"> * </span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Locale.UserMaximumLoginAttempt
+                </th>
+                <td>
+                    @if (@ViewBag.SecurityProfileTemp.fldUserLoginAttempt != @ViewBag.SecurityProfile.fldUserLoginAttempt)
+                    {
+                        <input type="text" name="fldUserLoginAttemptMax" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.SecurityProfileTemp.fldUserLoginAttempt" maxLength=4 class="number-only" disabled />
+                        <input type="hidden" name="fldUserLoginAttemptMax" value=@(ViewBag.SecurityProfileTemp.fldUserLoginAttempt)>
+                    }
+                    else
+                    {
+                        <input type="text" name="fldUserLoginAttemptMax" value="@ViewBag.SecurityProfileTemp.fldUserLoginAttempt" maxLength=4 class="number-only" disabled />
+                        <input type="hidden" name="fldUserLoginAttemptMax" value=@(ViewBag.SecurityProfileTemp.fldUserLoginAttempt)>
+                    }
+                    @Locale.Times<span class="red-star"> * </span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.ConcurrentConnection
+                </th>
+                <td>
+                    <input type="radio" name="fldUserCNCR" value="Y" @(ViewBag.SecurityProfileTemp.fldUserCNCR == "Y" ? "checked" : "") disabled> @Locale.Yes1
+                    <input type="radio" name="fldUserCNCR" value="N" @(ViewBag.SecurityProfileTemp.fldUserCNCR == "N" ? "checked" : "") disabled> @Locale.No1
+                    <input type="hidden" name="fldUserCNCR" value=@(ViewBag.SecurityProfileTemp.fldUserCNCR)>
+                    <span class="red-star"> * </span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.UserSessionTimeout
+                </th>
+                <td>
+                    @if (@ViewBag.SecurityProfileTemp.fldUserSessionTimeOut != @ViewBag.SecurityProfile.fldUserSessionTimeOut)
+                    {
+                        <input type="text" name="fldUserSessionTimeOut" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.SecurityProfileTemp.fldUserSessionTimeOut" maxLength=4 class="number-only" disabled />
+                        <input type="hidden" name="fldUserSessionTimeOut" value=@(ViewBag.SecurityProfileTemp.fldUserSessionTimeOut)>
+                    }
+                    else
+                    {
+                        <input type="text" name="fldUserSessionTimeOut" value="@ViewBag.SecurityProfileTemp.fldUserSessionTimeOut" maxLength=4 class="number-only" disabled />
+                        <input type="hidden" name="fldUserSessionTimeOut" value=@(ViewBag.SecurityProfileTemp.fldUserSessionTimeOut)>
+                    }
+                    @Locale.Minutes<span class="red-star"> * </span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.DualApproval
+                </th>
+                <td>
+                    <input type="radio" name="fldDualApproval" value="Y" @(ViewBag.SecurityProfileTemp.fldDualApproval == "Y" ? "checked" : "") disabled> @Locale.Yes1
+                    <input type="radio" name="fldDualApproval" value="N" @(ViewBag.SecurityProfileTemp.fldDualApproval == "N" ? "checked" : "") disabled> @Locale.No1
+                    <input type="hidden" name="fldDualApproval" value=@(ViewBag.SecurityProfileTemp.fldDualApproval)>
+                    <span class="red-star"> * </span>
+                </td>
+            </tr>
+
+            @*------------------------------------------------------------------------------------------------------------------*@
+
+            <TR><Th><u><b>@Locale.ActiveDirectoryProperties</b></u></Th></TR>
+
+            <tr>
+                <th>
+                    @Locale.ADDomain
+                </th>
+                <td>
+                    @if (@ViewBag.SecurityProfileTemp.fldUserADDomain != @ViewBag.SecurityProfile.fldUserADDomain)
+                    {
+                        <input type="text" name="fldUserADDomain" STYLE="color: #FFFFFF;background-color: #FF0000;" id="fldUserADDomain" value="@ViewBag.SecurityProfileTemp.fldUserADDomain" maxLength=4 disabled />
+                        <input type="hidden" name="fldUserADDomain" value=@(ViewBag.SecurityProfileTemp.fldUserADDomain)>
+                    }
+                    else
+                    {
+                        <input type="text" name="fldUserADDomain" id="fldUserADDomain" value="@ViewBag.SecurityProfileTemp.fldUserADDomain" maxLength=4 disabled />
+                        <input type="hidden" name="fldUserADDomain" value=@(ViewBag.SecurityProfileTemp.fldUserADDomain)>
+                    }
+                </td>
+            </tr>
+
+
+            @*------------------------------------------------------------------------------------------------------------------*@
+
+            <TR><Th><u><b>@Locale.LocalProfilerProperties</b></u></Th></TR>
+
+            <tr>
+                <th>
+                    @Locale.UserPasswordLength
+                </th>
+                <td>
+                    @if (@ViewBag.SecurityProfileTemp.fldUserPwdLengthMin != @ViewBag.SecurityProfile.fldUserPwdLengthMin)
+                    {
+                        <input type="text" name="fldUserPwdLengthMin" STYLE="color: #FFFFFF;background-color: #FF0000;" id="fldUserPwdLengthMin" value="@ViewBag.SecurityProfileTemp.fldUserPwdLengthMin" maxLength=3 class="number-only" disabled /> @Locale.Min
+                        <input type="hidden" name="fldUserPwdLengthMin" value=@(ViewBag.SecurityProfileTemp.fldUserPwdLengthMin)>
+                        <span class="red-star"> * </span>
+                    }
+                    else
+                    {
+                        <input type="text" name="fldUserPwdLengthMin" id="fldUserPwdLengthMin" value="@ViewBag.SecurityProfileTemp.fldUserPwdLengthMin" maxLength=3 class="number-only" disabled /> @Locale.Min
+                        <input type="hidden" name="fldUserPwdLengthMin" value=@(ViewBag.SecurityProfileTemp.fldUserPwdLengthMin)>
+                        <span class="red-star"> * </span>
+                    }
+
+                    @if (@ViewBag.SecurityProfileTemp.fldUserPwdLengthMax != @ViewBag.SecurityProfile.fldUserPwdLengthMax)
+                    {
+                        <input type="text" name="fldUserPwdLengthMax" STYLE="color: #FFFFFF;background-color: #FF0000;" id="fldUserPwdLengthMax" value="@ViewBag.SecurityProfileTemp.fldUserPwdLengthMax" maxLength=3 class="number-only" disabled /> @Locale.Max
+                        <input type="hidden" name="fldUserPwdLengthMax" value=@(ViewBag.SecurityProfileTemp.fldUserPwdLengthMax)>
+                        <span class="red-star"> * </span>
+                    }
+                    else
+                    {
+                        <input type="text" name="fldUserPwdLengthMax" id="fldUserPwdLengthMax" value="@ViewBag.SecurityProfileTemp.fldUserPwdLengthMax" maxLength=3 class="number-only" disabled /> @Locale.Max
+                        <input type="hidden" name="fldUserPwdLengthMax" value=@(ViewBag.SecurityProfileTemp.fldUserPwdLengthMax)>
+                        <span class="red-star"> * </span>
+                    }
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.PasswordHistoryReusableafter
+                </th>
+                <td>
+                    @if (@ViewBag.SecurityProfileTemp.fldUserPwdHisRA != @ViewBag.SecurityProfile.fldUserPwdHisRA)
+                    {
+                        <input type="text" name="fldUserPwdHistoryMax" STYLE="color: #FFFFFF;background-color: #FF0000;" id="fldUserPwdHistoryMax" value="@ViewBag.SecurityProfileTemp.fldUserPwdHisRA" maxLength=4 class="number-only" disabled />
+                        <input type="hidden" name="fldUserPwdHistoryMax" value=@(ViewBag.SecurityProfileTemp.fldUserPwdHisRA)>
+                    }
+                    else
+                    {
+                        <input type="text" name="fldUserPwdHistoryMax" id="fldUserPwdHistoryMax" value="@ViewBag.SecurityProfileTemp.fldUserPwdHisRA" maxLength=4 class="number-only" disabled />
+                        <input type="hidden" name="fldUserPwdHistoryMax" value=@(ViewBag.SecurityProfileTemp.fldUserPwdHisRA)>
+                    }
+                    @Locale.Times<span class="red-star"> * </span>
+                </td>
+            </tr>
+            <tr>
+
+                <th>
+                    @Locale.UserPasswordExpiryInterval
+                </th>
+                <td>
+
+                    @if (@ViewBag.SecurityProfileTemp.fldUserPwdExpiry != @ViewBag.SecurityProfile.fldUserPwdExpiry)
+                    {
+                        <input type="text" id="fldUserPwdExpiry" STYLE="color: #FFFFFF;background-color: #FF0000;" name="fldUserPwdExpiry" value="@ViewBag.SecurityProfileTemp.fldUserPwdExpiry" maxLength=3 class="number-only" disabled>
+                        <input type="hidden" name="fldUserPwdExpiry" value=@(ViewBag.SecurityProfileTemp.fldUserPwdExpiry)>
+                    }
+                    else
+                    {
+                        <input type="text" id="fldUserPwdExpiry" name="fldUserPwdExpiry" value="@ViewBag.SecurityProfileTemp.fldUserPwdExpiry" maxLength=3 class="number-only" disabled>
+                        <input type="hidden" name="fldUserPwdExpiry" value=@(ViewBag.SecurityProfileTemp.fldUserPwdExpiry)>
+                    }
+
+                    @if (@ViewBag.SecurityProfileTemp.fldUserPwdExpiryInt != @ViewBag.SecurityProfile.fldUserPwdExpiryInt)
+                    {
+                        <select name="fldUserPwdExpiryInt" STYLE="color: #FFFFFF;background-color: #FF0000;" id="fldUserPwdExpiryInt" class="textbox" disabled>
+                            <option value="D" @(ViewBag.SecurityProfileTemp.fldUserPwdExpiryInt == "D" ? "selected" : "")>@Locale.Day</option>
+                            <option value="M" @(ViewBag.SecurityProfileTemp.fldUserPwdExpiryInt == "M" ? "selected" : "")>@Locale.Month</option>
+                            <option value="Y" @(ViewBag.SecurityProfileTemp.fldUserPwdExpiryInt == "Y" ? "selected" : "")>@Locale.Year</option>
+                        </select>
+                        <input type="hidden" name="fldUserPwdExpiryInt" value=@(ViewBag.SecurityProfileTemp.fldUserPwdExpiryInt)>
+                    }
+                    else
+                    {
+                        <select name="fldUserPwdExpiryInt" id="fldUserPwdExpiryInt" class="textbox" disabled>
+                            <option value="D" @(ViewBag.SecurityProfileTemp.fldUserPwdExpiryInt == "D" ? "selected" : "")>@Locale.Day</option>
+                            <option value="M" @(ViewBag.SecurityProfileTemp.fldUserPwdExpiryInt == "M" ? "selected" : "")>@Locale.Month</option>
+                            <option value="Y" @(ViewBag.SecurityProfileTemp.fldUserPwdExpiryInt == "Y" ? "selected" : "")>@Locale.Year</option>
+                        </select>
+                        <input type="hidden" name="fldUserPwdExpiryInt" value=@(ViewBag.SecurityProfileTemp.fldUserPwdExpiryInt)>
+                    }
+                    <span class="red-star"> * </span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.UserPasswordNotificationInterval
+                </th>
+                <td>
+                    @if (@ViewBag.SecurityProfileTemp.fldUserPwdNotification != @ViewBag.SecurityProfile.fldUserPwdNotification)
+                    {
+                        <input type="text" id="fldUserPwdNotification" name="fldUserPwdNotification" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.SecurityProfileTemp.fldUserPwdNotification" maxLength=3 class="number-only" disabled />
+                        <input type="hidden" name="fldUserPwdNotification" value=@(ViewBag.SecurityProfileTemp.fldUserPwdNotification)>
+                    }
+                    else
+                    {
+                        <input type="text" id="fldUserPwdNotification" name="fldUserPwdNotification" value="@ViewBag.SecurityProfileTemp.fldUserPwdNotification" maxLength=3 class="number-only" disabled />
+                        <input type="hidden" name="fldUserPwdNotification" value=@(ViewBag.SecurityProfileTemp.fldUserPwdNotification)>
+                    }
+
+
+                    @if (@ViewBag.SecurityProfileTemp.fldUserPwdNotificationInt != @ViewBag.SecurityProfile.fldUserPwdNotificationInt)
+                    {
+                        <select name="fldUserPwdNotificationInt" STYLE="color: #FFFFFF;background-color: #FF0000;" id="fldUserPwdNotificationInt" class="textbox" disabled>
+                            <option value="D" @(ViewBag.SecurityProfileTemp.fldUserPwdNotificationInt == "D" ? "selected" : "")>@Locale.Day</option>
+                            <option value="M" @(ViewBag.SecurityProfileTemp.fldUserPwdNotificationInt == "M" ? "selected" : "")>@Locale.Month</option>
+                            <option value="Y" @(ViewBag.SecurityProfileTemp.fldUserPwdNotificationInt == "Y" ? "selected" : "")>@Locale.Year</option>
+                        </select>
+                        <input type="hidden" name="fldUserPwdNotificationInt" value=@(ViewBag.SecurityProfileTemp.fldUserPwdNotificationInt)>
+                    }
+                    else
+                    {
+                        <select name="fldUserPwdNotificationInt" id="fldUserPwdNotificationInt" class="textbox" disabled>
+                            <option value="D" @(ViewBag.SecurityProfileTemp.fldUserPwdNotificationInt == "D" ? "selected" : "")>@Locale.Day</option>
+                            <option value="M" @(ViewBag.SecurityProfileTemp.fldUserPwdNotificationInt == "M" ? "selected" : "")>@Locale.Month</option>
+                            <option value="Y" @(ViewBag.SecurityProfileTemp.fldUserPwdNotificationInt == "Y" ? "selected" : "")>@Locale.Year</option>
+                        </select>
+                        <input type="hidden" name="fldUserPwdNotificationInt" value=@(ViewBag.SecurityProfileTemp.fldUserPwdNotificationInt)>
+                    }
+                    <span class="red-star"> * </span>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Locale.WhenPasswordExpired
+                </th>
+                <td>
+                    <input type="radio" name="fldUserPwdExpAction" id="fldUserPwdExpAction" value="F" @(ViewBag.SecurityProfileTemp.fldUserPwdExpAction == "F" ? "checked" : "") disabled>@Locale.Forceusertochangepassword
+                    <input type="radio" name="fldUserPwdExpAction" id="fldUserPwdExpAction" value="D" @(ViewBag.SecurityProfileTemp.fldUserPwdExpAction == "D" ? "checked" : "") disabled>@Locale.Disableuser
+                    <input type="hidden" name="fldUserPwdExpAction" value=@(ViewBag.SecurityProfileTemp.fldUserPwdExpAction)>
+                    <span class="red-star"> * </span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Locale.UserPasswordChangeSequence
+                    <br />@Locale.WithinADay
+                </th>
+                <td>
+                    @if (@ViewBag.SecurityProfileTemp.fldPwdChangeTime != @ViewBag.SecurityProfile.fldPwdChangeTime)
+                    {
+                        <input type="text" name="fldPwdChangeTime" STYLE="color: #FFFFFF;background-color: #FF0000;" id="fldPwdChangeTime" value="@ViewBag.SecurityProfileTemp.fldPwdChangeTime" maxLength=3 class="number-only" disabled />
+                        <input type="hidden" name="fldPwdChangeTime" value=@(ViewBag.SecurityProfileTemp.fldPwdChangeTime)>
+                    }
+                    else
+                    {
+                        <input type="text" name="fldPwdChangeTime" id="fldPwdChangeTime" value="@ViewBag.SecurityProfileTemp.fldPwdChangeTime" maxLength=3 class="number-only" disabled />
+                        <input type="hidden" name="fldPwdChangeTime" value=@(ViewBag.SecurityProfileTemp.fldPwdChangeTime)>
+                    }
+                    @Locale.Times
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <button data-action="@Url.Action("/VerifyA2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.SecurityProfileChecker.VERIFY) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+                    <button data-action="@Url.Action("/VerifyR2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIds.SecurityProfileChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+                    <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.SecurityProfileChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+<script src="~/Scripts/App/SecurityProfile.js"></script>

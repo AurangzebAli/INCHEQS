@@ -1,0 +1,133 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using (Html.BeginForm("Update", "VerificationLimit", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Maintenance - Verification Limit (Edit)</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <TBODY>
+                <TR>
+                    <Th>@Locale.Class</Th>
+                    @if (ViewBag.findVerificationLimit != null) {
+                        <TD><input type="hidden" value="@ViewBag.findVerificationLimit["fldClass"]" name="txtclass" />@ViewBag.findVerificationLimit["fldClass"] </TD>
+                    }
+                </TR>
+                <TR>
+                    <Th>@Locale.firstAmount</Th>
+                    
+                        <TD>
+                            <select id="firstType" name="firstType">
+
+                                <option value=">" @(ViewBag.findVerificationLimit["fld1stType"].ToString().Trim() == ">" ? "selected" : "")>@Locale.morethan </option>
+                                <option value=">=" @(ViewBag.findVerificationLimit["fld1stType"].ToString().Trim() == ">=" ? "selected" : "")>@Locale.morethanandequalto</option>
+                                <option value="=" @(ViewBag.findVerificationLimit["fld1stType"].ToString().Trim() == "=" ? "selected" : "")>@Locale.equalto</option>
+                                <option value="<" @(ViewBag.findVerificationLimit["fld1stType"].ToString().Trim() == "<" ? "selected" : "")>@Locale.lessthan</option>
+                                <option value="<=" @(ViewBag.findVerificationLimit["fld1stType"].ToString().Trim() == "<=" ? "selected" : "")>@Locale.lessthanandequal</option>
+
+                            </select>
+                            <span class="red-star">*</span>
+                            <input type="text" value="@String.Format("{0:n}", ViewBag.findVerificationLimit["fld1stAmt"])" onkeyup="CopyData(this)" name="firstAmount" id="firstAmount" onchange="setTwoNumberDecimal" class="number-only" maxlength="20"/>
+                            <span class="red-star">*</span>
+                        </TD>
+                    
+                </TR>
+                <TR>
+                    <Th>@Locale.Concatenate</Th>
+
+                    <TD>
+                        <select id="concat" name="concat">
+
+                            <option value="" @(ViewBag.findVerificationLimit["fldConcatenate"] == null ? "selected" : "")> </option>
+                            <option value="Or" @(ViewBag.findVerificationLimit["fldConcatenate"].ToString().Trim() == "Or" ? "selected" : "")>Or</option>
+                            <option value="And" @(ViewBag.findVerificationLimit["fldConcatenate"].ToString().Trim() == "And" ? "selected" : "")>And</option>
+
+                        </select>
+                    </TD>
+
+                </TR>
+                <TR>
+                    <Th>@Locale.secondAmount</Th>
+                    
+                        <TD>
+                            <select id="secondType" name="secondType">
+                                <option value="" @(ViewBag.findVerificationLimit["fld2ndType"].ToString().Trim() == "" ? "selected" : "")> </option>
+                                <option value=">" @(ViewBag.findVerificationLimit["fld2ndType"].ToString().Trim() == ">" ? "selected" : "")>@Locale.morethan </option>
+                                <option value=">=" @(ViewBag.findVerificationLimit["fld2ndType"].ToString().Trim() == ">=" ? "selected" : "")>@Locale.morethanandequalto</option>
+                                <option value="=" @(ViewBag.findVerificationLimit["fld2ndType"].ToString().Trim() == "=" ? "selected" : "")>@Locale.equalto</option>
+                                <option value="<" @(ViewBag.findVerificationLimit["fld2ndType"].ToString().Trim() == "<" ? "selected" : "")>@Locale.lessthan</option>
+                                <option value="<=" @(ViewBag.findVerificationLimit["fld2ndType"].ToString().Trim() == "<=" ? "selected" : "")>@Locale.lessthanandequal</option>
+
+                            </select>
+                            <input type="text" value="@String.Format("{0:n}", ViewBag.findVerificationLimit["fld2ndAmt"])"   onkeyup="CopyData(this)" name="secondAmount" id="secondAmount" onchange="setTwoNumberDecimal2" class="number-only" maxlength="20"/>
+                        </TD>
+                    
+                </TR>
+                <TR>
+                    <Th>@Locale.LimitDescription</Th>
+                    @if (ViewBag.findVerificationLimit != null) {
+                        <TD><input type="text" value="@ViewBag.findVerificationLimit["fldLimitDesc"] " name="VerifyLimitDesc" id="VerifyLimitDesc" class="input" size = "60"  /></TD>
+                    }
+                </TR>
+
+            </TBODY>
+        </table>
+        <button type="submit" onclick="return Confirm()" Class="btn btn-default @(CurrentUser.HasTask(TaskIdsOCS.VerificationLimit.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIdsOCS.VerificationLimit.INDEX) ? "" : "disabled")">@Locale.btnClose</a>
+        
+        @*<input type="button" class="btn btn-default generateButton" value="Generate"/>*@
+
+
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $('#firstAmount, #secondAmount').maskMoney({ allowZero: true });
+    })
+
+    function CopyData(val) {
+        var a = document.getElementById("firstType").value
+        var b = document.getElementById("firstAmount").value + " "
+        var c = document.getElementById("concat").value
+        var d = document.getElementById("secondType").value
+        var e = document.getElementById("secondAmount").value
+
+        var inputs = document.querySelectorAll(".input");
+        for (var i = 0; i < inputs.length; i++) {
+            var z = "Amount " + a + b
+            inputs[i].value = z;
+            if (c != "" && d != "" && e != "") {
+                inputs[i].value = z + c + " Amount " + d + e;
+            }
+        }
+    }
+    function setTwoNumberDecimal(event) {
+        this.value = parseFloat(this.value).toFixed(2);
+    }
+    function setTwoNumberDecimal2(event) {
+        this.value = parseFloat(this.value).toFixed(2);
+    }
+
+    function Confirm() {
+        var input = $("<input />");
+        input.attr("type", "hidden").attr("name", "confirm_value");
+        if (confirm("Do you want to save data?")) {
+            input.val("Yes");
+
+            var a = $("#firstAmount").val().replace(",", "");
+            $("#firstAmount").val(a);
+
+            var b = $("#secondAmount").val().replace(",", "");
+            $("#secondAmount").val(b);
+            return true;
+        } else {
+            input.val("No");
+            return false;
+        }
+        $("form")[0].appendChild(input[0]);
+    }
+
+</script>
+<script src="~/Scripts/App/verificationLimit.js"></script>

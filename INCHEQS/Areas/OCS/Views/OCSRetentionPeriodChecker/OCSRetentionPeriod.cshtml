@@ -1,0 +1,135 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Security
+@using (Html.BeginForm("OCSRetentionPeriod", "OCSRetentionPeriodChecker", FormMethod.Post, new { @Class = "secure-form " }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+    <h4>Maintenance - System Setting - OCS Retention Period</h4>
+    <hr />
+
+    <table class="table form-table table-no-border">
+
+        <tr>
+            <th>
+                Outward Clearing Retention Period
+            </th>
+            <td>
+
+                @if (@ViewBag.OCSRetentionPeriodTemp.OCInt != @ViewBag.OCSRetentionPeriod.OCInt)
+                {
+                    <input type="text" id="OCInt" name="OCInt" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.OCSRetentionPeriodTemp.OCInt" maxLength=3 class="number-only" disabled>
+                }
+                else
+                {
+                    <input type="text" id="OCInt" name="OCInt" value="@ViewBag.OCSRetentionPeriodTemp.OCInt" maxLength=3 class="number-only" disabled>
+                }
+
+                @if (@ViewBag.OCSRetentionPeriodTemp.OCIntType != @ViewBag.OCSRetentionPeriod.OCIntType)
+                {
+                    <select name="OCIntType" id="OCIntType" class="textbox" STYLE="color: #FFFFFF;background-color: #FF0000;" disabled>
+                        <option value="" selected="selected">Select Interval Type</option>
+                        @foreach (var item in @ViewBag.ListInterval)
+                        {
+                            <option value="@item.IntType" @(ViewBag.OCSRetentionPeriodTemp.OCIntType == item.IntType ? "selected" : "")>@item.IntType</option>
+                        }
+                    </select>
+                }
+                else
+                {
+                    <select name="OCIntType" id="OCIntType" class="textbox" disabled>
+                        <option value="" selected="selected">Select Interval Type</option>
+                        @foreach (var item in @ViewBag.ListInterval)
+                        {
+                            <option value="@item.IntType" @(ViewBag.OCSRetentionPeriodTemp.OCIntType == item.IntType ? "selected" : "")>@item.IntType</option>
+                        }
+                    </select>
+                }
+            </td>
+        </tr>
+
+        <tr>
+            <th>
+                Outward Clearing History Retention Period
+            </th>
+            <td>
+
+                @if (@ViewBag.OCSRetentionPeriodTemp.OCHistoryInt != @ViewBag.OCSRetentionPeriod.OCHistoryInt)
+                {
+                    <input type="text" id="OCHistoryInt" name="OCHistoryInt" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.OCSRetentionPeriodTemp.OCHistoryInt" maxLength=3 class="number-only" disabled>
+                }
+                else
+                {
+                    <input type="text" id="OCHistoryInt" name="OCHistoryInt" value="@ViewBag.OCSRetentionPeriodTemp.OCHistoryInt" maxLength=3 class="number-only" disabled>
+                }
+
+                @if (@ViewBag.OCSRetentionPeriodTemp.OCHistoryIntType != @ViewBag.OCSRetentionPeriod.OCHistoryIntType)
+                {
+                    <select name="OCHistoryIntType" id="OCHistoryIntType" class="textbox" STYLE="color: #FFFFFF;background-color: #FF0000;" disabled>
+                        <option value="" selected="selected">Select Interval Type</option>
+                        @foreach (var item in @ViewBag.ListInterval)
+                        {
+                            <option value="@item.IntType" @(ViewBag.OCSRetentionPeriodTemp.OCHistoryIntType == item.IntType ? "selected" : "")>@item.IntType</option>
+                        }
+                    </select>
+                }
+                else
+                {
+                    <select name="OCHistoryIntType" id="OCHistoryIntType" class="textbox" disabled>
+                        <option value="" selected="selected">Select Interval Type</option>
+                        @foreach (var item in @ViewBag.ListInterval)
+                        {
+                            <option value="@item.IntType" @(ViewBag.OCSRetentionPeriodTemp.OCHistoryIntType == item.IntType ? "selected" : "")>@item.IntType</option>
+                        }
+                    </select>
+                }
+            </td>
+        </tr>
+
+        <tr>
+            <th>
+                Inward Return Retention Period
+            </th>
+            <td>
+
+                @if (@ViewBag.OCSRetentionPeriodTemp.IRInt != @ViewBag.OCSRetentionPeriod.IRInt)
+                {
+                    <input type="text" id="IRInt" name="IRInt" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.OCSRetentionPeriodTemp.IRInt" maxLength=3 class="number-only" disabled>
+                }
+                else
+                {
+                    <input type="text" id="IRInt" name="IRInt" value="@ViewBag.OCSRetentionPeriodTemp.IRInt" maxLength=3 class="number-only" disabled>
+                }
+
+                @if (@ViewBag.OCSRetentionPeriodTemp.IRIntType != @ViewBag.OCSRetentionPeriod.IRIntType)
+                {
+                    <select name="IRIntType" id="IRIntType" class="textbox" STYLE="color: #FFFFFF;background-color: #FF0000;" disabled>
+                        <option value="" selected="selected">Select Interval Type</option>
+                        @foreach (var item in @ViewBag.ListInterval)
+                        {
+                            <option value="@item.IntType" @(ViewBag.OCSRetentionPeriodTemp.IRIntType == item.IntType ? "selected" : "")>@item.IntType</option>
+                        }
+                    </select>
+                }
+                else
+                {
+                    <select name="IRIntType" id="IRIntType" class="textbox" disabled>
+                        <option value="" selected="selected">Select Interval Type</option>
+                        @foreach (var item in @ViewBag.ListInterval)
+                        {
+                            <option value="@item.IntType" @(ViewBag.OCSRetentionPeriodTemp.IRIntType == item.IntType ? "selected" : "")>@item.IntType</option>
+                        }
+                    </select>
+                }
+            </td>
+        </tr>
+
+    </table>
+
+    <button data-action="@Url.Action("/VerifyA2")" Class="btn btn-default normal-submit-verifysave-action-button @(CurrentUser.HasTask(TaskIdsOCS.OCSRetentionPeriodChecker.INDEX) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+    <button data-action="@Url.Action("/VerifyR2")" Class="btn btn-default normal-submit-verifydelete-action-button @(CurrentUser.HasTask(TaskIdsOCS.OCSRetentionPeriodChecker.INDEX) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+    <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.OCSRetentionPeriodChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+
+</div>
+}
+<script src="~/Scripts/App/app.js"></script>

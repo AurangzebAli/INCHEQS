@@ -1,0 +1,31 @@
+﻿@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Resources
+
+<table id="search-result-table" class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            @Html.Partial("SearchPage/_TableHeaderColumns")
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+        {
+            <tr class="inward-item-fullview" data-action="@Url.Action("ChequeVerificationPage")">
+                @Html.Partial("SearchPage/_TableBodyColumns", row)
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        @Html.Partial("SearchPage/_TablePaginationFooter")
+    </tfoot>
+</table>
+@if (ViewBag.SearchResult.TotalRecordCount > 0)
+{
+    if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "ChequeAmountQueue"))
+    {
+        <a class="btn btn-default inward-item-fullview" data-action="@Url.Action("ChequeAmountQueue")">Queue</a>
+    }
+    @*<a class="btn btn-default download-action" data-action="@Url.Action("PrintAll")">@Locale.Print</a>*@
+}
+
+@Scripts.Render("~/bundles/SearchResultPage")

@@ -1,0 +1,216 @@
+﻿@using System.Data;
+@{
+    ViewBag.Title = "ChequeVerificationPage";
+    Layout = "~/Views/Shared/_LayoutChequeVerification.cshtml";
+}
+@{
+    int MinusTotalRecord;
+    string OriTotalRecord = "";
+    if (ViewBag.MinusRecordIndicator != null) {
+        MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalRecord")) - 1;
+        if (ViewBag.StoreProc != null)
+        {
+            MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+        }
+        //if (ViewBag.DatabaseViewName == "View_Verification") {
+        //    MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified")) - 1;
+        //}
+    } else {
+        MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalRecord"));
+        //if (ViewBag.DatabaseViewName == "View_Verification") {
+        //    MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+        //}
+    }
+
+    if (ViewBag.LockIndicator != null) {
+        OriTotalRecord = ViewBag.InwardItemViewModel.getField("TotalRecord");
+        <input type="hidden" id="OriTotalRecordHolder" value="@OriTotalRecord">
+    }
+}
+        <div>
+    <div class="row mTop10">
+        <div class="col-sm-6">
+            <span class="h4 bold">@ViewBag.PageTitle</span>
+            @*<span Class="red">@ViewBag.InwardItemViewModel.getField("fldTransDesc")</span>*@
+            @*<span class="h5"> @ViewBag.InwardItemViewModel.getField("fldItemStatus")</span>*@
+            <!--input type="hidden" name="fldAccountNumber" value="@ViewBag.InwardItemViewModel.getField("fldAccountNumber")"-->
+            <input type="hidden" name="NextValue" value="@ViewBag.InwardItemViewModel.getField("NextValue")">
+            <input type="hidden" name="PreviousValue" value="@ViewBag.InwardItemViewModel.getField("PreviousValue")">
+
+
+            <span class="red bold">[@MinusTotalRecord / </span>
+            <span class="red bold" id="OriTotalRecord">1</span>
+            <span class="red bold">]</span>
+            <span>@ViewBag.InwardItemViewModel.getField("fldAccountDesc")</span>
+            <div class="row">
+                <div class="col-sm-6">
+                    <span class="h5 bold">UIC :</span>
+                    <span>@ViewBag.InwardItemViewModel.getField("fldUIC")</span>
+                </div>
+
+                <div class="col-sm-6">
+                    <span class="h5 bold">HOST STATUS :</span>
+                    @if (ViewBag.RejectStatus1 != "" && ViewBag.RejectStatus2 != "")
+                    {
+                        <span class="red">@ViewBag.RejectStatus1 - @ViewBag.StatusDesc,@ViewBag.RejectStatus2 - @ViewBag.StatusDesc2</span>
+                    }
+                    else if (ViewBag.RejectStatus1 != "")
+                    {
+                        <span class="red">@ViewBag.RejectStatus1 - @ViewBag.StatusDesc</span>
+
+                    }
+                    else if (ViewBag.RejectStatus2 != "")
+                    {
+                        <span class="red">@ViewBag.RejectStatus2 - @ViewBag.StatusDesc2</span>
+
+                    }
+                    else if (ViewBag.RejectStatus1 == "" && ViewBag.RejectStatus2 == "")
+                    {
+                        <span class="red">NIL</span>
+                    }
+                </div>
+                @*<div class="col-sm-7">
+                        <span class="h5 bold">IQA STATUS :</span>
+                        <span class="red">@ViewBag.IQADesc</span>
+                    </div>
+                    <div class="col-sm-11">
+                        <span class="h5 bold">MICR CORRECTION STATUS :</span>
+                        <span class="red">@ViewBag.MICRCorrectionDesc</span>
+                        </div>*@
+                @*<div class="col-sm-11">
+                        <span class="h5 bold">DLL VALIDATION STATUS :</span>
+                        <span class="red">@ViewBag.DLLStatus</span>
+                    </div>*@
+                @*<div class="col-sm-11">
+                    <span class="h5 bold">NCF Flag :</span>
+                        @if (ViewBag.NCFFlag == "")
+                        {
+                            <span class="red">NIL</span>
+                        }
+                        else if(ViewBag.NCFFlag == "0")
+                        {
+                            <span class="red">@ViewBag.NCFFlag - @ViewBag.NCFDesc</span>
+
+                        }
+                        else
+                        {
+                            <span class="red">@ViewBag.NCFFlag - @ViewBag.NCFDesc</span>
+
+                        }
+
+                    </div>*@
+                @*<div class="col-sm-11">
+                        <span class="h5 bold">NCF Flag 2:</span>
+                        @if (ViewBag.NCFFlag2 == "")
+                        {
+                            <span class="red">NIL</span>
+                        }
+                        else if (ViewBag.NCFFlag2 == "0")
+                        {
+                            <span class="red">@ViewBag.NCFFlag2 - @ViewBag.NCFDesc2</span>
+
+                        }
+                        else
+                        {
+                            <span class="red">@ViewBag.NCFFlag2 - @ViewBag.NCFDesc2</span>
+
+                        }
+                    </div>*@
+            </div>
+        </div>
+        <div class="col-sm-6 text-right">
+            @Html.Partial("InwardClearing/Base/_ChequeControlAction")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            @Html.Partial("InwardClearing/Base/_ChequeImage")
+        </div>
+        @*<div class="col-sm-4">
+            @Html.Partial("InwardClearing/Base/_ChequeInfo")
+            <div id="signatureInfo">
+            </div>
+            </div>*@
+        <div class="col-sm-4">
+            @Html.Partial("InwardClearing/Base/_ChequeDetail2")
+
+        </div>
+    </div>
+    @*<div class="row">
+        <div class="col-sm-8">
+            @Html.Partial("InwardClearing/Base/_ShowMICR")
+        </div>
+        </div>*@
+
+    <div class="row" id="">
+        <div class="col-sm-12">
+
+                    <div class="col-sm-8">
+                @Html.Partial("InwardClearing/Base/_SignatureList")
+
+                    </div>
+                    <div class="col-sm-4">
+                @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationAction"))
+                {
+                    if (CurrentUser.Account.isBranchUser())
+                    {
+                        @Html.Partial("InwardClearing/ICCSDefault/Partial/_BranchAction")
+                    }
+                    else
+                    {
+                        @Html.Partial("InwardClearing/ICCSDefault/Partial/_Action")
+                    }
+                }
+            </div>
+
+
+        </div>
+    </div>
+
+            <div class="col-sm-12">
+            @Html.Partial("InwardClearing/Base/_SignatureListing")
+            </div>
+        </div>
+
+            @if (ViewBag.IQA == "2")
+            {
+    <script>
+$(document).ready(function(){
+            alert("@ViewBag.IQADesc");
+
+});
+    </script>
+            }
+            @if (ViewBag.LockCheck == "False")
+            {
+    <script>
+        $(document).ready(function () {
+            alert(" Warning !" + "\n" + " This cheque is locked by other user");
+            disable();
+        });
+
+        function disable() {
+            $("#approveBtn").attr("disabled", true);
+            $("#returnBtn").attr("disabled", true);
+            $("#routeBtn").attr("disabled", true);
+            $("#pullOutBtn").attr("disabled", true);
+        }
+
+    </script>
+            }
+            @if (ViewBag.LockCheckBranch == "False")
+            {
+    <script>
+        $(document).ready(function () {
+            alert(" Warning !" + "\n" + " This cheque is locked by branch user");
+            disable();
+        });
+
+        function disable() {
+            $("#approveBtn").attr("disabled", true);
+            $("#returnBtn").attr("disabled", true);
+            $("#routeBtn").attr("disabled", true);
+            $("#pullOutBtn").attr("disabled", true);
+        }
+    </script>
+            }

@@ -1,0 +1,63 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "HubUserProfile", FormMethod.Post, new { @Class = "secure-form" })){
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Locale.HQUserProfileMaintenance</h4>
+        <hr />
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.HubId</th>
+                    <td>
+                        <input type="hidden" value="@ViewBag.HubUserIds["fldHubId"]" name="hubId" />@ViewBag.HubUserIds["fldHubId"]
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.HubDescription</th>
+                    <td>
+                        <input type="text" value="@ViewBag.HubUserIds["fldHubDesc"]" name="hubDesc" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form-select">
+                            <div>
+                                <b>@Locale.UserAvailableList</b><br>
+                                <select multiple="multiple" class="form-multiple select-from">
+                                    @foreach (var item in ViewBag.AvailableUserList.Rows) {
+                                        <option value="@item["fldUserId"]">@item["fldUserAbb"]</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-move">
+                                <br />
+                                <p>
+                                    <input type="button" title="select all" class="btn btn-default btn-move addAll" value="&gt;&gt;">
+                                </p>
+                                <p><input type="button" title="select" class="btn btn-default btn-move addOne" value="&gt;"></p>
+                                <p><input type="button" title="remove" class="btn btn-default btn-move rmOne" value="&lt;"></p>
+                                <p><input type="button" title="remove all" class="btn btn-default btn-move rmAll" value="&lt;&lt;"></p>
+                            </div>
+                            <div>
+                                <b>@Locale.UserSelectedList</b><br>
+                                <select multiple="multiple" class="form-multiple select-to" name="selectedhubbranch">
+                                    @foreach (var item in ViewBag.SelectedUserList.Rows) {
+                                        <option value="@item["fldUserId"]">@item["fldUserAbb"]</option>
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.HubUserProfile.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav" @(CurrentUser.HasTask(TaskIds.HubUserProfile.INDEX) ? "" : "hidden")>@Locale.BackBtn</a>
+    </div>
+}
+
+<script src="~/Scripts/App/multiSelectList.js"></script>

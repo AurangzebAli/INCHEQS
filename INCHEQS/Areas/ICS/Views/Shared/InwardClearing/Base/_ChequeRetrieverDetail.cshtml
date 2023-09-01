@@ -1,0 +1,177 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+    DateTime currentdate = DateTime.Now;
+    DateTime sDate = currentdate.AddMonths(-6);
+    string staleDate = sDate.ToString("dd-MM-yyyy");
+    string bankType;
+    if (ViewBag.InwardItemViewModel.getField("fldIssueBankCode").ToString().Trim() == "32")
+    {
+        bankType = "Conv";
+    }
+    else
+    {
+        bankType = "Islamic";
+    }
+}
+
+<table style="line-height: 23px; margin-top: 5px; margin-bottom: 2px; color:black">
+    <tr>
+        <th style="background-color:#E8E8E8">Cheque Clearing Date</th>
+
+        <td><span class="bold">@DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))</span></td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">UIC</th>
+
+        <td><span class="bold">@ViewBag.InwardItemViewModel.getField("fldUIC")</span></td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Account Number</th>
+
+        <td><span class="bold">@ViewBag.InwardItemViewModel.getField("fldAccountNumber")</span></td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Cheque Number</th>
+
+        <td><span class="bold">@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo")</span></td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Paying Branch</th>
+
+        <td><span class="bold">@ViewBag.InwardItemViewModel.getField("fldIssueBankBranch") - @ViewBag.InwardItemViewModel.getField("fldBranchDesc") -  @bankType</span></td>
+
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Presenting Bank</th>
+
+        <td><span class="bold">@ViewBag.InwardItemViewModel.getField("fldPreBankBranch") - @ViewBag.InwardItemViewModel.getField("fldPreBankDesc")</span></td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Amount</th>
+
+        <td><span class="bold">@StringUtils.FormatCurrency(ViewBag.InwardItemViewModel.getField("fldAmount"))</span></td>
+    </tr>
+    @*@if (ViewBag.TaskId.ToString().Trim() == "301120")
+        {
+        <tr>
+            <th style="background-color:#E8E8E8">NC Flag 1</th>
+
+            <td>
+                @if (ViewBag.InwardItemViewModel.getField("fldNonConformance").ToString().Trim() == "0")
+                {
+                    <span class="bold"> @(ViewBag.InwardItemViewModel.getField("fldNonConformance") + " - " + @ViewBag.NCFDesc) </span>
+                }
+                else if (ViewBag.InwardItemViewModel.getField("fldNonConformance").ToString().Trim() == "")
+                {
+                    <span> NIL </span>
+                }
+                else if (ViewBag.InwardItemViewModel.getField("fldNonConformance").ToString().Trim() == "6" || ViewBag.InwardItemViewModel.getField("fldNonConformance").ToString().Trim() == "7")
+                {
+                    <span class="bold"> @(ViewBag.InwardItemViewModel.getField("fldNonConformance") + " - " + @ViewBag.NCFDesc)</span>
+                }
+                else
+                {
+                    <span class="bold"> @(ViewBag.InwardItemViewModel.getField("fldNonConformance") + " - " + @ViewBag.NCFDesc)</span>
+                }
+            </td>
+        </tr>
+            if (ViewBag.InwardItemViewModel.getField("fldNonConformance2").ToString().Trim() != "")
+            {
+        <tr>
+            <th style="background-color:#E8E8E8">NC Flag 2</th>
+
+            <td>
+                @if (ViewBag.InwardItemViewModel.getField("fldNonConformance2").ToString().Trim() == "6" || ViewBag.InwardItemViewModel.getField("fldNonConformance2").ToString().Trim() == "7")
+                {
+                    <span class="bold"> @(ViewBag.InwardItemViewModel.getField("fldNonConformance2") + " - " + @ViewBag.NCFDesc2)</span>
+                }
+                else
+                {
+                    <span class="bold"> @(ViewBag.InwardItemViewModel.getField("fldNonConformance2") + " - " + @ViewBag.NCFDesc2)</span>
+                }
+            </td>
+        </tr>
+            }
+        }*@
+
+    <tr>
+        <th style="background-color:#E8E8E8">Transaction Type</th>
+        <td><span class="bold">@ViewBag.InwardItemViewModel.getField("fldTransDesc")</span></td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Host Reject</th>
+
+        <td>
+            <span class="bold">
+                @*@(ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() == "" ? "NIL" : @ViewBag.HostStatus)*@
+                @if (ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() == "" &&
+                     ViewBag.InwardItemViewModel.getField("fldRejectStatus2").ToString().Trim() == "" &&
+                     ViewBag.InwardItemViewModel.getField("fldRejectStatus3").ToString().Trim() == "" &&
+                     ViewBag.InwardItemViewModel.getField("fldRejectStatus4").ToString().Trim() == "")
+                {
+                    <text>NIL</text>
+                }
+                else
+                {
+                    if (ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() != "")
+                    {
+                        @ViewBag.HostStatus
+                    }
+                    if (ViewBag.InwardItemViewModel.getField("fldRejectStatus2").ToString().Trim() != "" && ViewBag.InwardItemViewModel.getField("fldRejectStatus2").ToString().Trim() != null)
+                    {
+                        <text>, </text>
+                        @ViewBag.HostStatus2
+                    }
+                    if (ViewBag.InwardItemViewModel.getField("fldRejectStatus3").ToString().Trim() != "" && ViewBag.InwardItemViewModel.getField("fldRejectStatus3").ToString().Trim() != null)
+                    {
+                        if (ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() != "")
+                        {
+                            <text>, </text>
+                        }
+                        @ViewBag.HostStatus3
+                    }
+                    if (ViewBag.InwardItemViewModel.getField("fldRejectStatus4").ToString().Trim() != "" && ViewBag.InwardItemViewModel.getField("fldRejectStatus4").ToString().Trim() != null)
+                    {
+                        <text>, </text>@ViewBag.HostStatus4
+                    }
+                }
+            </span>
+        </td>
+    </tr>
+
+
+
+    <tr>
+        <th style="background-color:#E8E8E8">Return Reason</th>
+
+        <td>
+            @if (ViewBag.InwardItemViewModel.getField("fldRejectCode").ToString().Trim() != "000")
+            {
+                <span class="bold">@ViewBag.InwardItemViewModel.getField("fldRejectCode").ToString().Trim() - @ViewBag.InwardItemViewModel.getField("fldRejectDesc").ToString().Trim()</span>
+            }
+            else
+            {
+                <span class="bold">@ViewBag.InwardItemViewModel.getField("fldRejectCode").ToString().Trim() - @ViewBag.InwardItemViewModel.getField("fldRejectDesc").ToString().Trim()</span>
+            }
+        </td>
+    </tr>
+
+    <tr>
+        <th style="background-color:#E8E8E8">CCU Remarks</th>
+
+        <td>
+            <span class="bold">@ViewBag.InwardItemViewModel.getField("fldRemarks").ToString().Trim()</span>
+        </td>
+    </tr>
+    <tr>
+        <th style="background-color:#E8E8E8">Branch Remarks</th>
+
+        <td>
+            <span class="bold">@ViewBag.InwardItemViewModel.getField("pendingbranchremarks").ToString().Trim()</span>
+        </td>
+    </tr>
+
+
+
+</table>

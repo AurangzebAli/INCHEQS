@@ -1,0 +1,42 @@
+﻿@using INCHEQS.Resources
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<div class="ChequBalanceAmountEntry">
+    <div id="BoxTransparentdiv" class="BoxChequeAmountEntry">
+        <!--Include a header DIV with the same name as the draggable DIV, followed by "header":-->
+
+        <div id="BoxChequeAmountEntryheaderDataEntry" class="titlebar">
+            <span class="title">Enter Amount</span>
+        </div>
+        <div hidden>
+
+        </div>
+        <div class="BoxChequeAmountEntry">
+            <div style="margin-bottom:50px;"></div>
+            <div>
+                <table cellspacing="0">
+                    <tr>
+
+                        <td><span style="color: black; font-size: 25px;">Amount :</span></td>
+                        <td>
+                            <input type="text" class="form-control hidden" id="hReasonCode" name="hReasonCode" value="" />
+                            <input type="text" class="form-control hidden" id="hIntRejCode" name="hIntRejCode" value="" />
+                            <input type="text" class="form-control hidden" id="hRemark" name="hRemark" value="" />
+                            <input type="text" class="form-control hidden" id="htoUpdateBalancing" name="htoUpdateBalancing" value="" />
+                            @if (@ViewBag.OutwardItemViewModel.getField("fldamount") == "0" || @ViewBag.OutwardItemViewModel.getField("fldamount") == "0.00")
+                            {
+                                <input id="txtChequeAmount" class="form-control " name="txtChequeAmount" style="font-size:medium;text-align:right;background-color: yellow; border: 1px; height:30px;" type="text" value="" />
+                            }
+                            else
+                            {
+                                <input id="txtChequeAmount" class="form-control number" name="txtChequeAmount" style="font-size:medium;text-align:right;background-color: yellow; border: 1px; height:30px;" type="text" value="0.00" />
+                            }
+                        </td>
+                     
+                    </tr>
+                </table>
+                <button type="button" id="AddBalancingAmount" class="btn btn-default btn-sm">@Locale.BalancingQueueUpdateAmountBtn</button>
+            </div>
+        </div>
+    </div>
+</div>

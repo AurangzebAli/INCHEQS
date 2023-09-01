@@ -1,0 +1,61 @@
+﻿@using INCHEQS.Resources
+<div class="ChequDataEntry">
+    <div id="BoxTransparentdiv" class="BoxChequeAmountEntry">
+        <!--Include a header DIV with the same name as the draggable DIV, followed by "header":-->
+        <div id="BoxChequeAmountEntryheader" class="titlebar">
+            <span class="title">Data Entry</span>
+        </div>
+        <div class="BoxChequeAmountEntry" style="position: relative;">
+            <div style="margin-bottom:50px;"></div>
+            <div>
+                <table cellspacing="0">
+                    <tr>
+                        <td><span style="color: black; font-size: 25px;">Acc No:</span></td>
+                        <td>
+                            <input id="txtChequeAccountNumber" maxlength="19" class="form-control number-only" name="txtChequeAccountNumber" style="font-size:medium;text-align:right;background-color: yellow; border: 1px; height:30px;" type="text" value="" />
+                        </td>
+                        <td><button type="button" id="btnAdd" class="btn btn-default btn-lg">@Locale.Add</button></td>
+                        <td>
+                            <input id="txtAccName" class="form-control" name="txtAccName" style="display:none;font-size:medium;text-align:right;background-color: yellow; border: 1px; height:30px;" type="text" value="" />
+                        </td>
+                        <td>
+                            <input id="txtAccStatus" class="form-control" name="txtAccStatus" style="display:none;font-size:medium;text-align:right;background-color: yellow; border: 1px; height:30px;" type="text" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span style="color: black; font-size: 25px;">Chq Amt:</span></td>
+                        <td>
+                            <input type="hidden" id="hfdCItemChqAmtList" name="hfdCItemChqAmtList" value="@ViewBag.hfdCItemChqAmtList" />
+                            <input type="hidden" id="hfdVItemNoList" name="hfdVItemNoList" value="@ViewBag.hfdVItemNoList" />
+                            <input type="hidden" id="hfdItemInitialID" name="hfdItemInitialID" value="@ViewBag.hfdItemInitialID" />
+                            <input type="hidden" id="hfdRejectVAcctList" name="hfdRejectVAcctList" value="" />
+                            <input type="hidden" id="hfdAccNo" name="hfdAccNo" value="@ViewBag.hfdAccNo" />
+                            <input type="hidden" id="hfdChqAmt" name="hfdChqAmt" value="@ViewBag.hfdChqAmt" />
+                            <input type="hidden" id="hfdDoneEntry" name="hfdDoneEntry" value="" />
+                            <input type="hidden" id="hAddFirstTime" name="hAddFirstTime" value="" />
+                            <input type="hidden" id="hIslamicOrConv" name="hIslamicOrConv" value="" />
+                            <input type="hidden" id="hfdBusinessType" name="hfdBusinessType" value="" />
+                            <input type="hidden" id="hfAccountNameStatus" name="hfAccountNameStatus" value="" />
+                            <input type="hidden" id="hfZeroAmount" name="hfZeroAmount" value="" />
+
+                            @*<input type="hidden"  id="lblItemID" name="lblItemID" value="@ViewBag.fldItemId" />*@
+                            <label id="lblItemID" name="lblItemID" class="hidden">@ViewBag.fldItemId</label>
+                            <label id="lblRemark" name="lblRemark" class="hidden"></label>
+                            <label id="lblTransNo" name="lblTransNo" class="hidden">@ViewBag.fldTransno</label>
+                            <input type="hidden" id="hEnableButton" name="hEnableButton" value="" />
+
+                            <input type="text" class="form-control hidden" id="hReasonCode" name="hReasonCode" value="" />
+                            <input type="text" class="form-control hidden" id="hIntRejCode" name="hIntRejCode" value="" />
+                            <input type="text" class="form-control hidden" id="hRemark" name="hRemark" value="" />
+                            <input type="text" class="form-control hidden" id="htaskid" name="htaskid" value="@ViewBag.taskid" />
+                            <input id="txtChequeAmount" class="form-control " name="txtChequeAmount" style="font-size:medium;text-align:right;background-color: yellow; border: 1px; height:30px;" type="text" value="" />
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/OCS/DataEntry.js"></script>

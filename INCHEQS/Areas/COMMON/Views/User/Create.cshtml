@@ -1,0 +1,107 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "User", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.AdministratorUserProfileAdd</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.UserLoginId</th>
+                    <td>
+                        <input type="text" name="fldUserAbb" autocomplete="off" maxlength="100" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.UserName</th>
+                    <td>
+                        <input type="text" name="fldUserDesc" autocomplete="off" maxlength="50" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.UserType</th>
+                    <td>
+                        @Locale.Center <input type="radio" name="userType" id="Admin" value="Admin" /> &nbsp;&nbsp;&nbsp;
+                        @Locale.Branch <input type="radio" name="userType" id="branch" value="branch" /> &nbsp;&nbsp;&nbsp;
+                        @Locale.System <input type="radio" name="userType" id="System" value="System" />&nbsp;&nbsp;&nbsp;<span class="red-star" id="usertyperedstar" name="usertyperedstar">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BranchCode</th>
+                    <td>
+                        <select name="fldBranchCode" id="fldBranchCode">
+                            <option value=""> </option>
+                            @foreach (var item in @ViewBag.Branch)
+                            {
+                                <option value="@item.fldInternalBranchId">@item.fldCBranchId,@item.fldIBranchId - @item.fldBranchDesc</option>
+                            }
+                        </select>
+                        <span class="red-star" id="BranchCoderedstar" name="BranchCoderedstar" style="visibility:hidden;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.VerificationClass</th>
+                    <td>
+                        <select name="fldVerificationClass" id="fldVerificationClass" disabled>
+                            <option value=""> </option>
+                            @foreach (var item in @ViewBag.VerificationClass)
+                            {
+                                <option value="@item.fldClass"> Class @item.fldClass : @item.fldLimitDesc</option>
+                            }
+                        </select>
+                        <span class="red-star" id="VerificationClassredstar" name="VerificationClassredstar" style="visibility:hidden;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.VerificationLimit</th>
+                    <td>
+                        <input type="text" name="fldVerificationLimit" id="fldVerificationLimit" class="number-only" autocomplete="off" maxlength="3" value="50" disabled />
+                        <span class="red-star" id="VerificationLimitredstar" name="VerificationLimitredstar" style="visibility:hidden;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.Disable</th>
+                    <td><input type="checkbox" id="fldDisableLogin" name="fldDisableLogin" value="" /> Yes</td>
+                </tr>
+                <tr>
+                    <th>Zero Maker</th>
+                    <td><input type="checkbox" id="fldZeroMaker" name="fldZeroMaker" value="" /> Yes</td>
+                </tr>
+                <tr>
+                    <th>Branch User</th>
+                    <td>
+                        Officer <input type="radio" name="fldbranchuser" id="Officer" value="0" checked /> &nbsp;&nbsp;&nbsp;
+                        Admin <input type="radio" name="fldbranchuser" id="admin" value="1" /> &nbsp;&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.Password</th>
+                    <td>
+                        <input type="password" name="fldPassword" id="fldPassword" autocomplete="off" maxlength="50" />
+                        <span class="red-star" id="Passwordredstar" name="Passwordredstar" style="visibility:hidden;">*</span>
+                        &nbsp;&nbsp;<span><input type="checkbox" id="chkboxPassword" name="chkboxPassword" value="" /> Update Password</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.ConfirmPassword</th>
+                    <td>
+                        <input type="password" name="fldConfirmPassword" id="fldConfirmPassword" autocomplete="off" maxlength="50" />
+                        <span class="red-star" id="ConfirmPasswordredstar" name="ConfirmPasswordredstar" style="visibility:hidden;">*</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" data-action="@Url.Action("/SAVECREATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIds.User.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIds.User.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/user.js"></script>
+<script src="~/Scripts/App/app.js"></script>

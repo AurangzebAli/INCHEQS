@@ -1,0 +1,112 @@
+﻿using INCHEQS.Common;
+using INCHEQS.Helpers;
+using INCHEQS.Processes.DataProcess;
+using INCHEQS.Security;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Web.Mvc;
+
+namespace INCHEQS.Controllers.Api
+{
+    [CustomAuthorize(TaskIds = "all")]
+    public class DataProcessApiController : BaseController {
+        private readonly IDataProcessDao dataProcessDao;
+        protected readonly OCSIDataProcessDao OCScleardataProcess;
+        public DataProcessApiController(IDataProcessDao dataProcessDao, OCSIDataProcessDao OCScleardataProcess) {
+            this.dataProcessDao = dataProcessDao;
+            this.OCScleardataProcess = OCScleardataProcess;
+        }
+
+        // GET: DataProcessApi
+        public JsonResult AsJson(FormCollection collection) {
+            DataTable result = dataProcessDao.GetProcessStatus(collection["cleardate"], collection["processname"], CurrentUser.Account.BankCode);
+            List<string> resultList = new List<string>();
+            foreach (DataRow row in result.Rows) {
+                resultList.Add(string.Format("{0} - {1} - {2} <span id='processStatus' class='hidden'>{3}</span>",
+                    DateUtils.formatTimeStampFromSql(row["fldCreateTimeStamp"].ToString()),
+                    row["fldProcessName"],
+                    row["fldRemarks"] , 
+                    row["fldStatus"]
+                    ));
+            }
+            return Json(resultList, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AsJsonEOD(FormCollection collection)
+        {
+            DataTable result = dataProcessDao.GetProcessStatusEOD(collection["cleardate"], collection["processname"], CurrentUser.Account.BankCode);
+            List<string> resultList = new List<string>();
+            foreach (DataRow row in result.Rows)
+            {
+                if ((row["fldRemarks"].ToString() == ("Housekeeping daily image...")) || (row["fldRemarks"].ToString() == ("End of day process is completed.")) || (row["fldRemarks"].ToString() == ("End of day process is not completed.")))
+                {
+                    resultList.Add(string.Format("Clear date : {4} <br> {0} - <font color='green'>{1} - {2}</font> <span id='processStatus' class='hidden'>{3}</span>",
+                    DateUtils.formatTimeStampFromSql(row["fldCreateTimeStamp"].ToString()),
+                    row["fldProcessName"],
+                    row["fldRemarks"],
+                    row["fldStatus"],
+                    Convert.ToDateTime(row["fldcleardate"].ToString()).ToString("dd/MM/yyyy")
+                    ));
+                }
+                else
+                {
+                    resultList.Add(string.Format("Clear date : {4} <br> {0} - <font color='red'>{1} - {2}</font> <span id='processStatus' class='hidden'>{3}</span>",
+                    DateUtils.formatTimeStampFromSql(row["fldCreateTimeStamp"].ToString()),
+                    row["fldProcessName"],
+                    row["fldRemarks"],
+                    row["fldStatus"],
+                    Convert.ToDateTime(row["fldcleardate"].ToString()).ToString("dd/MM/yyyy")
+                    ));
+                }
+
+            }
+            return Json(resultList, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AsJsonICL(FormCollection collection)
+        {
+            DataTable result = dataProcessDao.GetProcessStatusICL(collection["cleardate"], collection["pospaytype"], CurrentUser.Account.BankCode, collection["processname"]);
+            List<string> resultList = new List<string>();
+            foreach (DataRow row in result.Rows)
+            {
+                resultList.Add(string.Format("{0} - {1} - {2} <span id='processStatus' class='hidden'>{3}</span>",
+                    DateUtils.formatTimeStampFromSql(row["fldCreateTimeStamp"].ToString()),
+                    row["fldPosPayType"],
+                    row["fldProcessName"],
+                    row["fldStatus"]
+                    ));
+            }
+            return Json(resultList, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AsJsonInwardICL(FormCollection collection)
+        {
+            DataTable result = OCScleardataProcess.GetProcessStatusIR_ICL(collection["cleardate"], collection["systemType"], CurrentUser.Account.BankCode, collection["processname"]);
+            List<string> resultList = new List<string>();
+            foreach (DataRow row in result.Rows)
+            {
+                resultList.Add(string.Format("<span id='processStatus' class='hidden'>{3}</span>",
+                    DateUtils.formatTimeStampFromSql(row["fldCreateTimeStamp"].ToString()),
+                    row["fldSystemType"],
+                    row["fldProcessName"],
+                    row["fldStatus"]
+                    ));
+            }
+            return Json(resultList, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult AsJsonECCS(FormCollection collection) {
+            DataTable result = dataProcessDao.GetProcessStatusECCS(collection["filetype"], collection["cleardate"], collection["processname"], CurrentUser.Account.BankCode);
+            List<string> resultList = new List<string>();
+            foreach (DataRow row in result.Rows) {
+                resultList.Add(string.Format("{0} - {1} - {2} <span id='processStatus' class='hidden'>{3}</span>",
+                    DateUtils.formatTimeStampFromSql(row["fldCreateTimeStamp"].ToString()),
+                    row["fldProcessName"],
+                    row["fldRemarks"],
+                    row["fldStatus"]
+                    ));
+            }
+            return Json(resultList, JsonRequestBehavior.AllowGet);
+        }
+    }
+}

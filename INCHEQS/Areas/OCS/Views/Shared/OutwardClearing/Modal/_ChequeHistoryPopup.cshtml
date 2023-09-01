@@ -1,0 +1,69 @@
+﻿@*@using INCHEQS.Resources
+    @{
+        ViewBag.Title = "ChequeHistory";
+    }
+    <!DOCTYPE html>
+
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>_ChequeHistory</title>
+    </head>
+    <body>
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>User Login ID</th>
+                        <th>Module Accessed</th>
+                        <th>Date Time</th>
+                        <th>Action Performed</th>
+                        <th>Action Details</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in ViewBag.ChequeHistory.Rows) {
+                    <tr>
+                        <td>@row["flduserdesc"]</td>
+                        <td>@row["ModuleAccessed"]</td>
+                        <td>@row["fldCreateTimeStamp"]</td>
+                        <td>@row["fldactionperformed"]</td>
+                        <td>@Html.Partial("_TableBodyColumns", (string)ViewBag.InwardItemViewModel.getField["fldactiondetails"])</td>
+
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </body>
+    </html>*@
+
+@using INCHEQS.Models.SearchPageConfig;
+@using INCHEQS.Resources
+@using INCHEQS.Common;
+@Html.Partial("SearchPage/_InfoBox")
+<table id="search-result-table" class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            @Html.Partial("SearchPage/_TableHeaderColumns")
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (List<DataField> row in ViewBag.SearchResult.TableData)
+        {
+
+            <tr>
+                @Html.Partial("SearchPage/_TableBodyColumns", row)
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        @*@Html.Partial("SearchPage/_TablePaginationFooter")*@
+
+    </tfoot>
+
+</table>
+
+@Scripts.Render("~/bundles/SearchResultPage")
+

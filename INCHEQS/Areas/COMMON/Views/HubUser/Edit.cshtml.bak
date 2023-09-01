@@ -1,0 +1,73 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "HubUser", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Locale.MaintenanceHubUserProfile (Edit)</h4>
+        <hr />
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.HubId</th>
+                    <td><input type="text" value="@ViewBag.Hub.fldHubId" name="fldHubId" size="30" style = "margin-left: 30px;" readonly/></td>
+                </tr>
+                <tr>
+                    <th>@Locale.HubDescription</th>
+                    <td><input type="text" value="@ViewBag.Hub.fldHubDesc" name="fldHubDesc"  size="80" style = "margin-left: 30px;" /><span class="red-star">*</span></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form-select">
+                            <div>
+                                <b>@Locale.UserAvailableList</b><br>
+                                <select multiple="multiple" class="form-multiple select-from">
+                                    @foreach (var item in ViewBag.AvailableUser) {
+                                        <option value="@item.fldUserId">@item.fldUserAbb</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-move" style="margin:50px 20px;  width:100px; ">
+                                <br />
+                                <p>
+                                    <input type="button" title="select all" class="btn btn-default btn-move addOne" value="Add" style="width:100px;">
+                                </p>
+                                <p><input type="button" title="select" class="btn btn-default btn-move addAll" value="Add All" style="width:100px;"></p>
+                                <p><input type="button" title="remove" class="btn btn-default btn-move rmOne" value="Remove" style="width:100px;"></p>
+                                <p><input type="button" title="remove all" class="btn btn-default btn-move rmAll" value="Remove All" style="width:100px;"></p>
+                            </div>
+                            <div>
+                                <b>@Locale.UserSelectedList</b><br>
+                                <select multiple="multiple" class="form-multiple select-to" name="selectedUser">
+                                    @foreach (var item in ViewBag.SelectedUser) {
+                                        <option value="@item.fldUserId">@item.fldUserAbb</option>
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" onclick="return Confirm()" Class="btn btn-default @(CurrentUser.HasTask(TaskIdsOCS.HubUserProfile.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.HubUserProfile.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+<script type="text/javascript">
+    function Confirm() {
+        var input = $("<input />");
+        input.attr("type", "hidden").attr("name", "confirm_value");
+        if (confirm("Do you want to save data?")) {
+            input.val("Yes");
+            return true;
+        } else {
+            input.val("No");
+            return false;
+        }
+        $("form")[0].appendChild(input[0]);
+    }
+</script>
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/app.js"></script>

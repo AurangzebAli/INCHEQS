@@ -1,0 +1,51 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+    ViewBag.Title = "ReadyitemToPostedHistory";
+    var i = 0;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_ReadyitemToPostedHistory</title>
+</head>
+<body>
+    <div style="overflow-y: scroll; height:500px;">
+        <table class="table table-bordered">
+            <tr>Item Ready for Debit Posting Details</tr>
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>UIC</th>
+                    <th>Cheque Number</th>
+                    <th>Issuing Bank Branch</th>
+                    <th>Issuer Account Number</th>
+                    @*<th>Transaction Code</th>*@
+                    <th>Presenting Bank Branch</th>
+                    @*<th>NCF Flag</th>*@
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in ViewBag.PostedHistory.Rows)
+                {
+
+                    <tr>
+                        <td>@{i++;} @i</td>
+                        <td>@row["fldUIC"]</td>
+                        <td>@row["fldChequeSerialNo"]</td>
+                        <td>@row["fldIssueBankCode"]@row["fldIssueStateCode"]@row["fldIssueBranchCode"]</td>
+                        <td>@row["fldAccountNumber"]</td>
+                        @*<td>@row["fldTransCode"]</td>*@
+                    <td>@row["fldPreBankCode"]@row["fldPreStateCode"]@row["fldPreBranchCode"]</td>
+                        @*<td>@row["fldNCFCode"]</td>*@
+                        <td align="right">@StringUtils.FormatCurrency((row["fldAmount"]).ToString())</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

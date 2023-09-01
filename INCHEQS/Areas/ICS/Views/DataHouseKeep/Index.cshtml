@@ -1,0 +1,45 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Security
+@using (Html.BeginForm("Update", "DataHouseKeep", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+
+
+    <h4>@Locale.UtilitiesDataHouseKeepingRetentionPeriod</h4>
+    <hr/>
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+            <table class="table form-table table-no-border table-utility">
+                <tr>
+                    <th>@Locale.ICCSAuditLog</th>
+                    <td>
+                        <input type="text" maxlength="2" name="txtPal" id="txtPal" value="@ViewBag.DataHouseKeepRetention.audit1" Class="number-only">
+                        <select name="PalInterval" id="PalInterval" >
+                            <option @(ViewBag.DataHouseKeepRetention.audit2 == "D" ? "selected" : "") value="D">@Locale.Day</option>
+                            <option @(ViewBag.DataHouseKeepRetention.audit2 == "M" ? "selected" : "") value="M"> @Locale.Month</option>
+                        </select><span class="red-star"> *</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.ArchivedAuditLogFiles</th>
+                    <td>
+                        <input type="text" maxlength="2" name="txtArchivedALFile" id="txtArchivedALFile" value="@ViewBag.DataHouseKeepRetention.achaudit1" Class="number-only">
+                        <select name="AALFInterval" id="AALFInterval" >
+                            <option @(ViewBag.DataHouseKeepRetention.achaudit2 == "D" ? "selected" : "") value="D"> @Locale.Day</option>
+                            <option @(ViewBag.DataHouseKeepRetention.achaudit2 == "M" ? "selected" : "") value="M"> @Locale.Month</option>
+                        </select><span class="red-star"> *</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.DataHousKeep.UPDATE) ? "":"hidden")">@Locale.SaveBtn</button>
+                        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.DataHousKeep.INDEX) ? "":"hidden")">
+                            @Locale.Reset
+                        </a>
+                    </td>
+                </tr>
+            </table>
+
+
+           
+}

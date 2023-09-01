@@ -1,0 +1,85 @@
+﻿
+<th class="hidden" style="display:none"></th>
+@foreach (var row in ViewBag.SearchResult.TableHeaders.Rows)
+{
+    if (string.Compare(row["isResult"].ToString(), "Y") == 0)
+    {
+        if (@row["taskid"] == "700101")
+        {
+            if (ViewBag.Type == "Submitted")
+            {
+                if (row["fieldId"] == "fldchkbox")
+                {
+                    <th style="display:none; background-color:#BDEDFF" class="sort @row["fieldId"] txtBlack" data-sort="@row["fieldId"]">@row["fieldLabel"]</th>
+                }
+                else
+                {
+                    <th style="background-color:#BDEDFF" class="sort @row["fieldId"] txtBlack" data-sort="@row["fieldId"]">@row["fieldLabel"]</th>
+                }
+            }
+            else
+            {
+                <th style="background-color:#BDEDFF" class="sort @row["fieldId"] txtBlack" data-sort="@row["fieldId"]">@row["fieldLabel"]</th>
+            }
+        }
+        else if (row["taskid"] == "103111" || row["taskid"] == "103112" || row["taskid"] == "309120" || row["taskid"] == "309121" || row["taskid"] == "309122" || row["taskid"] == "309126"
+            || row["taskid"] == "309127" || row["taskid"] == "309128" || row["taskid"] == "309129" || row["taskid"] == "309130"
+            || row["taskid"] == "309130" || row["taskid"] == "309131" || row["taskid"] == "318110" || row["taskid"] == "309310" || row["taskid"] == "309300" || row["taskid"] == "309305"
+            || row["taskid"] == "999850" || row["taskid"] == "999851" || row["taskid"] == "309124" || row["taskid"] == "309125")
+        {
+            <th style="background-color:#BDEDFF" class="txtBlack">@row["fieldLabel"]</th>
+        }
+        @*else if (row["taskid"] == "205500")
+        {
+            if (@row["fieldId"] == "fldIdForDelete")
+            {
+                <th><input type="checkbox" name="chkDeleteAll" onclick="chkDeleteAll" id="chkDeleteAll"></th>
+            }
+        }*@
+        else
+        {
+            if (@row["fieldId"] == "fldActionDetails")
+            {
+                <th style="background-color:#BDEDFF" class="txtBlack">@row["fieldLabel"]</th>
+            }
+            else if (@row["fieldId"] == "fldIdForEnable")
+            {
+                <th style="background-color:#BDEDFF"><input type="checkbox" name="chkDeleteAll" onclick="chkDeleteAll" id="chkDeleteAll"></th>
+            }
+            else if (@row["fieldId"] == "fldIdForDelete")
+            {
+                if (@row["taskid"] == "205500")
+                {
+                    <th style="background-color:#BDEDFF"><input type="checkbox" name="chkDeleteAll" onclick="chkDeleteAll" id="chkDeleteAll"></th>
+                }
+                else
+                {
+                    <th style="background-color:#BDEDFF" class="sort @row["fieldId"] txtBlack" data-sort="@row["fieldId"]">@row["fieldLabel"]</th>
+                }
+
+            }
+
+    else
+    {
+        if (row["taskid"] == "306220" || row["taskid"] == "306230" || row["taskid"] == "306510" || row["taskid"] == "306520" || row["taskid"] == "306530" || row["taskid"] == "306540" || row["taskid"] == "306550" || row["taskid"] == "309100"
+        || row["taskid"] == "318190" || row["taskid"] == "318210" || row["taskid"] == "318220" || row["taskid"] == "318290" || row["taskid"] == "318410")
+        {
+            if (@row["fieldId"] != "fldModifiedFields")
+            {
+                        <th style="background-color:#BDEDFF" class="sort @row["fieldId"] txtBlack" data-sort="@row["fieldId"]">@row["fieldLabel"]</th>
+                    }
+                }
+                else
+                {
+                    <th style="background-color:#BDEDFF" class="sort @row["fieldId"] txtBlack" data-sort="@row["fieldId"]">@row["fieldLabel"]</th>
+                }
+
+            }
+        }
+    }
+    @*if (string.Compare(row["isResult"].ToString(), "Y") == 0)
+        {
+
+            <th class="sort @row["fieldId"]" data-sort="@row["fieldId"]">@row["fieldLabel"]</th>
+        }*@
+}

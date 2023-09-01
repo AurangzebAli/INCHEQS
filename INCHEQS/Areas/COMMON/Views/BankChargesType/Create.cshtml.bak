@@ -1,0 +1,37 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("SaveCreate", "BankChargesType", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.BankChargesTypeAdd</h4>
+        
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.BankChargesType</th>
+                    <td>
+                        <input type="text" name="fldBankChargesType" autocomplete="off" maxlength="3" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.BankChargesTypeDesc</th>
+                    <td>
+                        <input type="text" name="fldBankChargesDesc" autocomplete="off" maxlength="50" />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" data-action="@Url.Action("/SAVECREATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIdsOCS.BankChargesType.SAVECREATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.BankChargesType.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+
+@*<script src="~/Scripts/App/multiSelectList.js"></script>*@
+@*<script src="~/Scripts/App/user.js"></script>*@
+<script src="~/Scripts/App/app.js"></script>

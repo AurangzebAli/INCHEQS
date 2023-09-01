@@ -1,0 +1,66 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.TaskAssignment;
+@using INCHEQS.Resources;
+
+@using (Html.BeginForm("Edit", "TaskChecker", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @*<h4>@Locale.MaintenanceTaskAssignment</h4>*@
+        <h4>@ViewBag.PageTitle</h4>
+        <hr />
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.GroupID</th>
+                    <td>@ViewBag.GroupChecker.fldGroupId<input type="hidden" value="@ViewBag.GroupChecker.fldGroupId" name="fldGroupId" /></td>
+                </tr>
+                <tr>
+                    <th>@Locale.GroupDescription</th>
+                    <td>@ViewBag.GroupChecker.fldGroupDesc<input type="hidden" value="@ViewBag.GroupChecker.fldGroupDesc" name="fldGroupDesc" /></td>
+                </tr>
+                <tr>
+                    <td><br /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form-select">
+                            <div>
+                                <b>@Locale.TaskAvailableList</b><br>
+                                <select multiple="multiple" contenteditable="false" class="form-multiple select-from">
+                                    @foreach (var item in ViewBag.AvailableTaskChecker)
+                                    {
+                                        <option value="@item.fldTaskId">@item.fldTaskDesc</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-move">
+                                <br /><br /><br />
+                                <p><input type="button" disabled="disabled" title="select" style='width:100px' class="btn btn-default btn-move addOne" value="Add"></p>
+                                <p><input type="button" disabled="disabled" title="select all" style='width:100px' class="btn btn-default btn-move addAll" value="Add All"></p>
+                                <p><input type="button" disabled="disabled" title="remove" style='width:100px' class="btn btn-default btn-move rmOne" value="Remove"></p>
+                                <p><input type="button" disabled="disabled" title="remove all" style='width:100px' class="btn btn-default btn-move rmAll" value="Remove All"></p>
+                                <br />
+                            </div>
+                            <div>
+                                <b>@Locale.TaskSelectedList</b><br>
+                                <select multiple="multiple" contenteditable="false" class="form-multiple select-to" name="selectedTask">
+                                    @foreach (var item in ViewBag.SelectedTaskChecker)
+                                    {
+                                        <option value="@item.fldTaskId">@item.fldTaskDesc</option>
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a href="@Url.Action("/Index")" Class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.ApprovedTaskChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/app.js"></script>

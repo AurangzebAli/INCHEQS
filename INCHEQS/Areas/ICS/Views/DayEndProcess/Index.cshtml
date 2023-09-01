@@ -1,0 +1,202 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@{
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+<div id="resultContainer"></div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline submit-onload secure-form", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <style>
+        body {
+            font-family: Arial;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            height: 40px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+            /* Style the buttons inside the tab */
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: 0.3s;
+                font-size: 14px;
+            }
+
+                /* Change background color of buttons on hover */
+                .tab button:hover {
+                    background-color: #ddd;
+                }
+
+                /* Create an active/current tablink class */
+                .tab button.active {
+                    background-color: #737373;
+                }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 0px solid #ccc;
+            border-top: none;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+        #hide input[type=file] {
+            display: none;
+            margin: 10px;
+        }
+
+            #hide input[type=file] + label {
+                display: inline-block;
+                margin: 20px;
+                padding: 4px 32px;
+                background-color: #FFFFFF;
+                border: solid 1px #666F77;
+                border-radius: 6px;
+                color: #666F77;
+            }
+
+            #hide input[type=file]:active + label {
+                background-image: none;
+                background-color: #2D6C7A;
+                color: #FFFFFF;
+            }
+
+
+        .overlay {
+            position: absolute;
+            display: none;
+            background-color: rgb(128,128,128,0.5);
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
+
+        .popup {
+            position: fixed;
+            z-index: 99;
+            vertical-align: central;
+            display: none;
+            margin-left: 15%;
+            margin-bottom: 30%;
+        }
+
+        .percentage {
+            position: fixed;
+            vertical-align: central;
+            margin-left: 20%;
+        }
+    </style>
+    <div class="form-horizontal">
+        <h4>Utilities - ICS Center End of Day & Archival </h4>
+        <hr />
+        <table class="table form-table table-no-border">
+            <tr>
+                <td>@Locale.ArchiveChequeInfotofile</td>
+                <td>
+                    @if (ViewBag.ArchiveChequeInfo != null)
+                    {
+                        <select name=CIAchDate style="width: 130px">
+                            @foreach (var row in ViewBag.ArchiveChequeInfo.Rows)
+                            {
+                                <Option name="fldClearDate" value="@row["fldClearDate"]">@row["fldClearDate"]</Option>
+                            }
+                        </select>
+                        <input checked type="checkbox" id="txtChequeInfo" name="txtChequeInfo" value="1">
+                    }
+                    else
+                    {
+                        <select name=CIAchDate style="width: 130px" disabled>
+                            @foreach (var row in ViewBag.ArchiveChequeInfo.Rows)
+                            {
+                                <Option value="@row["fldClearDate"]">@row["fldClearDate"]</Option>
+                            }
+                        </select>
+                        <input checked type="checkbox" id="txtChequeInfo" name="txtChequeInfo" value="1" disabled>
+                    }
+                </td>
+            </tr>
+        </table>
+        <div>
+
+
+            <div id="Fade_area" class="overlay"></div>
+            <div id="mymodal" class="popup">
+                @Html.Partial("~/Areas/ICS/Views/DayEndProcess/Modal/_Popup.cshtml")
+
+            </div>
+
+        </div>
+
+        <table class="table form-table table-no-border" style="margin-top:-15px">
+            <tr>
+                <td>
+                    @*<input checked type="checkbox" id="txtArchivalHistory" name="txtArchivalHistory" value="1">
+                    <span>&nbsp;</span>*@
+                    <span>Archival of Data to History Table based on Retention Period (Online Enquiry)</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @*<input checked type="checkbox" id="txtArchivalTable" name="txtArchivalTable" value="1">
+                    <span>&nbsp;</span>*@
+                    <span>Archival of Data to Archival DataBase Table based on Retention Period (Online Enquiry)</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @*<input checked type="checkbox" id="txtArchivalChequeImg" name="txtArchivalChequeImg" value="1">
+                    <span>&nbsp;</span>*@
+                    <span>Archival of Cheque Images in Physical Path based on Retention Period (Online Enquiry)</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @*<input checked type="checkbox" id="txtHousekeepData" name="txtHousekeepData" value="1">
+                    <span>&nbsp;</span>*@
+                    <span>Housekeeping of Data from Master Table</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @*<input checked type="checkbox" id="txtHousekeepHistory" name="txtHousekeepHistory" value="1">
+                    <span>&nbsp;</span>*@
+                    <span>Housekeeping of Data from History Table based on Retention Period</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @*<input checked type="checkbox" id="txtHousekeepImg" name="txtHousekeepImg" value="1">
+                    <span>&nbsp;</span>*@
+                    <span>Housekeeping of Cheque Images In Physical Path based on Retention Period</span>
+                </td>
+            </tr>
+        </table>
+
+        <button id="eod" type="submit" data-action="@Url.Action("SaveCreate")" class="btn btn-default btn-chequeverification init-refresh-page-realtime  @(CurrentUser.HasTask(TaskIds.DayEndProcess.SAVECREATE) ? "" : "hidden")">Run</button>
+        @*<a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.DayEndProcess.INDEX) ? "" : "hidden")">@Locale.Reset</a>*@
+    </div>
+}
+
+<div id="dataProcessContainer" data-processname="ICSEOD" data-pospaytype="ICSEOD"></div>
+<input id="inwardProcessType" value="Other" type="hidden">
+<input id="totalcheques" type="hidden">
+@Scripts.Render("~/bundles/DataProcessRealTime")

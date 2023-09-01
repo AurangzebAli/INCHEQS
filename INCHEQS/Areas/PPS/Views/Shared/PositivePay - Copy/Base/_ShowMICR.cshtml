@@ -1,0 +1,42 @@
+﻿@using INCHEQS.Resources
+<span class="micr-info fldCheckDigitPPS">@ViewBag.ChequeInfo.fldCheckDigit</span>
+<span class="micr-info fldChequeSerialNoPPS" id="fldChequeSerialNoPPS">@ViewBag.ChequeInfo.fldChequeNo</span>
+<span class="micr-info fldIssueStateCodePPS">@ViewBag.ChequeInfo.fldIssueBankCode</span>
+<span class="micr-info fldIssueBranchCodePPS">@ViewBag.ChequeInfo.fldIssueStateCode@ViewBag.ChequeInfo.fldIssueBranchCode</span>
+<span class="micr-info fldAccountNumberPPS" id="fldAccountNumberPPS">@ViewBag.ChequeInfo.fldAccountNo</span>
+<span class="micr-info fldTransCodePPS">@ViewBag.ChequeInfo.fldTransCode</span>
+
+@if ((ViewBag.InwardItemViewModel.getField("fldModifiedFields").Trim() == "AccNo"))
+{
+    <script>
+
+    $(document).ready(function () {
+        //$('#fldAccountNumberPPS').addClass("txtRed")
+        $('#fldAccountNumberPPS').css({
+                'color': 'red'
+            });
+    });
+    </script>
+}
+else if ((ViewBag.InwardItemViewModel.getField("fldModifiedFields").Trim() == "ChequeNo"))
+{
+    <script>
+    $(document).ready(function () {
+        //$('#fldChequeSerialNoPPS').addClass("txtRed")
+        $('#fldChequeSerialNoPPS').css({
+            'color': 'red'
+        });
+    });
+    </script>
+}
+else if ((ViewBag.InwardItemViewModel.getField("fldModifiedFields").Trim() == "AccNo,ChequeNo"))
+{
+    <script>
+    $(document).ready(function () {
+        //$('#fldChequeSerialNoPPS, #fldAccountNumberPPS').addClass("txtRed")
+        $('#fldChequeSerialNoPPS, #fldAccountNumberPPS').css({
+            'color': 'red'
+        });
+    });
+    </script>
+}

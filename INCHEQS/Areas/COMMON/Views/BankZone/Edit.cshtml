@@ -1,0 +1,40 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Update", "BankZone", FormMethod.Post, new { @Class = "secure-form" })) {
+@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>@Locale.BankZoneEdit</h4>
+    
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <tbody>
+            <tr>
+                <th>@Locale.BankZoneCode</th>
+              
+                <td>
+                    <input type="text" value="@ViewBag.bankzone.fldBankZoneCode" disabled />
+                    <input type="text" name="fldBankZoneCode" value="@ViewBag.bankzone.fldBankZoneCode" hidden />
+                    <span class="red-star">*</span>
+                </td>
+            </tr>
+            <tr>
+                <th>@Locale.BankZoneDesc</th>
+         
+                <td>
+                    <input type="text" name="fldBankZoneDesc" value="@ViewBag.bankzone.fldBankZoneDesc" autocomplete="off" maxlength="50" />
+                    <span class="red-star">*</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="submit" data-action="@Url.Action("/UPDATE")" Class="btn btn-default normal-submit-save-action-button @(CurrentUser.HasTask(TaskIdsOCS.BankZone.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+    <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.BankZone.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+</div>
+}
+
+@*<script src="~/Scripts/App/multiSelectList.js"></script>*@
+@*@<script src="~/Scripts/App/user.js"></script>*@
+<script src="~/Scripts/App/app.js"></script>

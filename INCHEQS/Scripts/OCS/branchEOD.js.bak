@@ -1,0 +1,409 @@
+﻿
+(function () {
+    $(document).ready(function () {
+
+        var $holder = $("#ajaxBranchSelectList");
+        if ($holder.length > 0) {
+            $.ajax({
+                cache: false,
+                url: App.ContextPath + "CommonApi/BranchList",
+                method: "POST",
+                success: function (data) {
+                    $.each(data, function (i, item) {
+                        $holder.append("<option value=" + item.fldbranchid + ">" + item.fldbranchid + " - " + item.fldBranchDesc + "</option>");
+                    });
+
+
+                }
+            });
+        }
+        
+        jsInitialize();
+        jsPopulateData();
+        jsGetBranchEOD();
+
+        //----------------------------------------------------------------------------------------------------------
+        //-------EVENTS
+        //-----------------
+
+        //branch dropdown
+        $("#ajaxBranchSelectList").change(function (e) {
+            jsInitialize();
+            jsPopulateData();
+            jsGetBranchEOD();
+        })
+
+        //save button
+        $("#btnEOD").on("click", function (e) {
+
+            var eodstatus = 0;
+            var branchcode = $("#ajaxBranchSelectList").val();
+            var OCSprocessdate = $("#currentdate").val();
+
+            //var resultDataEntry = ajaxDataEntryPendingItem(branchcode).split("-");
+            //var resultAuthorization = ajaxAuthorizationPendingItem(branchcode).split("-");
+
+
+
+            //if (resultDataEntry != "") {
+            //    alert("There are still pending item/s in the Batch Entry.");
+            //    //return;
+            //}
+            //else if (resultDataEntry != "") {
+            //    alert("There are still pending item/s in the Authorization.");
+            //    //return;
+            //}
+            debugger
+            var totalamount = parseFloat($("#sGrandTotalAmount").text().replace(/,/g, ""));
+            var eodamount = $("#txtAmount").val();
+            if (eodamount == "" || eodamount == null) { eodamount = "0"; }
+            eodamount = parseFloat((eodamount.replace(/,/g, "")));
+
+            var difference = totalamount - totalamount;
+            $("#txtDifference").val(jsFormatAmount(difference));
+
+            if (difference == 0) {
+                $("#btnEOD").prop("disabled", true);
+                eodstatus = 1;
+            }
+            else {
+                eodstatus = 0;
+            }
+
+            if (eodstatus == 0) {
+                alert("Please complete outstanding items before performing End of Day")
+            }
+            else if (eodstatus == 1) {
+            
+                var blnInsertBranchEndOfDay = ajaxInsertBranchEndOfDay(branchcode, totalamount.toString(), difference.toString(), eodstatus);
+
+
+            }
+
+
+            jsGetBranchEOD();
+
+            if ($("#sEODStatus").text() == "Done") {
+                $("#txtAmount").prop('readonly', true);
+            }
+            else {
+                $("#txtAmount").prop('readonly', false);
+            }
+
+        })
+
+
+        //----------------------------------------------------------------------------------------------------------
+        //-------FUNCTIONS
+        //-----------------
+
+        function jsInitialize() {
+            $("#sReadyForSubmissionTotalItem").text("0");
+            $("#sReadyForSubmissionTotalAmount").text("0.00");
+            $("#sSubmittedtoClearingHouseTotalItem").text("0");
+            $("#sSubmittedtoClearingHouseTotalAmount").text("0.00");
+            $("#sGrandTotalItem").text("0");
+            $("#sGrandTotalAmount").text("0.00");
+
+            $("#sHubReadyForSubmissionTotalItem").text("0");
+            $("#sHubReadyForSubmissionTotalAmount").text("0.00");
+            $("#sHubSubmittedtoClearingHouseTotalItem").text("0");
+            $("#sHubSubmittedtoClearingHouseTotalAmount").text("0.00");
+            $("#sHubGrandTotalItem").text("0");
+            $("#sHubGrandTotalAmount").text("0.00");
+
+            $("#sEODStatus").text("");
+            $("#txtAmount").val("0.00");
+            $("#txtDifference").val("0.00");
+
+            $("#btnEOD").prop("disabled", false);
+
+            $("#txtDifference").css("color", "white");
+
+        }
+
+        function jsPopulateData() {
+            var branchcode = $("#ajaxBranchSelectList").val();
+
+            var resultForSubmission = ajaxGetItemReadyForSubmission(branchcode).split("-");
+            var totalitemForSubmission = new Number(resultForSubmission[0]);
+            var totalamountForSubmission = new Number(resultForSubmission[1]);
+
+            var resultSubmitted = ajaxGetItemSubmitted(branchcode).split("-");
+            var totalitemSubmitted = new Number(resultSubmitted[0]);
+            var totalamountSubmitted = new Number(resultSubmitted[1]);
+
+            var totalitem = totalitemForSubmission + totalitemSubmitted;
+            var totalamount = totalamountForSubmission + totalamountSubmitted;
+
+            //Hub
+            var resultHubForSubmission = ajaxGetHubItemReadyForSubmission(branchcode).split("-");
+            var totalHubitemForSubmission = new Number(resultHubForSubmission[0]);
+            var totalHubamountForSubmission = new Number(resultHubForSubmission[1]);
+
+            var resultHubSubmitted = ajaxGetItemSubmitted(branchcode).split("-");
+            var totalHubitemSubmitted = new Number(resultHubSubmitted[0]);
+            var totalHubamountSubmitted = new Number(resultHubSubmitted[1]);
+
+            var totalHubitem = totalHubitemForSubmission + totalHubitemSubmitted;
+            var totalHubamount = totalHubamountForSubmission + totalHubamountSubmitted;
+
+            $("#sReadyForSubmissionTotalItem").text(jsFormatNumber(totalitemForSubmission));
+            $("#sReadyForSubmissionTotalAmount").text(jsFormatAmount(totalamountForSubmission));
+            $("#sSubmittedtoClearingHouseTotalItem").text(jsFormatNumber(totalitemSubmitted));
+            $("#sSubmittedtoClearingHouseTotalAmount").text(jsFormatAmount(totalamountSubmitted));
+            $("#sGrandTotalItem").text(jsFormatNumber(totalitem));
+            $("#sGrandTotalAmount").text(jsFormatAmount(totalamount));
+
+            $("#sHubReadyForSubmissionTotalItem").text(jsFormatNumber(totalHubitemForSubmission));
+            $("#sHubReadyForSubmissionTotalAmount").text(jsFormatAmount(totalHubamountForSubmission));
+            $("#sHubSubmittedtoClearingHouseTotalItem").text(jsFormatNumber(totalHubitemSubmitted));
+            $("#sHubSubmittedtoClearingHouseTotalAmount").text(jsFormatAmount(totalHubamountSubmitted));
+            $("#sHubGrandTotalItem").text(jsFormatNumber(totalHubitem));
+            $("#sHubGrandTotalAmount").text(jsFormatAmount(totalHubamount));
+        }
+
+        function jsGetBranchEOD() {
+
+            var branchcode = $("#ajaxBranchSelectList").val();
+
+            var totalitemForSubmission = $("#sReadyForSubmissionTotalItem").text();
+            var totalitemSubmitted = $("#sSubmittedtoClearingHouseTotalItem").text();
+            if (totalitemForSubmission != 0) {
+                //$("#btnEOD").prop("disabled", true);
+            }
+            else {
+                if (totalitemSubmitted == 0) {
+                    //$("#btnEOD").prop("disabled", true);
+                }
+            }
+
+            //---user able perform EOD branch even with no transaction 
+            if (totalitemForSubmission == "0" && totalitemSubmitted == "0") {
+                $("#txtAmount").val("0.00");
+                $("#txtAmount").prop('readonly', true);
+                $("#btnEOD").prop("disabled", false);
+            }
+            else if (totalitemSubmitted != "0" && eodstatus != "1") {
+                $("#txtAmount").val("");
+                if (totalitemForSubmission == "0") {
+                    $("#txtAmount").prop('readonly', false);
+                    $("#btnEOD").prop("disabled", false);
+                }
+                else {
+                    $("#txtAmount").val("0.00");
+                }
+            }
+
+            //-------------------------------
+
+            var result = ajaxGetBranchEndOfDay(branchcode).split("-");
+            if (result != "") {
+                var eodstatus = result[0];
+                var amount = new Number(result[1]);
+                var difference = new Number(result[2]);
+
+                if (eodstatus == "1") {
+                    $("#sEODStatus").text("Done");
+                    $('#sEODStatus').css("color", "green");
+                    $("#txtDifference").css("background-color", "green");
+                    $("#btnEOD").prop("disabled", true);
+                }
+                else {
+                    $("#sEODStatus").text("Not Done");
+                    $('#sEODStatus').css("color", "red");
+                    $("#txtDifference").css("background-color", "red");
+
+                }
+
+                $("#txtAmount").val(jsFormatAmount(amount));
+                $("#txtDifference").val(jsFormatAmount(difference));
+            }
+            else {
+                $("#sEODStatus").text("Not Done");
+                $('#sEODStatus').css("color", "red");
+                $("#txtDifference").css("background-color", "red");
+            }
+
+            //$("#btnEOD").prop("disabled", false);
+        }
+
+        function jsFormatAmount(x) {
+            x = x.toFixed(2)
+            var parts = x.toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts.join(".");
+        }
+
+        function jsFormatNumber(x) {
+            var parts = x.toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts.join(".");
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+        //-------AJAX
+        //----------------- 
+
+        function ajaxGetItemReadyForSubmission(strBranchCode) {
+            var strReturn = "";
+            $.ajax({
+                async: false,
+                cache: false,
+                url: App.ContextPath + "CommonApi/OCSGetItemReadyForSubmission",
+                method: "POST",
+                data: "strBranchCode=" + strBranchCode,
+                success: function (data) {
+                    var totalitem = 0;
+                    var totalamount = 0;
+                    $.each(data, function (i, item) {
+                        var tempItem = new Number(item.TotalItem);
+                        var tempAmount = new Number(item.TotalAmount);
+                        totalitem = totalitem + tempItem;
+                        totalamount = totalamount + tempAmount;
+                    });
+                    strReturn = totalitem + "-" + totalamount
+                }
+            });
+            return strReturn;
+        }
+
+        function ajaxGetItemSubmitted(strBranchCode) {
+            var strReturn = "";
+            $.ajax({
+                async: false,
+                cache: false,
+                url: App.ContextPath + "CommonApi/OCSGetItemSubmitted",
+                method: "POST",
+                data: "strBranchCode=" + strBranchCode,
+                success: function (data) {
+                    var totalitem = 0;
+                    var totalamount = 0;
+                    $.each(data, function (i, item) {
+                        var tempItem = new Number(item.TotalItem);
+                        var tempAmount = new Number(item.TotalAmount);
+                        totalitem = totalitem + tempItem;
+                        totalamount = totalamount + tempAmount;
+                    });
+                    strReturn = totalitem + "-" + totalamount
+                }
+            });
+            return strReturn;
+        }
+
+        function ajaxGetHubItemReadyForSubmission(strUserId) {
+            var strHubReturn = "";
+            $.ajax({
+                async: false,
+                cache: false,
+                url: App.ContextPath + "CommonApi/OCSGetHubItemReadyForSubmission",
+                method: "POST",
+                data: "strUserId=" + strUserId,
+                success: function (data) {
+                    var totalitem = 0;
+                    var totalamount = 0;
+                    $.each(data, function (i, item) {
+                        var tempItem = new Number(item.TotalItem);
+                        var tempAmount = new Number(item.TotalAmount);
+                        totalitem = totalitem + tempItem;
+                        totalamount = totalamount + tempAmount;
+                    });
+                    strHubReturn = totalitem + "-" + totalamount
+                }
+            });
+            return strHubReturn;
+        }
+
+        function ajaxGetHubItemSubmitted(strUserId) {
+            var strReturn = "";
+            $.ajax({
+                async: false,
+                cache: false,
+                url: App.ContextPath + "CommonApi/OCSGetHubItemSubmitted",
+                method: "POST",
+                data: "strUserId=" + strUserId,
+                success: function (data) {
+                    var totalitem = 0;
+                    var totalamount = 0;
+                    $.each(data, function (i, item) {
+                        var tempItem = new Number(item.TotalItem);
+                        var tempAmount = new Number(item.TotalAmount);
+                        totalitem = totalitem + tempItem;
+                        totalamount = totalamount + tempAmount;
+                    });
+                    strReturn = totalitem + "-" + totalamount
+                }
+            });
+            return strReturn;
+        }
+
+        function ajaxGetBranchEndOfDay(strBranchCode) {
+            var strReturn = "";
+            $.ajax({
+                async: false,
+                cache: false,
+                url: App.ContextPath + "CommonApi/OCSGetBranchEndOfDay",
+                method: "POST",
+                data: "strBranchCode=" + strBranchCode,
+                success: function (data) {
+                    $.each(data, function (i, item) {
+                        strReturn = item.fldEODStatus + "-" + item.fldAmount + "-" + item.fldDifference
+                    });
+                }
+            });
+            return strReturn;
+        }
+
+        function ajaxDataEntryPendingItem(strBranchCode) {
+            var strReturn = "";
+            $.ajax({
+                async: false,
+                cache: false,
+                url: App.ContextPath + "CommonApi/OCSDataEntryPendingItem",
+                method: "POST",
+                data: "strBranchCode=" + strBranchCode,
+                success: function (data) {
+                    $.each(data, function (i, item) {
+                        strReturn = item.Cnt
+                    });
+                }
+            });
+            return strReturn;
+        }
+
+        function ajaxAuthorizationPendingItem(strBranchCode) {
+            var strReturn = "";
+            $.ajax({
+                async: false,
+                cache: false,
+                url: App.ContextPath + "CommonApi/OCSAuthorizationPendingItem",
+                method: "POST",
+                data: "strBranchCode=" + strBranchCode,
+                success: function (data) {
+                    $.each(data, function (i, item) {
+                        strReturn = item.Cnt
+                    });
+                }
+            });
+            return strReturn;
+        }
+
+        function ajaxInsertBranchEndOfDay(strBranchId, strAmount, strDifference, strEODStatus) {
+            var blnSuccess;
+            $.ajax({
+                async: false,
+                cache: false,
+                url: App.ContextPath + "CommonApi/OCSInsertBranchEndOfDay",
+                method: "POST",
+                data: "strBranchId=" + strBranchId + "&strAmount=" + strAmount + "&strDifference=" + strDifference + "&strEODStatus=" + strEODStatus,
+                success: function (data) {
+                    blnSuccess = true;
+                }
+            });
+            return blnSuccess;
+        }
+
+    });
+})();
+
+

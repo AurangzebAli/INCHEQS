@@ -1,0 +1,71 @@
+﻿using INCHEQS.Common;
+using INCHEQS.DataAccessLayer;
+using INCHEQS.Helpers;
+using INCHEQS.Security.Account;
+using System.Collections;
+using System.Data;
+using System.Data.SqlClient;
+using System.Threading.Tasks;
+
+namespace INCHEQS.Models.TaskMenu {
+
+    public class TaskMenuDao : ITaskMenuDao {
+
+        private readonly ApplicationDbContext dbContext;
+        public TaskMenuDao(ApplicationDbContext dbContext) {
+            this.dbContext = dbContext;
+        }
+
+        public async Task<ArrayList> GetTaskListForUserAsync(AccountModel account, string strMenu) {
+
+            //oyj 20040914
+            ArrayList taskMenuList = taskMenuList = await System.Threading.Tasks.Task.Run(() => GetTaskListForUser(account, strMenu));
+
+            return taskMenuList;
+        }
+
+        private ArrayList GetTaskListForUser(AccountModel account, string strMenu) {
+
+            ArrayList taskMenuList = new ArrayList();
+            //string mySql = "SELECT Distinct a.* FROM tblTaskMaster a,tblGroupTask b, tblGroupMaster c";
+            //mySql = mySql + " WHERE a.fldTaskId = b.fldTaskId and b.fldGroupId = c.fldGroupId";
+            //mySql = mySql + " AND c.fldGroupId in (@groups) ";
+            //mySql = mySql + " AND a.fldTaskType='Menu Page' And a.fldMvcUrl <> '' ";
+            string mySql = "SELECT Distinct a.* FROM tblTaskMaster a,tblGroupTask b, tblGroupMaster c";
+            mySql = mySql + " WHERE a.fldTaskId = b.fldTaskId and b.fldGroupCode = c.fldGroupCode";
+            mySql = mySql + " AND c.fldGroupCode in (@groups) ";
+            mySql = mySql + " AND a.fldTaskType='Menu Page' And a.fldMvcUrl <> '' ";
+
+            if (!string.IsNullOrEmpty(strMenu)) {
+                mySql = mySql + " AND a.fldMainMenu =@mainMenu ";
+            }
+
+            mySql = mySql + " AND a.fldRecordStatus = 1 ";
+            mySql = mySql + " order by a.fldSubSeq";
+
+            DataTable dataTable = dbContext.GetRecordsAsDataTable(mySql,
+                new[] {
+                    new SqlParameter("@mainMenu", StringUtils.Trim(strMenu)),
+                    new SqlParameter("@groups", string.Join(",", account.GroupIds).TrimEnd(','))
+                });
+
+            foreach (DataRow row in dataTable.Rows) {
+                TaskMenuModel taskMenu = new TaskMenuModel();
+                taskMenu.taskId = row["fldTaskId"].ToString();
+                taskMenu.menuTitle = row["fldMenuTitle"].ToString();
+                taskMenu.subMenu = row["fldSubmenu"].ToString();
+                taskMenu.taskDesc = row["fldTaskDesc"].ToString();
+                taskMenu.url = row["fldMvcUrl"].ToString();
+                taskMenu.mainSeq = row["fldMainSeq"].ToString();
+                taskMenu.subSeq = row["fldSubSeq"].ToString();
+                taskMenu.mainMenu = row["fldMainMenu"].ToString();
+                taskMenu.subMenuId = StringUtils.RemoveSpecialCharacters(row["fldSubmenu"].ToString().Trim());
+                taskMenuList.Add(taskMenu);
+            }
+            return taskMenuList;
+        }
+
+
+    }
+
+}

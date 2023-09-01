@@ -1,0 +1,72 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Security
+@using System.Globalization;
+@using INCHEQS.TaskAssignment
+@using (Html.BeginForm("Delete", "ReleaseBranchLockedCheque", FormMethod.Post, new { @Class = "secure-form" }))
+{
+    @Html.AntiForgeryToken()
+
+
+    <h4>Utilities - Release Locked Cheque</h4>
+    <div>
+
+        @*<table class="table table-condensed table-striped table-hover data-table hidden">*@
+        @*<table class="table table-condensed table-striped table-hover data-table hidden">*@
+        <table class=" table table-condensed table-striped table-hover table-bordered data-table">
+            <thead>
+                <tr>
+                    <th style="background-color:#BDEDFF" class="txtBlack">Cheque Clear Date</th>
+                    <th style="background-color:#BDEDFF" class="txtBlack">UIC</th>
+                    <th style="background-color:#BDEDFF" class="txtBlack">Account Number</th>
+                    <th style="background-color:#BDEDFF" class="txtBlack">Cheque Number</th>
+                    <th style="background-color:#BDEDFF" class="txtBlack">Amount</th>
+                    <th style="background-color:#BDEDFF" class="txtBlack">Locked by</th>
+                    <th style="background-color:#BDEDFF" class="txtBlack"><input type="checkbox" name="chkDeleteAll" id="chkDeleteAll" onclick="chkDeleteAll"></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var row in ViewBag.LockedCheque.Rows)
+                {
+                    <tr>
+
+                        <td class="txtBlack">
+                            @DateTime.ParseExact(row["fldClearDate"].ToString().Trim(), "M/d/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture).ToString("dd-MM-yyyy hh:mm:ss tt")
+                        </td>
+                        <td class="txtBlack">@row["fldUIC"]</td>
+                        <td class="txtBlack">@row["fldAccountNumber"]</td>
+                        <td class="txtBlack">@row["fldChequeSerialNo"]</td>
+                        <td class="txtBlack">@row["fldAmount"]</td>
+                        <td class="txtBlack">@row["fldUserAbb"]</td>
+                        <td class="delete-checkbox">
+                            <input type="checkbox" name="deleteBox" value="@row["fldinwarditemid"]">
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+            </tfoot>
+        </table>
+    </div>
+    <button type="submit" class="btn btn-default confirm @(CurrentUser.HasTask(TaskIds.ReleaseBranchLockedCheque.DELETE) ? "" : "hidden")">@Locale.DeleteBtn</button>
+
+
+}
+<script>
+    $(document).ready(function () {
+        // Check or Uncheck All checkboxes
+        $("#chkDeleteAll").change(function () {
+            var checked = $(this).is(':checked');
+            if (checked) {
+                $("input[name=deleteBox]").each(function () {
+                    $(this).prop("checked", true);
+                });
+            } else {
+                $("input[name=deleteBox]").each(function () {
+                    $(this).prop("checked", false);
+                });
+            }
+        });
+    });
+</script>
+<script src="~/Scripts/App/common.js"></script>

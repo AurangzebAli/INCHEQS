@@ -1,0 +1,158 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("ReturnCode", "ReturnCodeChecker", FormMethod.Post, new { @Class = "secure-form" })) {
+
+    @Html.AntiForgeryToken();
+
+<div class="form-horizontal">
+    <h4>@Locale.ReturnCodeChecker</h4>
+    
+    <hr />
+    <span class="red"><i>*@Locale.RequiredField</i></span>
+    <table class="table form-table table-no-border">
+        <tbody>
+            @if (@ViewBag.ReturnCodeMaster != null)
+            {
+                <tr>
+                    <th>@Locale.ReturnCode</th>
+
+
+                    <td>
+                        <input type="text" value="@ViewBag.ReturnCodeMaster.fldRejectCode" disabled />
+                        <input type="text" name="fldRejectCode" value="@ViewBag.ReturnCodeMaster.fldRejectCode" hidden />
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.ReturnDescription</th>
+
+                    @if (@ViewBag.ReturnCodeMaster.fldRejectDesc != @ViewBag.ReturnCodeMasterTemp.fldRejectDesc)
+                    {
+                        <td>
+                            <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;width:500px;" value="@ViewBag.ReturnCodeMasterTemp.fldRejectDesc" autocomplete="off" maxlength="50" disabled />
+                            <input type="text" name="fldRejectDesc" value="@ViewBag.ReturnCodeMasterTemp.fldRejectDesc" hidden />
+                            <input type="text" name="Action" value="@ViewBag.ReturnCodeMasterTemp.fldApproveStatus" hidden />
+                            <span class="red-star">*</span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input type="text" style="width:500px;" value="@ViewBag.ReturnCodeMasterTemp.fldRejectDesc" autocomplete="off" maxlength="50" disabled />
+                            <input type="text" name="fldBankZoneDesc" value="@ViewBag.ReturnCodeMasterTemp.fldRejectDesc" hidden />
+                            <input type="text" name="Action" value="@ViewBag.ReturnCodeMasterTemp.fldApproveStatus" hidden />
+                            <span class="red-star">*</span>
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <th>
+                        @Locale.Representable
+                    </th>
+                    <td>
+                        <input type="radio" name="fldRepresentable" value="Y" @(ViewBag.ReturnCodeMasterTemp.fldRepresentable == "Y" ? "checked" : "") disabled> @Locale.Yes1
+                        <input type="radio" name="fldRepresentable" value="N" @(ViewBag.ReturnCodeMasterTemp.fldRepresentable == "N" ? "checked" : "") disabled> @Locale.No1
+                        <input type="hidden" name="fldRepresentable" value=@(ViewBag.ReturnCodeMasterTemp.fldRepresentable)>
+                        <span class="red-star"> * </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.ReturnType</th>
+
+                    @if (@ViewBag.ReturnCodeMaster.fldRejectType != @ViewBag.ReturnCodeMasterTemp.fldRejectType)
+                    {
+                        <td>
+                            <select name="fldRejectType" id="fldRejectTypeId" class="textbox" STYLE="color: #FFFFFF;background-color: #FF0000;" disabled>
+                                <option value="">Please Select Return Type</option>
+                                @foreach (var item in @ViewBag.RejectType)
+                                {
+                                    <option value="@item.fldRejectType" @(ViewBag.ReturnCodeMaster.fldRejectType == item.fldRejectType ? "selected" : "")>@item.fldRejectTypeDesc</option>
+                                }
+                            </select>
+                            <span class="red-star">*</span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <select name="fldRejectType" id="fldRejectType" class="textbox" disabled>
+                                <option value="">Please Select Return Type</option>
+                                @foreach (var item in @ViewBag.RejectType)
+                                {
+                                    <option value="@item.fldRejectType" @(ViewBag.ReturnCodeMaster.fldRejectType == item.fldRejectType ? "selected" : "")>@item.fldRejectTypeDesc</option>
+                                }
+                            </select>
+                            <span class="red-star">*</span>
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <th>@Locale.ReturnCharges</th>
+
+                    @if (@ViewBag.ReturnCodeMaster.fldCharges != @ViewBag.ReturnCodeMasterTemp.fldCharges)
+                    {
+                        <td>
+                            <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;width:500px;" value="@ViewBag.ReturnCodeMasterTemp.fldCharges" autocomplete="off" maxlength="50" disabled />
+                            <input type="text" name="fldCharges" value="@ViewBag.ReturnCodeMasterTemp.fldCharges" hidden />
+                            <span class="red-star">*</span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input type="text" style="width:500px;" value="@ViewBag.ReturnCodeMasterTemp.fldCharges" autocomplete="off" maxlength="50" disabled />
+                            <input type="text" name="fldCharges" value="@ViewBag.ReturnCodeMasterTemp.fldCharges" hidden />
+                            <span class="red-star">*</span>
+                        </td>
+                    }
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <th>@Locale.ReturnCode</th>
+                    <td>
+                        <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;width:500px;" value="@ViewBag.ReturnCodeMasterTemp.fldRejectCode" autocomplete="off" maxlength="50" disabled />
+                        <input type="text" name="fldRejectCode" value="@ViewBag.ReturnCodeMasterTemp.fldRejectCode" hidden />
+                        <input type="text" name="Action" value="@ViewBag.ReturnCodeMasterTemp.fldApproveStatus" hidden />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.ReturnDescription</th>
+                    <td>
+                        <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;width:500px;" value="@ViewBag.ReturnCodeMasterTemp.fldRejectDesc" autocomplete="off" maxlength="50" disabled />
+                        <input type="text" name="fldRejectDesc" value="@ViewBag.ReturnCodeMasterTemp.fldRejectDesc" hidden />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.ReturnType</th>
+                    <td>
+                        <select name="fldRejectType" id="fldRejectTypeId" class="textbox" STYLE="color: #FFFFFF;background-color: #FF0000;" disabled>
+                            <option value="">Please Select Return Type</option>
+                            @foreach (var item in @ViewBag.RejectType)
+                            {
+                                <option value="@item.fldRejectType" @(ViewBag.ReturnCodeMasterTemp.fldRejectType == item.fldRejectType ? "selected" : "")>@item.fldRejectTypeDesc</option>
+                            }
+                        </select>
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Locale.ReturnCharges</th>
+                    <td>
+                        <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;width:500px;" value="@ViewBag.ReturnCodeMasterTemp.fldCharges" autocomplete="off" maxlength="50" disabled />
+                        <input type="text" name="fldCharges" value="@ViewBag.ReturnCodeMasterTemp.fldCharges" hidden />
+                        <span class="red-star">*</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button data-action="@Url.Action("/VerifyA2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsOCS.ReturnCodeChecker.VERIFY) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+    <button data-action="@Url.Action("/VerifyR2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsOCS.ReturnCodeChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+    <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.ReturnCodeChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+</div>}
+
+<script src="~/Scripts/App/app.js"></script>

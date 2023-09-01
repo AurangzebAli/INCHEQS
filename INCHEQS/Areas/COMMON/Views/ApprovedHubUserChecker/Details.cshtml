@@ -1,0 +1,58 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("Index", "ApprovedHubUserChecker", FormMethod.Post, new { @Class = "secure-form" }))
+{
+
+    <div class="form-horizontal">
+        <h4>@Locale.MaintenanceHubUserProfile (Checker)</h4>
+        <hr />
+        <table class="table form-table table-no-border">
+            <tbody>
+                <tr>
+                    <th>@Locale.HubId</th>
+                    <td><input type="text" value="@ViewBag.Hub.fldHubId" name="fldHubId" size="30" style = "margin-left: 30px;" disabled/></td>
+                </tr>
+                <tr>
+                    <th>@Locale.HubDescription</th>
+                    <td><input type="text" value="@ViewBag.Hub.fldHubDesc" name="fldHubDesc"  size="80" style = "margin-left: 30px;" disabled/></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form-select">
+                            <div>
+                                <b>@Locale.UserAvailableList</b><br>
+                                <select multiple="multiple" class="form-multiple select-from">
+                                    @foreach (var item in ViewBag.AvailableUser) {
+                                        <option value="@item.fldUserId">@item.fldUserAbb</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-move" style="margin:50px 20px;  width:100px; ">
+                                <br />
+                                <p>
+                                    <input type="button" title="select all" class="btn btn-default btn-move addOne" value="Add" style="width:100px; "disabled>
+                                </p>
+                                <p><input type="button" title="select" class="btn btn-default btn-move addAll" value="Add All" style="width:100px;"disabled></p>
+                                <p><input type="button" title="remove" class="btn btn-default btn-move rmOne" value="Remove" style="width:100px;"disabled></p>
+                                <p><input type="button" title="remove all" class="btn btn-default btn-move rmAll" value="Remove All" style="width:100px;"disabled></p>
+                            </div>
+                            <div>
+                                <b>@Locale.UserSelectedList</b><br>
+                                <select multiple="multiple" class="form-multiple select-to" name="selectedUser">
+                                    @foreach (var item in ViewBag.SelectedUser) {
+                                        <option value="@item.fldUserId">@item.fldUserAbb</option>
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="@Url.Action("Index")" Class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsSDS.ApprovedHubUserChecker.VERIFY) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+<script src="~/Scripts/App/multiSelectList.js"></script>
+<script src="~/Scripts/App/app.js"></script>

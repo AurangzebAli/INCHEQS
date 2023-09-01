@@ -1,0 +1,51 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@using System
+@{
+    ViewBag.Title = "ReadGWCConsolidatedFiles";
+    var i = 0;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ReadGWCConsolidatedFiles</title>
+</head>
+
+<body>
+    <div style="overflow-y: scroll; height:500px;">
+        @if (ViewBag.FileList != null)
+        {
+        <table class="table table-bordered">
+            <tr>File(s) Available List</tr>
+            <tr><hr /></tr>
+            <tr><u>Folder Path Details:</u><br/></tr>
+            <tr>Source Folder Path: @ViewBag.SourcePath</tr>
+            <tr></tr>
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>File Size (KB)</th>
+                    <th>File Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var file in ViewBag.FileList)
+                {
+                    <tr>
+                        <td>@file.fileNameOnly</td>
+                        <td>@file.fileSize</td>
+                        <td>@file.fileTimeStamp</td>
+                    </tr>
+                }
+            </tbody>
+        </table>}
+        else {
+            
+                           <h1> Folder/File is Not Available </h1>
+
+        }
+    </div>
+</body>
+</html>

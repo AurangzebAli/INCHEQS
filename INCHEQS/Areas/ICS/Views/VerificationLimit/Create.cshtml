@@ -1,0 +1,133 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.Resources
+@using INCHEQS.TaskAssignment
+@using (Html.BeginForm("SaveCreate", "VerificationLimit", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Maintenance - Verification Limit (Add)</h4>
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            <TBODY>
+                <TR>
+                    <Th>@Locale.Class</Th>
+                        <TD><input type="text" name="class" maxlength="1"/>
+                            <span class="red-star">*</span>
+                        </TD>
+                    
+                </TR>
+                <TR>
+                    <Th>@Locale.firstAmount</Th>
+
+                    <TD>
+                        <select id="firstType" name="firstType" >
+
+                            <option value=">" >@Locale.morethan </option>
+                            <option value=">=" >@Locale.morethanandequalto</option>
+                            <option value="=" >@Locale.equalto</option>
+                            <option value="<" >@Locale.lessthan</option>
+                            <option value="<=" >@Locale.lessthanandequal</option>
+
+                        </select>
+                        <span class="red-star">*</span>
+                        <input type="text" name="firstAmount" id="firstAmount" class="number-only" onkeyup="CopyData(this)" onchange="setTwoNumberDecimal" value="0.00" C />
+                        <span class="red-star">*</span>
+                    </TD>
+
+                </TR>
+                <TR>
+                    <Th>@Locale.Concatenate</Th>
+
+                    <TD>
+                        <select id="concat" name="concat">
+
+                            <option value="" > </option>
+                            <option value="Or">&nbsp; Or </option>
+                            <option value="And">&nbsp; And </option>
+
+                        </select>
+                    </TD>
+
+                </TR>
+                <TR>
+                    <Th>@Locale.secondAmount</Th>
+
+                    <TD>
+                        <select id="secondType" name="secondType">
+                            <option value=""></option>
+                            <option value=">" >@Locale.morethan </option>
+                            <option value=">=" >@Locale.morethanandequalto</option>
+                            <option value="=" >@Locale.equalto</option>
+                            <option value="<" >@Locale.lessthan</option>
+                            <option value="<=" >@Locale.lessthanandequal</option>
+
+                        </select>
+                        <input type="text" name="secondAmount" id="secondAmount" class="number-only" onkeyup="CopyData(this)" onchange="setTwoNumberDecimal2" value="0.00" maxlength="20" />
+                    </TD>
+
+                </TR>
+                <TR>
+                    <Th>@Locale.LimitDescription</Th>
+                    
+                        <TD><input type="text"  name="VerifyLimitDesc" id="VerifyLimitDesc" class="input"  size = "60" /></TD>
+                    
+                </TR>
+
+            </TBODY>
+        </table>
+        <button type="submit" onclick="return Confirm()" Class="btn btn-default @(CurrentUser.HasTask(TaskIdsOCS.VerificationLimit.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIdsOCS.VerificationLimit.INDEX) ? "" : "disabled")">@Locale.btnClose</a>
+
+        @*<input type="button" class="btn btn-default generateButton" value="Generate" name="clickButton" hidden />*@
+
+
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $('#firstAmount, #secondAmount').maskMoney({ allowZero: true});
+    })
+
+    function CopyData(val) {
+        var a = document.getElementById("firstType").value
+        var b = document.getElementById("firstAmount").value + " "
+        var c = document.getElementById("concat").value
+        var d = document.getElementById("secondType").value
+        var e = document.getElementById("secondAmount").value
+
+        var inputs = document.querySelectorAll(".input");
+        for (var i = 0; i < inputs.length; i++) {
+            var z = " Amount " + a + b
+            inputs[i].value = z;
+            if (c != "" && d != "" && e != "") {
+                inputs[i].value = z + c + " Amount " + d + e;
+            }
+        }
+    }
+    function setTwoNumberDecimal(event) {
+        this.value = parseFloat(this.value).toFixed(2);
+    }
+    function setTwoNumberDecimal2(event) {
+        this.value = parseFloat(this.value).toFixed(2);
+    }
+
+    function Confirm() {
+        var input = $("<input />");
+        input.attr("type", "hidden").attr("name", "confirm_value");
+        if (confirm("Do you want to save data?")) {
+            input.val("Yes");
+            var a = $("#firstAmount").val().replace(",", "");
+            $("#firstAmount").val(a);
+
+            var b = $("#secondAmount").val().replace(",", "");
+            $("#secondAmount").val(b);
+            return true;
+        } else {
+            input.val("No");
+            return false;
+        }
+        $("form")[0].appendChild(input[0]);
+    }
+
+</script>
+<script src="~/Scripts/App/verificationLimit.js"></script>

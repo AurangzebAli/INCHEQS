@@ -1,0 +1,234 @@
+﻿@using INCHEQS.Resources
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline secure-form ", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+    <h4>@ViewBag.SearchPage.PageTitle</h4>
+    <div class="row">
+        <hr />
+        <table style="width:100%" class="tablestyle">
+            <colgroup>
+                <col span="1" style="width: 15%;">
+                <col span="1" style="width: 40%;">
+                <col span="1" style="width: 45%;">
+            </colgroup>
+            <tr>
+                <td>ChequeClearDate</td>
+                <td><input type="Text" class="form-date" id="fldClearDate" name="fldClearDate" value="@ViewBag.SearchPage.FormFields[0].fieldDefaultValue" readonly /></td>
+            </tr>
+            <tr>
+                <td>Percentage</td>
+                <td><input type="text" id="fldPercentage" name="fldPercentage" class="number-only" maxlength="5"/>&nbsp;%</td>
+            </tr>
+            <tr>
+                <td>StatisticRange</td>
+                <td><input type="Text" id="fldStatisticRange" name="fldStatisticRange" value="100" class="number-only" maxlength="5"/></td>
+            </tr>
+            <tr>
+                <td>TruncateChequeAmount</td>
+                <td>
+                    <label>@Locale.Min</label>&nbsp;<input type="Text" id="fldTruncateChequeAmountMin" name="fldTruncateChequeAmountMin" value="0.00" class="number-only" />&nbsp;&nbsp;
+                    <label>@Locale.Max</label>&nbsp;<input type="Text" id="fldTruncateChequeAmountMax" name="fldTruncateChequeAmountMax" value="0.00" class="number-only" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <hr />
+    <div class="form-group">
+        <input type="button" class="btn btn-default normal-submit-calculate" data-action="@Url.Action("Calculate")" value="Calculate" />
+        <button type="submit" class="btn btn-default" onclick="fnClear()">Clear</button>
+        <input type="button" class="btn btn-default normal-submit-truncate" value="Truncate" />
+        <input type="button" id="truncate_btn" class="btn btn-default normal-submit-without-search" data-action="@Url.Action("Truncation")" value="Truncate" style="display:none" />
+        <button type="submit" class="btn btn-default init-search" data-action="@Url.Action("SearchResultPage")" style="display:none">@Locale.Search</button>
+    </div>
+
+    <p>&nbsp;</p>
+    <input type="hidden" name="fldMaxAmount" id="fldMaxAmount" value="@ViewBag.fldMaxAmount" />
+    <div id="resultCalculate"></div>
+    <div id="resultContainer"></div>
+}
+
+<div class="popup" id="truncationPopup" style="position:absolute; left:50%;top:50%">
+    <div class="overlay"></div>
+    <div class="content">
+        <h2>House Cheque</h2>
+        <p>
+            Do you want to reset the truncation amount?
+            <br />
+            <br />
+            <br />
+            <button id="confirm_truncateBtn" Class="btn btn-danger">Confirm</button>
+            <button class="btn btn-primary" onclick="toogleTruncatePopup('closeTruncate', '')">Cancel</button>
+            <ul>
+                <li class="danger"></li>
+            </ul>
+        </p>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/SearchPage")
+<style>
+    .tablestyle {
+        margin-left: 10px;
+    }
+
+    .popup .overlay {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.5);
+        z-index: 3;
+        display: none;
+    }
+
+    .popup .content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%) scale(0);
+        background: #fff;
+        width: 450px;
+        height: 220px;
+        z-index: 4;
+        text-align: center;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .popup .close-btn {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        width: 30px;
+        height: 30px;
+        background: #222;
+        color: #fff;
+        font-size: 25px;
+        font-weight: 600;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 50%;
+    }
+
+    .popup.active .overlay {
+        display: block;
+    }
+
+    .popup.active .content {
+        transition: all 300ms ease-in-out;
+        transform: translate(-50%,-50%) scale(1);
+    }
+</style>
+
+<script>
+    var MinAmount;
+    var MaxAmount;
+    var TotRec;
+    var TotRecPending;
+    var btnCalc;
+
+    function fnClear() {
+        $("#fldPercentage").val("");
+        $("#fldStatisticRange").val("100");
+        $("#fldTruncateChequeAmountMin").val("0.00");
+        $("#fldTruncateChequeAmountMax").val("0.00");
+        $("#resultCalculate").html("");
+        $("#calculateResultAmountRangeContainer").html("");
+
+        btnCalc = false;
+    }
+
+    function toogleTruncatePopup(task, timeOut) {
+        if (task == 'truncate') {
+            $(window).scrollTop(0);
+            document.getElementById("truncationPopup").classList.toggle("active")
+        }
+        else if (task == 'closeTruncate') {
+            document.getElementById("truncationPopup").classList.toggle("active")
+        }
+    }
+
+    $(".normal-submit-calculate").click(function (e) {
+        e.preventDefault();
+        var $form = $(this).closest("form");
+        var fldPercentage = $("#fldPercentage").val();
+        var fldStatisticRange = $("#fldStatisticRange").val();
+        if ($(this).data("action") == null) {
+            alert("No Action properties specified for the button. Eg data-action='Controller/Action'");
+            return;
+        }
+
+        if (fldPercentage == "") {
+            $("#notice").removeClass("alert-success");
+            $("#notice").removeClass("hidden");
+            $("#notice").addClass("alert-danger");
+            $("#notice .notice-body").html("<span style='font-weight:bold'>Please key in percentage</span>");
+        }
+        else if (fldStatisticRange == "" || fldStatisticRange == "0") {
+            $("#notice").removeClass("alert-success");
+            $("#notice").removeClass("hidden");
+            $("#notice").addClass("alert-danger");
+            $("#notice .notice-body").html("<span style='font-weight:bold'>Please key in the range</span>");
+        }
+        else {
+            $("#notice").addClass("alert-success");
+            $("#notice").addClass("hidden");
+            $("#notice").removeClass("alert-danger");
+            $("#notice .notice-body").html("");
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: $(this).data("action"),
+                data: $form.serialize(),
+                success: function (data) {
+                    $("#resultCalculate").html("");
+                    $("#resultCalculate").html(data);
+                }
+            });
+        }
+    });
+
+    $(".normal-submit-truncate").click(function (e) {
+        e.preventDefault();
+        var $form = $(this).closest("form");
+        var fldMaxAmount = $("#fldMaxAmount").val();
+        var fldTruncateChequeAmountMin = $("#fldTruncateChequeAmountMin").val();
+        var fldTruncateChequeAmountMax = $("#fldTruncateChequeAmountMax").val();
+
+        fldTruncateChequeAmountMin = fldTruncateChequeAmountMin.replace(",", "").replace(".", "");
+        fldTruncateChequeAmountMax = fldTruncateChequeAmountMax.replace(",", "").replace(".", "");
+
+        if (parseInt(fldTruncateChequeAmountMax) <= parseInt(fldMaxAmount)) {
+            $("#notice").removeClass("alert-success");
+            $("#notice").removeClass("hidden");
+            $("#notice").addClass("alert-danger");
+            $("#notice .notice-body").html("<span style='font-weight:bold'>Current maximum cheque amount is less than previous maximum cheque amount.</span>");
+        }
+        else if (parseInt(fldTruncateChequeAmountMin) >= parseInt(fldTruncateChequeAmountMax)) {
+            $("#notice").removeClass("alert-success");
+            $("#notice").removeClass("hidden");
+            $("#notice").addClass("alert-danger");
+            $("#notice .notice-body").html("<span style='font-weight:bold'>Minimum cheque amount must be less than maximum cheque amount.</span>");
+        }
+        else {
+            $("#notice").addClass("alert-success");
+            $("#notice").addClass("hidden");
+            $("#notice").removeClass("alert-danger");
+            $("#notice .notice-body").html("");
+            toogleTruncatePopup("truncate");
+        }
+    });
+
+    $("#confirm_truncateBtn").click(function (e) {
+        $("#truncate_btn").click();
+        document.getElementById("truncationPopup").classList.toggle("active");
+    });
+
+    $(function () {
+        $('#fldTruncateChequeAmountMin').maskMoney({ allowZero: true });
+        $('#fldTruncateChequeAmountMax').maskMoney({ allowZero: true });
+    })
+</script>
+
+

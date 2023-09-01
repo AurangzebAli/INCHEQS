@@ -1,0 +1,112 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+    DateTime currentdate = DateTime.Now;
+    DateTime sDate = currentdate.AddMonths(-6);
+    string staleDate = sDate.ToString("dd-MM-yyyy");
+
+}
+
+<style>
+    .tr th:first-child, tr td:first-child{
+    }
+</style>
+
+<table style="line-height: 23px; margin-top: 30px; font-size:18px">
+
+    <tr>
+        <th class="col-sm-4 txtBlack">Cheque Clearing Date</th>
+        <th style="width:1%">:</th>
+        <td class="col-sm-5"><span class="h3 red bold">@DateUtils.formatDateFromSql(ViewBag.InwardItemViewModel.getField("fldClearDate"))</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4 txtBlack">Host Status</th>
+        <th style="width:1%">:</th>
+        <td class="col-sm-5">
+            @*@(ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() == "" ? "NIL" :
+                @ViewBag.HostStatus + " ("+ ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() + ")" )*@
+            <span class="bold" style="font-size:16px">
+                @if (ViewBag.InwardItemViewModel.getField("fldRejectStatus1").ToString().Trim() == "" &&
+                ViewBag.InwardItemViewModel.getField("fldRejectStatus2").ToString().Trim() == "" &&
+                ViewBag.InwardItemViewModel.getField("fldRejectStatus3").ToString().Trim() == "" &&
+                ViewBag.InwardItemViewModel.getField("fldRejectStatus4").ToString().Trim() == "")
+                {
+                    <span class="bold h4">
+                        <text>NIL</text>
+                    </span>
+                }
+                else
+                {
+                    <span class="txtRed bold h4 blink">
+                        @ViewBag.HostStatus
+                        @if (ViewBag.InwardItemViewModel.getField("fldRejectStatus2").ToString().Trim() != "" && ViewBag.InwardItemViewModel.getField("fldRejectStatus2").ToString().Trim() != null)
+                        {
+                            <text>,</text> @ViewBag.HostStatus2
+                        }
+                    </span>
+                }
+
+            </span>
+
+        </td>
+    </tr>
+    <tr>
+        <th class="col-sm-4 txtBlack">NC Flag</th>
+        <th style="width:1%">:</th>
+        <td class="col-sm-5">
+            <span class="txtBlack bold" style="font-size:16px">
+
+                @if(ViewBag.InwardItemViewModel.getField("fldNonConformance") == "0")
+            {
+
+            }
+
+                @ViewBag.InwardItemViewModel.getField("fldNonConformance")
+                @if (ViewBag.InwardItemViewModel.getField("fldNonConformance2") != null && ViewBag.InwardItemViewModel.getField("fldNonConformance2") != "")
+                {
+                    <text>,</text> <span class="red blink">@ViewBag.InwardItemViewModel.getField("fldNonConformance2")</span>
+                }
+
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <th class="col-sm-4 txtBlack">Check Digit</th>
+        <th style="width:1%">:</th>
+        <td class="col-sm-5"><span class="txtBlack bold" style="font-size:16px">@ViewBag.InwardItemViewModel.getField("fldCheckDigit")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4 txtBlack">Presenting Bank Branch</th>
+        <th style="width:1%">:</th>
+        <td class="col-sm-5"><span class="txtBlack bold" style="font-size:16px">@ViewBag.InwardItemViewModel.getField("fldPreBankCode")@ViewBag.InwardItemViewModel.getField("fldPreBranchCode")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4 txtBlack">Issuing Bank Branch</th>
+        <th style="width:1%">:</th>
+        <td class="col-sm-5"><span class="txtBlack bold" style="font-size:16px">@ViewBag.InwardItemViewModel.getField("fldIssueBankCode")@ViewBag.InwardItemViewModel.getField("fldIssueBranchCode")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4 txtBlack">Cheque Number</th>
+        <th style="width:1%">:</th>
+        <td class="col-sm-5"><span class="txtBlack bold" style="font-size:16px">@ViewBag.InwardItemViewModel.getField("fldChequeSerialNo")</span></td>
+    </tr>
+    <tr>
+        <th class="col-sm-4 txtBlack" style="font-size:18px">Account Number</th>
+        <th style="width:1%">:</th>
+        <td class="col-sm-5"><span class="txtBlack bold" style="font-size:16px">@ViewBag.InwardItemViewModel.getField("fldAccountNumber")</span></td>
+    </tr>
+    <!--<tr>-->
+    @*<th class="col-sm-4 txtBlack">Trans Code</th>
+        <th>:</th>*@
+    <span class="txtBlack bold" style="font-size:16px" hidden>@ViewBag.InwardItemViewModel.getField("fldTransCode")</span>
+    @*</tr>*@
+
+    <tr>
+        <th class="col-sm-4 txtBlack">Amount</th>
+        <th style="width:1%">:</th>
+        <td class="col-sm-5"><span class="h3 red bold">@StringUtils.FormatCurrency(ViewBag.InwardItemViewModel.getField("fldAmount"))</span></td>
+    </tr>
+
+</table>
+
+<input type="hidden" value="@ViewBag.InwardItemViewModel.getField("fldIssueBankBranch")" name="fldIssueBankBranch" />

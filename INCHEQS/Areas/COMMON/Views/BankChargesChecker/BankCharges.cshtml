@@ -1,0 +1,336 @@
+﻿@using INCHEQS.Security;
+@using INCHEQS.Resources;
+@using INCHEQS.TaskAssignment;
+@using (Html.BeginForm("BankCharges", "BankChargesChecker", FormMethod.Post, new { @Class = "secure-form" }))
+{
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @*<h4>@Locale.BankChargesChecker</h4>*@
+        <h4>@Locale.BankChargesChecker</h4>
+
+        <hr />
+        <span class="red"><i>*@Locale.RequiredField</i></span>
+        <table class="table form-table table-no-border">
+            @if (@ViewBag.BankCharges != null)
+            {
+                <tbody>
+                    <tr>
+                        <th>@Locale.ProductCode</th>
+                        <td>
+                            @*<input type="text" name="fldProductCode" autocomplete="off" maxlength="3"/>*@
+                            <select disabled>
+                                <option value="@ViewBag.BankChargesTemp.fldProductCode">@ViewBag.BankChargesTemp.fldProductCode</option>
+                            </select>
+                            <input name="fldProductCode" value="@ViewBag.BankChargesTemp.fldProductCode" hidden />
+                            <span class="red-star">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@Locale.BankChargesType</th>
+                        <td>
+                            @*<input type="text" name="fldBankChargesType" autocomplete="off" maxlength="3"/>*@
+                            <select disabled>
+                                <option>@ViewBag.BankChargesTemp.fldBankChargesType</option>
+                            </select>
+                            <input id="fldBankChargesType" name="fldBankChargesType" value="@ViewBag.BankChargesTemp.fldBankChargesType" hidden />
+                            <span class="red-star">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@Locale.BankChargesTypeDesc</th>
+                        <td>
+                            <label id="fldBankChargesDesc">@ViewBag.BankChargesTemp.fldBankChargesDesc</label>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>@Locale.ChequeAmount</th>
+                        @if ((@ViewBag.BankChargesTemp.fldChequeAmtMin == "1") && (@ViewBag.BankChargesTemp.fldChequeAmtMax == "9999999999999.99"))
+                        {
+                            <td>
+                                <input type="radio" name="amount" class="amount" value="Amount" checked disabled />
+                                <label style="display: inline-block; width: 90px;">@Locale.AnyAmount</label>
+                                <input type="text" autocomplete="off" value="1.00" disabled />
+                                <span class="red-star">*</span>
+
+
+                                <label style="display: inline-block; padding-left: 4px;">@Locale.To</label>
+                                <input type="text" autocomplete="off" value="9,999,999,999,999.99" disabled />
+                                <span class="red-star">*</span>
+
+                                <input type="text" name="fldChequeAmtMax" id="fldChequeMaxAmt" value="9999999999999.99" hidden />
+                                <input type="text" name="fldChequeAmtMin" id="fldChequeMinAmt" value="1.00" hidden />
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input type="radio" name="amount" class="amount" value="Amount" disabled />
+                                <label style="display: inline-block; width: 90px;">@Locale.AnyAmount</label>
+                                <input type="text" autocomplete="off" value="1.00" disabled />
+                                <label style="display: inline-block; padding-left: 13px;">@Locale.To</label>
+                                <input type="text" autocomplete="off" value="9,999,999,999,999.99" disabled />
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        <th />
+                        @if ((@ViewBag.BankChargesTemp.fldChequeAmtMin != "1") || (@ViewBag.BankChargesTemp.fldChequeAmtMax != "9999999999999.99"))
+                        {
+                        <td>
+                            <input type="radio" class="amount" name="amount" value="AmountRange" checked disabled />
+                            <label style="display: inline-block; width: 90px;">@Locale.AmountRange</label>
+
+                            @if (@ViewBag.BankChargesTemp.fldChequeAmtMin != @ViewBag.BankCharges.fldChequeAmtMin)
+                            {
+                                <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.BankChargesTemp.fldChequeAmtMin" autocomplete="off" disabled />
+                                <input type="text" name="fldChequeAmtMin" value="@ViewBag.BankChargesTemp.fldChequeAmtMin" autocomplete="off" hidden />
+                                <span class="red-star">*</span>
+
+                            }
+                            else
+                            {
+                                <input type="text" id="fldChequeMinAmtAR" value="@ViewBag.BankChargesTemp.fldChequeAmtMin" name="fldChequeAmtMin" autocomplete="off" disabled />
+                                <input type="text" name="fldChequeAmtMin" value="@ViewBag.BankChargesTemp.fldChequeAmtMin" autocomplete="off" hidden />
+                                <span class="red-star">*</span>
+                            }
+
+                            <label style="display: inline-block; padding-left: 4px;">@Locale.To</label>
+                            @if (@ViewBag.BankChargesTemp.fldChequeAmtMax != @ViewBag.BankCharges.fldChequeAmtMax)
+                            {
+                                <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.BankChargesTemp.fldChequeAmtMax" autocomplete="off" disabled />
+                                <input type="text" name="fldChequeAmtMax" value="@ViewBag.BankChargesTemp.fldChequeAmtMax" autocomplete="off" hidden />
+                                <span class="red-star">*</span>
+                            }
+                            else
+                            {
+                                <input type="text" value="@ViewBag.BankChargesTemp.fldChequeAmtMax" autocomplete="off" disabled />
+                                <input type="text" name="fldChequeAmtMax" value="@ViewBag.BankChargesTemp.fldChequeAmtMax" autocomplete="off" hidden />
+                                <span class="red-star">*</span>
+                            }
+
+                            <input type="text" name="fldChequeAmtMaxCur" value="ViewBag.BankChargesTemp.fldChequeAmtMax" hidden />
+                        </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input type="radio" class="amount" name="amount" value="AmountRange" disabled />
+                                <label style="display: inline-block; width: 90px;">@Locale.AmountRange</label>
+                                <input type="text" id="fldChequeMinAmtAR" name="fldChequeAmtMin" autocomplete="off" disabled />
+                                <span class="red-star">*</span>
+                                <label style="display: inline-block; padding-left: 4px;">@Locale.To</label>
+                                <input type="text" id="fldChequeMaxAmtAR" name="fldChequeAmtMax" autocomplete="off" disabled />
+                                <span class="red-star">*</span>
+
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        <th>@Locale.BankCharges</th>
+                        @if (@ViewBag.BankChargesTemp.fldBankChargesAmount != "0")
+                        {
+
+                            <td>
+                                <input type="radio" name="bankcharges" class="bankcharges" value="ChargesAmount" checked disabled />
+                                @if (@ViewBag.BankChargesTemp.fldBankChargesAmount != @ViewBag.BankCharges.fldBankChargesAmount)
+                                {
+                                    <label style="display: inline-block; width: 90px;">@Locale.Amount</label>
+                                    <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" id="fldBankChargesAmount" value="@ViewBag.BankChargesTemp.fldBankChargesAmount" name="fldBankChargesAmount" autocomplete="off" disabled />
+                                    <span class="red-star">*</span>
+                                }
+                                else
+                                {
+                                    <label style="display: inline-block; width: 90px;">@Locale.Amount</label>
+                                    <input type="text" id="fldBankChargesAmount" name="fldBankChargesAmount" autocomplete="off" disabled />
+                                }
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input type="radio" name="bankcharges" class="bankcharges" value="ChargesAmount" />
+                                <label style="display: inline-block; width: 90px;">@Locale.Amount</label>
+                                <input type="text" id="fldBankChargesAmount" name="fldBankChargesAmount" autocomplete="off" disabled />
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        <th />
+                        @if (@ViewBag.BankChargesTemp.fldBankChargesRate != "0")
+                        {
+                            <td>
+                                <input type="radio" name="bankcharges" class="bankcharges" value="ChargesRate" checked disabled />
+                                @if (@ViewBag.BankChargesTemp.fldBankChargesRate != @ViewBag.BankCharges.fldBankChargesRate)
+                                {
+                                    <label style="display: inline-block; width: 90px;">@Locale.Rate</label>
+                                    <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" id="fldBankChargesRate" value="@ViewBag.BankChargesTemp.fldBankChargesRate" name="fldBankChargesRate" autocomplete="off" disabled />
+                                    <span>%</span>
+                                }
+                                else
+                                {
+                                    <label style="display: inline-block; width: 90px;">@Locale.Rate</label>
+                                    <input type="text" id="fldBankChargesRate" name="fldBankChargesRate" value="@ViewBag.BankChargesTemp.fldBankChargesRate" autocomplete="off" disabled />
+                                    <span>%</span>
+                                }
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input type="radio" name="bankcharges" class="bankcharges" value="ChargesRate" disabled />
+                                <label style="display: inline-block; width: 90px;">@Locale.Rate</label>
+                                <input type="text" id="fldBankChargesRate" name="fldBankChargesRate" autocomplete="off" disabled />
+                                <span>%</span>
+                            </td>
+                        }
+                    </tr>
+                </tbody>}
+            else
+            {//Create
+                <tbody>
+                    <tr>
+                        <th>@Locale.ProductCode</th>
+                        <td>
+                            @*<input type="text" name="fldProductCode" autocomplete="off" maxlength="3"/>*@
+                            <select disabled>
+                                <option value="@ViewBag.BankChargesTemp.fldProductCode">@ViewBag.BankChargesTemp.fldProductCode</option>
+                            </select>
+                            <input name="fldProductCode" value="@ViewBag.BankChargesTemp.fldProductCode" hidden />
+                            <span class="red-star">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@Locale.BankChargesType</th>
+                        <td>
+                            @*<input type="text" name="fldBankChargesType" autocomplete="off" maxlength="3"/>*@
+                            <select disabled>
+                                <option>@ViewBag.BankChargesTemp.fldBankChargesType</option>
+                            </select>
+                            <input id="fldBankChargesType" name="fldBankChargesType" value="@ViewBag.BankChargesTemp.fldBankChargesType" hidden />
+                            <span class="red-star">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@Locale.BankChargesTypeDesc</th>
+                        <td>
+                            <label id="fldBankChargesDesc">@ViewBag.BankChargesTemp.fldBankChargesDesc</label>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>@Locale.ChequeAmount</th>
+                        @if ((@ViewBag.BankChargesTemp.fldChequeAmtMin == "1") && (@ViewBag.BankChargesTemp.fldChequeAmtMax == "9999999999999.99"))
+                        {
+                            <td>
+                                <input type="radio" name="amount" class="amount" value="Amount" checked disabled />
+                                <label style="display: inline-block; width: 90px;">@Locale.AnyAmount</label>
+                                <input type="text" autocomplete="off" value="1.00" disabled />
+                                <span class="red-star">*</span>
+
+
+                                <label style="display: inline-block; padding-left: 4px;">@Locale.To</label>
+                                <input type="text" autocomplete="off" value="9,999,999,999,999.99" disabled />
+                                <span class="red-star">*</span>
+
+                                <input type="text" name="fldChequeAmtMax" id="fldChequeMaxAmt" value="9999999999999.99" hidden />
+                                <input type="text" name="fldChequeAmtMin" id="fldChequeMinAmt" value="1.00" hidden />
+
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input type="radio" name="amount" class="amount" value="Amount" />
+                                <label style="display: inline-block; width: 90px;">@Locale.AnyAmount</label>
+                                <input type="text" autocomplete="off" value="1.00" disabled />
+                                <label style="display: inline-block; padding-left: 13px;">To</label>
+                                <input type="text" autocomplete="off" value="9,999,999,999,999.99" disabled />
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        <th />
+                        @if ((@ViewBag.BankChargesTemp.fldChequeAmtMin != "1") || (@ViewBag.BankChargesTemp.fldChequeAmtMax != "9999999999999.99"))
+                        {
+                        <td>
+                            <input type="radio" class="amount" name="amount" value="AmountRange" checked />
+                            <label style="display: inline-block; width: 90px;">@Locale.AmountRange</label>
+                            <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.BankChargesTemp.fldChequeAmtMin" autocomplete="off" disabled />
+                            <label style="display: inline-block; padding-left: 4px;">@Locale.To</label>
+                            <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" value="@ViewBag.BankChargesTemp.fldChequeAmtMax"  autocomplete="off" disabled />
+                            <span class="red-star">*</span>
+                            <input type="text" name="fldChequeAmtMax" value="@ViewBag.BankChargesTemp.fldChequeAmtMax" autocomplete="off" hidden />
+                            <input type="text" name="fldChequeAmtMin" value="@ViewBag.BankChargesTemp.fldChequeAmtMin" autocomplete="off" hidden />
+
+                        </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input type="radio" class="amount" name="amount" value="AmountRange" />
+                                <label style="display: inline-block; width: 90px;">@Locale.AmountRange</label>
+                                <input type="text" id="fldChequeMinAmtAR" name="fldChequeAmtMin" autocomplete="off" disabled />
+                                <span class="red-star">*</span>
+                                <label style="display: inline-block; padding-left: 4px;">@Locale.To</label>
+                                <input type="text" id="fldChequeMaxAmtAR" name="fldChequeAmtMax" autocomplete="off" disabled />
+                                <span class="red-star">*</span>
+
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        <th>@Locale.BankCharges</th>
+                        @if (@ViewBag.BankChargesTemp.fldBankChargesAmount != "0")
+                        {
+                            <td>
+                                <input type="radio" name="bankcharges" class="bankcharges" value="ChargesAmount" checked disabled />
+                                <label style="display: inline-block; width: 90px;">@Locale.Amount</label>
+                                <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" id="fldBankChargesAmount" value="@ViewBag.BankChargesTemp.fldBankChargesAmount" name="fldBankChargesAmount" autocomplete="off" disabled />
+                                <span class="red-star">*</span>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input type="radio" name="bankcharges" class="bankcharges" value="ChargesAmount" disabled />
+                                <label style="display: inline-block; width: 90px;">@Locale.Amount</label>
+                                <input type="text" id="fldBankChargesAmount" name="fldBankChargesAmount" autocomplete="off" disabled />
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        <th />
+                        @if (@ViewBag.BankChargesTemp.fldBankChargesRate != "0")
+                        {
+                            <td>
+                                <input type="radio" name="bankcharges" class="bankcharges" value="ChargesRate" checked disabled />
+                                <label style="display: inline-block; width: 90px;">@Locale.Rate</label>
+                                <input type="text" STYLE="color: #FFFFFF;background-color: #FF0000;" id="fldBankChargesRate" value="@ViewBag.BankChargesTemp.fldBankChargesRate" name="fldBankChargesRate" autocomplete="off" disabled />
+                                <span>%</span>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input type="radio" name="bankcharges" class="bankcharges" value="ChargesRate" disabled />
+                                <label style="display: inline-block; width: 90px;">@Locale.Rate</label>
+                                <input type="text" id="fldBankChargesRate" name="fldBankChargesRate" autocomplete="off" disabled />
+                                <span>%</span>
+                            </td>
+                        }
+                    </tr>
+                </tbody>
+            }
+        </table>
+        <input type="text" name="action" value="@ViewBag.BankChargesTemp.fldApproveStatus" hidden/>
+        <button data-action="@Url.Action("/VerifyA2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsOCS.BankChargesChecker.VERIFY) ? "" : "hidden") " confirm-msg="Are you sure you want to approve?" value="Approve">@Locale.ApproveBtn</button>
+        <button data-action="@Url.Action("/VerifyR2")" Class="btn btn-default normal-submit-CustomConfirm-action-button @(CurrentUser.HasTask(TaskIdsOCS.BankChargesChecker.VERIFY) ? "" : "hidden")" confirm-msg="Are you sure you want to reject?" value="Reject">@Locale.RejectBtn</button>
+        <a href="@Url.Action("/Index")" class="btn btn-default secure-nav  @(CurrentUser.HasTask(TaskIdsOCS.BankChargesChecker.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+    </div>
+}
+<script src="~/Scripts/App/app.js"></script>
+

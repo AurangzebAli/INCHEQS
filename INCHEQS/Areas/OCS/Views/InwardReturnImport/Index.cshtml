@@ -1,0 +1,56 @@
+﻿@using INCHEQS.Resources
+@using (Html.BeginForm(null, null, FormMethod.Post, new { action = @Url.Action("SearchResultPage"), @Class = "form-inline secure-form", id = "searchForm" }))
+{
+    @Html.AntiForgeryToken();
+
+    <h4>@ViewBag.SearchPage.PageTitle</h4>
+    <hr />
+    <div class="row">
+        @Html.Partial("SearchPage/_GenericFieldsForm")
+    </div>
+    <hr />
+    <div class="form-group">
+        <button class="btn btn-default init-search">Search</button>
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "FileListing"))
+        {
+            <button class="btn btn-default modal-submit" data-action="@Url.Action("FileListing")" data-title="Gateway File Listing">@Locale.GatewayFileListing</button>
+            @*<button class="btn btn-default modal-submit" data-action="@Url.Action("FileListing")" data-title="Gateway File Listing">Gateway File Listing</button>*@
+        }
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "Import"))
+        {
+            <button class="btn btn-default init-refresh-page-realtime" data-action="@Url.Action("Import")" data-title="Import">@Locale.Import</button>
+        }
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "MatchListing"))
+        {
+            <button class="btn btn-default modal-submit" data-action="@Url.Action("MatchListing")" data-title="MatchListing">@Locale.MatchListing</button>
+            @*<button class="btn btn-default modal-submit" data-action="@Url.Action("MatchListing")" data-title="MatchListing">Match Listing</button>*@
+        }
+        @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "UnmatchListing"))
+        {
+            <button class="btn btn-default modal-submit" data-action="@Url.Action("UnmatchListing")" data-title="UnmatchListing">@Locale.UnmatchListing</button>
+            @*< button class="btn btn-default modal-submit" data-action="@Url.Action("UnmatchListing")" data-title="UnmatchListing">Unmatch Listing</button>*@
+        }
+
+
+
+
+    </div>
+    <div id="resultContainer"></div>
+
+}
+        @if (ViewBag.TaskRole == "ICL")
+        {
+    <div id="dataProcessContainer" data-pospaytype="@ViewBag.DataPosPayType"></div>
+        }
+else
+{
+    //<div id="dataProcessContainer" data-processname="@ViewBag.ProcessName"></div>
+}
+
+
+
+<input id="dataProcessType" value="@ViewBag.TaskRole" type="hidden">
+<img src="~/Content/Images/spin.gif" class="resultLoader hidden" />
+
+@Scripts.Render("~/bundles/SearchPage")
+@Scripts.Render("~/bundles/OCSDataProcessRealTime")

@@ -1,0 +1,348 @@
+﻿@using System.Data;
+@using INCHEQS.Resources
+@using INCHEQS.Security
+@using INCHEQS.Common;
+
+@{
+    /**/
+
+    ViewBag.Title = "ChequeVerificationPage";
+    Layout = "~/Views/Shared/_LayoutPPSChequeVerification.cshtml";
+
+    int MinusTotalRecord;
+    string OriTotalRecord = "";
+    if (ViewBag.MinusRecordIndicator != null)
+    {
+        MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+        if (ViewBag.StoreProc != null)
+        {
+            MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+        }
+        //if (ViewBag.DatabaseViewName == "View_Verification") {
+        //    MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified")) - 1;
+        //}
+    }
+    else
+    {
+        if (ViewBag.InwardItemViewModel.getField("TotalUnverified") == "")
+        {
+            MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalRecord"));
+        }
+        else
+        {
+            MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+        }
+    }
+
+    if (ViewBag.LockIndicator != null)
+    {
+        OriTotalRecord = ViewBag.InwardItemViewModel.getField("TotalRecord");
+        <input type="hidden" id="OriTotalRecordHolder" value="@OriTotalRecord">
+    }
+
+}
+
+<style>
+    .tdTable thead, th, td, tr {
+        border: 1px solid black;
+    }
+</style>
+
+@{
+    @*int MinusTotalRecord;
+        string OriTotalRecord = "";
+        if (ViewBag.MinusRecordIndicator != null) {
+            MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalRecord")) - 1;
+            if (ViewBag.StoreProc != null)
+            {
+                MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalUnverified"));
+            }
+
+        } else {
+            MinusTotalRecord = Convert.ToInt32(ViewBag.InwardItemViewModel.getField("TotalRecord"));
+
+        }
+
+        if (ViewBag.LockIndicator != null) {
+            OriTotalRecord = ViewBag.InwardItemViewModel.getField("TotalRecord");
+            <input type="hidden" id="OriTotalRecordHolder" value="@OriTotalRecord">
+        }*@
+}
+
+<div class="row mTop10">
+    <div class="col-sm-4">
+        <span class="h3 bold">@ViewBag.PageTitle</span>
+
+        <input type="hidden" name="NextValue" value="@ViewBag.InwardItemViewModel.getField("NextValue")">
+        <input type="hidden" name="PreviousValue" value="@ViewBag.InwardItemViewModel.getField("PreviousValue")">
+        <input type="hidden" name="DataAction" value="@ViewBag.DataAction">
+        <span class="red bold">[@MinusTotalRecord / </span>
+        <span class="red bold" id="OriTotalRecord">1</span>
+        <span class="red bold">]</span>
+        <div>
+            <br />
+            <span class="h4 bold">Cheque Info</span>
+
+            @if (ViewBag.TaskId != "308160" && ViewBag.TaskId != "308250" && ViewBag.TaskId != "308260")
+            {
+                <span class="h4 bold" style="margin-left:50px;color:red">Percentage Match: @ViewBag.ChequeInfo.fldPercentMatch %</span>
+            }
+        </div>
+    </div>
+
+    <div class="col-sm-8 text-right">
+        @Html.Partial("PositivePay/Base/_ChequeControlAction")
+    </div>
+</div>
+
+
+<div class="col-sm-12">
+    <table class="table form-table tdTable" id="chequeInfo">
+        <thead>
+            <tr>
+                <th>Account Number</th>
+                <th>Cheque Number</th>
+                <th>Payee Name</th>
+                <th></th>
+                <th>Issue Date</th>
+                <th>Trans Code</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                @if (ViewBag.ChequeInfo.fldModifiedFields == "AccNo")
+                {
+                    <td rowspan="3" style="color:red" class="col-sm-1">@ViewBag.ChequeInfo.fldAccountNo</td>
+                }
+                else
+                {
+                    <td rowspan="3" class="col-sm-1">@ViewBag.ChequeInfo.fldAccountNo</td>
+                }
+
+                @if (ViewBag.ChequeInfo.fldModifiedFields == "ChequeNo")
+                {
+                    <td rowspan="3" style="color:red;width:10%" class="col-sm-1">@ViewBag.ChequeInfo.fldChequeNo</td>
+                }
+                else
+                {
+                    <td rowspan="3" style="width:10%">@ViewBag.ChequeInfo.fldChequeNo</td>
+                }
+
+                <td class="Payee col-sm-3">@ViewBag.ChequeInfo.fldPayee</td>
+                <td rowspan="3" class="col-sm-3">
+                    Inward (RM) : @StringUtils.FormatCurrency(ViewBag.ChequeInfo.fldAmount.ToString())
+                    <br />
+                    MICR: @ViewBag.ChequeInfo.fldMicr
+                    @*MICR: ^@ViewBag.ChequeInfo.fldCheckDigit^@ViewBag.ChequeInfo.fldChequeNo^@ViewBag.ChequeInfo.fldIssueBankCode^@ViewBag.C  hequeInfo.fldIssueStateCode@ViewBag.ChequeInfo.fldIssueBranchCode^@ViewBag.ChequeInfo.fldAccountNo^@ViewBag.ChequeInfo.fldTransCode*@
+                </td>
+                <td rowspan="3" class="col-sm-1">@ViewBag.ChequeInfo.fldIssueDate</td>
+                <td rowspan="3" class="col-sm-1">@ViewBag.ChequeInfo.fldTransCode</td>
+                <td rowspan="3" class="col-sm-2">@ViewBag.ChequeInfo.HostReject</td>
+            </tr>
+            
+        </tbody>
+    </table>
+</div>
+
+<input class="remarks" type="hidden" name="textAreaRemarks" placeholder="@ViewBag.InwardItemViewModel.getField("fldRemarks")" value="@ViewBag.ChequeInfo.fldRejectCode">
+
+
+
+<input type="hidden" name="fldCharges" style="width:40px;min-width:40px" id="serviceCharge" value="@ViewBag.InwardItemViewModel.getField("fldCharges")" />
+
+
+<div class="Default" style="width: 100%; height:120px; overflow:auto">
+    <div class="col-sm-12">
+        <span class="h4 bold">Positive Pay Info</span>
+        <table>
+            <tr>
+                <td>Account Number <input type="text" name="txtAccountNo" value="@ViewBag.ChequeInfo.fldAccountNo" /></td>
+                <td>Cheque Number <input type="text" name="txtChequeNo" value="@ViewBag.ChequeInfo.fldChequeNo" /></td>
+
+                <td class="textbox">
+                    Issue Month
+                    <select name="IssueMonth" id="selIssueMonth" class="textbox">
+                        <option value="">Any</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                    &nbsp;&nbsp;
+                </td>
+                <td>Issue Year <input type="text" name="txtYear" /></td>
+
+                <td>
+                    Bank Code
+                    <select name="BankCode" id="BankCode" class="textbox">
+                        <option value="18">18</option>
+                        <option value="43">43</option>
+                    </select>
+                </td>
+
+                @*<td><button type="button" id="findBtn" class="normal-submit btn btn-default btn-xs" data-action="@Url.Action("Find")">Find</button></td>*@
+                <td><a id="findBtn" class="btn btn-default btn-xs">Find</a></td>
+
+            </tr>
+        </table>
+
+        <div class="">
+            @Html.Partial("PositivePay/Base/_PPSChequeInfo")
+        </div>
+
+    </div>
+
+
+
+</div>
+<br />
+<div class="col-sm-6">
+    <span class="h4 bold">NCF Flag 1:</span>
+    @if (ViewBag.ChequeInfo.fldNonConformance == "")
+    {
+        <span class="h4 bold">NIL</span>
+    }
+    else if (ViewBag.ChequeInfo.fldNonConformance == "0")
+    {
+        <span class="h4 bold">@ViewBag.ChequeInfo.fldNonConformance - @ViewBag.ChequeInfo.fldNonDesc</span>
+
+    }
+    else
+    {
+
+        <span class="h4 bold red blink">@ViewBag.ChequeInfo.fldNonConformance - @ViewBag.ChequeInfo.fldNonDesc</span>
+
+        @*if (ViewBag.ChequeInfo.fldNonConformance == "7")
+            {
+
+            }
+            else
+            {
+                <span class="h4 bold red">@ViewBag.ChequeInfo.fldNonConformance - @ViewBag.ChequeInfo.fldNonDesc</span>
+            }*@
+
+    }
+
+    <br />
+
+    <span class="h4 bold">NCF Flag 2:</span>
+    @if (ViewBag.ChequeInfo.fldNonConformance2 == "")
+    {
+        <span class="h4 bold">NIL</span>
+    }
+    else if (ViewBag.ChequeInfo.fldNonConformance2 == "0")
+    {
+        <span class="h4 bold">@ViewBag.ChequeInfo.fldNonConformance2 - @ViewBag.ChequeInfo.fldNonDesc1</span>
+
+    }
+    else
+    {
+        <span class="h4 bold red blink">@ViewBag.ChequeInfo.fldNonConformance2 - @ViewBag.ChequeInfo.fldNonDesc1</span>
+
+        @*if (ViewBag.ChequeInfo.fldNonConformance2 == "7")
+        {
+            <span class="h4 bold red blink">@ViewBag.ChequeInfo.fldNonConformance2 - @ViewBag.ChequeInfo.fldNonDesc1</span>
+        }
+        else
+        {
+            <span class="h4 bold red">@ViewBag.ChequeInfo.fldNonConformance2 - @ViewBag.ChequeInfo.fldNonDesc1</span>
+        }*@
+
+    }
+
+</div>
+<div class="col-sm-6">
+    <br />
+    <span class="h4 bold">Cheque Clearing Date : </span>
+    <span class="h4 bold red">@ViewBag.ChequeInfo.fldClearDate</span>
+</div>
+<div>
+    <div class="row">
+        <div class="col-sm-7">
+            @Html.Partial("PositivePay/ICCSDefault/Partial/_Action2")
+            @Html.Partial("PositivePay/Base/_ChequeImage")
+            @Html.Partial("PositivePay/Base/_ShowMICR")
+
+        </div>
+
+        @*<div class="col-sm-4" style="overflow:scroll;height:200px">
+                @Html.Partial("PositivePay/Modal/_ChequeHistoryPopup")
+            </div>*@
+        @*<div id="signatureInfo" style="width:300px; height:200px; background-color:white; margin:0 0 0 10px; border:1px solid #787878"></div>*@
+    </div>
+</div>
+
+<div class="row">
+    <br />
+    <div class="col-sm-12 text-left">
+        @Html.Partial("PositivePay/ICCSDefault/Partial/_Action3")
+    </div>
+</div>
+
+
+@if (ViewBag.IQA == "2")
+{
+    <script>
+$(document).ready(function(){
+    alert("@ViewBag.IQADesc");
+
+});
+    </script>
+}
+@if (ViewBag.LockCheck == "False")
+{
+    <script>
+        $(document).ready(function () {
+            alert(" Warning !" + "\n" + " This cheque is locked by other user");
+            disable();
+        });
+
+        function disable() {
+            $("#approveBtn").attr("disabled", true).css({ 'color': 'Silver' });;
+            $("#returnBtn").attr("disabled", true).css({ 'color': 'Silver' });;
+            $("#routeBtn").attr("disabled", true).css({ 'color': 'Silver' });;
+            $("#pullOutBtn").attr("disabled", true).css({ 'color': 'Silver' });;
+        }
+
+    </script>
+}
+@if (ViewBag.LockCheckBranch == "False")
+{
+    <script>
+        $(document).ready(function () {
+            alert(" Warning !" + "\n" + " This cheque is locked by branch user");
+            disable();
+        });
+
+        function disable() {
+            $("#approveBtn").attr("disabled", true);
+            $("#returnBtn").attr("disabled", true);
+            $("#routeBtn").attr("disabled", true);
+            $("#pullOutBtn").attr("disabled", true);
+        }
+    </script>
+}
+@*<script>
+        var chequeStatusInfo = document.getElementById("tblFindPayee").rows[1].cells.item(6).innerHTML;
+        if (chequeStatusInfo = "P") {
+
+            if (confirm("This Cheque is already paid.\n Do you still want to be proceed?") == true) {
+
+            } else {
+                $("#approveBtn").attr("disabled", true);
+                $("#returnBtn").attr("disabled", true);
+                $("#routeBtn").attr("disabled", true);
+            }
+
+        }
+
+    </script>*@

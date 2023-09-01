@@ -1,0 +1,18 @@
+﻿@using INCHEQS.Models.SearchPageConfig;
+<table id="search-result-table" class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            @Html.Partial("SearchPage/_TableHeaderColumns")
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (List<DataField> row in ViewBag.SearchResult.TableData) {
+            <tr>
+            @Html.Partial("SearchPage/_TableBodyColumns", row)
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        @Html.Partial("SearchPage/_TablePaginationFooter")
+    </tfoot>
+</table>

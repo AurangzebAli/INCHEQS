@@ -1,0 +1,106 @@
+﻿@using INCHEQS.Resources
+
+
+@{
+
+    var i = 0;
+    var j = 0;
+}
+
+<div>
+    <span style="border-bottom: 1px solid;" class="h5 bold">Folder Path Details:</span>
+    <br />
+
+    <span class="h5">Source Folder Path : @ViewBag.FolderPathFromDDYF</span>
+    <br />
+    <br />
+
+</div>
+
+<table class="table table-bordered table-condensed table-striped">
+    @if (ViewBag.FileListA != null)
+    {
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>File Name</th>
+                @*<th>Folder Count</th>*@
+                <th>File Size (KB)</th>
+                <th>File Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in ViewBag.FileListA)
+            {
+            <tr>
+                <td>@{i++;} @i</td>
+                <td>@file.fileNameOnly</td>
+                @*<td>@folder.folderCount</td>*@
+                <td>@file.fileSize KB</td>
+                <td>@file.fileTimeStamp</td>
+            </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        <thead>
+
+        </thead>
+        <tbody>
+            <tr>
+                <td>File Not Found</td>
+            </tr>
+        </tbody>
+    }
+
+</table>
+
+<div>
+    <span style="border-bottom: 1px solid;" class="h5 bold">Folder Path Details:</span>
+    <br />
+
+    <span class="h5">Source Folder Path : @ViewBag.FolderPathFromDAHF</span>
+    <br />
+    <br />
+
+</div>
+
+<table class="table table-bordered table-condensed table-striped">
+    @if (ViewBag.FileListB != null)
+    {
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>File Name</th>
+                @*<th>Folder Count</th>*@
+                <th>File Size (KB)</th>
+                <th>File Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in ViewBag.FileListB)
+            {
+                <tr>
+                    <td>@{j++;} @j</td>
+                    <td>@file.fileNameOnly</td>
+                    @*<td>@folder.folderCount</td>*@
+                    <td>@file.fileSize KB</td>
+                    <td>@file.fileTimeStamp</td>
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        <thead>
+
+        </thead>
+        <tbody>
+            <tr>
+                <td>File Not Found</td>
+            </tr>
+        </tbody>
+    }
+
+</table>

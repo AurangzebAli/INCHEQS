@@ -1,0 +1,52 @@
+﻿@using INCHEQS.Security
+@using INCHEQS.TaskAssignment
+@using INCHEQS.Resources
+@using (Html.BeginForm("Update", "BranchCode", FormMethod.Post, new { @Class = "secure-form" })) {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>@Locale.BranchCodeMaintenance</h4>
+        <hr/>
+        <table class="table form-table table-no-border">
+            <TBODY>
+                @if (ViewBag.BranchCode != null) {
+                    <TR>
+                        <Th>@Locale.BankDescription </Th>
+
+                        <td>
+                            <input type="hidden" name="fldBranchId" value="@ViewBag.BranchCode["fldBranchId"]">
+                            @ViewBag.BankCode - @ViewBag.BankDesc
+                        </td>
+
+                    </TR>
+                    <TR>
+                        <Th>@Locale.BranchCode </Th>
+
+                        <td>
+                            <input type="hidden" name="branchCode">@ViewBag.BranchCode["fldStateCode"]@ViewBag.BranchCode["fldBranchCode"]
+                        </td>
+
+                    </TR>
+
+                    <TR>
+                        <Th>@Locale.BranchDescription</Th>
+                        <td>
+                            <input type="text" name="branchDesc" value="@ViewBag.BranchCode["fldBranchDesc"]">
+                        </td>
+
+                    </TR>
+                    <TR>
+                        <Th>@Locale.Disable</Th>
+                        <td>
+                            <input type="checkbox" name="fldDisable" value="Y" @(ViewBag.BranchCode["fldDisable"] == "Y" ? "checked" : "")>@Locale.YES
+                        </td>
+
+                    </TR>
+                }
+            </TBODY>
+        </table>
+
+        <button type="submit" Class="btn btn-default @(CurrentUser.HasTask(TaskIds.BranchCode.UPDATE) ? "" : "hidden")">@Locale.SaveBtn</button>
+        <a href="@Url.Action("Index")" class="btn btn-default secure-nav @(CurrentUser.HasTask(TaskIds.BranchCode.INDEX) ? "" : "hidden")">@Locale.btnClose</a>
+
+    </div>
+}

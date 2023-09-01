@@ -1,0 +1,137 @@
+﻿@using INCHEQS.Resources
+@using INCHEQS.Common
+@{
+
+}
+<table class="table form-table table-no-border">
+    <tr hidden>
+        <td class="bold">UIC </td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("flduic")</td>
+
+    </tr>
+    <tr>
+        <td class="bold">Capturing Date</td>
+        @*<td>:&emsp;&emsp;@DateUtils.formatDateFromSql(ViewBag.OutwardItemViewModel.getField("fldcapturingdate"))</td>*@
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("fldcapturingdate")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Presenting Bank</td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("fldcapturingbranch").Substring(1, 3)</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Presenting Bank Name</td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("fldpresentingbankname")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Presenting Branch</td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("fldcapturingbranch").Substring(4, 4)</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Scanner ID</td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("fldscannerid")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Batch Number</td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("fldbatchnumber")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Sequence Number</td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("fldseqno")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Issuing Bank</td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("fldbankcode")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Issuing Bank Name</td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("fldbankdesc")</td>
+
+    </tr>
+
+    <tr>
+        <td class="bold">Issuing Branch</td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("fldbranchcode")</td>
+
+    </tr>
+    <tr>
+        <td class="bold">Source</td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("source")</td>
+
+    </tr>
+    <tr>
+        <td class="bold">Amount</td>
+        <td>:&emsp;&emsp;@StringUtils.FormatCurrency(ViewBag.OutwardItemViewModel.getField("fldamount"))</td>
+    </tr>
+    <tr>
+        <td class="bold">Cheque Status</td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("fldclearingstatusdesc")</td>
+    </tr>
+
+    @if ((ViewBag.OutwardItemViewModel.getField("fldmultiitem") == "SS") || (ViewBag.OutwardItemViewModel.getField("fldmultiitem") == "SM"))
+    {
+        <tr class="table-bordered">
+        <th class="bold table-bordered">Creditor Account Number</th>
+        <th class="bold table-bordered">Creditor Account Name</th>
+        <th class="bold table-bordered">Posting Status</th>
+    </tr>
+
+        foreach (var row in ViewBag.lstCreditAcc)
+        {
+            <tr class="table-bordered">
+            <td class="table-bordered">@row.creditacc</td>
+            <td class="table-bordered">@row.creditaccname</td>
+            <td class="table-bordered">@row.creditpoststatus</td>
+            </tr>
+        }
+    }
+    else
+    {
+            <tr class="table-bordered">
+            <th class="bold table-bordered">Creditor Account Number</th>
+            <th class="bold table-bordered">Creditor Account Name</th>
+            <th class="bold table-bordered">Amount</th>
+            <th class="bold table-bordered">Posting Status</th>
+                </tr>
+
+        foreach (var row in ViewBag.lstCreditAcc)
+        {
+            <tr class="table-bordered">
+                <td class="table-bordered">@row.creditacc</td>
+                <td class="table-bordered">@row.creditaccname</td>
+                <td class="table-bordered">@row.creditchequeamount</td>
+                <td class="table-bordered">@row.creditpoststatus</td>
+            </tr>
+        }
+
+    }
+
+    <tr>
+        <td class="bold">Return Code</td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("fldreturncode")</td>
+    </tr>
+    <tr>
+        <td class="bold">Return Description</td>
+        <td>:&emsp;&emsp;@ViewBag.OutwardItemViewModel.getField("fldreason")</td>
+    </tr>
+</table>
+<style>
+    .bold {
+        font-weight: bold;
+    }
+</style>

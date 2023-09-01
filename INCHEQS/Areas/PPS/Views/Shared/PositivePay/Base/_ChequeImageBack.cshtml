@@ -1,0 +1,12 @@
+﻿@using INCHEQS.Resources
+<div id="chequeImageContainerBack">
+    <div id="imageHolderBack" class="cheque-img rotated180">
+        <input type="hidden" id="itemIdBack" name="imageItemIdBack" value="@ViewBag.InwardItemViewModel.getField("fldInwardItemId")" />
+        <input type="hidden" id="imageFolderBack" name="imageFolderBack" value="@ViewBag.InwardItemViewModel.getFormatImageFolderPath()" />
+        <input type="hidden" id="imageIdBack" name="imageIdBack" value="@ViewBag.InwardItemViewModel.getField("fldImageFileName")" />
+        <input type="hidden" id="imageStateBack" name="imageStateBack" value="greyscale" />
+        <input type="hidden" id="System" name="System" value="ICS" />
+        <img id="chequeImageBack" class="chequeImageBack" />
+    </div>
+
+</div>

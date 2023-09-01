@@ -1,0 +1,47 @@
+﻿@using INCHEQS.Resources
+
+    <h4>Signature - Signature Viewer</h4>
+    <div id="signatureInfo" style="width:350px; height:270px; background-color:#f8fcfd; margin:0 0 0 10px; border:1px solid #787878"></div>
+    <br />
+    <div id="signatureListContainer" class="mBot5" style="background-color:#f8fcfd">
+        <div class="row">
+            <div class="col-xs-6">
+                <div id="signatureRules">
+                    <table style="margin: 0;padding: 0">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-4" style="background-color: lightgrey">Account Number</th>
+                                <td colspan='3'>
+                                    <input id="searchAccountNumber" class="bold" style="border: 1px solid black;" value=""/>
+                                    <a id="searchSignature" class="btn btn-default btn-xs">Search</a>
+                                </td>
+                            </tr>
+                        </thead>
+
+                        <thead id="signatureInfo2">
+                        </thead>
+                    </table>
+                    <table class="table table-condensed" id="signatureRules2"></table>
+
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div id="signatureImages">
+                    <div id="signatureSearchContainer">
+                        <div id="signatureResult" class="pull-left"></div>
+
+
+
+                        <div style="clear:both"></div>
+                    </div>
+                    <div id="signatureContainer">
+                        <img src="~/Content/Images/spin.gif" class="signature-loader small-loader hidden" style="position: absolute;margin: 70px;" />
+                        <div id="signatureGallery"></div>
+                        <div style="clear:both"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/ICS/signature.js"></script>

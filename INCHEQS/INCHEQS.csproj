@@ -99,10 +99,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>App_Start\bin\INCHEQS.BNM.dll</HintPath>
     </Reference>
-    <Reference Include="INCHEQS.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>App_Start\bin\INCHEQS.Common.dll</HintPath>
-    </Reference>
     <Reference Include="INCHEQS.ConfigVerficationBranch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>App_Start\bin\INCHEQS.ConfigVerficationBranch.dll</HintPath>
@@ -2595,6 +2591,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\01-Level 1\02-Trunk\INCHEQS.Common-00.000.00.01\INCHEQS.Common.csproj">
+      <Project>{4533581b-7776-42fa-87b3-315ed048fe0c}</Project>
+      <Name>INCHEQS.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\01-Level 1\02-Trunk\INCHEQS.DataAccessLayer-00.000.00.01\INCHEQS.DataAccessLayer.csproj">
       <Project>{fc8aa598-5543-4376-a492-1a1c75b66e6b}</Project>
       <Name>INCHEQS.DataAccessLayer</Name>

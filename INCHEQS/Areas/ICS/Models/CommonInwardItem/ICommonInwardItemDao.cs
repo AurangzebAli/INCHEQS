@@ -73,6 +73,9 @@ namespace INCHEQS.Models.CommonInwardItem {
         DataTable ManuallyUpdateCheques(string inwardItemId, AccountModel currentUser,FormCollection col,string accNo,string cheqNo, string Taskid);
         DataTable ManuallyUpdateReturnedCheques(FormCollection collection);
         DataTable RouteToAuthorizer(string inwardItemId, AccountModel currentUser, FormCollection col, string accNo, string cheqNo, string Taskid);
+        DataTable DeferedToPhysicalUpdated(string inwardItemId, AccountModel currentUser, FormCollection col, string accNo, string cheqNo, string Taskid);
+
+
 
         
         

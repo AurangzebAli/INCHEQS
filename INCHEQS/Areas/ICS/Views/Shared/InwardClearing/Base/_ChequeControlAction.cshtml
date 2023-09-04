@@ -218,7 +218,14 @@ else
         <button type="button" id="returnBtn" data-action="@Url.Action("BranchReferBack")" class="btn-verification-border btn-verification btn-medium normal-submit-Verification" style="margin-left :5px;">ReferBack</button>
     }
 }
-
+@if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "DeferedToPhysical"))
+{
+    
+        <button type="button" data-action="@Url.Action("DeferedToPhysical")" class="btn-medium btn-verification-border btn-verification normal-submit-Verification">
+            Infered
+        </button>
+    
+}
 
 @if (ViewHelper.HasUrlAccess(CurrentUser.Account, ViewBag.AllowedAction, "VerificationApprove"))
 {

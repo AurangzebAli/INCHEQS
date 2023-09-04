@@ -189,6 +189,10 @@
                             {
                                 <span class="txtRed bold">[Pending]</span>
                             }
+                            else if (ViewBag.InwardItemViewModel.getField("fldApprovalStatus").ToString().Trim() == "D")
+                            {
+                                <span class="txtRed bold">[Defered]</span>
+                            }
                             else if (ViewBag.InwardItemViewModel.getField("fldManual").ToString().Trim() == "1")
                             {
                                 <span class="txtRed bold">[Marked Manual]</span>

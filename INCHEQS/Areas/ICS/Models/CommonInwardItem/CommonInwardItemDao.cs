@@ -762,8 +762,21 @@ namespace INCHEQS.Models.CommonInwardItem {
 
         }
 
-        
-        
+        public DataTable DeferedToPhysicalUpdated(string inwardItemId, AccountModel currentUser, FormCollection collection, string accNo, string cheqNo, string Taskid)
+        {
+            List<SqlParameter> sqlParameterNext = new List<SqlParameter>();
+            sqlParameterNext.Add(new SqlParameter("@fldInwardItemId", inwardItemId));
+            sqlParameterNext.Add(new SqlParameter("@fldApprovalUserId", currentUser.UserId));
+            sqlParameterNext.Add(new SqlParameter("@fldTaskId", Taskid));
+
+            DataTable dtDeferToPhysical = dbContext.GetRecordsAsDataTableSP("spcu_DeferedtoPhysical", sqlParameterNext.ToArray());
+            
+
+            return dtDeferToPhysical;
+
+        }
+
+
 
 
         public DataTable ChequeHistoryH(string inwardItemId)

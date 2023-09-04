@@ -77,8 +77,6 @@ namespace INCHEQS.Models.CommonInwardItem {
 
 
 
-        
-        
 
     }
 }

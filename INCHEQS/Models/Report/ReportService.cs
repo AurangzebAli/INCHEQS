@@ -1336,7 +1336,7 @@ namespace INCHEQS.Models.Report
                 }
 
                 // BRANCH REPORT config.TaskId == "304440" //config.TaskId == "304450" 
-                else if (  config.TaskId == "304470" ||  config.TaskId == "304460" || config.TaskId == "304480"
+                else if (  config.TaskId == "304470" ||  config.TaskId == "304460" 
                     || config.TaskId == "304451" || config.TaskId == "304490")
                 {
                     List<SqlParameter> sqlParameterNext = new List<SqlParameter>();

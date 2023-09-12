@@ -375,7 +375,7 @@ namespace INCHEQS.Models.Verification
                             sqlParameterNext.Add(new SqlParameter("@fldNonConfirmStatus", VerificationStatus.ACTION.VerificationApprove1stChecker));
                             sqlParameterNext.Add(new SqlParameter("@fldActionStatus", verifyAction));
                         }
-
+                        dbContext.GetRecordsAsDataTableSP("spcuApprovedInwardItem", sqlParameterNext.ToArray());
                     }
                     //if not, just approved it
                     else

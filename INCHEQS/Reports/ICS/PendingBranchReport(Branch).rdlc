@@ -133,6 +133,10 @@
           <DataField>InternalBranchCodeFilter</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="fldUpdateTimeStamp">
+          <DataField>fldUpdateTimeStamp</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>INCHEQS_ICSDataSet</rd:DataSetName>
@@ -248,22 +252,25 @@
                   <Width>1.1809in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.75716in</Width>
+                  <Width>0.64079in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.00613in</Width>
+                  <Width>0.75613in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.04845in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.28749in</Width>
+                  <Width>0.99582in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.10335in</Width>
+                  <Width>1.57002in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.6in</Width>
+                  <Width>0.85in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.25803in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -316,9 +323,10 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <ColSpan>8</ColSpan>
+                        <ColSpan>9</ColSpan>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell />
                     <TablixCell />
                     <TablixCell />
                     <TablixCell />
@@ -585,7 +593,7 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox37">
+                        <Textbox Name="Textbox38">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -593,6 +601,42 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>Host Status</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox37</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>LightSteelBlue</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox37">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>DateTime</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -658,9 +702,10 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <ColSpan>8</ColSpan>
+                        <ColSpan>9</ColSpan>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell />
                     <TablixCell />
                     <TablixCell />
                     <TablixCell />
@@ -706,9 +751,10 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <ColSpan>8</ColSpan>
+                        <ColSpan>9</ColSpan>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell />
                     <TablixCell />
                     <TablixCell />
                     <TablixCell />
@@ -762,9 +808,10 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <ColSpan>8</ColSpan>
+                        <ColSpan>9</ColSpan>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell />
                     <TablixCell />
                     <TablixCell />
                     <TablixCell />
@@ -783,28 +830,31 @@
                           <TablixBody>
                             <TablixColumns>
                               <TablixColumn>
-                                <Width>1.26224in</Width>
+                                <Width>1.06844in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>1.0651in</Width>
+                                <Width>1.24849in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>0.71447in</Width>
+                                <Width>0.64079in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>0.99537in</Width>
+                                <Width>0.75613in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>1.03769in</Width>
+                                <Width>1.04845in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>1.8184in</Width>
+                                <Width>0.99582in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>1.62622in</Width>
+                                <Width>1.57002in</Width>
                               </TablixColumn>
                               <TablixColumn>
-                                <Width>1.6in</Width>
+                                <Width>0.88333in</Width>
+                              </TablixColumn>
+                              <TablixColumn>
+                                <Width>1.2247in</Width>
                               </TablixColumn>
                             </TablixColumns>
                             <TablixRows>
@@ -1059,7 +1109,7 @@
                                   </TablixCell>
                                   <TablixCell>
                                     <CellContents>
-                                      <Textbox Name="fldHostStatus4">
+                                      <Textbox Name="Textbox7">
                                         <CanGrow>true</CanGrow>
                                         <KeepTogether>true</KeepTogether>
                                         <Paragraphs>
@@ -1067,6 +1117,41 @@
                                             <TextRuns>
                                               <TextRun>
                                                 <Value>=Fields!fldHostStatus.Value</Value>
+                                                <Style>
+                                                  <FontSize>8pt</FontSize>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Left</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox7</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Color>LightGrey</Color>
+                                            <Style>Solid</Style>
+                                          </Border>
+                                          <VerticalAlign>Middle</VerticalAlign>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="fldHostStatus4">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!fldUpdateTimeStamp.Value</Value>
                                                 <Style>
                                                   <FontSize>8pt</FontSize>
                                                 </Style>
@@ -1106,6 +1191,7 @@
                               <TablixMember />
                               <TablixMember />
                               <TablixMember />
+                              <TablixMember />
                             </TablixMembers>
                           </TablixColumnHierarchy>
                           <TablixRowHierarchy>
@@ -1134,9 +1220,10 @@
                             </Border>
                           </Style>
                         </Tablix>
-                        <ColSpan>8</ColSpan>
+                        <ColSpan>9</ColSpan>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell />
                     <TablixCell />
                     <TablixCell />
                     <TablixCell />
@@ -1293,6 +1380,40 @@
                     <TablixCell />
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Textbox5">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox5</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>LightSteelBlue</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Textbox47">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -1404,9 +1525,10 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <ColSpan>7</ColSpan>
+                        <ColSpan>8</ColSpan>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell />
                     <TablixCell />
                     <TablixCell />
                     <TablixCell />
@@ -1489,9 +1611,10 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <ColSpan>7</ColSpan>
+                        <ColSpan>8</ColSpan>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell />
                     <TablixCell />
                     <TablixCell />
                     <TablixCell />
@@ -1504,6 +1627,7 @@
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
+                <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
@@ -1569,7 +1693,7 @@
             </SortExpressions>
             <Top>1.65048in</Top>
             <Height>2.18749in</Height>
-            <Width>10.11951in</Width>
+            <Width>9.43617in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -1613,7 +1737,7 @@
         <Height>4.23034in</Height>
         <Style />
       </Body>
-      <Width>10.40284in</Width>
+      <Width>11.11951in</Width>
       <Page>
         <PageFooter>
           <Height>0.53875in</Height>

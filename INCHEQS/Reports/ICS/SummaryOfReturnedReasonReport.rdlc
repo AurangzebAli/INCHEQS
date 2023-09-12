@@ -16,52 +16,6 @@
         <DataSourceName>INCHEQS_ICSDataSet</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
-      <Fields>
-        <Field Name="fldrejecttypeid">
-          <DataField>fldrejecttypeid</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="fldRejectType">
-          <DataField>fldRejectType</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="fldRejectTypeGroup">
-          <DataField>fldRejectTypeGroup</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="fldrejectdesc">
-          <DataField>fldrejectdesc</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="fldRejectCode">
-          <DataField>fldRejectCode</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="NonEONTotalAmount">
-          <DataField>NonEONTotalAmount</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
-        </Field>
-        <Field Name="EonTotalAmount">
-          <DataField>EonTotalAmount</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
-        </Field>
-        <Field Name="NonEonTotalItem">
-          <DataField>NonEonTotalItem</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="EonTotalItem">
-          <DataField>EonTotalItem</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="grandamt">
-          <DataField>grandamt</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
-        </Field>
-        <Field Name="GrandItem">
-          <DataField>GrandItem</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-      </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>INCHEQS_ICSDataSet</rd:DataSetName>
         <rd:SchemaPath>D:\Development\AFFIN\Tech Refresh\AFFIN_ICS_v7\Affin\V1\03-MVC_WEB\02-INCHEQS\02-Trunk\0001.000.000.00\INCHEQS\INCHEQS_ICSDataSet.xsd</rd:SchemaPath>
@@ -578,7 +532,6 @@
                           </Style>
                         </Textbox>
                         <ColSpan>7</ColSpan>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -798,6 +751,7 @@
                                           <PaddingBottom>2pt</PaddingBottom>
                                         </Style>
                                       </Textbox>
+                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell>

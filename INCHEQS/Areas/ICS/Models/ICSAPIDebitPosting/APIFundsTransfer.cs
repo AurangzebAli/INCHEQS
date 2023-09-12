@@ -460,7 +460,7 @@ namespace INCHEQS.Areas.ICS.Models.ICSAPIDebitPosting
                 acqInstCode = clsapift.acqInstCode,
                 pinData = "",
                 fromBankIMD = clsapift.fromBankIMD,
-                fromAccountNumber = clsapift.fromAccountNumber,
+                fromAccountNumber = clsapift.fromAccountNumber, 
                 fromAccountType = "",
                 fromAccountCurrency = clsapift.fromAccountCurrency,
                 fromAccountBranch = clsapift.fromAccountBranch,
@@ -524,11 +524,14 @@ namespace INCHEQS.Areas.ICS.Models.ICSAPIDebitPosting
                     List<JToken> results = json.Children().ToList();
                     List<JToken> endresult = results[1].Children().ToList();
                     List<JToken> error011 = results[0].Children().ToList();
-                    
+                    List<JToken> transactionLogId = results[3].Children().ToList();
+
+
                     List<SqlParameter> sqlParameterFTransfer = new List<SqlParameter>();
                     sqlParameterFTransfer.Add(new SqlParameter("@fldftcounter ", clsapift.stan));
                     sqlParameterFTransfer.Add(new SqlParameter("@fldAccountNumber", accNo));
                     sqlParameterFTransfer.Add(new SqlParameter("@fldChequeSerialNo", chequeNo));
+                    sqlParameterFTransfer.Add(new SqlParameter("fldTransactionLogId", transactionLogId[3].ToString()));
                     DataTable dtROWS = dbContext.GetRecordsAsDataTableSP("spciFundsTransfer", sqlParameterFTransfer.ToArray());
                     if (error011[0].ToString() == "011")
                     {

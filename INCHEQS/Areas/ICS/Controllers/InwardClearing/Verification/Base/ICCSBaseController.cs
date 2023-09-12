@@ -247,7 +247,7 @@ namespace INCHEQS.Areas.ICS.Controllers
                 return View(searchPageHtml);
             }
 
-                public virtual async Task<ActionResult> SearchResultPage(FormCollection collection) {
+            public virtual async Task<ActionResult> SearchResultPage(FormCollection collection) {
                 await initializeBeforeAction();
                 //string sqlCondition = "";
                 int checkitem=1;

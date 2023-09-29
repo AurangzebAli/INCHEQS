@@ -844,6 +844,50 @@
         });
 
 
+        $(".btn-DayEndSettlement", context).off("click.g").on("click.g", function (e) {
+            e.preventDefault()
+
+            //setTimeout(function () {
+            //    $('#btnTest').removeAttr("disabled");
+            //}, 30000);
+            var $form = $(this).closest("form");
+
+            var $actionRefresh = $(this).data("action");
+            $actionRefresh = $actionRefresh.replace("Generate", "ProgressBar");
+
+            if ($(this).data("action") == null) {
+                alert("No Action properties specified for the button. Eg data-action='Controller/Action'");
+                return;
+            }
+            else {
+                $(".btn-DayEndSettlement").attr("disabled", true);
+                $(".btn-action-verification").attr("disabled", true);
+
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: $(this).data("action"),
+                    data: $form.serialize(),
+                    success: function (data) {
+                        //$("#right-panel").html(data);
+                        //$("#resultContainer").html(data);
+                        //$("#myModal .modal-body").html(data)
+                        //$("#myModal").modal();
+                        //alert("Data Save Successfully");
+
+                         setTimeout(function () {
+                        $("#notice .notice-body").html(data.notice)
+                        $("#notice").removeClass("hidden");
+                    }, 500);
+                        
+                    }
+                });
+
+            }
+
+        });
+
+
 
         /*** Upload and Progress Bar code  
          * Author : Ali */

@@ -424,20 +424,44 @@ namespace INCHEQS.Areas.ICS.Models.ICSAPIDebitPosting
             }
             else
             {
-                clsapift.fromAccountNumber = accNo;// "6580008552700087";
-                if (collection["fldIssueStateCode"] == "20")
+
+                if (accNo == "407130691")
                 {
-                    clsapift.toAccountNumber = "608080129";
+                    clsapift.toAccountNumber = accNo;// "6580008552700087";
+                    if (collection["fldIssueStateCode"] == "20")
+                    {
+                        clsapift.fromAccountNumber = "608080129";
+
+                    }
+                    else
+                    {
+                        clsapift.fromAccountNumber = "608080130";
+
+                    }
+
+                    clsapift.toAccountBranch= collection["fldIssueBranchCode"].Replace(",", "").Trim();//.Substring(collection["fldIssueBankCode"].Length - 3);
+                    clsapift.fromAccountBranch = "954";
+
 
                 }
                 else
                 {
-                    clsapift.toAccountNumber = "608080130";
 
+                    clsapift.fromAccountNumber = accNo;// "6580008552700087";
+                    if (collection["fldIssueStateCode"] == "20")
+                    {
+                        clsapift.toAccountNumber = "608080129";
+
+                    }
+                    else
+                    {
+                        clsapift.toAccountNumber = "608080130";
+
+                    }
+
+                    clsapift.fromAccountBranch = collection["fldIssueBranchCode"].Replace(",", "").Trim();//.Substring(collection["fldIssueBankCode"].Length - 3);
+                    clsapift.toAccountBranch = "954";
                 }
-
-                clsapift.fromAccountBranch = collection["fldIssueBranchCode"].Replace(",","").Trim();//.Substring(collection["fldIssueBankCode"].Length - 3);
-                clsapift.toAccountBranch = "954";
 
             }
 
@@ -531,7 +555,7 @@ namespace INCHEQS.Areas.ICS.Models.ICSAPIDebitPosting
                     sqlParameterFTransfer.Add(new SqlParameter("@fldftcounter ", clsapift.stan));
                     sqlParameterFTransfer.Add(new SqlParameter("@fldAccountNumber", accNo));
                     sqlParameterFTransfer.Add(new SqlParameter("@fldChequeSerialNo", chequeNo));
-                    sqlParameterFTransfer.Add(new SqlParameter("fldTransactionLogId", transactionLogId[3].ToString()));
+                    sqlParameterFTransfer.Add(new SqlParameter("fldTransactionLogId", transactionLogId[0].ToString()));
                     DataTable dtROWS = dbContext.GetRecordsAsDataTableSP("spciFundsTransfer", sqlParameterFTransfer.ToArray());
                     if (error011[0].ToString() == "011")
                     {
@@ -586,6 +610,271 @@ namespace INCHEQS.Areas.ICS.Models.ICSAPIDebitPosting
 
         }
 
+        #region
+
+        public string GETAPIReponseDayEndSettlement(FormCollection collection, string accNo, string chequeno)
+        {
+
+            GetAPIParam();
+            string vTokenApiEndPoint = APITokenURL;
+            RestClient tokenapicall = new RestClient(vTokenApiEndPoint);
+            string Message = "";
+            //tokenapicall.timeout = -1;
+            RestRequest requesttokencall = new RestRequest("token", Method.Post);
+            requesttokencall.AddHeader("authorization", APITokenAuth);
+            requesttokencall.AddHeader("content-type", "application/x-www-form-urlencoded");
+            requesttokencall.AddParameter("grant_type", APITokenGrantType);
+            requesttokencall.AddParameter("scope", APITokenScope);
+            var resulttokencall = tokenapicall.ExecuteAsync(requesttokencall);
+            try
+            {
+                //var resulttokencall = tokenapicall.ExecuteAsync(requesttokencall);
+                var result = resulttokencall.Result;
+                if (result.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+
+                    JObject json = JObject.Parse(result.Content);
+                    List<JToken> results = json.Children().ToList();
+                    List<JToken> BearerToken = results[0].Children().ToList();
+                    APIFTAuth = "Bearer " + BearerToken[0].ToString();
+
+                    RestClient FTAPICall = new RestClient(APIFundsTranferApiUrl);
+                    RestRequest requestFT = new RestRequest("", Method.Post);
+                    List<SqlParameter> sqlParameterFT = new List<SqlParameter>();
+
+                    DataTable dtfundstransfer = dbContext.GetRecordsAsDataTableSP("spcgFundsTransfer", sqlParameterFT.ToArray());
+                    Message = GetAPIResult(APIFundsTranferApiUrl, collection, dtfundstransfer, BearerToken[0].ToString(), accNo, chequeno);
+
+
+                    return Message;
+                }
+                else
+                {
+                    return resulttokencall.Result.StatusCode.ToString() + " 1 "
+                        + resulttokencall.Result.StatusDescription.ToString() + " 2 "
+                        + resulttokencall.Result.Content +
+                        " apitoken auth: " + APITokenAuth +
+                         " apigranttype: " + APITokenGrantType +
+                        " apitokenscope: " + APITokenScope +
+                        " apitokenurl: " + APITokenURL;
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return "Token Service Execution" + ex.Message + ex.StackTrace;
+            }
+
+
+        }
+
+
+        public string GetAPIResultDayEndSettlement(string APIFundsTranferApiUrl, FormCollection collection, DataTable dtfundstransfer, string token, string accNo, string chequeNo)
+        {
+            var client = new RestClient(APIFundsTranferApiUrl);
+            RestRequest requestFT = new RestRequest("", Method.Post);
+            requestFT.AddHeader("authorization", APIFTAuth);
+            requestFT.AddHeader("content-type", "application/json");
+            requestFT.AddHeader("username", APIUsername);
+            requestFT.AddHeader("password", "esbuser");
+
+            APIFundsTransfer clsapift = new APIFundsTransfer(dbContext);
+            clsapift.transmissionDate = DateTime.Now.ToString("yyyyMMdd");// collection["fldClearDate"].ToString("yyyyMMdd");
+            clsapift.transmissionTime = DateTime.Now.ToString("hhmmss"); //"112834";//"hhmmss"
+            clsapift.dateLocalTran = DateTime.Now.ToString("yyyyMMdd");// collection["fldClearDate"].ToString("yyyyMMdd");
+            clsapift.timeLocalTran = DateTime.Now.ToString("hhmmss"); //"112834";// "hhmmss"
+            clsapift.stan = dtfundstransfer.Rows[0]["fldFTcounter"].ToString();
+            //"000002";
+            clsapift.rrn = dtfundstransfer.Rows[0]["fldFTcounter"].ToString(); //"000002";
+            clsapift.acqInstCode = "623977";
+            clsapift.fromBankIMD = "623977";
+            clsapift.fromAccountCurrency = "586";
+            clsapift.fromAccountBranch = collection["fldIssueBranchCode"].Replace(",", "").Trim();//.Substring(collection["fldIssueBankCode"].Length - 3); //Account Branch
+            clsapift.toBankIMD = "623977";
+
+            if (collection["fldTaskId"] == "306260")
+            {
+                if (collection["fldIssueStateCode"] == "20")
+                {
+                    clsapift.fromAccountNumber = "608080129";
+
+                }
+                else
+                {
+                    clsapift.fromAccountNumber = "608080130";
+
+                }
+                clsapift.toAccountNumber = accNo;// "6580008552700087";
+                clsapift.fromAccountBranch = "954";
+                clsapift.toAccountBranch = collection["fldIssueBranchCode"].Replace(",", "").Trim();//.Substring(collection["fldIssueBankCode"].Length - 3);
+            }
+            else
+            {
+                clsapift.fromAccountNumber = accNo;// "6580008552700087";
+                if (collection["fldIssueStateCode"] == "20")
+                {
+                    clsapift.toAccountNumber = "608080129";
+
+                }
+                else
+                {
+                    clsapift.toAccountNumber = "608080130";
+
+                }
+
+                clsapift.fromAccountBranch = collection["fldIssueBranchCode"].Replace(",", "").Trim();//.Substring(collection["fldIssueBankCode"].Length - 3);
+                clsapift.toAccountBranch = "954";
+
+            }
+
+
+            clsapift.transactionAmount = (collection["fldAmount"].ToString() + "00").PadLeft(12, '0');//"000000002000";
+            clsapift.transactionCurrency = "586";
+            clsapift.narrative = "DebitPostingAccountNumber:" + accNo + " " + DateTime.Now;
+            clsapift.purposeOfPayment = "0122";
+            clsapift.fromAccountCurrency = "586";
+
+            var varbody1 = new
+            {
+                relationshipId = "",
+                transmissionDate = clsapift.transmissionDate,
+                transmissionTime = clsapift.transmissionTime,
+                dateLocalTran = clsapift.dateLocalTran,
+                timeLocalTran = clsapift.timeLocalTran,
+                stan = clsapift.stan,
+                rrn = clsapift.rrn,
+                acqInstCode = clsapift.acqInstCode,
+                pinData = "",
+                fromBankIMD = clsapift.fromBankIMD,
+                fromAccountNumber = clsapift.fromAccountNumber,
+                fromAccountType = "",
+                fromAccountCurrency = clsapift.fromAccountCurrency,
+                fromAccountBranch = clsapift.fromAccountBranch,
+                tranIndecator = "",
+                toBankIMD = clsapift.fromBankIMD,
+                toAccountNumber = clsapift.toAccountNumber,
+                toAccountBranch = clsapift.toAccountBranch,
+                beneficiaryIBAN = "",
+                transactionAmount = clsapift.transactionAmount,
+                transactionCurrency = clsapift.transactionCurrency,
+                purposeOfPayment = clsapift.purposeOfPayment,
+                narrative = clsapift.narrative,
+                cardAccepTermId = ""
+
+
+            };
+
+            requestFT.AddParameter("application/json", JsonConvert.SerializeObject(varbody1), ParameterType.RequestBody);
+
+            //var varbody1 = new
+            //{
+            //    relationshipId = "",
+            //    transmissionDate = "20230803",
+            //    transmissionTime = "094156",
+            //    dateLocalTran = "20230803",
+            //    timeLocalTran = "094156",
+            //    stan = "000399",
+            //    rrn = "000399",
+            //    acqInstCode = "623977",
+            //    pinData = "",
+            //    fromBankIMD = "623977",
+            //    fromAccountNumber = "6580003315500019",
+            //    fromAccountType = "",
+            //    fromAccountCurrency = "586",
+            //    fromAccountBranch = "002",
+            //    tranIndecator = "",
+            //    toBankIMD = "623977",
+            //    toAccountNumber = "608080130",
+            //    toAccountBranch = "954",
+            //    beneficiaryIBAN = "",
+            //    transactionAmount = "000001391600",
+            //    transactionCurrency = "586",
+            //    purposeOfPayment = "0122",
+            //    narrative = "Testing",
+            //    cardAccepTermId = ""
+
+
+            //};
+
+            //requestFT.AddJsonBody(varbody1);
+
+            try
+            {
+                var restResponse = client.ExecuteAsync(requestFT);
+                restResponse.Wait();
+                var result1 = restResponse.Result;
+                if (result1.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+
+                    JObject json = JObject.Parse(result1.Content);
+                    List<JToken> results = json.Children().ToList();
+                    List<JToken> endresult = results[1].Children().ToList();
+                    List<JToken> error011 = results[0].Children().ToList();
+                    List<JToken> transactionLogId = results[3].Children().ToList();
+
+
+                    List<SqlParameter> sqlParameterFTransfer = new List<SqlParameter>();
+                    sqlParameterFTransfer.Add(new SqlParameter("@fldftcounter ", clsapift.stan));
+                    sqlParameterFTransfer.Add(new SqlParameter("@fldAccountNumber", accNo));
+                    sqlParameterFTransfer.Add(new SqlParameter("@fldChequeSerialNo", chequeNo));
+                    sqlParameterFTransfer.Add(new SqlParameter("fldTransactionLogId", transactionLogId[0].ToString()));
+                    DataTable dtROWS = dbContext.GetRecordsAsDataTableSP("spciFundsTransfer", sqlParameterFTransfer.ToArray());
+                    if (error011[0].ToString() == "011")
+                    {
+                        return "Service Responded 011 Code";
+                    }
+
+                    return endresult[0].ToString();
+                }
+                else
+                {
+                    return result1.StatusCode + result1.StatusDescription + "GETAPIRESULT" + APIFTAuth + APIUsername + APIFundsTranferApiUrl;
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return "API AFTER TOKEN: " + ex.Message + ex.StackTrace + ex.InnerException + ex.Data +
+                       "URL: " + APIFundsTranferApiUrl
+                     + " relationshipId: " + varbody1.relationshipId
+                     + " transmissionDate: " + varbody1.transmissionDate
+                     + " transmissionTime: " + varbody1.transmissionTime
+                     + " dateLocalTran: " + varbody1.dateLocalTran
+                     + " timeLocalTran: " + varbody1.timeLocalTran
+                     + " stan: " + varbody1.stan
+                     + " rnn: " + varbody1.rrn
+                     + "acqInstCode: " + varbody1.acqInstCode
+                     + "pinData:" + varbody1.acqInstCode
+                     + "fromBankIMD: " + varbody1.fromBankIMD
+                     + "fromAccountNumber:" + varbody1.fromAccountNumber
+                     + "fromAccountType: " + varbody1.fromAccountType
+                     + "fromAccountCurrency: " + varbody1.fromAccountCurrency
+                     + "fromAccountBranch: " + varbody1.fromAccountBranch
+                     + "tranIndecator:" + varbody1.tranIndecator
+                     + "toBankIMD: " + varbody1.fromBankIMD
+                     + "toAccountNumber: " + varbody1.toAccountNumber
+                     + "toAccountBranch: " + varbody1.toAccountBranch
+                     + "beneficiaryIBAN: " + varbody1.beneficiaryIBAN
+                     + "transactionAmount: " + varbody1.transactionAmount
+                     + "transactionCurrency: " + varbody1.transactionCurrency
+                     + "purposeOfPayment: " + varbody1.purposeOfPayment
+                     + "narrative: " + varbody1.narrative
+                     + "cardAccepTermId: " + varbody1.narrative
+                     + "cardAccepTermId: " + APIFTAuth
+
+                     ;
+
+
+
+            }
+
+
+        }
+
+
+        #endregion
 
         protected string GetAPIParam()
         {

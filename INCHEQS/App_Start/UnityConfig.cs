@@ -173,6 +173,7 @@ using INCHEQS.Areas.PPS.Models.LoadPPSFile;
 using INCHEQS.Areas.ICS.Models.Truncation;
 using INCHEQS.Areas.COMMON.Models.CreditAccount;
 using INCHEQS.Areas.ICS.Models.HostValidation;
+using INCHEQS.Areas.ICS.Models.DayEndSettlement;
 
 namespace INCHEQS
 {
@@ -342,8 +343,9 @@ namespace INCHEQS
 			container.RegisterType<ITruncationDao, TruncationDao>();
             container.RegisterType<ICreditAccountDao, CreditAccountDao>();
             container.RegisterType<INCHEQS.Areas.ICS.Models.HostValidation.IHostValidationDao, HostValidationDao>();
+            container.RegisterType<INCHEQS.Areas.ICS.Models.DayEndSettlement.IDayEndSettlementDao, DayEndSettlementDao>();
 
-            
+
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }
     }

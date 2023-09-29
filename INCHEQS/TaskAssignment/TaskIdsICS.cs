@@ -51,6 +51,10 @@ namespace INCHEQS.TaskAssignment
         {
             public const string INDEX = "306250";
         }
+        public static class DayEndSettlement
+        {
+            public const string INDEX = "306720";
+        }
 
         public static class GenerateCreditFileBased
         {

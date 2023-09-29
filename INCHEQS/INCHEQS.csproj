@@ -439,6 +439,8 @@
     <Compile Include="Areas\ICS\Controllers\InwardClearing\BranchMonitoring\BranchActivationController.cs" />
     <Compile Include="Areas\ICS\Controllers\InwardClearing\BranchSubmission\BranchSubmissionController.cs" />
     <Compile Include="Areas\ICS\Controllers\InwardClearing\BranchSubmission\BranchSubmission_BranchController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\DayEndSettlement\Base\DayEndSettlementBaseController.cs" />
+    <Compile Include="Areas\ICS\Controllers\InwardClearing\DayEndSettlement\DayEndSettlementController.cs" />
     <Compile Include="Areas\ICS\Controllers\InwardClearing\GenerateOutwardReturn\Base\OutwardReturnICLBaseController.cs" />
     <Compile Include="Areas\ICS\Controllers\InwardClearing\GenerateOutwardReturn\GenerateOutwardReturnICLController.cs" />
     <Compile Include="Areas\ICS\Controllers\InwardClearing\GenerateUPI\Base\GenerateUPIBaseController.cs" />
@@ -512,6 +514,9 @@
     <Compile Include="Areas\ICS\Models\CommonInwardItem\ICommonInwardItemDao.cs" />
     <Compile Include="Areas\ICS\Models\DashboardConfig\DashboardConfigDao.cs" />
     <Compile Include="Areas\ICS\Models\DashboardConfig\IDashboardConfigDao.cs" />
+    <Compile Include="Areas\ICS\Models\DayEndSettlement\DayEndSettlementDao.cs" />
+    <Compile Include="Areas\ICS\Models\DayEndSettlement\DayEndSettlementModel.cs" />
+    <Compile Include="Areas\ICS\Models\DayEndSettlement\IDayEndSettlementDao.cs" />
     <Compile Include="Areas\ICS\Models\DedicatedBranchDay\DedicatedBranchDayDao.cs" />
     <Compile Include="Areas\ICS\Models\DedicatedBranchDay\DedicatedBranchDayModel.cs" />
     <Compile Include="Areas\ICS\Models\DedicatedBranchDay\IDedicatedBranchDayDao.cs" />
@@ -2110,6 +2115,9 @@
     <Content Include="Areas\ICS\Views\GenerateUPI\Modal\_ReadyToPostLateReturnPopup.cshtml" />
     <Content Include="Areas\ICS\Views\GenerateUPI\Modal\_ReadyToPostPopup.cshtml" />
     <Content Include="Areas\ICS\Views\GenerateUPI\Modal\_Popup.cshtml" />
+    <Content Include="Areas\ICS\Views\DayEndSettlement\Index.cshtml" />
+    <Content Include="Areas\ICS\Views\DayEndSettlement\SearchResultPage.cshtml" />
+    <Content Include="Areas\ICS\Views\DayEndSettlement\Modal\_Popup.cshtml" />
     <None Include="INCHEQS_ICSDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <SubType>Designer</SubType>
@@ -2321,6 +2329,8 @@
   <ItemGroup>
     <Folder Include="Areas\ATV\Controller\ATV\Shared\" />
     <Folder Include="Areas\COMMON\Views\Shared\" />
+    <Folder Include="Areas\ICS\Views\DayEndSettlementBase\" />
+    <Folder Include="Areas\ICS\Views\NewFolder1\" />
     <Folder Include="Areas\OCS\Controllers\InwardClearing\" />
     <Folder Include="Areas\OCS\Views\NewFolder1\" />
     <Folder Include="Areas\RPA\Models\" />
@@ -2403,6 +2413,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\ICS\DebitItemsException.rdlc" />
+    <EmbeddedResource Include="Reports\ICS\DeferedtoPhysical.rdlc" />
     <EmbeddedResource Include="Reports\ICS\DigitalSigningReport.rdlc" />
     <EmbeddedResource Include="Reports\ICS\DMIReport.rdlc" />
     <EmbeddedResource Include="Reports\ICS\DuplicatedRecordsInPPSReport.rdlc" />

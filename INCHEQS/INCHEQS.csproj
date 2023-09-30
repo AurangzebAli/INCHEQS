@@ -99,6 +99,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>App_Start\bin\INCHEQS.BNM.dll</HintPath>
     </Reference>
+    <Reference Include="INCHEQS.BoPServices, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\INCHEQS.BoPServices.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\INCHEQS.Common.dll</HintPath>
+    </Reference>
     <Reference Include="INCHEQS.ConfigVerficationBranch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>App_Start\bin\INCHEQS.ConfigVerficationBranch.dll</HintPath>
@@ -125,6 +133,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>App_Start\bin\INCHEQS.DataAccessLayer.SVS.dll</HintPath>
     </Reference>
+    <Reference Include="INCHEQS.EOD, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\INCHEQS.EOD.dll</HintPath>
+    </Reference>
     <Reference Include="INCHEQS.OracleDataAccessLayer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>App_Start\bin\INCHEQS.OracleDataAccessLayer.dll</HintPath>
@@ -136,6 +148,18 @@
     <Reference Include="INCHEQS.PPS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Internal\INCHEQS.PPS.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.Processes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\INCHEQS.Processes.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\INCHEQS.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="INCHEQS.TaskAssignment, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>App_Start\bin\INCHEQS.TaskAssignment.dll</HintPath>
     </Reference>
     <Reference Include="InsiteMYLicensing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=561141ee79855b0c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -2602,33 +2626,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\01-Level 1\02-Trunk\INCHEQS.Common-00.000.00.01\INCHEQS.Common.csproj">
-      <Project>{4533581b-7776-42fa-87b3-315ed048fe0c}</Project>
-      <Name>INCHEQS.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\01-Level 1\02-Trunk\INCHEQS.DataAccessLayer-00.000.00.01\INCHEQS.DataAccessLayer.csproj">
       <Project>{fc8aa598-5543-4376-a492-1a1c75b66e6b}</Project>
       <Name>INCHEQS.DataAccessLayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\02-Level 2\02-Trunk\INCHEQS.BoPServices\INCHEQS.BoPServices\INCHEQS.BoPServices.csproj">
-      <Project>{778f9912-3c0a-4b2f-b230-6383848bf05d}</Project>
-      <Name>INCHEQS.BoPServices</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\02-Level 2\02-Trunk\INCHEQS.Processes-00.000.00.01\INCHEQS.Processes.csproj">
-      <Project>{a2017de6-9518-404c-95cb-a814598fe9fb}</Project>
-      <Name>INCHEQS.Processes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\02-Level 2\02-Trunk\INCHEQS.Security-00.000.02.01\INCHEQS.Security.csproj">
-      <Project>{cad046fb-934b-4e6d-927d-85fda7c99553}</Project>
-      <Name>INCHEQS.Security</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\02-Level 2\02-Trunk\INCHEQS.TaskAssignment-00.000.00.01\INCHEQS.TaskAssignment\INCHEQS.TaskAssignment.csproj">
-      <Project>{674c2e5e-1fe3-4672-a2c9-4b09a61f46d9}</Project>
-      <Name>INCHEQS.TaskAssignment</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\03-Level 3\02-Trunk\INCHEQS.EOD-00.000.00.01\INCHEQS.EOD.csproj">
-      <Project>{e1f76810-7e37-4564-a64b-3c385593b0c5}</Project>
-      <Name>INCHEQS.EOD</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\MVC\01-Core\01-Library\04-Level 4\02-Trunk\INCHEQS.ConfigVerification-00.000.00.01\INCHEQS.ConfigVerification.csproj">
       <Project>{8612ed92-a76f-47af-b9a9-10a374234895}</Project>
